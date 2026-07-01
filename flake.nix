@@ -31,7 +31,7 @@
         # those are more easily expressed in perSystem.
       	nixosConfigurations = {
           # Replace 'your-hostname' with your actual system hostname
-          nixos = self.nixpkgs.lib.nixosSystem {
+          nixos = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             modules = [
               .modules/_nixos/hardware-configuration.nix
