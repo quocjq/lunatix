@@ -64,8 +64,6 @@
           curl
 	  emacs
         ];
-
-        system.stateVersion = "26.05";
       };
 
     # host provides default home environment for its users
