@@ -1,8 +1,8 @@
 # defines all hosts + users + homes.
 # then config their aspects in as many files you want
 {
-  # tux user at igloo host.
-  den.hosts.x86_64-linux.igloo.users.tux = { };
+  # lunixose user at igloo host.
+  den.hosts.x86_64-linux.igloo.users.lunixose = { };
 
   # define an standalone home-manager for tux
   # den.homes.x86_64-linux.tux = { };
