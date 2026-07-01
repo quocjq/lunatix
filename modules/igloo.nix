@@ -63,6 +63,7 @@
           git
           curl
 	  emacs
+	  obsidian
         ];
       };
 
