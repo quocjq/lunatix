@@ -21,6 +21,7 @@
 
         time.timeZone = "Asia/Ho_Chi_Minh";
 
+
         i18n.defaultLocale = "en_US.UTF-8";
         i18n.extraLocaleSettings = {
           LC_ADDRESS = "vi_VN";
@@ -41,6 +42,12 @@
           layout = "us";
           variant = "";
         };
+	fonts.packages = with pkgs; [
+	  jetbrains-mono
+	  symbola
+	  noto-fonts-cjk-sans
+	  noto-fonts-color-emoji
+	];
 
         services.printing.enable = true;
 
