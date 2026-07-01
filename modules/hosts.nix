@@ -4,6 +4,7 @@
   # lunixose user at igloo host.
   den.hosts.x86_64-linux.igloo.users.lunixose = { };
 
+## Example
   # define an standalone home-manager for tux
   # den.homes.x86_64-linux.tux = { };
 
