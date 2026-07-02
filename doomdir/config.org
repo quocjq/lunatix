@@ -1,0 +1,40 @@
+#+title: Config
+* Table of Content :toc:
+- [[#basic][Basic]]
+- [[#keybind][Keybind]]
+  - [[#tabout][Tabout]]
+- [[#orgmode][Orgmode]]
+  - [[#orgmodern][Orgmodern]]
+
+* Basic
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-monokai-octagon)
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :weight 'medium))
+(add-hook 'window-setup-hook #'toggle-frame-maximized)
+(setq display-line-numbers-type 'relative)
+(setq org-directory "~/org/")
+#+end_src
+
+* Keybind
+
+** Tabout
+#+begin_src emacs-lisp
+(defun my/tabout ()
+  (interactive)
+  (cond
+   ((and (derived-mode-p 'org-mode)
+         (fboundp 'org-at-table-p)
+         (org-at-table-p))
+    (call-interactively #'org-cycle))
+   (t
+    (ignore-errors (sp-up-sexp)))))
+(map! :i "TAB" #'my/tabout)
+#+end_src
+
+
+* Orgmode
+
+** Orgmodern
+#+begin_src emacs-lisp
+(with-eval-after-load 'org (global-org-modern-mode))
+#+end_src
