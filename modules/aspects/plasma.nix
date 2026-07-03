@@ -9,11 +9,13 @@
   };
 
   den.aspects.plasma = {
+    provides.to-hosts.nixos = { pkgs, ... }: {
+      services.desktopManager.plasma6.enable = true;
+    };
     home-manager = { pkgs, ... }: {
       imports = [
         inputs.plasma-manager.homeModules.plasma-manager
       ];
-
       programs.plasma = {
         enable = true;
         workspace = {
