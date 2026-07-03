@@ -9,7 +9,7 @@
   };
 
   den.aspects.plasma = {
-    provides.to-hosts.nixos = { pkgs, ... }: {
+    provides.to-hosts.nixos = {
       services.desktopManager.plasma6.enable = true;
     };
     home-manager = { pkgs, ... }: {
@@ -19,7 +19,7 @@
       programs.plasma = {
         enable = true;
         workspace = {
-          clickItemTo = "select"; # If you liked the click-to-open default from plasma 5
+          clickItemTo = "select";
           cursor = {
             animationTime = 5;
             cursorFeedback = "Bouncing";
@@ -30,7 +30,7 @@
           iconTheme = "Papirus";
           wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Kay/contents/images/1080x1920.png";
           soundTheme = "freedesktop";
-          # splashScreen.engine = "none";
+          splashScreen.engine = "none";
           splashScreen.theme = "None";
           theme = "breeze-dark";
         };
@@ -93,12 +93,12 @@
               "org.kde.plasma.panelspacer"
               {
                 digitalClock = {
+                  date.enable = false;
                   calendar.firstDayOfWeek = "monday";
                   time.format = "24h";
-                  date.enable = false;
                   font = {
-                    family = "JetBrains Mono ExtraBold";
-                    size = 25;
+                    family = "JetBrains Mono";
+                    bold = true;
                     italic = true;
                   };
                 };
@@ -187,7 +187,6 @@
         kwin = {
           edgeBarrier = 0; # Disables the edge-barriers introduced in plasma 6.1
           cornerBarrier = false;
-
           scripts.polonium.enable = true;
         };
 
@@ -345,32 +344,7 @@
           "services/org.kde.konsole.desktop"._launch = "Meta+T";
         };
         configFile = {
-          baloofilerc.General.dbVersion = 2;
-          dolphinrc.General.ViewPropsTimestamp = "2026,6,30,8,26,25.544";
-          dolphinrc.IconsMode.PreviewSize = 80;
-          dolphinrc."KFileDialog Settings"."Places Icons Auto-resize" = false;
-          dolphinrc."KFileDialog Settings"."Places Icons Static Size" = 22;
-          kactivitymanagerdrc.activities."287e4057-f08b-4c81-a3d2-2ef71d085867" = "Default";
-          katerc.General."Days Meta Infos" = 30;
-          katerc.General.PinnedDocuments = "";
-          katerc.General."Save Meta Infos" = true;
-          katerc.General."Show Full Path in Title" = false;
-          katerc.General."Show Menu Bar" = true;
-          katerc.General."Show Status Bar" = true;
-          katerc.General."Show Tab Bar" = true;
-          katerc.General."Show Url Nav Bar" = true;
-          katerc.filetree.editShade = "30,78,103";
-          katerc.filetree.listMode = false;
-          katerc.filetree.middleClickToClose = false;
-          katerc.filetree.shadingEnabled = true;
-          katerc.filetree.showCloseButton = false;
-          katerc.filetree.showFullPathOnRoots = false;
-          katerc.filetree.showToolbar = true;
-          katerc.filetree.sortRole = 0;
-          katerc.filetree.viewShade = "77,46,91";
           kcminputrc.Mouse.cursorSize = 24;
-          kded5rc.Module-browserintegrationreminder.autoload = false;
-          kded5rc.Module-device_automounter.autoload = false;
           kdeglobals.General.XftAntialias = true;
           kdeglobals.General.XftHintStyle = "hintslight";
           kdeglobals.General.XftSubPixel = "vbgr";
@@ -411,9 +385,6 @@
           krunnerrc.General.FreeFloating = true;
           kscreenlockerrc.Daemon.LockOnResume = true;
           kscreenlockerrc.Daemon.Timeout = 10;
-          ksplashrc.KSplash.Engine = "none";
-          ksplashrc.KSplash.Theme = "None";
-          kwalletrc.Wallet."First Use" = false;
           kwinrc.Desktops.Number = 9;
           kwinrc.Desktops.Rows = 1;
           kwinrc.EdgeBarrier.CornerBarrier = false;
@@ -454,7 +425,6 @@
           kwinrulesrc.General.rules = 1;
           kxkbrc.Layout.Options = "caps:escape";
           kxkbrc.Layout.ResetOldOptions = true;
-          plasma-localerc.Formats.LANG = "en_US.UTF-8";
           plasmarc.Theme.name = "breeze-dark";
           spectaclerc.ImageSave.translatedScreenshotsFolder = "Screenshots";
           spectaclerc.VideoSave.translatedScreencastsFolder = "Screencasts";
