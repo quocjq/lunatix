@@ -6,16 +6,22 @@
       den.batteries.define-user
       den.batteries.primary-user
       (den.batteries.user-shell "bash")
+      den.aspects.doom-emacs
+      den.aspects.zen-browser
+      den.aspects.plasma
     ];
-     nixos =
-	{ pkgs, ... }:
-        {
-          users.users.lunixose = {
-            description = "lunixose";
-            extraGroups = [ "networkmanager" "wheel" ];
-            packages = [];
-          };
+    nixos =
+      { pkgs, ... }:
+      {
+        users.users.lunixose = {
+          description = "lunixose";
+          extraGroups = [
+            "networkmanager"
+            "wheel"
+          ];
+          packages = [ ];
         };
+      };
 
     homeManager =
       { pkgs, ... }:
