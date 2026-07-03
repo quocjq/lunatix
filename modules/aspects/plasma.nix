@@ -12,7 +12,7 @@
     provides.to-hosts.nixos = {
       services.desktopManager.plasma6.enable = true;
     };
-    home-manager = { pkgs, ... }: {
+    homeManager = { pkgs, ... }: {
       imports = [
         inputs.plasma-manager.homeModules.plasma-manager
       ];
