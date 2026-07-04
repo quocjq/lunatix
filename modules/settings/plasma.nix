@@ -10,6 +10,7 @@
 
   den.aspects.plasma = {
     provides.to-hosts.nixos = {
+      services.displayManager.sddm.enable = true;
       services.desktopManager.plasma6.enable = true;
     };
     homeManager = { pkgs, ... }: {
@@ -130,10 +131,10 @@
                   shown = [
                     "org.kde.plasma.battery"
                     "org.kde.plasma.bluetooth"
+                    "org.kde.plasma.volume"
                   ];
                   hidden = [
                     "org.kde.plasma.networkmanagement"
-                    "org.kde.plasma.volume"
                   ];
                 };
               }

@@ -4,12 +4,6 @@
     nixos = { pkgs, ... }: {
       networking.networkmanager.enable = true;
 
-      nix.settings.experimental-features = [
-        "nix-command"
-        "flakes"
-        "pipe-operators"
-      ];
-
       time.timeZone = "Asia/Ho_Chi_Minh";
 
       i18n.defaultLocale = "en_US.UTF-8";
