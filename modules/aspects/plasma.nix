@@ -112,18 +112,15 @@
                       radius = 8;
                     };
                     icon = "view-media-track";
-                    songText = {
-                      maximumWidth = 200;
-                    };
                   };
                   playbackSource = "auto";
-                  musicControls.showPlaybackControls = true;
+                  musicControls.showPlaybackControls = false;
                   songText = {
                     displayInSeparateLines = true;
-                    maximumWidth = 640;
+                    maximumWidth = 200;
                     scrolling = {
                       behavior = "alwaysScroll";
-                      speed = 3;
+                      speed = 4;
                     };
                   };
                 };
