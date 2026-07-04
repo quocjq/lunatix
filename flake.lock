@@ -15,6 +15,22 @@
         "type": "github"
       }
     },
+    "doom-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783144817,
+        "narHash": "sha256-ZfgUG/DNqLBBwxGiKnir1teNaNUAvR7SPdp6WCUhQ6w=",
+        "owner": "quocjq",
+        "repo": "doomdir",
+        "rev": "81a6ce4156563a1cbe13031347d0c9381948f68c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "quocjq",
+        "repo": "doomdir",
+        "type": "github"
+      }
+    },
     "doomemacs": {
       "flake": false,
       "locked": {
@@ -222,6 +238,7 @@
     "root": {
       "inputs": {
         "den": "den",
+        "doom-config": "doom-config",
         "flake-file": "flake-file",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",

@@ -9,6 +9,7 @@
       den.aspects.doom-emacs
       den.aspects.zen-browser
       den.aspects.plasma
+      den.aspects.nixcord
     ];
     nixos =
       { pkgs, ... }:
@@ -31,6 +32,14 @@
 
     # user can provide NixOS configurations
     # to any host it is included on
-    provides.to-hosts.nixos = { pkgs, ... }: { };
+    provides.to-hosts.nixos = { pkgs, ... }: {
+      environment.systemPackages = with pkgs; [
+        neovim
+        wget
+        git
+        curl
+        obsidian
+      ];
+    };
   };
 }

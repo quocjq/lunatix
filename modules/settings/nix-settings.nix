@@ -5,27 +5,29 @@
       { pkgs, config, ... }:
       {
         nixpkgs.config.allowUnfree = true;
-        optimise.automatic = true;
-        settings = {
-          substituters = [
+        nix = {
+          optimise.automatic = true;
+          settings = {
+            substituters = [
 
-          ];
-          trusted-public-keys = [
+            ];
+            trusted-public-keys = [
 
-          ];
-          experimental-features = [
-            "nix-command"
-            "flakes"
-            "pipe-operators"
-          ];
-          trusted-users = [
-            "root"
-            "@wheel"
-          ];
-        };
-        gc = pkgs.lib.optionalAttrs config.nix.enable {
-          automatic = true;
-          options = "--delete-older-than 3d";
+            ];
+            experimental-features = [
+              "nix-command"
+              "flakes"
+              "pipe-operators"
+            ];
+            trusted-users = [
+              "root"
+              "@wheel"
+            ];
+          };
+          gc = pkgs.lib.optionalAttrs config.nix.enable {
+            automatic = true;
+            options = "--delete-older-than 3d";
+          };
         };
       };
   };

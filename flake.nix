@@ -5,6 +5,10 @@
 
   inputs = {
     den.url = "github:denful/den";
+    doom-config = {
+      url = "github:quocjq/doomdir";
+      flake = false;
+    };
     flake-file.url = "github:denful/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
