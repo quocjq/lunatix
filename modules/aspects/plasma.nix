@@ -27,7 +27,7 @@
             taskManagerFeedback = true;
             theme = "Breeze_Snow";
           };
-          iconTheme = "Papirus";
+          iconTheme = "breeze-dark";
           wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Kay/contents/images/1080x1920.png";
           soundTheme = "freedesktop";
           splashScreen.engine = "none";
@@ -97,7 +97,7 @@
                   calendar.firstDayOfWeek = "monday";
                   time.format = "24h";
                   font = {
-                    family = "JetBrains Mono";
+                    family = "JetBrains Mono ExtraBold";
                     bold = true;
                     italic = true;
                   };
@@ -112,6 +112,9 @@
                       radius = 8;
                     };
                     icon = "view-media-track";
+                    songText = {
+                      maximumWidth = 200;
+                    };
                   };
                   playbackSource = "auto";
                   musicControls.showPlaybackControls = true;
@@ -349,8 +352,6 @@
           kdeglobals.General.XftHintStyle = "hintslight";
           kdeglobals.General.XftSubPixel = "vbgr";
           kdeglobals.General.fixed = "JetBrains Mono Medium,10,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular,0,0";
-          kdeglobals.General.font = "Fira Code,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0";
-          kdeglobals.Icons.Theme = "breeze-dark";
           kdeglobals.KDE.SingleClick = false;
           kdeglobals.KDE.contrast = 4;
           kdeglobals.KDE.frameContrast = 0.2;
@@ -421,8 +422,6 @@
           kwinrulesrc."1".wmclass = "dolphin";
           kwinrulesrc."1".wmclasscomplete = true;
           kwinrulesrc."1".wmclassmatch = 2;
-          kwinrulesrc.General.count = 1;
-          kwinrulesrc.General.rules = 1;
           kxkbrc.Layout.Options = "caps:escape";
           kxkbrc.Layout.ResetOldOptions = true;
           plasmarc.Theme.name = "breeze-dark";

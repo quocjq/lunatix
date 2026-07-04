@@ -12,6 +12,7 @@
       programs.doom-emacs = {
         enable = true;
         doomDir = ../../doomdir;
+        tangleArgs = "--all config.org";
         extraPackages =
           epkgs: with epkgs; [
             eglot
