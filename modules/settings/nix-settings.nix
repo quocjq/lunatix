@@ -30,5 +30,10 @@
           };
         };
       };
+    provides.to-users.homeManager =
+      { pkgs, ... }:
+      {
+        nixpkgs.config.allowUnfree = true;
+      };
   };
 }

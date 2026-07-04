@@ -4,7 +4,6 @@
       den.aspects.settings
       den.aspects.latitude3250
     ];
-    # host NixOS configuration
     nixos =
       {
         config,
@@ -53,13 +52,6 @@
         boot.loader.efi.canTouchEfiVariables = true;
 
         networking.hostName = "nixos";
-      };
-
-    # host provides default home environment for its users
-    provides.to-users.homeManager =
-      { pkgs, ... }:
-      {
-        home.packages = [ pkgs.vim ];
       };
   };
 }

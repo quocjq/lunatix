@@ -21,6 +21,7 @@
         extraPackages =
           epkgs: with epkgs; [
             eglot
+            vterm
             nix-ts-mode
             treesit-grammars.with-all-grammars
           ];
@@ -82,6 +83,7 @@
         nixpkgs-review
         nix-output-monitor
         nix-fast-build
+        sbcl
       ];
     };
   };

@@ -23,6 +23,7 @@
       url = "github:marienz/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "";
     };
+    nixcord.url = "github:FlameFlag/nixcord";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
