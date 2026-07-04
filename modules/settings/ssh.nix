@@ -18,8 +18,6 @@
         };
       };
     };
-    # Optional: If you need the host itself to have the SSH daemon enabled,
-    # you can define that right here alongside the user config.
     nixos = {
       services.openssh.enable = true;
     };
