@@ -6,6 +6,7 @@
       den.batteries.define-user
       den.batteries.primary-user
       (den.batteries.user-shell "bash")
+      den.aspects.settings
       den.aspects.doom-emacs
       den.aspects.zen-browser
       den.aspects.plasma
