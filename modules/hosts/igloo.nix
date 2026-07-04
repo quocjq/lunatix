@@ -1,5 +1,4 @@
 { den, ... }: {
-  # host aspect
   den.aspects.igloo = {
     includes = [
       den.aspects.settings
