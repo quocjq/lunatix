@@ -14,7 +14,8 @@
         # Choose your Discord mod client (enable at most one of these two)
         # discord.vencord.enable = true; # Standard Vencord
         discord = {
-          equicord.enable = true; # Equicord (has more plugins)
+          # equicord.enable = true; # Equicord (has more plugins)
+          legcord.enable = true;
           branch = "stable";
           krisp.enable = true;
           openASAR.enable = true;
@@ -23,17 +24,16 @@
         # Or these
         # vesktop.enable = true;
         # dorion.enable = true;
-        # legcord.enable = true;
 
         # Theming
-        quickCss = "/* css goes here */";
+        # quickCss = "/* css goes here */";
         config = {
-          useQuickCss = true;
+          useQuickCss = false;
           enabledThemeLinks = [
             "https://raw.githubusercontent.com/refact0r/midnight-discord/refs/heads/master/themes/midnight.theme.css"
           ];
           frameless = true;
-          transparent = true;
+          # transparent = true;
 
           plugins = {
             clearUrls.enable = true;
