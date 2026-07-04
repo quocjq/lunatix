@@ -1,7 +1,7 @@
 { inputs, ... }: {
   flake-file.inputs = {
     nixcord = {
-      url = "github:FlameFlag/nixcord";
+      url = "github:4evy/nixcord";
     };
   };
   den.aspects.nixcord = {
@@ -14,13 +14,13 @@
         # Choose your Discord mod client (enable at most one of these two)
         # discord.vencord.enable = true; # Standard Vencord
         discord = {
-          # equicord.enable = true; # Equicord (has more plugins)
-          legcord.enable = true;
+          equicord.enable = true; # Equicord (has more plugins)
           branch = "stable";
           krisp.enable = true;
           openASAR.enable = true;
         };
 
+        legcord.enable = true;
         # Or these
         # vesktop.enable = true;
         # dorion.enable = true;
