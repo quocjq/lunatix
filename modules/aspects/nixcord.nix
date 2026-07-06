@@ -20,7 +20,7 @@
           openASAR.enable = true;
         };
 
-        legcord.enable = true;
+        # legcord.enable = true;
         # Or these
         # vesktop.enable = true;
         # dorion.enable = true;

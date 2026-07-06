@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake-file.inputs.zen-browser = {
+  flake-file.inputs.zenwser = {
     url = "github:0xc000022070/zen-browser-flake";
     inputs.nixpkgs.follows = "nixpkgs";
   };

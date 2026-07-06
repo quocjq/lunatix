@@ -10,7 +10,7 @@
       flake = false;
     };
   };
-  den.aspects.doom-emacs = {
+  den.aspects.doomacs = {
     homeManager = { pkgs, ... }: {
       imports = [ inputs.nix-doom-emacs-unstraightened.homeModule ];
 
@@ -47,13 +47,12 @@
         python3
         pipenv
         sqlite
-        duckdb
-        wordnet
         # :emacs dired +dirvish (for file previews)
         ffmpegthumbnailer
         mediainfo
         vips
         editorconfig-core-c
+        # lsp + compiler + fmt
         gcc
         gnumake
         ccls
