@@ -1,5 +1,5 @@
 {
-  den.aspects.settings = {
+  den.aspects.ssh = {
     nixos = {
       services.openssh.enable = true;
       programs.ssh.startAgent = true;

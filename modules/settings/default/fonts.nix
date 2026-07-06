@@ -1,5 +1,5 @@
 {
-  den.aspects.settings = {
+  den.aspects.fonts = {
     nixos = { pkgs, ... }: {
       fonts.packages = with pkgs; [
         jetbrains-mono

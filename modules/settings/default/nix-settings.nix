@@ -1,6 +1,6 @@
 { ... }:
 {
-  den.aspects.settings = {
+  den.aspects.nix-settings = {
     nixos =
       { pkgs, config, ... }:
       {
