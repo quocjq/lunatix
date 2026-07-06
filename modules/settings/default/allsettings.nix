@@ -8,7 +8,6 @@
       local
       network
       nix-settings
-      plasma
       printing
       ssh
       x11

@@ -3,16 +3,15 @@
   den.aspects.lunixose = {
     includes =
       (with den.batteries; [
-        batteries.define-user
-        batteries.primary-user
-        (batteries.user-shell "bash")
+        define-user
+        primary-user
+        (user-shell "bash")
       ])
       ++ (with den.aspects; [
-        aspects.settings
-        aspects.doomacs
-        aspects.zenwser
-        aspects.nixcord
-        aspects.plasma
+        doomacs
+        zenwser
+        nixcord
+        plasma
       ]);
     nixos =
       { pkgs, ... }:
