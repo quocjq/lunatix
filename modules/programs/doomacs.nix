@@ -80,8 +80,6 @@
         nixfmt-tree
         deadnix
         nixpkgs-review
-        nix-output-monitor
-        nix-fast-build
         sbcl
       ];
     };

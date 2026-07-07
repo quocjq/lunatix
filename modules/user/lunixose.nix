@@ -6,6 +6,7 @@
         define-user
         primary-user
         (user-shell "bash")
+        custom-class
       ])
       ++ (with den.aspects; [
         doomacs

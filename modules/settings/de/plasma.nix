@@ -8,7 +8,7 @@
     };
   };
 
-  den.aspects.plasma = {
+  den.aspects.plasma.default = {
     provides.to-hosts.nixos = { pkgs, ... }: {
       services.displayManager.sddm.enable = true;
       services.desktopManager.plasma6.enable = true;
