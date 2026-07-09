@@ -10,7 +10,7 @@
       flake = false;
     };
   };
-  den.aspects.doomacs = {
+  lix.doomacs = {
     homeManager = { pkgs, ... }: {
       imports = [ inputs.nix-doom-emacs-unstraightened.homeModule ];
 

@@ -8,7 +8,7 @@
     let
       cfg = config.den.classes.config or { };
       def = config.den.classes.default or { };
-      lowPrioDef = lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (n: v: lib.mkOverride 1000 v) def;
+      highPrioCfg = lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (n: v: lib.mkOverride 75 v) cfg;
     in
     {
       den.classes.config = { };
@@ -16,13 +16,13 @@
 
       # Route and merge them directly into the standard OS classes
       den.classes.homeManager = lib.mkMerge [
-        (lowPrioDef.homeManager or { })
-        (cfg.homeManager or { })
+        (highPrioCfg.homeManager or { })
+        (def.homeManager or { })
       ];
 
       den.classes.nixos = lib.mkMerge [
-        (lowPrioDef.nixos or { })
-        (cfg.nixos or { })
+        (highPrioCfg.nixos or { })
+        (def.nixos or { })
       ];
     };
 }

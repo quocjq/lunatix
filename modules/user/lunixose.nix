@@ -1,4 +1,9 @@
-{ den, ... }:
+{
+  den,
+  lix,
+  lig,
+  ...
+}:
 {
   den.aspects.lunixose = {
     includes =
@@ -8,11 +13,14 @@
         (user-shell "bash")
         custom-class
       ])
-      ++ (with den.aspects; [
+      ++ (with lix; [
         doomacs
         zenwser
         nixcord
         plasma
+      ])
+      ++ (with lig; [
+        nixcord
       ]);
     nixos =
       { pkgs, ... }:

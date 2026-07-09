@@ -5,7 +5,7 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  den.aspects.zenwser = {
+  lix.zenwser = {
     homeManager = {
       imports = [ inputs.zen-browser.homeModules.twilight ];
       programs.zen-browser = {

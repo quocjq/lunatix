@@ -1,5 +1,5 @@
 {
-  den.aspects.nixcord.config = {
+  lig.nixcord = {
     programs.nixcord = {
       quickCss = "/* css goes here */";
       config = {
