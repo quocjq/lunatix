@@ -11,7 +11,7 @@
         define-user
         primary-user
         (user-shell "bash")
-        custom-class
+        # custom-class
       ])
       ++ (with lix; [
         doomacs
