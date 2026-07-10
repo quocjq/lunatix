@@ -18,6 +18,7 @@
         zenwser
         nixcord
         plasma
+        hyprland
       ])
       ++ (with lig; [
         nixcord

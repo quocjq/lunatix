@@ -8,7 +8,7 @@
 
   lix.hyprland = {
     # Requirement
-    provides.to-host.nixos = { pkgs, ... }: {
+    provides.to-hosts.nixos = { pkgs, ... }: {
       # The Hyprland Cachix exists to cache the hyprland packages and any dependencies not found in cache.nixos.org.
       nix.settings = {
         substituters = [ "https://hyprland.cachix.org" ];
