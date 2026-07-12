@@ -19,6 +19,7 @@
         nixcord
         plasma
         hyprland
+        kanata
       ])
       ++ (with lig; [
         nixcord

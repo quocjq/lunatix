@@ -10,10 +10,10 @@
               gaps_in = 4;
               gaps_out = 10;
               border_size = 1;
-              col = {
-                active_border = lib.generators.mkLuaInline "colors.mauve";
-                inactive_border = lib.generators.mkLuaInline "colors.overlay0";
-              };
+              # col = {
+              #   active_border = lib.generators.mkLuaInline "colors.mauve";
+              #   inactive_border = lib.generators.mkLuaInline "colors.overlay0";
+              # };
               layout = "dwindle";
               resize_on_border = true;
             };

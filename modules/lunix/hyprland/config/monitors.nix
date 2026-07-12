@@ -4,7 +4,7 @@
       monitor = [
         {
           output = "";
-          mode = "1080x1920@60";
+          mode = "1920x10800@60";
           position = "auto";
           scale = "1.0";
         }
