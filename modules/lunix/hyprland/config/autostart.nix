@@ -14,7 +14,6 @@
               (lua ''
                 function()
                   hl.exec_cmd("emacs")
-                  hl.exec_cmd("zen-twilight")
                 end
               '')
             ];
