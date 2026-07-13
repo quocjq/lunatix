@@ -1,7 +1,6 @@
 {
   den,
   lix,
-  lig,
   ...
 }:
 {
@@ -11,7 +10,6 @@
         define-user
         primary-user
         (user-shell "bash")
-        # custom-class
       ])
       ++ (with lix; [
         doomacs
@@ -20,9 +18,6 @@
         plasma
         hyprland
         kanata
-      ])
-      ++ (with lig; [
-        nixcord
       ]);
     nixos =
       { pkgs, ... }:
