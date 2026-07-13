@@ -27,7 +27,6 @@
     homeManager =
       { pkgs, ... }:
       {
-        home.packages = [ pkgs.htop ];
       };
 
     provides.to-hosts.nixos = { pkgs, ... }: {
