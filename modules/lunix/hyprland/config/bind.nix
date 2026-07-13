@@ -37,7 +37,8 @@
           bind = [
             # Actions
             (bind "${mainMod} + Return" (dsp.exec "emacs"))
-            (bind "${mainMod} + SHIFT + Q" dsp.close)
+            (bind "${mainMod} + " (dsp.exec "emacs"))
+            (bind "${mainMod} + Q" dsp.close)
             (bind "${mainMod} + F" dsp.fullscreen)
             # (bind "${mainMod} + Space" (dsp.exec "wofi --show drun --allow-images --prompt Applications"))
             # (bind "Print" (dsp.exec "grim -g \\\"$(slurp)\\\" - | wl-copy"))

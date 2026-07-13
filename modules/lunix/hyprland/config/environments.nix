@@ -1,4 +1,3 @@
-{ ... }:
 {
   lix.hyprland.homeManager = {
     wayland.windowManager.hyprland = {

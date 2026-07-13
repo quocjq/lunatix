@@ -9,7 +9,6 @@
       (with den.batteries; [
         define-user
         primary-user
-        (user-shell "bash")
       ])
       ++ (with lix; [
         doomacs
@@ -19,15 +18,6 @@
         hyprland
         kanata
       ]);
-    nixos =
-      { pkgs, ... }:
-      {
-      };
-
-    homeManager =
-      { pkgs, ... }:
-      {
-      };
 
     provides.to-hosts.nixos = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [
