@@ -1,5 +1,5 @@
 {
-  den.aspects.home-manager = {
+  den.aspects.home-manager.home-manager = {
     home-manager.backupFileExtension = "backup";
   };
 }
