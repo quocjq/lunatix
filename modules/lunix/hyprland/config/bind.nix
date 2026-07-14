@@ -37,7 +37,7 @@
           bind = [
             # Actions
             (bind "${mainMod} + Return" (dsp.exec "emacs"))
-            (bind "${mainMod} + " (dsp.exec "emacs"))
+            (bind "${mainMod} + B" (dsp.exec "zen-twilight"))
             (bind "${mainMod} + Q" dsp.close)
             (bind "${mainMod} + F" dsp.fullscreen)
             # (bind "${mainMod} + Space" (dsp.exec "wofi --show drun --allow-images --prompt Applications"))
@@ -45,8 +45,8 @@
             # (bind "SHIFT + Print" (
             #   dsp.exec "grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') - | wl-copy"
             # ))
-            #(bind "${mainMod} + grave" (dsp.exec "$HOME/.config/hypr/scripts/hdrop.sh --floating --gap 10 --class ddownkit kitty --class ddownkit"))
-            #(bind "${mainMod} + ALT + grave" (dsp.exec "$HOME/.config/hypr/scripts/hdrop.sh --floating --gap 10 --class ddownfiles kitty --class ddownfiles yazi"))
+            # (bind "${mainMod} + grave" (dsp.exec "$HOME/.config/hypr/scripts/hdrop.sh --floating --gap 10 --class ddownkit kitty --class ddownkit"))
+            # (bind "${mainMod} + ALT + grave" (dsp.exec "$HOME/.config/hypr/scripts/hdrop.sh --floating --gap 10 --class ddownfiles kitty --class ddownfiles yazi"))
             (bind "${mainMod} + C" (dsp.exec "$HOME/.config/hypr/scripts/goxlrMute.sh"))
 
             (bind "XF86AudioRaiseVolume" (dsp.exec "wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%+"))
