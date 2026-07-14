@@ -40,11 +40,6 @@
             };
             clipsEnhancements.enable = true;
             clipUpload.enable = true;
-            customTimestamps = {
-              formats = {
-                enabled = false;
-              };
-            };
             declutter.enable = true;
             decor.enable = true;
             dragify.enable = true;
@@ -59,32 +54,6 @@
               ignorePlaying = true;
             };
             limitlessScreenshare.enable = true;
-            moreUserTags = {
-              tagSettings = {
-                administrator = {
-                  enabled = false;
-                };
-                chatModerator = {
-                  enabled = false;
-                };
-                moderator = {
-                  enabled = false;
-                };
-                moderatorStaff = {
-                  enabled = false;
-                };
-                owner = {
-                  enabled = false;
-                };
-                voiceModerator = {
-                  enabled = false;
-                };
-                webhook = {
-                  enabled = false;
-                };
-                enabled = false;
-              };
-            };
             noF1.enable = true;
             noMosaic.enable = true;
             noNitroUpsell.enable = true;
