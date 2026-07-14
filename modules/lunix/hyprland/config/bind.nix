@@ -41,6 +41,7 @@
             (bind "${mainMod} + Q" dsp.close)
             (bind "${mainMod} + F" dsp.fullscreen)
             (bind "${mainMod} + D" (dsp.exec "discord"))
+            (bind "${mainMod} + O" (dsp.exec "obsidian"))
             # (bind "${mainMod} + Space" (dsp.exec "wofi --show drun --allow-images --prompt Applications"))
             # (bind "Print" (dsp.exec "grim -g \\\"$(slurp)\\\" - | wl-copy"))
             # (bind "SHIFT + Print" (
