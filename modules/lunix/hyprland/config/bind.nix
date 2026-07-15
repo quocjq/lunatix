@@ -36,9 +36,9 @@
         settings = {
           bind = [
             # Actions
-            (bind "${mainMod} + Return" (dsp.exec "emacsclient  -e \\\"(eshell)\\\" "))
-            (bind "${mainMod} + T" (dsp.exec "emacsclient  -n -a \\\"\\\" "))
-            (bind "${mainMod} + E" (dsp.exec "emacsclient  -n -a \\\"\\\" \\\"$(pwd)\\\" "))
+            (bind "${mainMod} + Return" (dsp.exec "emacsclient -e \\\"(eshell)\\\" "))
+            (bind "${mainMod} + T" (dsp.exec "emacsclient -n -a \\\"\\\" "))
+            (bind "${mainMod} + E" (dsp.exec "emacsclient -n -a \\\"\\\" \\\"$(pwd)\\\" "))
             (bind "${mainMod} + B" (dsp.exec "zen-twilight"))
             (bind "${mainMod} + Q" dsp.close)
             (bind "${mainMod} + F" dsp.fullscreen)

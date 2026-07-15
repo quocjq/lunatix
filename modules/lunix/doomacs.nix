@@ -13,7 +13,7 @@
   lix.doomacs = {
     homeManager = { pkgs, ... }: {
       imports = [ inputs.nix-doom-emacs-unstraightened.homeModule ];
-
+      services.emacs.enable = true;
       programs.doom-emacs = {
         enable = true;
         doomDir = inputs.doom-config;

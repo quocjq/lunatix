@@ -13,7 +13,9 @@
               "hyprland.start"
               (lua ''
                 function()
-                  hl.exec_cmd("emacs")
+                  hl.exec_cmd("emacsclient -c -e \\\"(eshell)\\\" ")
+                  hl.exec_cmd("bluetooth")
+                  hl.exec_cmd("noctalia")
                 end
               '')
             ];

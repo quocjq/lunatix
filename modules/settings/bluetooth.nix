@@ -3,7 +3,16 @@
     nixos = {
       hardware.bluetooth = {
         enable = true;
-        powerOnBoot = false;
+        powerOnBoot = true;
+        settings = {
+          General = {
+            Experimental = true;
+            FastConnectable = true;
+          };
+          Policy = {
+            AutoEnable = true;
+          };
+        };
       };
     };
   };
