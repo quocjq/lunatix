@@ -7,6 +7,9 @@
   };
 
   lix.hyprland = {
+    includes = [
+      lix.noctalia
+    ];
     # Requirement
     provides.to-hosts.nixos = { pkgs, ... }: {
       # The Hyprland Cachix exists to cache the hyprland packages and any dependencies not found in cache.nixos.org.
