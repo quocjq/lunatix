@@ -2,7 +2,7 @@
 {
   flake-file.inputs.noctalia = {
     url = "github:noctalia-dev/noctalia";
-    inputs.nixpkgs.follow = "nixpkgs";
+    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   lix.noctalia = {
@@ -11,22 +11,20 @@
       services.upower.enable = true;
     };
     homeManager = {
-      home-manager.users.drfoobar = {
-        imports = [
-          inputs.noctalia.homeModules.default
-        ];
-        programs.noctalia = {
-          enable = true;
-          settings = {
-            theme = {
-              mode = "dark";
-              source = "builtin";
-              builtin = "Catppuccin";
-            };
-            wallpaper = {
-              enabled = false;
-              default.path = "/path/to/wallpapers/wallpaper.png";
-            };
+      imports = [
+        inputs.noctalia.homeModules.default
+      ];
+      programs.noctalia = {
+        enable = true;
+        settings = {
+          theme = {
+            mode = "dark";
+            source = "builtin";
+            builtin = "Catppuccin";
+          };
+          wallpaper = {
+            enabled = false;
+            default.path = "/path/to/wallpapers/wallpaper.png";
           };
         };
       };

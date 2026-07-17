@@ -37,8 +37,8 @@
           bind = [
             # Actions
             (bind "${mainMod} + Return" (dsp.exec "emacsclient -e \\\"(eshell)\\\" "))
-            (bind "${mainMod} + T" (dsp.exec "emacsclient -n -a \\\"\\\" "))
-            (bind "${mainMod} + E" (dsp.exec "emacsclient -n -a \\\"\\\" \\\"$(pwd)\\\" "))
+            (bind "${mainMod} + T" (dsp.exec "emacsclient -c -n -a \\\"\\\" "))
+            (bind "${mainMod} + E" (dsp.exec "emacsclient -c -n -a \\\"\\\" \\\"$(pwd)\\\" "))
             (bind "${mainMod} + B" (dsp.exec "zen-twilight"))
             (bind "${mainMod} + Q" dsp.close)
             (bind "${mainMod} + F" dsp.fullscreen)
@@ -49,6 +49,8 @@
             (bind "XF86AudioLowerVolume" (dsp.exec "wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%-"))
             (bind "XF86AudioMute" (dsp.exec "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
             (bind "XF86AudioMicMute" (dsp.exec "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"))
+            (bind "XF86MonBrightnessUp" (dsp.exec "noctalia msg brightness-up"))
+            (bind "XF86MonBrightnessDown" (dsp.exec "noctalia msg brightness-down"))
 
             (bindF "${mainMod} + mouse:272" dsp.mouse.drag dsp.mouse.flag)
             (bindF "${mainMod} + mouse:273" dsp.mouse.resize dsp.mouse.flag)

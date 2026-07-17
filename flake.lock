@@ -714,6 +714,26 @@
         "url": "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz"
       }
     },
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784090059,
+        "narHash": "sha256-0bU1kDfpkEYE59wXmnIVrRgW0o3i+y82MyXoMMxqYco=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia",
+        "rev": "9a28579dad6e8651663f01be29b7333023b46cdb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia",
+        "type": "github"
+      }
+    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -771,6 +791,7 @@
         "nix-doom-emacs-unstraightened": "nix-doom-emacs-unstraightened",
         "nixcord": "nixcord",
         "nixpkgs": "nixpkgs_3",
+        "noctalia": "noctalia",
         "plasma-manager": "plasma-manager",
         "zen-browser": "zen-browser"
       }

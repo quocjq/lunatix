@@ -59,8 +59,9 @@
         zig
         zls
         graphviz
-        pyright
+        # Go
         go-grip
+        # Markdown
         marksman # markdown language server
         hugo
         dockfmt
@@ -69,18 +70,31 @@
         jdt-language-server
         bash-language-server
         yaml-language-server
+        # python
         black
         python313Packages.pyflakes
         isort
         python312Packages.pytest
         pyenv
+        pyright
+
+        # Nix
         nil # nix language server
         nixd
         nixfmt
         nixfmt-tree
         deadnix
         nixpkgs-review
+
+        # lisp
         sbcl
+
+        # Rust
+        cargo
+        rustc
+        rustfmt
+        clippy
+        rust-analyzer
       ];
     };
   };

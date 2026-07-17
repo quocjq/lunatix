@@ -26,6 +26,10 @@
     };
     nixcord.url = "github:4evy/nixcord";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs = {

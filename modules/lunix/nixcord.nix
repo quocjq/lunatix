@@ -19,7 +19,8 @@
         config = {
           useQuickCss = true;
           enabledThemeLinks = [
-            "https://raw.githubusercontent.com/refact0r/system24/refs/heads/main/theme/system24.theme.css"
+            # "https://raw.githubusercontent.com/refact0r/system24/refs/heads/main/theme/system24.theme.css"
+            "https://raw.githubusercontent.com/refact0r/midnight-discord/refs/heads/master/themes/midnight.theme.css"
           ];
           frameless = true;
           transparent = true;
@@ -76,7 +77,7 @@
         extraConfig.plugins = {
           CollapsibleUI = {
             enable = true;
-            detachUserArea = true;
+            detachUserArea = false;
           };
           fakeNitro = {
             useHyperLinks = true;
