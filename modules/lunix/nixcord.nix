@@ -3,7 +3,6 @@
     nixcord = {
       url = "github:4evy/nixcord";
     };
-  };
   lix.nixcord = {
     homeManager = { pkgs, ... }: {
       imports = [ inputs.nixcord.homeModules.nixcord ];
