@@ -22,7 +22,7 @@
     provides.to-hosts.nixos = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [
         yazi
-        kitty
+        ghostty
         neovim
         wget
         git

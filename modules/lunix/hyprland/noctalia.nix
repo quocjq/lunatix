@@ -23,8 +23,8 @@
             builtin = "Catppuccin";
           };
           wallpaper = {
-            enabled = false;
-            default.path = "/path/to/wallpapers/wallpaper.png";
+            enabled = true;
+            default.path = "/home/lunixose/Pictures/wallpaper/10.png";
           };
         };
       };
