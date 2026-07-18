@@ -17,6 +17,7 @@
         plasma
         hyprland
         kanata
+        starship
       ]);
 
     provides.to-hosts.nixos = { pkgs, ... }: {
