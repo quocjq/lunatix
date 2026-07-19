@@ -11,6 +11,19 @@
     };
   };
   lix.doomacs = {
+    provides.to-hosts.nixos = { pkgs, ... }: {
+      nix.settings = {
+        substituters = [ "https://doom-emacs-unstraightened.cachix.org" ];
+        trusted-substituters = [ "https://doom-emacs-unstraightened.cachix.org" ];
+        trusted-public-keys = [
+          "doom-emacs-unstraightened.cachix.org-1:O5oOlRPnmQEvVaFyuMTmthCEooHbrg54WgSLR07tmg4="
+        ];
+        trusted-users = [
+          "root"
+          "@wheel"
+        ];
+      };
+    };
     homeManager = { pkgs, ... }: {
       imports = [ inputs.nix-doom-emacs-unstraightened.homeModule ];
       services.emacs.enable = true;

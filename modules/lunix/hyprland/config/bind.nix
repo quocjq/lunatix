@@ -39,6 +39,7 @@
             (bind "${mainMod} + Return" (dsp.exec "ghostty"))
             (bind "${mainMod} + T" (dsp.exec "emacsclient -c -n -a \\\"\\\" "))
             (bind "${mainMod} + E" (dsp.exec "ghostty -e yazi"))
+            (bind "${mainMod} + SHIFT + E" (dsp.exec "emacs"))
             (bind "${mainMod} + B" (dsp.exec "zen-twilight"))
             (bind "${mainMod} + Q" dsp.close)
             (bind "${mainMod} + F" dsp.fullscreen)
