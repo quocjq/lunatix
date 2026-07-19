@@ -22,6 +22,7 @@
 
     provides.to-hosts.nixos = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [
+        codecrafters-cli
         yazi
         ghostty
         neovim
