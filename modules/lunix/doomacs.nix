@@ -23,6 +23,10 @@
           "@wheel"
         ];
       };
+      # HACK: make magit works
+      environment.systemPackages = with pkgs; [
+        git
+      ];
     };
     homeManager = { pkgs, ... }: {
       imports = [ inputs.nix-doom-emacs-unstraightened.homeModule ];
