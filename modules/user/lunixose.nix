@@ -1,27 +1,23 @@
 {
-  den,
-  lix,
+  __findFile,
   ...
 }:
 {
   den.aspects.lunixose = {
-    includes =
-      (with den.batteries; [
-        define-user
-        primary-user
-      ])
-      ++ (with lix; [
-        doomacs
-        zenwser
-        nixcord
-        plasma
-        hyprland
-        kanata
-        starship
-      ]);
-
-    provides.to-hosts.nixos = { pkgs, ... }: {
-      environment.systemPackages = with pkgs; [
+    includes = [
+      <den/define-user>
+      <den/primary-user>
+      <lix/doomacs>
+      <lix/zenwser>
+      <lix/nixcord>
+      <lix/plasma>
+      <lix/hyprland>
+      <lix/kanata>
+      <lix/starship>
+    ];
+    user = { pkgs, ... }: {
+      initialHashedPassword = "$6$.u5xmD5jRI69qFuA$L/M.0dWMo4pS5tLIsgZboyEzZeVXI.v17sG0SDv7WekS.VNEwyEbswld8yV3FHXymhUCnc1phCxyHxpi66uLs.";
+      packages = with pkgs; [
         codecrafters-cli
         yazi
         ghostty

@@ -1,10 +1,10 @@
-{ den, ... }: {
+{ __findFile, ... }: {
   den.hosts.x86_64-linux.igloo.users.lunixose = { };
 
   den.aspects.igloo = {
     includes = [
-      den.aspects.settings
-      den.aspects.latitude3250
+      <settings>
+      <latitude3250>
     ];
     nixos =
       {
