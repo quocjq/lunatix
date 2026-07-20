@@ -1,4 +1,4 @@
-# lunatix
+# lunatixOS
 
 Personal NixOS configuration for the `igloo` host, built on a dendritic
 flake layout using the [den](https://github.com/denful/den) framework,
