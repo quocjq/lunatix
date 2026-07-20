@@ -14,6 +14,7 @@
       <lix/hyprland>
       <lix/kanata>
       <lix/starship>
+      <lix/bash>
       <lix/claude>
     ];
     user = { pkgs, ... }: {
@@ -21,6 +22,7 @@
       packages = with pkgs; [
         claude-code
         codecrafters-cli
+        just
         yazi
         ghostty
         neovim

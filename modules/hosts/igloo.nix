@@ -5,6 +5,8 @@
     includes = [
       <settings>
       <latitude3250>
+      <disko-latitude3250>
+      <lig/agenix>
     ];
     nixos =
       {
