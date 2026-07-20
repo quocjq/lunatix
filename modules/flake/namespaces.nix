@@ -2,6 +2,6 @@
 {
   imports = [
     (inputs.den.namespace "lix" true)
-    # (inputs.den.namespace "lig" false)
+    (inputs.den.namespace "lig" false)
   ];
 }
