@@ -57,9 +57,77 @@ modules/
     kanata.nix            Home-row mods keyboard remapping
     starship.nix          Shell prompt
     claude.nix            Claude Code
+  lig/                    Secret-management aspects (`lig` namespace)
+    agenix.nix            agenix consumer: turns `secrets` declarations into age.secrets
+    _secrets/             Encrypted *.age files + agenix rules (secrets.nix)
   user/
     lunixose.nix          User definition and packages
 ```
+
+## Reinstall on a fresh machine
+
+A fresh NixOS installer has neither flakes nor any of the install tooling
+enabled. The whole flow is driven from the `justfile`, and every recipe turns
+on the experimental features it needs from the command line — so the only tool
+you have to fetch by hand is `just`.
+
+Boot the NixOS installer ISO, connect to the network, then:
+
+1. **Get the repo and `just`.** `git` and `just` are the only things you pull
+   into the ephemeral installer shell:
+
+   ```console
+   nix-shell -p just git
+   git clone https://github.com/lunixose/lunatix
+   cd lunatix
+   ```
+
+2. **Enter the bootstrap toolbox.** This drops you into a shell with `disko`,
+   `cryptsetup`, `btrfs-progs`, `nixos-install-tools` and everything else the
+   install shells out to, pinned to `flake.lock`:
+
+   ```console
+   just bootstrap
+   ```
+
+3. **Check the target disk.** Confirm it matches the device pinned in
+   `modules/disko/latitude3250.nix`:
+
+   ```console
+   lsblk -o NAME,SIZE,TYPE,MODEL,SERIAL
+   ```
+
+4. **Stash the LUKS passphrase** where disko expects it while formatting. This
+   is used only during formatting — boot still prompts interactively:
+
+   ```console
+   echo -n 'your-passphrase' > /tmp/secret.key
+   ```
+
+5. **Partition, format and mount** the disk at `/mnt`. This is DESTRUCTIVE — it
+   wipes the target disk:
+
+   ```console
+   just disko-format
+   ```
+
+6. **Install the system** onto the freshly mounted `/mnt`:
+
+   ```console
+   just install
+   ```
+
+7. **Reboot**, log in, then activate the full configuration from the installed
+   system:
+
+   ```console
+   just switch
+   ```
+
+> The host mounts in `modules/hosts/igloo.nix` pin specific LUKS UUIDs. A fresh
+> `disko` run generates new UUIDs, so update those (and `/boot`'s) to match the
+> new disk — or set `disko.enableConfig = true` in
+> `modules/disko/latitude3250.nix` and drop the hand-written block.
 
 ## Desktop
 

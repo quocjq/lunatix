@@ -23,6 +23,7 @@
         claude-code
         codecrafters-cli
         just
+        nh
         yazi
         ghostty
         neovim
