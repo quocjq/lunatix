@@ -45,10 +45,6 @@
       };
 
       home.packages = with pkgs; [
-        (pkgs.aspellWithDicts (dicts: [
-          dicts.en
-          dicts.en-computers
-        ]))
         languagetool
         nerd-fonts.symbols-only
         twemoji-color-font
@@ -80,6 +76,8 @@
         go-grip
         # Markdown
         marksman # markdown language server
+        pandoc
+        multimarkdown
         hugo
         dockfmt
         html-tidy
