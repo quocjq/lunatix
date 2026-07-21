@@ -11,6 +11,14 @@
           command = "${pkgs.starship}/bin/starship statusline claude-code";
           padding = 0;
         };
+        plugins = with pkgs; [
+          (fetchFromGitHub {
+            owner = "juliusbrussee";
+            repo = "caveman";
+            rev = "0d95a81d35a9f2d123a5e9430d1cfc43d55f1bb0";
+            sha256 = "sha256-VqRHx3/4SSCnEh3cUJ/he5saIfwNhS0hOzoH/wwtU2o=";
+          })
+        ];
       };
     };
   };
