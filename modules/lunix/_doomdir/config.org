@@ -1,0 +1,1914 @@
+#+title: Config
+#+author: Lunixose
+
+This is a [[https://en.wikipedia.org/wiki/Literate_programming][literate]] Doom Emacs configuration: prose and code live
+together, and the code blocks below are extracted ("tangled") into the
+=.el= files Emacs actually loads. Doom's =:config literate= module
+handles that tangling automatically on save — so there is no need for
+=org-auto-tangle=. Blocks are routed by their =:tangle= header: the
+Doom modules block sends it to =init.el=, package declarations carry
+=:tangle packages.el=, and every other block tangles to =config.el=.
+
+* Table of Content :toc:
+- [[#doom-modules][Doom modules]]
+- [[#personal-information][Personal Information]]
+- [[#better-defaults][Better Defaults]]
+- [[#basic][Basic]]
+  - [[#theme-and-fonts][Theme and Fonts]]
+  - [[#display][Display]]
+  - [[#org-directory][Org Directory]]
+  - [[#editing-defaults][Editing Defaults]]
+  - [[#completion][Completion]]
+  - [[#buffer-behavior][Buffer Behavior]]
+- [[#appearance][Appearance]]
+  - [[#splash-screen][Splash Screen]]
+  - [[#transparency][Transparency]]
+- [[#keybind][Keybind]]
+  - [[#tabout][Tabout]]
+  - [[#toggle][Toggle]]
+- [[#editor][Editor]]
+  - [[#snippets][Snippets]]
+- [[#languages][Languages]]
+  - [[#lsp][LSP]]
+  - [[#web][Web]]
+  - [[#python][Python]]
+  - [[#latex][LaTeX]]
+  - [[#markdown][Markdown]]
+- [[#orgmode][Orgmode]]
+  - [[#appearance-1][Appearance]]
+  - [[#fonts-and-headings][Fonts and Headings]]
+  - [[#symbols][Symbols]]
+  - [[#emphasis-markers][Emphasis Markers]]
+  - [[#behaviour][Behaviour]]
+  - [[#nicer-return][Nicer Return]]
+  - [[#capture-templates][Capture Templates]]
+  - [[#source-blocks][Source Blocks]]
+- [[#agenda][Agenda]]
+- [[#roam][Roam]]
+  - [[#basic-settings][Basic settings]]
+  - [[#modeline-file-name][Modeline file name]]
+  - [[#graph-view][Graph view]]
+- [[#html-export][HTML Export]]
+  - [[#extra-header-content][Extra header content]]
+  - [[#custom-cssjs][Custom CSS/JS]]
+  - [[#collapsable-src-and-example-blocks][Collapsable src and example blocks]]
+  - [[#handle-table-overflow][Handle table overflow]]
+  - [[#toc-as-a-collapsable-tree][TOC as a collapsable tree]]
+  - [[#make-verbatim-different-to-code][Make verbatim different to code]]
+  - [[#change-checkbox-type][Change checkbox type]]
+  - [[#extra-special-strings][Extra special strings]]
+  - [[#header-anchors][Header anchors]]
+  - [[#link-previews][Link previews]]
+  - [[#latex-rendering][LaTeX Rendering]]
+- [[#other-packages][Other Packages]]
+
+* Doom modules
+This block tangles to =init.el=
+#+begin_src emacs-lisp :tangle init.el
+;;; $DOOMDIR/init.el -*- lexical-binding: t; -*-
+
+(doom! :input
+       ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
+       ;;chinese
+       ;;japanese
+       ;;layout            ; auie,ctsrnm is the superior home row
+
+       :completion
+       ;; company           ; the ultimate code completion backend
+       (corfu +orderless)  ; complete with cap(f), cape and a flying feather!
+       ;;helm              ; the *other* search engine for love and life
+       ;;ido               ; the other *other* search engine...
+       ;;ivy               ; a search engine for love and life
+       vertico           ; the search engine of the future
+
+       :ui
+       deft              ; notational velocity for Emacs
+       doom              ; what makes DOOM look the way it does
+       dashboard         ; a nifty splash screen for Emacs
+       ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
+       ;;(emoji +unicode)  ; 🙂
+       hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+       indent-guides     ; highlighted indent columns
+       (ligatures +extra)         ; ligatures and symbols to make your code pretty again
+       ;;minimap           ; show a map of the code on the side
+       modeline          ; snazzy, Atom-inspired modeline, plus API
+       ;; nav-flash         ; blink cursor line after big motions
+       ;;neotree           ; a project drawer, like NERDTree for vim
+       ophints           ; highlight the region an operation acts on
+       (popup +defaults)   ; tame sudden yet inevitable temporary windows
+       smooth-scroll     ; So smooth you won't believe it's not butter
+       ;;tabs              ; a tab bar for Emacs
+       ;;treemacs          ; a project drawer, like neotree but cooler
+       unicode           ; extended unicode support for various languages
+       (vc-gutter +pretty) ; vcs diff in the fringe
+       vi-tilde-fringe   ; fringe tildes to mark beyond EOB
+       window-select     ; visually switch windows
+       workspaces        ; tab emulation, persistence & separate workspaces
+       zen               ; distraction-free coding or writing
+
+       :editor
+       (evil +everywhere); come to the dark side, we have cookies
+       file-templates    ; auto-snippets for empty files
+       fold              ; (nigh) universal code folding
+       (format +onsave)  ; automated prettiness
+       ;;god               ; run Emacs commands without modifier keys
+       ;;lispy             ; vim for lisp, for people who don't like vim
+       multiple-cursors  ; editing in many places at once
+       ;;objed             ; text object editing for the innocent
+       parinfer          ; turn lisp into python, sort of
+       rotate-text       ; cycle region at point between text candidates
+       snippets          ; my elves. They type so I don't have to
+       (whitespace +guess +trim)  ; a butler for your whitespace
+       ;;word-wrap         ; soft wrapping with language-aware indent
+
+       :emacs
+       dired             ; making dired pretty [functional]
+       electric          ; smarter, keyword-based electric-indent
+       eww               ; the internet is gross
+       ibuffer           ; interactive buffer management
+       tramp             ; remote files at your arthritic fingertips
+       undo              ; persistent, smarter undo for your inevitable mistakes
+       vc                ; version-control and Emacs, sitting in a tree
+
+       :term
+       eshell            ; the elisp shell that works everywhere
+       ;;shell             ; simple shell REPL for Emacs
+       ;;term              ; basic terminal emulator for Emacs
+       vterm             ; the best terminal emulation in Emacs
+
+       :checkers
+       syntax              ; tasing you for every semicolon you forget
+       (spell +flyspell) ; tasing you for misspelling mispelling
+       grammar           ; tasing grammar mistake every you make
+
+       :tools
+       ;; ansible
+       biblio            ; Writes a PhD for you (citation needed)
+       ;;collab            ; buffers with friends
+       debugger          ; stepping through code, to help you add bugs
+       direnv
+       docker
+       editorconfig      ; let someone else argue about tabs vs spaces
+       ;;ein               ; tame Jupyter notebooks with emacs
+       (eval +overlay)     ; run code, run (also, repls)
+       lookup              ; navigate your code and its documentation
+       ;;llm               ; when I said you needed friends, I didn't mean...
+       (lsp +eglot)      ; M-x vscode
+       magit             ; a git porcelain for Emacs
+       make              ; run make tasks from Emacs
+       pass              ; password manager for nerds
+       pdf               ; pdf enhancements
+       ;;terraform         ; infrastructure as code
+       ;; tmux              ; an API for interacting with tmux
+       tree-sitter       ; syntax and parsing, sitting in a tree...
+       upload            ; map local to remote projects via ssh/ftp
+
+       :os
+       (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
+       ;;tty               ; improve the terminal Emacs experience
+
+       :lang
+       ;;ada               ; In strong typing we (blindly) trust
+       (agda +local)     ; types of types of types of types...
+       ;;beancount         ; mind the GAAP
+       (cc +lsp)         ; C > C++ == 1
+       ;;clojure           ; java with a lisp
+       common-lisp       ; if you've seen one lisp, you've seen them all
+       ;;coq               ; proofs-as-programs
+       ;;crystal           ; ruby at the speed of c
+       ;;csharp            ; unity, .NET, and mono shenanigans
+       data              ; config/data formats
+       ;;(dart +flutter)   ; paint ui and not much else
+       ;;dhall
+       ;;elixir            ; erlang done right
+       ;;elm               ; care for a cup of TEA?
+       emacs-lisp        ; drown in parentheses
+       ;;erlang            ; an elegant language for a more civilized age
+       ;;ess               ; emacs speaks statistics
+       ;;factor
+       ;;faust             ; dsp, but you get to keep your soul
+       ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
+       ;;fsharp            ; ML stands for Microsoft's Language
+       ;;fstar             ; (dependent) types and (monadic) effects and Z3
+       ;;gdscript          ; the language you waited for
+       (go +lsp)         ; the hipster dialect
+       ;;(graphql +lsp)    ; Give queries a REST
+       ;;(haskell +lsp)    ; a language that's lazier than I am
+       ;;hy                ; readability of scheme w/ speed of python
+       ;;idris             ; a language you can depend on
+       json              ; At least it ain't XML
+       ;;janet             ; Fun fact: Janet is me!
+       (java +lsp)       ; the poster child for carpal tunnel syndrome
+       javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       ;;julia             ; a better, faster MATLAB
+       ;;kotlin            ; a better, slicker Java(Script)
+       (latex +lsp +fold +cdlatex)             ; writing papers in Emacs has never been so fun
+       lean              ; for folks with too much to prove
+       ;;ledger            ; be audit you can be
+       (lua +lsp)               ; one-based indices? one-based indices
+       (markdown +lsp +tree-sitter +grip)          ; writing docs for people to ignore
+       ;;nim               ; python + lisp at the speed of c
+       (nix +lsp +tree-sitter)               ; I hereby declare "nix geht mehr!"
+       ;;ocaml             ; an objective camel
+       ;;odin              ; C, minus its footguns
+       org               ; organize your plain life in plain text
+       php               ; perl's insecure younger brother
+       ;;plantuml          ; diagrams for confusing people more
+       ;;graphviz          ; diagrams for confusing yourself even more
+       ;;purescript        ; javascript, but functional
+       (python +lsp +tree-sitter)            ; beautiful is better than ugly
+       (qt +lsp +tree-sitter)                ; the 'cutest' gui framework ever
+       ;;racket            ; a DSL for DSLs
+       ;;raku              ; the artist formerly known as perl6
+       ;;rest              ; Emacs as a REST client
+       ;;rst               ; ReST in peace
+       (ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       ;;scad              ; trust the preview, regret the render
+       ;;scala             ; java, but good
+       ;; (scheme +guile)   ; a fully conniving family of lisps
+       (sh +lsp)                ; she sells {ba,z,fi}sh shells on the C xor
+       ;;sml
+       ;;solidity          ; do you need a blockchain? No.
+       ;;swift             ; who asked for emoji variables?
+       ;;terra             ; Earth and Moon in alignment for performance.
+       (web +lsp +tree-sitter)               ; the tubes
+       yaml              ; JSON, but readable
+       ;;zig               ; C, but simpler
+
+       :email
+       (mu4e +org +gmail)
+       ;;notmuch
+       ;;(wanderlust +gmail)
+
+       :app
+       calendar
+       ;;emms
+       ;;everywhere        ; *leave* Emacs!? You must be joking
+       irc               ; how neckbeards socialize
+       (rss +org)        ; emacs as an RSS reader
+
+       :config
+       literate
+       (default +bindings +smartparens))
+
+#+end_src
+* Personal Information
+Some packages (Magit commits, mu4e, snippets, GPG) read these
+variables to know who you are. Fill in the email below — it's left as
+a TODO so it doesn't ship a placeholder address.
+
+#+begin_src emacs-lisp
+(setq user-full-name "Lunixose"
+      user-mail-address "luniose@gmail.com")
+#+end_src
+* Better Defaults
+A handful of small, broadly-useful tweaks borrowed from
+[[https://tecosaur.github.io/emacs-config/config.html][tecosaur's config]]. None of these depend on a specific package — they
+just make the out-of-the-box behaviour a little nicer.
+
+- =delete-by-moving-to-trash= sends deletions to the system trash
+  instead of erasing them outright.
+- =window-combination-resize= takes space for a new window from all
+  others, not just the current one.
+- =x-stretch-cursor= widens the block cursor to the glyph under it (so
+  it covers a TAB fully).
+- =evil-want-fine-undo= makes undo step through edits in smaller,
+  more predictable chunks.
+- =undo-limit= raises how much undo history is kept in memory.
+- =truncate-string-ellipsis= swaps the =...= truncation marker for a
+  single =…= glyph.
+- =password-cache-expiry= keeps entered passwords cached for the
+  session instead of expiring after a couple of minutes.
+- =global-subword-mode= lets word motions stop at CamelCase
+  boundaries.
+- =display-time-mode= puts a clock in the modeline.
+- =which-key-idle-delay= shows the keybinding popup sooner.
+
+#+begin_src emacs-lisp
+(setq-default delete-by-moving-to-trash t
+              window-combination-resize t
+              x-stretch-cursor t)
+(setq undo-limit (* 80 1024 1024)     ; 80 MB of undo history
+      evil-want-fine-undo t
+      truncate-string-ellipsis "…"
+      password-cache-expiry nil
+      display-time-default-load-average nil
+      which-key-idle-delay 0.4)
+(display-time-mode 1)
+(global-subword-mode 1)
+#+end_src
+
+Send Emacs' auto-generated =customize= settings to their own file
+instead of letting them clutter =config.el=, and load it if present.
+This keeps hand-written config and machine-written config separate.
+
+#+begin_src emacs-lisp
+(setq-default custom-file (expand-file-name ".custom.el" doom-user-dir))
+(when (file-exists-p custom-file)
+  (load custom-file))
+#+end_src
+
+Use =hippie-expand= for =M-/= completion — it tries a whole list of
+strategies (visible text, other buffers, filenames, kill-ring, lisp
+symbols) in turn, which is more capable than the default =dabbrev=.
+
+#+begin_src emacs-lisp
+(global-set-key [remap dabbrev-expand] #'hippie-expand)
+(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev-visible
+        try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-all-abbrevs
+        try-expand-line
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
+#+end_src
+* Basic
+Core settings that shape the everyday editing experience: theme,
+fonts, how the frame opens, and a handful of quality-of-life tweaks.
+
+** Theme and Fonts
+Pick the Monokai Octagon theme and set JetBrainsMono Nerd Font as the
+default. The Nerd Font variant ships the glyphs used by the modeline
+and dashboard icons.
+
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-monokai-octagon)
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 18 :weight 'medium))
+#+end_src
+
+** Display
+Open maximized and use relative line numbers, which pair well with
+Evil's count-based motions.
+
+#+begin_src emacs-lisp
+(setq display-line-numbers-type 'relative)
+#+end_src
+
+** Org Directory
+Where Org files live by default. Agenda, capture, and refile all read
+from here.
+
+#+begin_src emacs-lisp
+(setq org-directory "~/Org/")
+#+end_src
+
+** Editing Defaults
+Indent with two spaces and disable Emacs' auto-save (=#file#=) files —
+version control covers recovery here.
+
+#+begin_src emacs-lisp
+(setq-default tab-width 2)
+(setq auto-save-default nil)
+#+end_src
+
+** Completion
+Enable =fido-mode=, a lightweight built-in completion UI, layered on
+top of Doom's Vertico stack.
+
+#+begin_src emacs-lisp
+(use-package! icomplete
+  :config
+  (fido-mode 1))
+#+end_src
+
+** Buffer Behavior
+Auto-revert keeps buffers in sync with changes made on disk (including
+non-file buffers like Dired). The advice prompts for which buffer to
+show whenever a window is split, instead of duplicating the current
+one. The =flyspell= tweak stops it from flagging repeated words.
+
+#+begin_src emacs-lisp
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
+(defadvice! prompt-for-buffer (&rest _)
+  :after 'window-split (switch-to-buffer))
+(after! flyspell
+  (setq flyspell-duplicate-distance nil))
+#+end_src
+* Appearance
+** Splash Screen
+
+#+begin_src emacs-lisp
+;; Place 'my-banner.png' inside your ~/.config/doom/ directory
+;; (setq fancy-splash-image (expand-file-name "my-banner.png" doomdir))
+(defun my-custom-ascii-banner-fn ()
+  (propertize
+   "
+ __  __       ____
+|  \\/  |_   _|  _ \\  ___   ___  _ __ ___
+| |\\/| | | | | | | |/ _ \\ / _ \\| '_ ` _ \\
+| |  | | |_| | |_| | (_) | (_) | | | | | |
+|_|  |_|\\__, |____/ \\___/ \\___/|_| |_| |_|
+        |___/
+"
+   'face '+dashboard-banner))
+(setq +dashboard-ascii-banner-fn #'my-custom-ascii-banner-fn)
+
+(defun my-dashboard-widget-welcome ()
+  "Inserts a welcome message into the dashboard."
+  (insert "\n")
+  (+dashboard-insert
+   (propertize "Welcome home, Lunixose!"
+               ;; Try 'font-lock-string-face or 'font-lock-comment-face
+               'face 'font-lock-keyword-face)))
+
+(setq +dashboard-functions
+      '(+dashboard-widget-banner
+        my-dashboard-widget-welcome
+        +dashboard-widget-footer
+        +dashboard-widget-loaded))
+#+end_src
+** Transparency
+Make the frame slightly translucent. The =(active . inactive)= pair
+sets background opacity for the focused and unfocused frame; adding it
+to =default-frame-alist= applies the same to new frames.
+
+#+begin_src emacs-lisp
+(set-frame-parameter (selected-frame) 'alpha '(96 . 97))
+(add-to-list 'default-frame-alist '(alpha . (96 . 97)))
+#+end_src
+* Keybind
+Custom key bindings layered on top of Doom's defaults.
+
+** Tabout
+Repurpose =TAB= in insert mode: inside an Org table it cycles to the
+next cell, and everywhere else it jumps out of the current pair of
+delimiters (=sp-up-sexp=).
+
+#+begin_src emacs-lisp
+(defun my/tabout ()
+  (interactive)
+  (cond
+   ((and (derived-mode-p 'org-mode)
+         (fboundp 'org-at-table-p)
+         (org-at-table-p))
+    (call-interactively #'org-cycle))
+   (t
+    (ignore-errors (sp-up-sexp)))))
+(map! :i "TAB" #'my/tabout)
+#+end_src
+
+** Toggle
+
+#+begin_src emacs-lisp
+(map! :leader
+        :desc "Toggle nix-eshell"       "n"     #'nix-eshell
+        :desc "Toggle dirvish"          "o /"   #'dirvish
+        :desc "Toggle vterm"            "v t"   #'+vterm/toggle
+        :desc "New vterm"               "v n"   #'+vterm/here)
+#+end_src
+
+* Editor
+General editing behaviour that isn't tied to a single language.
+
+** Snippets
+Doom ships YASnippet. This points it at a personal snippets directory
+and lets one snippet expand into another (nested expansion), which is
+handy for building larger templates out of small pieces.
+
+#+begin_src emacs-lisp
+(after! yasnippet
+  (setq yas-triggers-in-field t)        ; allow nested snippet expansion
+  (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" doom-user-dir)))
+#+end_src
+
+* Languages
+Per-language tweaks. Doom's =:lang= modules already do the heavy
+lifting (LSP, tree-sitter, formatting) — these just adjust a few
+defaults, in the same spirit as tecosaur's language section but pared
+down to the languages you have enabled.
+
+** LSP
+Trim the LSP client for responsiveness: raise the debounce a touch so
+completion isn't recomputed on every keystroke, and stop it from
+scanning huge trees of files for changes. Disabling the doc-glance
+popup keeps hovers from stealing focus.
+
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (setq lsp-idle-delay 0.5
+        lsp-enable-file-watchers nil
+        lsp-enable-symbol-highlighting nil))
+(after! lsp-ui
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-sideline-enable nil))
+#+end_src
+
+** Web
+Two-space indentation for HTML/CSS/JS, which matches your global
+=tab-width= and the common convention for web files.
+
+#+begin_src emacs-lisp
+(after! web-mode
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2))
+#+end_src
+
+** Python
+Silence the native-completion warning that pops up when the running
+Python lacks readline, and prefer =pytest= as the test runner.
+
+#+begin_src emacs-lisp
+(after! python
+  (setq python-shell-completion-native-enable nil))
+#+end_src
+
+** LaTeX
+You have =(latex +lsp +fold +cdlatex)= enabled. Set a wider fill
+column for prose and let previews scale with the buffer font.
+
+#+begin_src emacs-lisp
+(after! latex
+  (setq TeX-fold-math-spec-list nil)    ; keep +fold's defaults
+  (setq-hook! 'LaTeX-mode-hook
+    fill-column 100))
+#+end_src
+
+** Markdown
+*** Titles
+#+begin_src emacs-lisp
+(custom-set-faces!
+'(markdown-header-delimiter-face :foreground "#616161" :height 0.9)
+'(markdown-header-face-1 :height 1.8 :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face)
+'(markdown-header-face-2 :height 1.4 :foreground "#EBCB8B" :weight extra-bold :inherit markdown-header-face)
+'(markdown-header-face-3 :height 1.2 :foreground "#D08770" :weight extra-bold :inherit markdown-header-face)
+'(markdown-header-face-4 :height 1.15 :foreground "#BF616A" :weight bold :inherit markdown-header-face)
+'(markdown-header-face-5 :height 1.1 :foreground "#b48ead" :weight bold :inherit markdown-header-face)
+'(markdown-header-face-6 :height 1.05 :foreground "#5e81ac" :weight semi-bold :inherit markdown-header-face))
+#+end_src
+*** Autohide
+
+#+begin_src emacs-lisp
+(defvar nb/current-line '(0 . 0)
+   "(start . end) of current line in current buffer")
+ (make-variable-buffer-local 'nb/current-line)
+ (defun my/markdown-unhide-table (limit)
+   (when (re-search-forward "^[ \t]*|.*$" limit t)
+     (remove-text-properties (match-beginning 0) (match-end 0)
+                     '(invisible t display "" composition ""))
+     t))
+
+(defun my/markdown-pad-table (limit)
+      (let ((row-end (match-end 0))
+           (cell-start (match-beginning 0)))
+       (goto-char cell-start)
+       (while (search-forward "|" row-end t)
+         (let ((pipe-pos (1- (point)))
+               (hidden 0))
+           (save-excursion
+             (goto-char cell-start)
+             (while (< (point) pipe-pos)
+               (when (or (get-text-property (point) 'invisible)
+                         (equal (get-text-property (point) 'display) ""))
+                 (setq hidden (1+ hidden)))
+               (forward-char 1)))
+           (when (> hidden 0)
+             (put-text-property pipe-pos (1+ pipe-pos) 'display
+                                (concat (make-string hidden ?\s) "|")))
+           (setq cell-start (point))))
+       (goto-char row-end))
+
+ (defun nb/unhide-current-line (limit)
+   "Font-lock function"
+   (let ((start (max (point) (car nb/current-line)))
+         (end (min limit (cdr nb/current-line))))
+     (when (< start end)
+       (remove-text-properties start end
+                       '(invisible t display "" composition ""))
+       (goto-char limit)
+       t)))
+
+ (defun nb/refontify-on-linemove ()
+   "Post-command-hook"
+   (let* ((start (line-beginning-position))
+          (end (line-beginning-position 2))
+          (needs-update (not (equal start (car nb/current-line)))))
+     (setq nb/current-line (cons start end))
+     (when needs-update
+       (font-lock-fontify-block 3))))
+
+ (defun nb/markdown-unhighlight ()
+   "Enable markdown concealling"
+   (interactive)
+   (markdown-toggle-markup-hiding 'toggle)
+   (font-lock-add-keywords nil '((nb/unhide-current-line)
+                                 (my/markdown-pad-table)) t)
+   (add-hook 'post-command-hook #'nb/refontify-on-linemove nil t))
+
+ (add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
+#+end_src
+
+* Orgmode
+Tweaks to how Org buffers look and behave. This is where tecosaur's
+config spends most of its effort, so it's where the borrowed ideas are
+densest — restyling headings, revealing markup on demand, and smarter
+capture — while staying on top of Doom's Org module rather than
+replacing it.
+
+** Appearance
+:PROPERTIES:
+:CUSTOM_ID: appearance-org
+:END:
+=org-modern= restyles headings, lists, tables, keywords, and
+timestamps for a cleaner, more typographic look. Beyond just enabling
+it, these settings pick a nicer bullet for lists, draw a fringe marker
+beside source blocks, and give TODO/DONE labels pill-shaped faces —
+the visual polish tecosaur is known for, without the custom SVG
+machinery.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-modern)
+#+end_src
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-modern-star 'replace                 ; swap heading asterisks for bullets
+        org-modern-list '((?- . "•") (?+ . "◦") (?* . "▪"))
+        org-modern-block-fringe nil              ; keep blocks aligned with text
+        org-modern-table t
+        org-modern-timestamp t)
+  ;; Nicer folding ellipsis and pretty entities (\alpha -> α, etc.)
+  (setq org-ellipsis " ▾"
+        org-pretty-entities t
+        org-hide-emphasis-markers t)
+  (global-org-modern-mode))
+#+end_src
+
+** Fonts and Headings
+:PROPERTIES:
+:CUSTOM_ID: fonts-and-headings
+:END:
+Straight from tecosaur: turn on Doom's =+org-pretty-mode= (mixed-pitch
+prose with monospace code), scale headings so the outline is easy to
+skim, enlarge the document title, italicise quote/verse blocks, and
+paint passed deadlines in the error face. The last block defers
+font-locking in large files so typing doesn't feel sluggish.
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook #'+org-pretty-mode)
+
+(custom-set-faces!
+  '(outline-1 :weight extra-bold :height 1.25)
+  '(outline-2 :weight bold :height 1.15)
+  '(outline-3 :weight bold :height 1.12)
+  '(outline-4 :weight semi-bold :height 1.09)
+  '(outline-5 :weight semi-bold :height 1.06)
+  '(outline-6 :weight semi-bold :height 1.03)
+  '(outline-8 :weight semi-bold)
+  '(outline-9 :weight semi-bold))
+(custom-set-faces!
+  '(org-document-title :height 1.2))
+
+(after! org
+  (setq org-fontify-quote-and-verse-blocks t
+        org-agenda-deadline-faces
+        '((1.001 . error)
+          (1.0 . org-warning)
+          (0.5 . org-upcoming-deadline)
+          (0.0 . org-upcoming-distant-deadline))))
+
+(defun locally-defer-font-lock ()
+  "Set jit-lock defer and stealth, when buffer is over a certain size."
+  (when (> (buffer-size) 50000)
+    (setq-local jit-lock-defer-time 0.05
+                jit-lock-stealth-time 1)))
+(add-hook 'org-mode-hook #'locally-defer-font-lock)
+#+end_src
+
+** Symbols
+
+Use Doom's ligature system to prettify a handful of Org tokens that
+=org-modern= doesn't touch — property drawers, priority cookies, the
+=::= description separator, and arrows. tecosaur wires these to
+=nerd-icons= faces so priorities get colour. The =defadvice!= re-runs
+after Doom sets up Org appearance so the substitutions stick.
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-priority-highest ?A
+        org-priority-lowest ?E
+        org-priority-faces
+        '((?A . nerd-icons-red)
+          (?B . nerd-icons-orange)
+          (?C . nerd-icons-yellow)
+          (?D . nerd-icons-green)
+          (?E . nerd-icons-blue))))
+
+(appendq! +ligatures-extra-symbols
+          (list :list_property "∷"
+                :em_dash       "—"
+                :ellipses      "…"
+                :arrow_right   "→"
+                :arrow_left    "←"
+                :arrow_lr      "↔"
+                :properties    "⚙"
+                :end           "∎"
+                :priority_a    #("⚑" 0 1 (face nerd-icons-red))
+                :priority_b    #("⬆" 0 1 (face nerd-icons-orange))
+                :priority_c    #("■" 0 1 (face nerd-icons-yellow))
+                :priority_d    #("⬇" 0 1 (face nerd-icons-green))
+                :priority_e    #("❓" 0 1 (face nerd-icons-blue))))
+
+(defadvice! +org-init-appearance-h--no-ligatures-a ()
+  :after #'+org-init-appearance-h
+  (set-ligatures! 'org-mode nil)
+  (set-ligatures! 'org-mode
+    :list_property "::"
+    :em_dash       "---"
+    :ellipsis      "..."
+    :arrow_right   "->"
+    :arrow_left    "<-"
+    :arrow_lr      "<->"
+    :properties    ":PROPERTIES:"
+    :end           ":END:"
+    :priority_a    "[#A]"
+    :priority_b    "[#B]"
+    :priority_c    "[#C]"
+    :priority_d    "[#D]"
+    :priority_e    "[#E]"))
+#+end_src
+
+** Emphasis Markers
+With =org-hide-emphasis-markers= on (above), the =/slashes/= and
+=*stars*= around emphasized text are hidden — nice to read, awkward to
+edit. =org-appear= restores them automatically whenever the cursor
+enters the emphasized region, so editing stays easy.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-appear)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! org-appear
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis t
+        org-appear-autolinks t
+        org-appear-autosubmarkers t))
+#+end_src
+
+** Behaviour
+Everyday behaviour tweaks, merging tecosaur's "tweaking defaults" with
+a few of my own: record a timestamp when a task is marked DONE, fold
+on open, indent content under its heading, hide leading stars, let
+properties inherit, allow alphabetical list bullets, guard against
+accidental edits in folded regions, and require explicit ={}= for
+sub/superscripts on export.
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-log-done 'time
+        org-startup-folded 'content
+        org-startup-indented t
+        org-hide-leading-stars t
+        org-return-follows-link t         ; RET opens the link under point
+        org-use-property-inheritance t    ; properties apply to child headings
+        org-list-allow-alphabetical t     ; a. A. a) A) list bullets
+        org-catch-invisible-edits 'smart  ; don't silently edit folded text
+        org-export-with-sub-superscripts '{}  ; require x_{i}, not x_i
+        org-image-actual-width '(0.9)))   ; inline images at 90% of window
+#+end_src
+
+By default Doom turns =visual-line-mode= on in text buffers. That
+wraps in a way that fights Org tables and LaTeX, so swap it for
+=auto-fill-mode= (hard wrapping) here — you can still toggle visual
+wrap per buffer. Also add arrow-key equivalents for Org's =hjkl=
+structural motions.
+
+#+begin_src emacs-lisp
+(remove-hook 'text-mode-hook #'visual-line-mode)
+(add-hook 'text-mode-hook #'auto-fill-mode)
+
+(map! :map evil-org-mode-map
+      :after evil-org
+      :n "g <up>"    #'org-backward-heading-same-level
+      :n "g <down>"  #'org-forward-heading-same-level
+      :n "g <left>"  #'org-up-element
+      :n "g <right>" #'org-down-element)
+#+end_src
+
+** Nicer Return
+:PROPERTIES:
+:CUSTOM_ID: nicer-return
+:END:
+tecosaur's context-aware =RET= (originally from [[https://github.com/alphapapa/unpackaged.el][unpackaged.el]]). On a
+heading it jumps past the entry content; in a list it inserts the next
+item — or ends the list if the current item is empty — carrying a
+checkbox when appropriate; in a table it adds a row. Everywhere else
+it behaves like a normal return.
+
+#+begin_src emacs-lisp
+(defun unpackaged/org-element-descendant-of (type element)
+  "Return non-nil if ELEMENT is a descendant of TYPE.
+TYPE should be an element type, like `item' or `paragraph'.
+ELEMENT should be a list like that returned by `org-element-context'."
+  (when-let* ((parent (org-element-property :parent element)))
+    (or (eq type (car parent))
+        (unpackaged/org-element-descendant-of type parent))))
+
+;;;###autoload
+(defun unpackaged/org-return-dwim (&optional default)
+  "A helpful replacement for `org-return-indent'.  With prefix, call `org-return-indent'.
+
+On headings, move point to position after entry content.  In
+lists, insert a new item or end the list, with checkbox if
+appropriate.  In tables, insert a new row or end the table."
+  (interactive "P")
+  (if default
+      (org-return t)
+    (cond
+     ((org-at-heading-p)
+      (let ((heading-start (org-entry-beginning-position)))
+        (goto-char (org-entry-end-position))
+        (cond ((and (org-at-heading-p)
+                    (= heading-start (org-entry-beginning-position)))
+               (end-of-line)
+               (insert "\n\n"))
+              (t
+               (forward-line -1)
+               (end-of-line)
+               (when (org-at-heading-p)
+                 (forward-line)
+                 (insert "\n")
+                 (forward-line -1))
+               (while (not (looking-back "\\(?:[[:blank:]]?\n\\)\\{3\\}" nil))
+                 (insert "\n"))
+               (forward-line -1)))))
+     ((org-at-item-checkbox-p)
+      (org-insert-todo-heading nil))
+     ((org-in-item-p)
+      (let ((context (org-element-context)))
+        (if (or (eq 'plain-list (car context))
+                (and (eq 'item (car context))
+                     (not (eq (org-element-property :contents-begin context)
+                              (org-element-property :contents-end context))))
+                (unpackaged/org-element-descendant-of 'item context))
+            (org-insert-item)
+          (delete-region (line-beginning-position) (line-end-position))
+          (insert "\n"))))
+     ((when (fboundp 'org-inlinetask-in-task-p)
+        (org-inlinetask-in-task-p))
+      (org-return t))
+     ((org-at-table-p)
+      (if (save-excursion
+            (beginning-of-line)
+            (cl-loop with end = (line-end-position)
+                     for cell = (org-element-table-cell-parser)
+                     always (equal (org-element-property :contents-begin cell)
+                                   (org-element-property :contents-end cell))
+                     while (re-search-forward "|" end t)))
+          (org-return t)
+        (org-table-next-row)))
+     (t
+      (org-return t)))))
+
+(map!
+ :after evil-org
+ :map evil-org-mode-map
+ :i [return] #'unpackaged/org-return-dwim)
+#+end_src
+
+** Capture Templates
+Quick capture entry points, patterned after tecosaur's richer set but
+kept to the essentials: a general TODO, a dated note, and a project
+task. They target files under your =org-directory=. =SPC X= (or =SPC n
+n=) opens the capture menu.
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-capture-templates
+        '(("t" "Todo" entry
+           (file+headline "todo.org" "Inbox")
+           "* TODO %?\n  %U\n  %i" :empty-lines 1)
+          ("n" "Note" entry
+           (file+headline "notes.org" "Notes")
+           "* %? :NOTE:\n  %U\n  %i" :empty-lines 1)
+          ("j" "Journal" entry
+           (file+olp+datetree "journal.org")
+           "* %?\n  %U" :empty-lines 1))))
+#+end_src
+
+** Source Blocks
+Since this very config is written in Org source blocks, these settings
+make editing them pleasant: real syntax highlighting inside blocks,
+=TAB= behaving as it would in the block's language, and =C-c '= (edit
+block) opening in the current window instead of splitting.
+=org-src-preserve-indentation= keeps whitespace-sensitive code intact
+when tangled.
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-src-preserve-indentation t
+        org-src-window-setup 'current-window))
+#+end_src
+
+* Agenda
+tecosaur's souped-up agenda, built on =org-super-agenda=. This groups
+the =alltodo= view by tag, priority, and deadline so a single =SPC o A
+o= "Overview" gives you Today's time-grid plus everything else bucketed
+sensibly.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-super-agenda)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! org-super-agenda
+  :commands org-super-agenda-mode)
+#+end_src
+
+The custom command below is tecosaur's, verbatim. The =:discard= at
+the end drops chore/routine/daily-tagged items from the overview so it
+stays focused on real work.
+
+#+begin_src emacs-lisp
+(after! org-agenda
+  (let ((inhibit-message t))
+    (org-super-agenda-mode)))
+
+(setq org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-include-deadlines t
+      org-agenda-block-separator nil
+      org-agenda-tags-column 100 ;; from testing this seems to be a good value
+      org-agenda-compact-blocks t)
+
+(setq org-agenda-custom-commands
+      '(("o" "Overview"
+         ((agenda "" ((org-agenda-span 'day)
+                      (org-super-agenda-groups
+                       '((:name "Today"
+                          :time-grid t
+                          :date today
+                          :todo "TODAY"
+                          :scheduled today
+                          :order 1)))))
+          (alltodo "" ((org-agenda-overriding-header "")
+                       (org-super-agenda-groups
+                        '((:name "Next to do"
+                           :todo "NEXT"
+                           :order 1)
+                          (:name "Important"
+                           :tag "Important"
+                           :priority "A"
+                           :order 6)
+                          (:name "Due Today"
+                           :deadline today
+                           :order 2)
+                          (:name "Due Soon"
+                           :deadline future
+                           :order 8)
+                          (:name "Overdue"
+                           :deadline past
+                           :face error
+                           :order 7)
+                          (:name "Assignments"
+                           :tag "Assignment"
+                           :order 10)
+                          (:name "Issues"
+                           :tag "Issue"
+                           :order 12)
+                          (:name "Emacs"
+                           :tag "Emacs"
+                           :order 13)
+                          (:name "Projects"
+                           :tag "Project"
+                           :order 14)
+                          (:name "Research"
+                           :tag "Research"
+                           :order 15)
+                          (:name "To read"
+                           :tag "Read"
+                           :order 30)
+                          (:name "Waiting"
+                           :todo "WAITING"
+                           :order 20)
+                          (:name "University"
+                           :tag "uni"
+                           :order 32)
+                          (:name "Trivial"
+                           :priority<= "E"
+                           :tag ("Trivial" "Unimportant")
+                           :todo ("SOMEDAY" )
+                           :order 90)
+                          (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
+#+end_src
+
+* Roam
+=org-roam= for networked note-taking, with tecosaur's modeline tweak
+and the =org-roam-ui= graph view.
+
+** Basic settings
+Point roam at a directory under your =org-directory=. Unlike
+tecosaur's hardcoded path, this derives from =org-directory= so it
+tracks wherever your Org files live. The directory is created on first
+use.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-roam)
+#+end_src
+
+#+begin_src emacs-lisp
+(setq org-roam-directory (expand-file-name "roam" org-directory))
+#+end_src
+
+** Modeline file name
+Roam filenames are timestamp-prefixed (=20230104120000-my_note.org=),
+which is noisy in the modeline. This advice — tecosaur's — rewrites
+roam buffers' names to =(2023-01-04) my note= while leaving every
+other buffer untouched.
+
+#+begin_src emacs-lisp
+(defadvice! doom-modeline--buffer-file-name-roam-aware-a (orig-fun)
+  :around #'doom-modeline-buffer-file-name ; takes no args
+  (if (string-match-p (regexp-quote org-roam-directory) (or buffer-file-name ""))
+      (replace-regexp-in-string
+       "\\(?:^\\|.*/\\)\\([0-9]\\{4\\}\\)\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)[0-9]*-"
+       "🢔(\\1-\\2-\\3) "
+       (subst-char-in-string ?_ ?  buffer-file-name))
+    (funcall orig-fun)))
+#+end_src
+
+** Graph view
+=org-roam-ui= serves an interactive graph of your notes in the
+browser. =SPC n r u= (or =M-x org-roam-ui-open=) starts the server and
+opens it. =websocket= is its runtime dependency.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-roam-ui)
+(package! websocket)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! websocket
+  :after org-roam)
+
+(use-package! org-roam-ui
+  :after org-roam
+  :commands org-roam-ui-open
+  :hook (org-roam . org-roam-ui-mode)
+  :config
+  (require 'org-roam) ; in case autoloaded
+  (defun org-roam-ui-open ()
+    "Ensure the server is active, then open the roam graph."
+    (interactive)
+    (unless org-roam-ui-mode (org-roam-ui-mode 1))
+    (browse-url-xdg-open (format "http://localhost:%d" org-roam-ui-port))))
+#+end_src
+
+* HTML Export
+
+I want to tweak a whole bunch of things. While I'll want my tweaks almost all
+the time, occasionally I may want to test how something turns out using a more
+default config. With that in mind, a global minor mode seems like the most
+appropriate architecture to use.
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (define-minor-mode org-fancy-html-export-mode
+    "Toggle my fabulous org export tweaks. While this mode itself does a little bit,
+  the vast majority of the change in behaviour comes from switch statements in:
+   - `org-html-template-fancier'
+   - `org-html--build-meta-info-extended'
+   - `org-html-src-block-collapsable'
+   - `org-html-block-collapsable'
+   - `org-html-table-wrapped'
+   - `org-html--format-toc-headline-colapseable'
+   - `org-html--toc-text-stripped-leaves'
+   - `org-export-html-headline-anchor'"
+    :global t
+    :init-value t
+    (if org-fancy-html-export-mode
+        (setq org-html-style-default org-html-style-fancy
+              org-html-meta-tags #'org-html-meta-tags-fancy
+              org-html-checkbox-type 'html-span)
+      (setq org-html-style-default org-html-style-plain
+            org-html-meta-tags #'org-html-meta-tags-default
+            org-html-checkbox-type 'html)))
+)
+#+end_src
+
+** Extra header content
+
+We want to tack on a few more bits to the start of the body. Unfortunately, there
+doesn't seem to be any nice variable or hook, so we'll just override the
+relevant function.
+
+This is done to allow me to add the date and author to the page header,
+implement a CSS-only light/dark theme toggle, and a sprinkle of [[https://ogp.me/][Open Graph]]
+metadata.
+#+begin_src emacs-lisp
+(after! ox-html
+  (defadvice! org-html-template-fancier (orig-fn contents info)
+    "Return complete document string after HTML conversion.
+  CONTENTS is the transcoded contents string.  INFO is a plist
+  holding export options. Adds a few extra things to the body
+  compared to the default implementation."
+    :around #'org-html-template
+    (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
+        (funcall orig-fn contents info)
+      (concat
+       (when (and (not (org-html-html5-p info)) (org-html-xhtml-p info))
+         (let* ((xml-declaration (plist-get info :html-xml-declaration))
+                (decl (or (and (stringp xml-declaration) xml-declaration)
+                          (cdr (assoc (plist-get info :html-extension)
+                                      xml-declaration))
+                          (cdr (assoc "html" xml-declaration))
+                          "")))
+           (when (not (or (not decl) (string= "" decl)))
+             (format "%s\n"
+                     (format decl
+                             (or (and org-html-coding-system
+                                      (fboundp 'coding-system-get)
+                                      (coding-system-get org-html-coding-system 'mime-charset))
+                                 "iso-8859-1"))))))
+       (org-html-doctype info)
+       "\n"
+       (concat "<html"
+               (cond ((org-html-xhtml-p info)
+                      (format
+                       " xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"%s\" xml:lang=\"%s\""
+                       (plist-get info :language) (plist-get info :language)))
+                     ((org-html-html5-p info)
+                      (format " lang=\"%s\"" (plist-get info :language))))
+               ">\n")
+       "<head>\n"
+       (org-html--build-meta-info info)
+       (org-html--build-head info)
+       (org-html--build-mathjax-config info)
+       "</head>\n"
+       "<body>\n<input type='checkbox' id='theme-switch'><div id='page'><label id='switch-label' for='theme-switch'></label>"
+       (let ((link-up (org-trim (plist-get info :html-link-up)))
+             (link-home (org-trim (plist-get info :html-link-home))))
+         (unless (and (string= link-up "") (string= link-home ""))
+           (format (plist-get info :html-home/up-format)
+                   (or link-up link-home)
+                   (or link-home link-up))))
+       ;; Preamble.
+       (org-html--build-pre/postamble 'preamble info)
+       ;; Document contents.
+       (let ((div (assq 'content (plist-get info :html-divs))))
+         (format "<%s id=\"%s\">\n" (nth 1 div) (nth 2 div)))
+       ;; Document title.
+       (when (plist-get info :with-title)
+         (let ((title (and (plist-get info :with-title)
+                           (plist-get info :title)))
+               (subtitle (plist-get info :subtitle))
+               (html5-fancy (org-html--html5-fancy-p info)))
+           (when title
+             (format
+              (if html5-fancy
+                  "<header class=\"page-header\">%s\n<h1 class=\"title\">%s</h1>\n%s</header>"
+                "<h1 class=\"title\">%s%s</h1>\n")
+              (if (or (plist-get info :with-date)
+                      (plist-get info :with-author))
+                  (concat "<div class=\"page-meta\">"
+                          (when (plist-get info :with-date)
+                            (org-export-data (plist-get info :date) info))
+                          (when (and (plist-get info :with-date) (plist-get info :with-author)) ", ")
+                          (when (plist-get info :with-author)
+                            (org-export-data (plist-get info :author) info))
+                          "</div>\n")
+                "")
+              (org-export-data title info)
+              (if subtitle
+                  (format
+                   (if html5-fancy
+                       "<p class=\"subtitle\" role=\"doc-subtitle\">%s</p>\n"
+                     (concat "\n" (org-html-close-tag "br" nil info) "\n"
+                             "<span class=\"subtitle\">%s</span>\n"))
+                   (org-export-data subtitle info))
+                "")))))
+       contents
+       (format "</%s>\n" (nth 1 (assq 'content (plist-get info :html-divs))))
+       ;; Postamble.
+       (org-html--build-pre/postamble 'postamble info)
+       ;; Possibly use the Klipse library live code blocks.
+       (when (plist-get info :html-klipsify-src)
+         (concat "<script>" (plist-get info :html-klipse-selection-script)
+                 "</script><script src=\""
+                 org-html-klipse-js
+                 "\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\""
+                 org-html-klipse-css "\"/>"))
+       ;; Closing document.
+       "</div>\n</body>\n</html>")))
+)
+#+end_src
+
+I think it would be nice if "Table of Contents" brought you back to the top of
+the page. Well, since we've done this much advising already...
+#+begin_src emacs-lisp
+(after! ox-html
+  (defadvice! org-html-toc-linked (depth info &optional scope)
+    "Build a table of contents.
+
+  Just like `org-html-toc', except the header is a link to \"#\".
+
+  DEPTH is an integer specifying the depth of the table.  INFO is
+  a plist used as a communication channel.  Optional argument SCOPE
+  is an element defining the scope of the table.  Return the table
+  of contents as a string, or nil if it is empty."
+    :override #'org-html-toc
+    (let ((toc-entries
+           (mapcar (lambda (headline)
+                     (cons (org-html--format-toc-headline headline info)
+                           (org-export-get-relative-level headline info)))
+                   (org-export-collect-headlines info depth scope))))
+      (when toc-entries
+        (let ((toc (concat "<div id=\"text-table-of-contents\">"
+                           (org-html--toc-text toc-entries)
+                           "</div>\n")))
+          (if scope toc
+            (let ((outer-tag (if (org-html--html5-fancy-p info)
+                                 "nav"
+                               "div")))
+              (concat (format "<%s id=\"table-of-contents\">\n" outer-tag)
+                      (let ((top-level (plist-get info :html-toplevel-hlevel)))
+                        (format "<h%d><a href=\"#\" style=\"color:inherit; text-decoration: none;\">%s</a></h%d>\n"
+                                top-level
+                                (org-html--translate "Table of Contents" info)
+                                top-level))
+                      toc
+                      (format "</%s>\n" outer-tag))))))))
+)
+#+end_src
+
+Lastly, let's pile on some metadata. This gives my pages nice embeds.
+#+begin_src emacs-lisp
+(after! ox-html
+  (defvar org-html-meta-tags-opengraph-image
+    '(:image "https://tecosaur.com/resources/org/nib.png"
+      :type "image/png"
+      :width "200"
+      :height "200"
+      :alt "Green fountain pen nib")
+    "Plist of og:image:PROP properties and their value, for use in `org-html-meta-tags-fancy'.")
+
+  (defun org-html-meta-tags-fancy (info)
+    "Use the INFO plist to construct the meta tags, as described in `org-html-meta-tags'."
+    (let* ((title (org-html-plain-text
+                   (org-element-interpret-data (plist-get info :title)) info))
+           (author (and (plist-get info :with-author)
+                        (let ((auth (plist-get info :author)))
+                          ;; Return raw Org syntax.
+                          (and auth (org-html-plain-text
+                                     (org-element-interpret-data auth) info)))))
+           (author-first-last
+            (and (not (org-string-nw-p author))
+                 (save-match-data
+                   (if (string-match "\\`\\(.+?\\) +\\(.+?\\)\\'" author)
+                       (cons (match-string 1 author)
+                             (match-string 2 author))
+                     (cons author nil))))))
+      (append
+       (list
+        (when (org-string-nw-p author)
+          (list "name" "author" author))
+        (when (org-string-nw-p (plist-get info :description))
+          (list "name" "description"
+                (plist-get info :description)))
+        '("name" "generator" "org mode")
+        '("name" "theme-color" "#77aa99")
+        '("property" "og:type" "article")
+        (list "property" "og:title" title)
+        (let ((subtitle (org-export-data (plist-get info :subtitle) info)))
+          (when (org-string-nw-p subtitle)
+            (list "property" "og:description" subtitle))))
+       (when org-html-meta-tags-opengraph-image
+         (list (list "property" "og:image" (plist-get org-html-meta-tags-opengraph-image :image))
+               (list "property" "og:image:type" (plist-get org-html-meta-tags-opengraph-image :type))
+               (list "property" "og:image:width" (plist-get org-html-meta-tags-opengraph-image :width))
+               (list "property" "og:image:height" (plist-get org-html-meta-tags-opengraph-image :height))
+               (list "property" "og:image:alt" (plist-get org-html-meta-tags-opengraph-image :alt))))
+       (list
+        (when (car author-first-last)
+          (list "property" "og:article:author:first_name" (car author-first-last)))
+        (when (cdr author-first-last)
+          (list "property" "og:article:author:last_name" (cdr author-first-last)))
+        (list "property" "og:article:published_time"
+              (format-time-string
+               "%FT%T%z"
+               (or
+                (when-let ((date-str (cadar (org-collect-keywords '("DATE")))))
+                  (unless (string= date-str (format-time-string "%F"))
+                    (ignore-errors (encode-time (org-parse-time-string date-str)))))
+                (if buffer-file-name
+                    (file-attribute-modification-time (file-attributes buffer-file-name))
+                  (current-time)))))
+        (when buffer-file-name
+          (list "property" "og:article:modified_time"
+                (format-time-string "%FT%T%z" (file-attribute-modification-time (file-attributes buffer-file-name)))))))))
+
+  (unless (functionp #'org-html-meta-tags-default)
+    (defalias 'org-html-meta-tags-default #'ignore))
+  (setq org-html-meta-tags #'org-html-meta-tags-fancy)
+)
+#+end_src
+
+** Custom CSS/JS
+
+The default org HTML export is ... alright, but we can really jazz it up.
+[[https://lepisma.xyz][lepisma.xyz]] has a really nice style, and from and org export too!
+Suffice to say I've snatched it, with a few of my own tweaks applied.
+
+#+begin_src html :tangle misc/org-export-header.html :comments no
+<link rel="icon" href="https://tecosaur.com/resources/org/nib.ico" type="image/ico" />
+
+<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/etbookot-roman-webfont.woff2">
+<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/etbookot-italic-webfont.woff2">
+<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextRegular.woff2">
+<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextItalic.woff2">
+<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextBold.woff2">
+#+end_src
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (setq org-html-style-plain org-html-style-default
+        org-html-htmlize-output-type 'css
+        org-html-doctype "html5"
+        org-html-html5-fancy t)
+
+  (defun org-html-reload-fancy-style ()
+    "Rebuild `org-html-style-fancy' from the asset files under misc/org-css/.
+  If any asset is missing, keep the default style rather than erroring —
+  run =doom sync= is not needed, just place the files and call this again."
+    (interactive)
+    (let ((header (expand-file-name "misc/org-export-header.html" doom-user-dir))
+          (js     (expand-file-name "misc/org-css/main.js" doom-user-dir))
+          (css    (expand-file-name "misc/org-css/main.min.css" doom-user-dir)))
+      (if (not (and (file-exists-p header) (file-exists-p js) (file-exists-p css)))
+          (when (called-interactively-p 'any)
+            (message "org-html fancy style assets missing under %smisc/org-css/"
+                     doom-user-dir))
+        (setq org-html-style-fancy
+              (with-temp-buffer
+                (insert-file-contents header)
+                (goto-char (point-max))
+                (insert "<script>\n")
+                (insert-file-contents js)
+                (goto-char (point-max))
+                (insert "</script>\n<style>\n")
+                (insert-file-contents css)
+                (goto-char (point-max))
+                (insert "</style>")
+                (buffer-string)))
+        (when org-fancy-html-export-mode
+          (setq org-html-style-default org-html-style-fancy)))))
+  (org-html-reload-fancy-style)
+)
+#+end_src
+
+** Collapsable src and example blocks
+
+By wrapping the ~<pre>~ element in a ~<details>~ block, we can obtain collapsable
+blocks with no CSS, though we will toss a little in anyway to have this looking
+somewhat spiffy.
+
+Since this collapsability seems useful to have on by default for certain chunks
+of code, it would be nice if you could set it with =#+attr_html: :collapsed t=.
+
+It would be nice to also have a corresponding global / session-local way of
+setting this, but I haven't quite been able to get that working (yet).
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (defvar org-html-export-collapsed nil)
+  (eval '(cl-pushnew '(:collapsed "COLLAPSED" "collapsed" org-html-export-collapsed t)
+                     (org-export-backend-options (org-export-get-backend 'html))))
+  (add-to-list 'org-default-properties "EXPORT_COLLAPSED")
+)
+#+end_src
+
+We can take our src block modification a step further, and add a gutter on the
+side of the src block containing both an anchor referencing the current block,
+and a button to copy the content of the block.
+
+#+name: Src blocks
+#+begin_src emacs-lisp
+(after! ox-html
+  (defadvice! org-html-src-block-collapsable (orig-fn src-block contents info)
+    "Wrap the usual <pre> block in a <details>"
+    :around #'org-html-src-block
+    (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
+        (funcall orig-fn src-block contents info)
+      (let* ((properties (cadr src-block))
+             (lang (mode-name-to-lang-name
+                    (plist-get properties :language)))
+             (name (plist-get properties :name))
+             (ref (org-export-get-reference src-block info))
+             (collapsed-p (member (or (org-export-read-attribute :attr_html src-block :collapsed)
+                                      (plist-get info :collapsed))
+                                  '("y" "yes" "t" t "true" "all"))))
+        (format
+         "<details id='%s' class='code'%s><summary%s>%s</summary>
+  <div class='gutter'>
+  <a href='#%s'>#</a>
+  <button title='Copy to clipboard' onclick='copyPreToClipbord(this)'>⎘</button>\
+  </div>
+  %s
+  </details>"
+         ref
+         (if collapsed-p "" " open")
+         (if name " class='named'" "")
+         (concat
+          (when name (concat "<span class=\"name\">" name "</span>"))
+          "<span class=\"lang\">" lang "</span>")
+         ref
+         (if name
+             (replace-regexp-in-string (format "<pre\\( class=\"[^\"]+\"\\)? id=\"%s\">" ref) "<pre\\1>"
+                                       (funcall orig-fn src-block contents info))
+           (funcall orig-fn src-block contents info))))))
+
+  (defun mode-name-to-lang-name (mode)
+    (or (cadr (assoc mode
+                     '(("asymptote" "Asymptote")
+                       ("awk" "Awk")
+                       ("C" "C")
+                       ("clojure" "Clojure")
+                       ("css" "CSS")
+                       ("D" "D")
+                       ("ditaa" "ditaa")
+                       ("dot" "Graphviz")
+                       ("calc" "Emacs Calc")
+                       ("emacs-lisp" "Emacs Lisp")
+                       ("fortran" "Fortran")
+                       ("gnuplot" "gnuplot")
+                       ("haskell" "Haskell")
+                       ("hledger" "hledger")
+                       ("java" "Java")
+                       ("js" "Javascript")
+                       ("latex" "LaTeX")
+                       ("ledger" "Ledger")
+                       ("lisp" "Lisp")
+                       ("lilypond" "Lilypond")
+                       ("lua" "Lua")
+                       ("matlab" "MATLAB")
+                       ("mscgen" "Mscgen")
+                       ("ocaml" "Objective Caml")
+                       ("octave" "Octave")
+                       ("org" "Org mode")
+                       ("oz" "OZ")
+                       ("plantuml" "Plantuml")
+                       ("processing" "Processing.js")
+                       ("python" "Python")
+                       ("R" "R")
+                       ("ruby" "Ruby")
+                       ("sass" "Sass")
+                       ("scheme" "Scheme")
+                       ("screen" "Gnu Screen")
+                       ("sed" "Sed")
+                       ("sh" "shell")
+                       ("sql" "SQL")
+                       ("sqlite" "SQLite")
+                       ("forth" "Forth")
+                       ("io" "IO")
+                       ("J" "J")
+                       ("makefile" "Makefile")
+                       ("maxima" "Maxima")
+                       ("perl" "Perl")
+                       ("picolisp" "Pico Lisp")
+                       ("scala" "Scala")
+                       ("shell" "Shell Script")
+                       ("ebnf2ps" "ebfn2ps")
+                       ("cpp" "C++")
+                       ("abc" "ABC")
+                       ("coq" "Coq")
+                       ("groovy" "Groovy")
+                       ("bash" "bash")
+                       ("csh" "csh")
+                       ("ash" "ash")
+                       ("dash" "dash")
+                       ("ksh" "ksh")
+                       ("mksh" "mksh")
+                       ("posh" "posh")
+                       ("ada" "Ada")
+                       ("asm" "Assembler")
+                       ("caml" "Caml")
+                       ("delphi" "Delphi")
+                       ("html" "HTML")
+                       ("idl" "IDL")
+                       ("mercury" "Mercury")
+                       ("metapost" "MetaPost")
+                       ("modula-2" "Modula-2")
+                       ("pascal" "Pascal")
+                       ("ps" "PostScript")
+                       ("prolog" "Prolog")
+                       ("simula" "Simula")
+                       ("tcl" "tcl")
+                       ("tex" "LaTeX")
+                       ("plain-tex" "TeX")
+                       ("verilog" "Verilog")
+                       ("vhdl" "VHDL")
+                       ("xml" "XML")
+                       ("nxml" "XML")
+                       ("conf" "Configuration File"))))
+        mode))
+)
+#+end_src
+
+#+name: Example, fixed width, and property blocks
+#+begin_src emacs-lisp
+(after! ox-html
+  (defun org-html-block-collapsable (orig-fn block contents info)
+    "Wrap the usual block in a <details>"
+    (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
+        (funcall orig-fn block contents info)
+      (let ((ref (org-export-get-reference block info))
+            (type (pcase (car block)
+                    ('property-drawer "Properties")))
+            (collapsed-default (pcase (car block)
+                                 ('property-drawer t)
+                                 (_ nil)))
+            (collapsed-value (org-export-read-attribute :attr_html block :collapsed))
+            (collapsed-p (or (member (org-export-read-attribute :attr_html block :collapsed)
+                                     '("y" "yes" "t" t "true"))
+                             (member (plist-get info :collapsed) '("all")))))
+        (format
+         "<details id='%s' class='code'%s>
+  <summary%s>%s</summary>
+  <div class='gutter'>\
+  <a href='#%s'>#</a>
+  <button title='Copy to clipboard' onclick='copyPreToClipbord(this)'>⎘</button>\
+  </div>
+  %s\n
+  </details>"
+         ref
+         (if (or collapsed-p collapsed-default) "" " open")
+         (if type " class='named'" "")
+         (if type (format "<span class='type'>%s</span>" type) "")
+         ref
+         (funcall orig-fn block contents info)))))
+
+  (advice-add 'org-html-example-block   :around #'org-html-block-collapsable)
+  (advice-add 'org-html-fixed-width     :around #'org-html-block-collapsable)
+  (advice-add 'org-html-property-drawer :around #'org-html-block-collapsable)
+)
+#+end_src
+
+** Handle table overflow
+
+In order to accommodate wide tables ---particularly on mobile devices--- we want
+to set a maximum width and scroll overflow. Unfortunately, this cannot be applied
+directly to the ~table~ element, so we have to wrap it in a ~div~.
+
+While we're at it, we can a link gutter, as we did with src blocks, and show the
+~#+name~, if one is given.
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (defadvice! org-html-table-wrapped (orig-fn table contents info)
+    "Wrap the usual <table> in a <div>"
+    :around #'org-html-table
+    (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
+        (funcall orig-fn table contents info)
+      (let* ((name (plist-get (cadr table) :name))
+             (ref (org-export-get-reference table info)))
+        (format "<div id='%s' class='table'>
+  <div class='gutter'><a href='#%s'>#</a></div>
+  <div class='tabular'>
+  %s
+  </div>\
+  </div>"
+                ref ref
+                (if name
+                    (replace-regexp-in-string (format "<table id=\"%s\"" ref) "<table"
+                                              (funcall orig-fn table contents info))
+                  (funcall orig-fn table contents info))))))
+)
+#+end_src
+
+** TOC as a collapsable tree
+
+The TOC is much nicer to navigate as a collapsable tree. Unfortunately we cannot
+achieve this with CSS alone. Thankfully we can avoid JS though, by adapting the
+TOC generation code to use a ~label~ for each item, and a hidden ~checkbox~ to keep
+track of state.
+
+To add this, we need to change one line in [[file:lisp/org/lisp/ox-html.el::(format "<a href=\"#%s\">%s</a>"][org-html--format-toc-headline]].
+
+Since we can actually accomplish the desired effect by adding advice /around/ the
+function, without overriding it --- let's do that to reduce the bug surface of
+this config a tad.
+#+begin_src emacs-lisp
+(after! ox-html
+  (defadvice! org-html--format-toc-headline-colapseable (orig-fn headline info)
+    "Add a label and checkbox to `org-html--format-toc-headline's usual output,
+  to allow the TOC to be a collapseable tree."
+    :around #'org-html--format-toc-headline
+    (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
+        (funcall orig-fn headline info)
+      (let ((id (or (org-element-property :CUSTOM_ID headline)
+                    (org-export-get-reference headline info))))
+        (format "<input type='checkbox' id='toc--%s'/><label for='toc--%s'>%s</label>"
+                id id (funcall orig-fn headline info)))))
+)
+#+end_src
+
+Now, leaves (headings with no children) shouldn't have the ~label~ item. The
+obvious way to achieve this is by including some /if no children.../ logic in
+~org-html--format-toc-headline-colapseable~. Unfortunately, I can't my elisp isn't
+up to par to extract the number of child headings from the mountain of info that
+org provides.
+#+begin_src emacs-lisp
+(after! ox-html
+  (defadvice! org-html--toc-text-stripped-leaves (orig-fn toc-entries)
+    "Remove label"
+    :around #'org-html--toc-text
+    (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
+        (funcall orig-fn toc-entries)
+      (replace-regexp-in-string "<input [^>]+><label [^>]+>\\(.+?\\)</label></li>" "\\1</li>"
+                                (funcall orig-fn toc-entries))))
+)
+#+end_src
+
+** Make verbatim different to code
+
+Since we have =verbatim= and ~code~, let's make use of the difference.
+
+We can use ~code~ exclusively for code snippets and commands like: "calling
+src_elisp{(message "Hello")} in batch-mode Emacs prints to stdout like ~echo~".
+Then we can use =verbatim= for miscellaneous 'other monospace' like keyboard
+shortcuts: "either =C-c C-c= or =C-g= is likely the most useful keybinding in Emacs",
+or file names: "I keep my configuration in =~/.config/doom/=", among other things.
+
+Then, styling these two cases differently can help improve clarity in a document.
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (setq org-html-text-markup-alist
+        '((bold . "<b>%s</b>")
+          (code . "<code>%s</code>")
+          (italic . "<i>%s</i>")
+          (strike-through . "<del>%s</del>")
+          (underline . "<span class=\"underline\">%s</span>")
+          (verbatim . "<kbd>%s</kbd>")))
+)
+#+end_src
+
+** Change checkbox type
+
+We also want to use HTML checkboxes, however we want to get a bit fancier than default
+#+begin_src emacs-lisp
+(after! ox-html
+  (appendq! org-html-checkbox-types
+            '((html-span
+               (on . "<span class='checkbox'></span>")
+               (off . "<span class='checkbox'></span>")
+               (trans . "<span class='checkbox'></span>"))))
+  (setq org-html-checkbox-type 'html-span)
+)
+#+end_src
+- [ ] I'm yet to do this
+- [-] Work in progress
+- [X] This is done
+
+** Extra special strings
+
+The ~org-html-special-string-regexps~ variable defines substitutions for:
++ =\-=, a shy hyphen
++ =---=, an em dash
++ =--=, an en dash
++ =...=, (horizontal) ellipses
+
+However I think it would be nice if there was also a substitution for left/right
+arrows (=->= and =<-=). This is a ~defconst~, but as you may tell from the amount of
+advice in this config, I'm not above messing with things I'm not 'supposed' to.
+
+The only minor complication is that =<= and =>= are converted to =&lt;= and =&gt;=
+before this stage of output processing.
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (pushnew! org-html-special-string-regexps
+            '("-&gt;" . "&#8594;")
+            '("&lt;-" . "&#8592;"))
+)
+#+end_src
+
+** Header anchors
+
+I want to add GitHub-style links on hover for headings.
+#+begin_src emacs-lisp
+(after! ox-html
+  (defun org-export-html-headline-anchor (text backend info)
+    (when (and (org-export-derived-backend-p backend 'html)
+               (not (org-export-derived-backend-p backend 're-reveal))
+               org-fancy-html-export-mode)
+      (unless (bound-and-true-p org-msg-export-in-progress)
+        (replace-regexp-in-string
+         "<h\\([0-9]\\) id=\"\\([a-z0-9-]+\\)\">\\(.*[^ ]\\)<\\/h[0-9]>" ; this is quite restrictive, but due to `org-reference-contraction' I can do this
+         "<h\\1 id=\"\\2\">\\3<a aria-hidden=\"true\" href=\"#\\2\">#</a> </h\\1>"
+         text))))
+
+  (add-to-list 'org-export-filter-headline-functions
+               'org-export-html-headline-anchor)
+)
+#+end_src
+
+** Link previews
+
+Sometimes it's nice to make a link particularly prominent, an embed/preview like
+Twitter does would be nice I think.
+
+We can do this without too much trouble by adding a new link type ever so
+slightly different from =https= --- =Https=.
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (org-link-set-parameters "Https"
+                           :follow (lambda (url arg) (browse-url (concat "https:" url) arg))
+                           :export #'org-url-fancy-export)
+)
+#+end_src
+
+Then, if we can fetch a plist of the form src_elisp{(:title "..." :description
+"..." :image "...")} for such links via a function ~org-url-unfurl-metadata~, we
+can make a fancy export.
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (defun org-url-fancy-export (url _desc backend)
+    (let ((metadata (org-url-unfurl-metadata (concat "https:" url))))
+      (cond
+       ((org-export-derived-backend-p backend 'html)
+        (concat
+         "<div class=\"link-preview\">"
+         (format "<a href=\"%s\">" (concat "https:" url))
+         (when (plist-get metadata :image)
+           (format "<img src=\"%s\"/>" (plist-get metadata :image)))
+         "<small>"
+         (replace-regexp-in-string "//\\(?:www\\.\\)?\\([^/]+\\)/?.*" "\\1" url)
+         "</small><p>"
+         (when (plist-get metadata :title)
+           (concat "<b>" (org-html-encode-plain-text (plist-get metadata :title)) "</b></br>"))
+         (when (plist-get metadata :description)
+           (org-html-encode-plain-text (plist-get metadata :description)))
+         "</p></a></div>"))
+       (t url))))
+)
+#+end_src
+
+Now we just need to actually implement that metadata extraction function.
+#+begin_src emacs-lisp
+(after! ox-html
+  (setq org-url-unfurl-metadata--cache nil)
+  (defun org-url-unfurl-metadata (url)
+    (cdr (or (assoc url org-url-unfurl-metadata--cache)
+             (car (push
+                   (cons
+                    url
+                    (let* ((head-data
+                            (cl-remove-if-not
+                             #'listp
+                             (cdaddr
+                              (with-current-buffer
+                                  (progn (message "Fetching metadata from %s" url)
+                                         (if (executable-find "curl")
+                                             (with-current-buffer (generate-new-buffer " *curl*")
+                                               (call-process "curl" nil t nil "--max-time" "5" "-sSL" url)
+                                               (current-buffer))
+                                           (url-retrieve-synchronously url t t 5)))
+                                (goto-char (point-min))
+                                (delete-region (point-min) (- (search-forward "<head") 6))
+                                (delete-region (search-forward "</head>") (point-max))
+                                (goto-char (point-min))
+                                (while (re-search-forward "<script[^\u2800]+?</script>" nil t)
+                                  (replace-match ""))
+                                (goto-char (point-min))
+                                (while (re-search-forward "<style[^\u2800]+?</style>" nil t)
+                                  (replace-match ""))
+                                (libxml-parse-html-region (point-min) (point-max))))))
+                           (meta (delq nil
+                                       (mapcar
+                                        (lambda (tag)
+                                          (when (eq 'meta (car tag))
+                                            (cons (or (cdr (assoc 'name (cadr tag)))
+                                                      (cdr (assoc 'property (cadr tag))))
+                                                  (cdr (assoc 'content (cadr tag))))))
+                                        head-data))))
+                      (let ((title (or (cdr (assoc "og:title" meta))
+                                       (cdr (assoc "twitter:title" meta))
+                                       (nth 2 (assq 'title head-data))))
+                            (description (or (cdr (assoc "og:description" meta))
+                                             (cdr (assoc "twitter:description" meta))
+                                             (cdr (assoc "description" meta))))
+                            (image (or (cdr (assoc "og:image" meta))
+                                       (cdr (assoc "twitter:image" meta)))))
+                        (when image
+                          (setq image (replace-regexp-in-string
+                                       "^/" (concat "https://" (replace-regexp-in-string "//\\([^/]+\\)/?.*" "\\1" url) "/")
+                                       (replace-regexp-in-string
+                                        "^//" "https://"
+                                        image))))
+                        (list :title title :description description :image image))))
+                   org-url-unfurl-metadata--cache)))))
+)
+#+end_src
+
+** LaTeX Rendering
+*** Pre-rendered
+
+I consider ~dvisvgm~ to be a rather compelling option. However this isn't scaled
+very well at the moment.
+#+begin_src emacs-lisp
+(after! ox-html
+  ;; (setq-default org-html-with-latex `dvisvgm)
+)
+#+end_src
+
+*** MathJax
+
+I want to use svg MathJax by default, and with a few of the custom commands that
+are part of my LaTeX preamble.
+
+#+begin_src emacs-lisp
+(after! ox-html
+  (setcdr (assoc 'path org-html-mathjax-options)
+          (list "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"))
+
+  (setq org-html-mathjax-template
+    "<script>
+    window.MathJax = {
+      loader: {
+        load: ['[tex]/mathtools'],
+      },
+      tex: {
+        ams: {
+          multlineWidth: '%MULTLINEWIDTH'
+        },
+        tags: '%TAGS',
+        tagSide: '%TAGSIDE',
+        tagIndent: '%TAGINDENT',
+        packages: {'[+]': ['mathtools']},
+        macros: {
+          RR: ['\\\\ifstrempty{#1}{\\\\mathbb{R}}{\\\\mathbb{R}^{#1}}', 1, ''],
+          NN: ['\\\\ifstrempty{#1}{\\\\mathbb{N}}{\\\\mathbb{N}^{#1}}', 1, ''],
+          ZZ: ['\\\\ifstrempty{#1}{\\\\mathbb{Z}}{\\\\mathbb{Z}^{#1}}', 1, ''],
+          QQ: ['\\\\ifstrempty{#1}{\\\\mathbb{Q}}{\\\\mathbb{Q}^{#1}}', 1, ''],
+          CC: ['\\\\ifstrempty{#1}{\\\\mathbb{C}}{\\\\mathbb{C}^{#1}}', 1, ''],
+          EE: '\\\\mathbb{E}',
+          Lap: '\\\\operatorname{\\\\mathcal{L}}',
+          Var: '\\\\operatorname{Var}',
+          Cor: '\\\\operatorname{Cor}',
+          E: '\\\\operatorname{E}',
+        },
+        mathtools: {
+          pairedDelimiters: {
+            abs: ['\\\\lvert', '\\\\rvert'],
+            norm: ['\\\\lVert', '\\\\rVert'],
+            ceil: ['\\\\lceil', '\\\\rceil'],
+            floor: ['\\\\lfloor', '\\\\rfloor'],
+            round: ['\\\\lfloor', '\\\\rceil'],
+          }
+        }
+      },
+      chtml: {
+        scale: %SCALE,
+        displayAlign: '%ALIGN',
+        displayIndent: '%INDENT'
+      },
+      svg: {
+        scale: %SCALE,
+        displayAlign: '%ALIGN',
+        displayIndent: '%INDENT'
+      },
+      output: {
+        font: '%FONT',
+        displayOverflow: '%OVERFLOW'
+      }
+    };
+  </script>
+
+  <script
+    id=\"MathJax-script\"
+    async
+    src=\"%PATH\">
+  </script>")
+)
+#+end_src
+
+* Other Packages
+These packages are installed but not yet configured — their
+declarations live here so nothing gets lost. Move each =package!= up
+next to a real configuration block when you set the package up.
+
+=theme-magic= applies your Emacs theme to the rest of your Linux TTY /
+X colours. =svg-tag-mode= renders tags and keywords as SVG labels.
+=doct= is a declarative syntax for =org-capture-templates= (the
+Capture section above could be rewritten with it). =org-noter= links
+notes to PDF/EPUB positions for annotated reading.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! theme-magic)
+(package! svg-tag-mode)
+(package! doct)
+(package! org-noter)
+#+end_src

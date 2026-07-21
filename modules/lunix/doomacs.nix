@@ -33,7 +33,8 @@
       services.emacs.enable = true;
       programs.doom-emacs = {
         enable = true;
-        doomDir = inputs.doom-config;
+        # doomDir = inputs.doom-config;
+        doomDir = ./_doomdir;
         tangleArgs = "--all config.org";
         extraPackages =
           epkgs: with epkgs; [
