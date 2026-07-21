@@ -448,6 +448,11 @@ delimiters (=sp-up-sexp=).
          (fboundp 'org-at-table-p)
          (org-at-table-p))
     (call-interactively #'org-cycle))
+      ((and (derived-mode-p 'markdown-mode)
+         (bound-and-true-p orgtbl-mode)
+         (fboundp 'org-at-table-p)
+         (org-at-table-p))
+    (call-interactively #'org-table-next-field))
    (t
     (ignore-errors (sp-up-sexp)))))
 (map! :i "TAB" #'my/tabout)
@@ -554,8 +559,9 @@ column for prose and let previews scale with the buffer font.
                      '(invisible t display "" composition ""))
      t))
 
-(defun my/markdown-pad-table (limit)
-      (let ((row-end (match-end 0))
+ (defun my/markdown-pad-table (limit)
+   (when (re-search-forward "^[ \t]*|.*$" limit t)
+     (let ((row-end (match-end 0))
            (cell-start (match-beginning 0)))
        (goto-char cell-start)
        (while (search-forward "|" row-end t)
@@ -573,6 +579,7 @@ column for prose and let previews scale with the buffer font.
                                 (concat (make-string hidden ?\s) "|")))
            (setq cell-start (point))))
        (goto-char row-end))
+     t))
 
  (defun nb/unhide-current-line (limit)
    "Font-lock function"
@@ -602,6 +609,15 @@ column for prose and let previews scale with the buffer font.
    (add-hook 'post-command-hook #'nb/refontify-on-linemove nil t))
 
  (add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
+#+end_src
+
+*** Tables
+Turn on =orgtbl-mode= in Markdown buffers so Org's table editor
+(alignment, =TAB=/=RET= cell navigation via [[#tabout][my/tabout]]) works on
+GFM tables.
+
+#+begin_src emacs-lisp
+(add-hook 'markdown-mode-hook #'orgtbl-mode)
 #+end_src
 
 * Orgmode
