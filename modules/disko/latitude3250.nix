@@ -61,8 +61,7 @@
                 };
               };
 
-              # p2 — encrypted btrfs root. GPT label pinned to "root" to match
-              # the existing partition.
+              # p2 — encrypted btrfs root.
               luks = {
                 priority = 2;
                 label = "root";
@@ -72,7 +71,6 @@
                   name = "luks-root";
                   # Passphrase source used ONLY while formatting (disko/disko-install).
                   # Create it first:  echo -n 'your-passphrase' > /tmp/secret.key
-                  # It is not referenced at boot; boot prompts interactively.
                   passwordFile = "/tmp/secret.key";
                   settings.allowDiscards = true;
                   content = {
