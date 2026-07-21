@@ -46,6 +46,18 @@
             (bind "${mainMod} + D" (dsp.exec "discord"))
             (bind "${mainMod} + O" (dsp.exec "obsidian"))
 
+            # Noctalia shell
+            (bind "${mainMod} + Space" (dsp.exec "noctalia msg panel-toggle launcher"))
+            (bind "${mainMod} + X" (dsp.exec "noctalia msg panel-toggle session"))
+            (bind "${mainMod} + L" (dsp.exec "noctalia msg session lock"))
+            (bind "${mainMod} + N" (dsp.exec "noctalia msg panel-toggle control-center"))
+            (bind "${mainMod} + C" (dsp.exec "noctalia msg panel-toggle control-center calendar"))
+            (bind "${mainMod} + SHIFT + N" (dsp.exec "noctalia msg panel-toggle control-center notifications"))
+            (bind "${mainMod} + V" (dsp.exec "noctalia msg panel-toggle clipboard"))
+            (bind "${mainMod} + W" (dsp.exec "noctalia msg panel-toggle wallpaper"))
+            (bind "Print" (dsp.exec "noctalia msg screenshot-region"))
+            (bind "${mainMod} + Print" (dsp.exec "noctalia msg screenshot-fullscreen"))
+
             (bind "XF86AudioRaiseVolume" (dsp.exec "wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%+"))
             (bind "XF86AudioLowerVolume" (dsp.exec "wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%-"))
             (bind "XF86AudioMute" (dsp.exec "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
