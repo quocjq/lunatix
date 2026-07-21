@@ -5,10 +5,10 @@
       url = "github:marienz/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "";
     };
-    doom-config = {
-      url = "github:quocjq/doomdir";
-      flake = false;
-    };
+    # doom-config = {
+    #   url = "github:quocjq/doomdir";
+    #   flake = false;
+    # };
   };
   lix.doomacs = {
     provides.to-hosts.nixos = { pkgs, ... }: {
