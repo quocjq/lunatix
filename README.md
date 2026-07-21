@@ -66,15 +66,10 @@ modules/
 
 ## Reinstall on a fresh machine
 
-A fresh NixOS installer has neither flakes nor any of the install tooling
-enabled. The whole flow is driven from the `justfile`, and every recipe turns
-on the experimental features it needs from the command line — so the only tool
-you have to fetch by hand is `just`.
-
 Boot the NixOS installer ISO, connect to the network, then:
 
 1. **Get the repo and `just`.** `git` and `just` are the only things you pull
-   into the ephemeral installer shell:
+   into the installer shell:
 
    ```console
    nix-shell -p just git
@@ -82,7 +77,7 @@ Boot the NixOS installer ISO, connect to the network, then:
    cd lunatix
    ```
 
-2. **Enter the bootstrap toolbox.** This drops you into a shell with `disko`,
+2. **Enter shell** This drops you into a shell with `disko`,
    `cryptsetup`, `btrfs-progs`, `nixos-install-tools` and everything else the
    install shells out to, pinned to `flake.lock`:
 
@@ -90,8 +85,7 @@ Boot the NixOS installer ISO, connect to the network, then:
    just bootstrap
    ```
 
-3. **Check the target disk.** Confirm it matches the device pinned in
-   `modules/disko/latitude3250.nix`:
+3. **Check the target disk.** :
 
    ```console
    lsblk -o NAME,SIZE,TYPE,MODEL,SERIAL
