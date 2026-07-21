@@ -56,7 +56,7 @@ in
 
         # `agenix` CLI (agenix -e <file>.age) for editing secrets.
         environment.systemPackages = [
-          inputs.agenix.packages.${pkgs.system}.default
+          inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
 
         # Host identity used to decrypt at activation. These are the defaults,
