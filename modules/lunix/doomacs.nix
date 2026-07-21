@@ -45,6 +45,10 @@
       };
 
       home.packages = with pkgs; [
+        (pkgs.aspellWithDicts (dicts: [
+          dicts.en
+          dicts.en-computers
+        ]))
         languagetool
         nerd-fonts.symbols-only
         twemoji-color-font
@@ -106,6 +110,12 @@
 
         # Rust
         cargo
+        cargo-watch
+        cargo-expand
+        cargo-edit
+        cargo-audit
+        cargo-flamegraph
+        bacon
         rustc
         rustfmt
         clippy
