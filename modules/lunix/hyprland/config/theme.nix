@@ -22,6 +22,12 @@
         env = [
           {
             _args = [
+              "XCURSOR_THEME"
+              "breeze_cursors"
+            ];
+          }
+          {
+            _args = [
               "XCURSOR_SIZE"
               "24"
             ];
