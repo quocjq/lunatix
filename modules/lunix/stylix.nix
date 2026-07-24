@@ -17,56 +17,74 @@
 
       stylix = {
         enable = true;
-
-        # Single source of truth for the palette. Image-derived from the
-        # wallpaper committed at modules/lunix/themes/wallpaper.jpg.
         image = ./themes/wallpaper.jpg;
-
-        polarity = "dark";   # everything currently uses a dark theme
+        polarity = "dark"; # everything currently uses a dark theme
 
         fonts = {
           monospace = {
             package = pkgs.nerd-fonts.jetbrains-mono;
-            name    = "JetBrainsMono Nerd Font";
+            name = "JetBrainsMono Nerd Font";
           };
           sansSerif = {
             package = pkgs.nerd-fonts.jetbrains-mono;
-            name    = "JetBrainsMono Nerd Font";
+            name = "JetBrainsMono Nerd Font";
           };
           serif = {
             package = pkgs.dejavu_fonts;
-            name    = "DejaVu Serif";
+            name = "DejaVu Serif";
           };
           emoji = {
             package = pkgs.noto-fonts-emoji;
-            name    = "Noto Color Emoji";
+            name = "Noto Color Emoji";
           };
           sizes = {
-            desktop      = 10;
+            desktop = 10;
             applications = 12;
-            terminal     = 12;
-            popups       = 10;
+            terminal = 12;
+            popups = 10;
           };
         };
 
         cursor = {
           package = pkgs.kdePackages.breeze;
-          name    = "breeze_cursors";
-          size    = 24;
+          name = "breeze_cursors";
+          size = 24;
         };
 
         icons = {
-          enable  = true;
+          enable = true;
           package = pkgs.papirus-icon-theme;
         };
 
         targets = {
           hyprland.enable = true; # borders, shadows, groupbar, bg
-          kde.enable      = true; # Plasma colors / fonts / cursor / wallpaper
-          gtk.enable      = true;
-          qt.enable       = true;
+          kde.enable = true; # Plasma colors / fonts / cursor / wallpaper
+          gtk.enable = true;
+          qt.enable = true;
           # emacs: deliberately off. Doom Emacs overrides the theme and the
           # user wants doom-monokai-octagon preserved.
+
+          # Explicit light + dark icon theme names. Without this stylix's
+          # auto-derivation from `icons.package` errors out at
+          # gtk.iconTheme.name evaluation (papirus auto-derivation fails
+          # because the upstream name is "Papirus-Dark", not "Papirus").
+          gtk.iconTheme = {
+            light = { name = "Papirus-Light"; package = pkgs.papirus-icon-theme; };
+            dark = { name = "Papirus-Dark"; package = pkgs.papirus-icon-theme; };
+          };
+
+          # noctalia v5 stylix target. Currently a no-op until
+          # `programs.noctalia-shell` is loaded (the existing setup uses
+          # v4's `programs.noctalia` in modules/lunix/hyprland/noctalia.nix).
+          # Forward-compatible: activates once the v4 -> v5 migration lands.
+          noctalia.enable = true;
+
+          # yazi themes the file manager; needs lix.yazi to enable
+          # `programs.yazi` first so a config file exists to theme.
+          yazi.enable = true;
+
+          # starship already enabled via lix.starship; stylix themes the TOML.
+          starship.enable = true;
         };
       };
     };

@@ -13,6 +13,8 @@
       <lix/hyprland>
       <lix/greetd>
       <lix/stylix>
+      <lix/lotus>
+      <lix/yazi>
       <lix/thunar>
       <lix/kanata>
       <lix/starship>
