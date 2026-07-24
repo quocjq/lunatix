@@ -26,19 +26,10 @@
         enable = true;
         workspace = {
           clickItemTo = "select";
-          cursor = {
-            animationTime = 5;
-            cursorFeedback = "Bouncing";
-            size = 24;
-            taskManagerFeedback = true;
-            theme = "breeze_cursors";
-          };
-          iconTheme = "breeze-dark";
-          wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Kay/contents/images/1080x1920.png";
-          soundTheme = "freedesktop";
-          splashScreen.engine = "none";
-          splashScreen.theme = "None";
-          theme = "breeze-dark";
+          # theme / iconTheme / wallpaper / soundTheme / splashScreen /
+          # cursor.theme / cursor.size are owned by the stylix `kde` target
+          # (see modules/lunix/stylix.nix). Override per-machine here only
+          # if you need to break from stylix.
         };
 
         hotkeys.commands."launch-konsole" = {
@@ -47,12 +38,8 @@
           command = "konsole";
         };
 
-        fonts = {
-          general = {
-            family = "JetBrains Mono";
-            pointSize = 12;
-          };
-        };
+        # fonts.general is owned by stylix (kdeglobals via the `kde` target).
+        # Override here only if you want a non-stylix font.
 
         panels = [
           {
@@ -103,7 +90,7 @@
                   calendar.firstDayOfWeek = "monday";
                   time.format = "24h";
                   font = {
-                    family = "JetBrains Mono ExtraBold";
+                    # family / size come from stylix; only the weight/style remain.
                     bold = true;
                     italic = true;
                   };
@@ -283,7 +270,7 @@
           "services/org.kde.konsole.desktop"._launch = "Meta+T";
         };
         configFile = {
-          kdeglobals.General.fixed = "JetBrains Mono Medium,10,-1,5,500,0,0,0,0,0,0,0,0,0,0,1,Regular,0,0";
+          # kdeglobals (font, colors) is owned by the stylix `kde` target.
           klaunchrc.FeedbackStyle.TaskbarButton = true;
           klaunchrc.TaskbarButtonSettings.Timeout = 5;
           krunnerrc.General.FreeFloating = true;

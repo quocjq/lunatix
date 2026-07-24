@@ -12,7 +12,7 @@
       <lix/nixcord>
       <lix/hyprland>
       <lix/greetd>
-      <lix/themes>
+      <lix/testaspect>
       <lix/thunar>
       <lix/kanata>
       <lix/starship>

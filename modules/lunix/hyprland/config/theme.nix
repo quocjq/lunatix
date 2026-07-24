@@ -1,5 +1,8 @@
 { ... }:
 {
+  # Hyprland non-color decoration knobs only.
+  # Colors (border, shadow, groupbar, gradients) come from the stylix
+  # `hyprland` target. Cursor env vars come from stylix `home.pointerCursor`.
   lix.hyprland.homeManager = {
     wayland.windowManager.hyprland = {
       settings = {
@@ -15,30 +18,9 @@
               enabled = true;
               range = 4;
               render_power = 3;
-              color = "rgba(1a1a1aee)";
             };
           };
         };
-        env = [
-          {
-            _args = [
-              "XCURSOR_THEME"
-              "breeze_cursors"
-            ];
-          }
-          {
-            _args = [
-              "XCURSOR_SIZE"
-              "24"
-            ];
-          }
-          {
-            _args = [
-              "HYPRCURSOR_SIZE"
-              "24"
-            ];
-          }
-        ];
       };
     };
   };

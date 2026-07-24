@@ -193,30 +193,28 @@
             screen_corners.enabled = true;
           };
 
+          # Palette is derived from the stylix wallpaper (modules/lunix/themes/wallpaper.jpg).
+          # Noctalia uses its own wallpaper_scheme extractor on the file, so dropping the
+          # Catppuccin builtin/community palette here aligns the bar/panel colors with stylix.
           theme = {
-            builtin = "Catppuccin";
-            community_palette = "Catppuccin Mocha Pink";
-            source = "community";
             wallpaper_scheme = "m3-content";
           };
 
           wallpaper = {
             directory = "/home/lunixose/Pictures/wallpaper";
 
-            default.path = "/home/lunixose/Pictures/wallpaper/A_Red_Face_Glowing_by_Merlin_Lightpainting.jpeg";
-            last.path = "/home/lunixose/Pictures/wallpaper/A_Red_Face_Glowing_by_Merlin_Lightpainting.jpeg";
-            monitors."eDP-1".path = "/home/lunixose/Pictures/wallpaper/A_Red_Face_Glowing_by_Merlin_Lightpainting.jpeg";
+            # The committed stylix source-of-truth image. Relative to this module:
+            #   modules/lunix/hyprland/noctalia.nix -> modules/lunix/themes/wallpaper.jpg
+            default.path = toString ../themes/wallpaper.jpg;
+            last.path    = toString ../themes/wallpaper.jpg;
+            monitors."eDP-1".path = toString ../themes/wallpaper.jpg;
 
             favorite = [
               {
-                community_palette = "Catppuccin Mocha Pink";
-                palette_source = "community";
                 path = "/home/lunixose/Pictures/wallpaper/A_Red_Face_Glowing_by_Merlin_Lightpainting.jpeg";
                 theme_mode = "dark";
               }
               {
-                community_palette = "Catppuccin Mocha Pink";
-                palette_source = "community";
                 path = "/home/lunixose/Pictures/wallpaper/16.png";
                 theme_mode = "dark";
               }
