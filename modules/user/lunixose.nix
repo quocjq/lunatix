@@ -10,8 +10,9 @@
       <lix/doomacs>
       <lix/zenwser>
       <lix/nixcord>
-      <lix/plasma>
       <lix/hyprland>
+      <lix/greetd>
+      <lix/thunar>
       <lix/kanata>
       <lix/starship>
       <lix/bash>

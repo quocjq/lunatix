@@ -1,4 +1,9 @@
-{ inputs, lix, ... }:
+{
+  inputs,
+  lix,
+  __findFile,
+  ...
+}:
 {
   flake-file.inputs = {
     hyprland = {
@@ -8,10 +13,9 @@
 
   lix.hyprland = {
     includes = [
-      lix.noctalia
+      <lix/noctalia>
     ];
-    # Requirement
-    provides.to-hosts.nixos = { pkgs, ... }: {
+    provides.to-hosts.nixos = { pkgs, lib, ... }: {
       # The Hyprland Cachix exists to cache the hyprland packages and any dependencies not found in cache.nixos.org.
       nix.settings = {
         substituters = [ "https://hyprland.cachix.org" ];
@@ -33,13 +37,22 @@
         portalPackage =
           inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       };
+
+      services.accounts-daemon.enable = true;
+      services.udisks2.enable = true;
+      services.libinput.enable = lib.mkDefault true;
+      services.geoclue2.enable = lib.mkDefault true;
+      services.fwupd.enable = lib.mkDefault true;
+      security.polkit.enable = true;
+      programs.dconf.enable = true;
+      programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-gnome3;
+      xdg.icons.enable = true;
+      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
     };
     homeManager = {
       wayland.windowManager.hyprland.enable = true;
       wayland.windowManager.hyprland.configType = "lua";
     };
-
-    # Will replace home-manager with maid soon!
-    #maid = {};
   };
 }

@@ -12,13 +12,10 @@
       };
     };
     den.url = "github:denful/den";
+    devenv.url = "github:cachix/devenv";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    doom-config = {
-      url = "github:quocjq/doomdir";
-      flake = false;
     };
     flake-file.url = "github:denful/flake-file";
     flake-parts = {

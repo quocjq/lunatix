@@ -86,20 +86,16 @@ secret-show name:
 rekey:
     cd {{secrets_dir}} && {{nix}} run github:ryantm/agenix -- --rekey -i {{identity}}
 
-# Replace the GitHub key: generate a fresh keypair, encrypt the private half
-# into github.age, and print the new public key to register on GitHub.
-# Use this when the old GitHub key expired.
-new-github-key:
+# Create new ssh key and add it to age & provide public key
+# Type of key: dsa, ecdsa, ecdsa-sk, ed25519, ed25519-sk, rsa
+new-key type name:
     #!/usr/bin/env bash
     set -euo pipefail
     tmp="$(mktemp -d)"
     trap 'rm -rf "$tmp"' EXIT
-    ssh-keygen -t ed25519 -f "$tmp/github" -N "" -C "lunixose@github"
-    ( cd {{secrets_dir}} && EDITOR="cp $tmp/github" {{nix}} run github:ryantm/agenix -- -e github.age )
+    ssh-keygen -t {{type}} -f "$tmp/{{name}}" -N "" -C "lunixose@{{name}}"
+    ( cd {{secrets_dir}} && EDITOR="cp $tmp/{{name}}" {{nix}} run github:ryantm/agenix -- -e {{name}}.age )
     echo
-    echo "==> github.age re-encrypted with the new key."
-    echo "==> Add this NEW public key at https://github.com/settings/keys and delete the old one:"
+    cat "$tmp/{{name}}.pub"
     echo
-    cat "$tmp/github.pub"
-    echo
-    echo "Then: git add {{secrets_dir}}/github.age && just switch"
+    echo "Then: git add {{secrets_dir}}/{{name}}.age && just switch"

@@ -1,9 +1,6 @@
 { inputs, den, ... }:
 let
-  # Encrypted *.age files and the agenix rules file live next to this module,
-  # under modules/lig/_secrets/. The leading `_` makes import-tree skip the
-  # directory, so the rules file (secrets.nix) is not evaluated as a flake
-  # module. A producer that emits `secrets = [ { name = "github"; ... } ]` is
+  # A producer that emits `secrets = [ { name = "github"; ... } ]` is
   # wired to modules/lig/_secrets/github.age automatically.
   secretsDir = ./_secrets;
 in
@@ -14,7 +11,7 @@ in
     inputs.home-manager.follows = "home-manager";
   };
 
-  # The `secrets` quirk: any aspect can *declare* an agenix secret without
+  # The `secrets`: any aspect can *declare* an agenix secret without
   # knowing about agenix. `lig.agenix` is the single consumer that turns every
   # declaration into an `age.secrets.<name>` entry.
   #
@@ -53,16 +50,8 @@ in
       }:
       {
         imports = [ inputs.agenix.nixosModules.default ];
-
-        # `agenix` CLI (agenix -e <file>.age) for editing secrets.
         environment.systemPackages = [
           inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
-        ];
-
-        # Host identity used to decrypt at activation. These are the defaults,
-        # made explicit: the openssh host key must be a recipient in secrets.nix.
-        age.identityPaths = [
-          "/etc/ssh/ssh_host_ed25519_key"
         ];
 
         age.secrets = lib.listToAttrs (

@@ -1,5 +1,17 @@
 {
   lix.git = {
+    secrets = [
+      {
+        name = "github-token";
+        owner = "root";
+        mode = "400";
+      }
+    ];
+    os = { config, ... }: {
+      nix.extraOptions = ''
+        !include ${config.age.secrets."github-token".path}
+      '';
+    };
     homeManager =
       { pkgs, ... }:
       {
