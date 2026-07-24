@@ -1,6 +1,5 @@
 {
   inputs,
-  lix,
   __findFile,
   ...
 }:
@@ -31,7 +30,7 @@
 
       programs.hyprland = {
         enable = true;
-        withUWSM = false;
+        withUWSM = true;
         xwayland.enable = true;
         package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
         portalPackage =

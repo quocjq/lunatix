@@ -31,7 +31,7 @@
             cursorFeedback = "Bouncing";
             size = 24;
             taskManagerFeedback = true;
-            theme = "Breeze_Snow";
+            theme = "breeze_cursors";
           };
           iconTheme = "breeze-dark";
           wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Kay/contents/images/1080x1920.png";
