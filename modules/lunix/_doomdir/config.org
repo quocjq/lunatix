@@ -94,7 +94,7 @@ This block tangles to =init.el=
        biblio            ; Writes a PhD for you (citation needed)
        ;;collab            ; buffers with friends
        debugger          ; stepping through code, to help you add bugs
-       direnv
+       ;; direnv
        docker
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
@@ -411,8 +411,7 @@ delimiters (=sp-up-sexp=).
         :desc "Toggle nix-eshell"       "n"     #'nix-eshell
         :desc "Toggle dirvish"          "o /"   #'dirvish
         :desc "Toggle vterm"            "v t"   #'+vterm/toggle
-        :desc "New vterm"               "v n"   #'+vterm/here
-        :desc "Toggle olivetti"         "t o"   #'olivetti-mode)
+        :desc "New vterm"               "v n"   #'+vterm/here)
 #+end_src
 
 * Editor
@@ -786,6 +785,15 @@ structural motions.
       :n "g <down>"  #'org-forward-heading-same-level
       :n "g <left>"  #'org-up-element
       :n "g <right>" #'org-down-element)
+#+end_src
+
+Hiding in org-modern will annoy me.
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-fragtog)
+#+end_src
+Add hook
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'org-fragtog-mode)
 #+end_src
 
 ** Nicer Return
@@ -1805,12 +1813,12 @@ notes to PDF/EPUB positions for annotated reading.
 
 #+begin_src emacs-lisp
 ;; Auto-start olivetti-mode in Org and Markdown modes
-(add-hook! (org-mode) #'olivetti-mode)
+;; (add-hook! (org-mode) #'olivetti-mode)
 
 ;; Manage line numbers based on olivetti-mode state
-(add-hook! 'olivetti-mode-hook
-  (defun +olivetti-toggle-line-numbers-h ()
-    (if olivetti-mode
-        (display-line-numbers-mode -1)
-      (display-line-numbers-mode 'relative))))
+;; (add-hook! 'olivetti-mode-hook
+;;   (defun +olivetti-toggle-line-numbers-h ()
+;;     (if olivetti-mode
+;;         (display-line-numbers-mode -1)
+;;       (display-line-numbers-mode 'relative))))
 #+end_src
