@@ -15,14 +15,6 @@
     provides.to-hosts.homeManager = { lib, pkgs, ... }: {
       imports = [ inputs.stylix.homeModules.stylix ];
 
-      # Force the GTK icon theme name. Stylix's auto-derivation produces a
-      # wrong value from `stylix.icons.package` (papirus), so override with
-      # mkForce and pair it with the matching papirus-dark package.
-      # gtk.iconTheme = {
-      #   name = lib.mkForce "Papirus-Dark";
-      #   package = pkgs.papirus-icon-theme;
-      # };
-
       stylix = {
         enable = true;
         image = ./themes/wallpaper.jpg;
@@ -63,6 +55,7 @@
 
         targets = {
           hyprland.enable = true; # borders, shadows, groupbar, bg
+          hyprpaper.enable = true;
           kde.enable = true; # Plasma colors / fonts / cursor / wallpaper
           gtk.enable = true;
           qt.enable = true;

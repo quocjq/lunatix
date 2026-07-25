@@ -4,7 +4,10 @@
       enable = true;
       keyboards = {
         internalKeyboard = {
-          extraDefCfg = "process-unmapped-keys yes";
+          extraDefCfg = ''
+            process-unmapped-keys yes
+            linux-dev-names-exclude ("Lotus-Uinput-Server")
+          '';
           config = ''
             (defsrc
             caps a s d f j k l ;

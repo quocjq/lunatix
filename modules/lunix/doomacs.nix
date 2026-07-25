@@ -46,14 +46,16 @@
       };
 
       home.packages = with pkgs; [
-        # (pkgs.aspellWithDicts (dicts: [
-        #   dicts.en
-        #   dicts.en-computers
-        # ]))
-        # languagetool
+        (pkgs.aspellWithDicts (dicts: [
+          dicts.en
+          dicts.en-computers
+        ]))
+        languagetool
         nerd-fonts.symbols-only
         # twemoji-color-font
         # emacs-lsp-booster
+        # findutils
+        # coreutils
         fd
         ripgrep
         ddate
