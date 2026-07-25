@@ -1,11 +1,12 @@
+{ user, ... }:
 {
   den.aspects.syncthing = {
     nixos = {
       services.syncthing = {
         enable = true;
         openDefaultPorts = true;
-        user = "lunixose";
-        dataDir = "/home/lunixose/.local/share/syncthing";
+        user = user.userName;
+        dataDir = "/home/${user.userName}/Documents";
       };
 
       # Allow syncthing through the firewall.

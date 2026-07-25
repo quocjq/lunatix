@@ -1,16 +1,16 @@
-{ ... }:
+{ user, ... }:
 {
   lix.bash = {
     # Declare an agenix secret holding shell environment exports — API keys,
     # tokens, and anything else too sensitive to commit in the clear. It flows
     # through the `secrets` quirk to `lig.agenix`, which decrypts
     # modules/lig/_secrets/env.age at activation to the path below (owned by
-    # lunixose so the interactive shell can read it).
+    # the user so the interactive shell can read it).
     secrets = [
       {
         name = "env";
-        path = "/home/lunixose/.config/secrets/env";
-        owner = "lunixose";
+        path = "/home/${user.userName}/.config/secrets/env";
+        owner = user.userName;
         group = "users";
         mode = "600";
       }

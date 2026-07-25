@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, user, ... }:
 {
   flake-file.inputs.noctalia = {
     url = "github:noctalia-dev/noctalia";
@@ -213,7 +213,7 @@
           };
 
           wallpaper = {
-            directory = "/home/lunixose/Pictures/wallpaper";
+            directory = "/home/${user.userName}/Pictures/wallpaper";
 
             # The committed stylix source-of-truth image. Relative to this module:
             #   modules/lunix/hyprland/noctalia.nix -> modules/lunix/themes/wallpaper.jpg
@@ -223,11 +223,11 @@
 
             favorite = [
               {
-                path = "/home/lunixose/Pictures/wallpaper/A_Red_Face_Glowing_by_Merlin_Lightpainting.jpeg";
+                path = "/home/${user.userName}/Pictures/wallpaper/A_Red_Face_Glowing_by_Merlin_Lightpainting.jpeg";
                 theme_mode = "dark";
               }
               {
-                path = "/home/lunixose/Pictures/wallpaper/16.png";
+                path = "/home/${user.userName}/Pictures/wallpaper/16.png";
                 theme_mode = "dark";
               }
             ];

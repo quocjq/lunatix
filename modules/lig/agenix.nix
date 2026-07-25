@@ -18,8 +18,8 @@ in
   # Producer contract (emit at aspect top level, list auto-flattens):
   #   secrets = [
   #     { name = "github";                       # -> modules/lig/secrets/github.age
-  #       path = "/home/lunixose/.ssh/github";   # symlink target for the decrypted file
-  #       owner = "lunixose";                    # optional, default "root"
+  #       path = "/home/${user.userName}/.ssh/github";   # symlink target for the decrypted file
+  #       owner = "${user.userName}";            # optional, default "root"
   #       group = "users";                       # optional, default "root"
   #       mode  = "600"; }                       # optional, default "400"
   #   ];

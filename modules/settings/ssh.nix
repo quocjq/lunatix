@@ -1,3 +1,4 @@
+{ user, ... }:
 {
   den.aspects.ssh = {
     # Declare the private keys as agenix secrets. These flow through the
@@ -7,15 +8,15 @@
     secrets = [
       {
         name = "github";
-        path = "/home/lunixose/.ssh/github";
-        owner = "lunixose";
+        path = "/home/${user.userName}/.ssh/github";
+        owner = user.userName;
         group = "users";
         mode = "600";
       }
       {
         name = "oraclevps";
-        path = "/home/lunixose/.ssh/ssh-key-2026-05-09.key";
-        owner = "lunixose";
+        path = "/home/${user.userName}/.ssh/ssh-key-2026-05-09.key";
+        owner = user.userName;
         group = "users";
         mode = "600";
       }

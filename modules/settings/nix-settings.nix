@@ -13,7 +13,9 @@
         # colliding with nix.gc below.
         programs.nh = {
           enable = true;
-          flake = "/home/lunixose/Proj/lunatix";
+          # Repo root, derived from this module's location so the username
+          # does not leak into the absolute path.
+          flake = toString ./../..;
         };
 
         nix = {
