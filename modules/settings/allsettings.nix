@@ -2,11 +2,10 @@
 {
   den.aspects.settings = {
     includes = with den.aspects; [
-      home-manager
       audio
       bluetooth
       fonts
-      local
+      locale
       network
       nix-settings
       printing

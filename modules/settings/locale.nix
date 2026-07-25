@@ -1,5 +1,5 @@
 {
-  den.aspects.local = {
+  den.aspects.locale = {
     nixos = {
       time.timeZone = "Asia/Ho_Chi_Minh";
 
