@@ -10,9 +10,6 @@
   lix.lotus = {
     provides.to-hosts.nixos = { pkgs, ... }: {
       imports = [ inputs.lotus.nixosModules.fcitx5-lotus ];
-
-      # The upstream module defaults to `inputs.self.packages.<sys>.fcitx5-lotus`,
-      # which is undefined when the flake is consumed externally. Pin it here.
       services.fcitx5-lotus = {
         enable = true;
         package = inputs.lotus.packages.${pkgs.stdenv.hostPlatform.system}.fcitx5-lotus;

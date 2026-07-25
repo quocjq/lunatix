@@ -15,7 +15,7 @@
                 function()
                   hl.exec_cmd("bluetooth")
                   hl.exec_cmd("noctalia")
-                  hl.exec_cmd("emacs")
+                  hl.exec_cmd("emacsclient -c -a \\\"\\\" ")
                   -- fcitx5 daemon (lotus engine is auto-added as addon).
                   -- Use the system wrapper so the addons resolved by
                   -- `i18n.inputMethod.fcitx5.addons` are visible.

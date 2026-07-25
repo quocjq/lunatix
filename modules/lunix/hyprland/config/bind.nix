@@ -37,7 +37,7 @@
           bind = [
             # Actions
             (bind "${mainMod} + Return" (dsp.exec "ghostty"))
-            (bind "${mainMod} + T" (dsp.exec "emacsclient -c -n -a \\\"\\\" "))
+            (bind "${mainMod} + T" (dsp.exec "emacsclient -c -a \\\"\\\" "))
             (bind "${mainMod} + E" (dsp.exec "thunar"))
             (bind "${mainMod} + SHIFT + E" (dsp.exec "emacs"))
             (bind "${mainMod} + B" (dsp.exec "zen-twilight"))

@@ -22,7 +22,14 @@
           bar = {
             order = [ "Top" ];
             Top = {
-              end = [ "media" "notifications" "bluetooth" "volume" "brightness" "battery" ];
+              end = [
+                "media"
+                "notifications"
+                "bluetooth"
+                "volume"
+                "brightness"
+                "battery"
+              ];
               layer = "overlay";
               margin_ends = 0;
               padding = 39;
@@ -31,7 +38,12 @@
               radius_bottom_right = 42;
               radius_top_left = 0;
               radius_top_right = 0;
-              start = [ "launcher" "wallpaper" "workspaces" "cat" ];
+              start = [
+                "launcher"
+                "wallpaper"
+                "workspaces"
+                "cat"
+              ];
               thickness = 25;
               widget_spacing = 5;
             };
@@ -205,9 +217,9 @@
 
             # The committed stylix source-of-truth image. Relative to this module:
             #   modules/lunix/hyprland/noctalia.nix -> modules/lunix/themes/wallpaper.jpg
-            default.path = toString ../themes/wallpaper.jpg;
-            last.path    = toString ../themes/wallpaper.jpg;
-            monitors."eDP-1".path = toString ../themes/wallpaper.jpg;
+            # default.path = toString ../themes/wallpaper.jpg;
+            # last.path    = toString ../themes/wallpaper.jpg;
+            # monitors."eDP-1".path = toString ../themes/wallpaper.jpg;
 
             favorite = [
               {

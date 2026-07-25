@@ -12,8 +12,16 @@
       imports = [ inputs.stylix.nixosModules.stylix ];
     };
 
-    provides.to-hosts.homeManager = { pkgs, ... }: {
+    provides.to-hosts.homeManager = { lib, pkgs, ... }: {
       imports = [ inputs.stylix.homeModules.stylix ];
+
+      # Force the GTK icon theme name. Stylix's auto-derivation produces a
+      # wrong value from `stylix.icons.package` (papirus), so override with
+      # mkForce and pair it with the matching papirus-dark package.
+      # gtk.iconTheme = {
+      #   name = lib.mkForce "Papirus-Dark";
+      #   package = pkgs.papirus-icon-theme;
+      # };
 
       stylix = {
         enable = true;
@@ -34,7 +42,7 @@
             name = "DejaVu Serif";
           };
           emoji = {
-            package = pkgs.noto-fonts-emoji;
+            package = pkgs.noto-fonts-color-emoji;
             name = "Noto Color Emoji";
           };
           sizes = {
@@ -51,10 +59,7 @@
           size = 24;
         };
 
-        icons = {
-          enable = true;
-          package = pkgs.papirus-icon-theme;
-        };
+        icons.dark = "Papirus-Dark";
 
         targets = {
           hyprland.enable = true; # borders, shadows, groupbar, bg
@@ -63,15 +68,6 @@
           qt.enable = true;
           # emacs: deliberately off. Doom Emacs overrides the theme and the
           # user wants doom-monokai-octagon preserved.
-
-          # Explicit light + dark icon theme names. Without this stylix's
-          # auto-derivation from `icons.package` errors out at
-          # gtk.iconTheme.name evaluation (papirus auto-derivation fails
-          # because the upstream name is "Papirus-Dark", not "Papirus").
-          gtk.iconTheme = {
-            light = { name = "Papirus-Light"; package = pkgs.papirus-icon-theme; };
-            dark = { name = "Papirus-Dark"; package = pkgs.papirus-icon-theme; };
-          };
 
           # noctalia v5 stylix target. Currently a no-op until
           # `programs.noctalia-shell` is loaded (the existing setup uses
