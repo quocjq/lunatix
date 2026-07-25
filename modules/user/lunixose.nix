@@ -15,6 +15,7 @@
       <lix/stylix>
       <lix/lotus>
       <lix/yazi>
+      <lix/zoxide>
       <lix/thunar>
       <lix/kanata>
       <lix/starship>

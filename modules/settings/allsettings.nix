@@ -10,6 +10,7 @@
       nix-settings
       printing
       ssh
+      syncthing
       x11
     ];
   };
