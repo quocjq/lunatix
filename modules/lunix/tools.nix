@@ -1,5 +1,5 @@
 # tools — shells, prompt, file managers, browser.
-{
+{ __findFile, ... }: {
   lix.tools = {
     includes = [
       <lix/bash>

@@ -2,7 +2,7 @@
 # `lix.hyprland` already pulls in `lix.noctalia` via its own includes
 # (see modules/lunix/hyprland/hyprland.nix:14-16) — no need to list
 # noctalia here.
-{
+{ __findFile, ... }: {
   lix.system = {
     includes = [
       <lix/hyprland>
