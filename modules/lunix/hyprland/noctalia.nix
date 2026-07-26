@@ -24,6 +24,7 @@
             Top = {
               end = [
                 "media"
+                "tray"
                 "notifications"
                 "bluetooth"
                 "volume"
