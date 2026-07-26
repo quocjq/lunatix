@@ -1,21 +1,9 @@
-{ user, ... }:
 {
   lix.bash = {
-    # Declare an agenix secret holding shell environment exports — API keys,
-    # tokens, and anything else too sensitive to commit in the clear. It flows
-    # through the `secrets` quirk to `lig.agenix`, which decrypts
-    # modules/lig/_secrets/env.age at activation to the path below (owned by
-    # the user so the interactive shell can read it).
-    secrets = [
-      {
-        name = "env";
-        path = "/home/${user.userName}/.config/secrets/env";
-        owner = user.userName;
-        group = "users";
-        mode = "600";
-      }
-    ];
-
+    # The agenix secret holding shell environment exports is declared on the
+    # user aspect itself, in modules/user/lunixose.nix, since it is
+    # inherently per-user. This aspect only configures the bash program and
+    # sources the decrypted secret from the standard location.
     homeManager = {
       programs.bash = {
         enable = true;

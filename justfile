@@ -19,6 +19,14 @@ nix := "nix --extra-experimental-features 'nix-command flakes'"
 bootstrap:
     {{nix}} develop
 
+# Bootstrap via devenv — same toolbox, but powered by cachix/devenv.
+bootstrap-dev:
+    {{nix}} run github:cachix/devenv -- shell
+
+# Enter the daily devenv shell (mirrors `.envrc`'s `use flake .#dev`).
+dev:
+    {{nix}} run github:cachix/devenv -- shell dev
+
 # Partition, format and mount the Latitude 3250 disk at /mnt (DESTRUCTIVE).
 # Stash the LUKS passphrase first:  echo -n 'your-passphrase' > /tmp/secret.key
 disko-format:

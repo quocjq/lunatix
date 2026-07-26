@@ -85,6 +85,10 @@ Boot the NixOS installer ISO, connect to the network, then:
    just bootstrap
    ```
 
+   Prefer devenv? `just bootstrap-dev` exposes the same toolbox via
+   [cachix/devenv](https://devenv.sh); the runbook printed on shell entry is
+   identical.
+
 3. **Check the target disk.** :
 
    ```console
@@ -129,6 +133,25 @@ Both a Wayland and an X11 desktop are configured:
 
 - KDE Plasma 6 with the SDDM display manager
 - Hyprland, configured in Lua, with the Noctalia shell (Catppuccin dark theme)
+
+## Diagrams
+
+The den framework exposes an aspect-resolution graph for every host. This
+repo builds Mermaid diagrams for it via
+[den-diagram](https://den.denful.dev/explanation/diagrams/):
+
+```console
+nix build .#diag-igloo    # host-level aspect resolution
+nix build .#diag-fleet    # fleet-wide Sankey
+```
+
+Each result is a plain `.mmd` text file under `result/`. Paste it into any
+Mermaid renderer (GitHub markdown, `mermaid.live`) or pipe through `mmdc`
+for SVG:
+
+```console
+nix run nixpkgs#mermaid-cli -- -i result/diag-igloo.mmd -o diag-igloo.svg
+```
 
 ## Usage
 

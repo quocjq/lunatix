@@ -9,6 +9,10 @@
   # other inputs may be defined at a module using them.
   flake-file.inputs = {
     den.url = "github:denful/den";
+    den-diagram = {
+      url = "github:denful/den-diagram";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-file.url = "github:denful/flake-file";
     home-manager = {
       url = "github:nix-community/home-manager";

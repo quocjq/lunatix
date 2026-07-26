@@ -15,9 +15,9 @@
           krisp.enable = true;
           openASAR.enable = true;
         };
-        quickCss = "/* css goes here */";
+        # Theme: Midnight (refact0r). Picked over stylix's discord target —
+        # change the URL here to swap themes; comment-uncomment to A/B.
         config = {
-          useQuickCss = true;
           enabledThemeLinks = [
             # "https://raw.githubusercontent.com/refact0r/system24/refs/heads/main/theme/system24.theme.css"
             "https://raw.githubusercontent.com/refact0r/midnight-discord/refs/heads/master/themes/midnight.theme.css"

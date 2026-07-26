@@ -1,7 +1,5 @@
 { inputs, den, ... }:
 let
-  # A producer that emits `secrets = [ { name = "github"; ... } ]` is
-  # wired to modules/lig/_secrets/github.age automatically.
   secretsDir = ./_secrets;
 in
 {
@@ -19,7 +17,7 @@ in
   #   secrets = [
   #     { name = "github";                       # -> modules/lig/secrets/github.age
   #       path = "/home/${user.userName}/.ssh/github";   # symlink target for the decrypted file
-  #       owner = "${user.userName}";            # optional, default "root"
+  #       owner = "${user.userName}";                  # optional, default "root"
   #       group = "users";                       # optional, default "root"
   #       mode  = "600"; }                       # optional, default "400"
   #   ];
@@ -27,10 +25,6 @@ in
     description = "agenix secret declarations collected by lig.agenix";
   };
 
-  # `secrets` may be declared on user aspects (e.g. lix.bash) but is consumed by
-  # lig.agenix at the host (nixos) scope. Same-scope aggregation is automatic;
-  # this policy exposes user-scope declarations up to their host so they reach
-  # the consumer too. Registered in den.default.includes below so it is always on.
   den.policies.expose-secrets =
     { ... }:
     let

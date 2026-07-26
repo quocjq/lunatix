@@ -59,20 +59,8 @@
           kde.enable = true; # Plasma colors / fonts / cursor / wallpaper
           gtk.enable = true;
           qt.enable = true;
-          # emacs: deliberately off. Doom Emacs overrides the theme and the
-          # user wants doom-monokai-octagon preserved.
-
-          # noctalia v5 stylix target. Currently a no-op until
-          # `programs.noctalia-shell` is loaded (the existing setup uses
-          # v4's `programs.noctalia` in modules/lunix/hyprland/noctalia.nix).
-          # Forward-compatible: activates once the v4 -> v5 migration lands.
           noctalia.enable = true;
-
-          # yazi themes the file manager; needs lix.yazi to enable
-          # `programs.yazi` first so a config file exists to theme.
           yazi.enable = true;
-
-          # starship already enabled via lix.starship; stylix themes the TOML.
           starship.enable = true;
         };
       };

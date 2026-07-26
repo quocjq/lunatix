@@ -1,4 +1,4 @@
-{ inputs, user, ... }:
+{ inputs, ... }:
 {
   flake-file.inputs.noctalia = {
     url = "github:noctalia-dev/noctalia";
@@ -10,7 +10,7 @@
       services.power-profiles-daemon.enable = true;
       services.upower.enable = true;
     };
-    homeManager = {
+    homeManager = { user, ... }: {
       imports = [
         inputs.noctalia.homeModules.default
       ];

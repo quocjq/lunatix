@@ -1,7 +1,6 @@
-{ user, ... }:
 {
   den.aspects.syncthing = {
-    nixos = {
+    nixos = { user, ... }: {
       services.syncthing = {
         enable = true;
         openDefaultPorts = true;

@@ -12,6 +12,10 @@
       };
     };
     den.url = "github:denful/den";
+    den-diagram = {
+      url = "github:denful/den-diagram";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     devenv.url = "github:cachix/devenv";
     disko = {
       url = "github:nix-community/disko";
@@ -28,6 +32,10 @@
     };
     hyprland.url = "github:hyprwm/Hyprland";
     import-tree.url = "github:vic/import-tree";
+    lotus = {
+      url = "github:lotusinputmethod/fcitx5-lotus";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-doom-emacs-unstraightened = {
       url = "github:marienz/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "";
@@ -47,10 +55,6 @@
     };
     stylix = {
       url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    lotus = {
-      url = "github:lotusinputmethod/fcitx5-lotus";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser = {

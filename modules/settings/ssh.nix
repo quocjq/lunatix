@@ -1,27 +1,9 @@
-{ user, ... }:
 {
   den.aspects.ssh = {
-    # Declare the private keys as agenix secrets. These flow through the
-    # `secrets` quirk to `lig.agenix`, which decrypts each *.age file to the
-    # given `path` at activation (a symlink into the nix-store-backed secret).
-    # The encrypted files live in modules/lig/secrets/<name>.age.
-    secrets = [
-      {
-        name = "github";
-        path = "/home/${user.userName}/.ssh/github";
-        owner = user.userName;
-        group = "users";
-        mode = "600";
-      }
-      {
-        name = "oraclevps";
-        path = "/home/${user.userName}/.ssh/ssh-key-2026-05-09.key";
-        owner = user.userName;
-        group = "users";
-        mode = "600";
-      }
-    ];
-
+    # The per-user agenix secrets (github key, oracle key) are declared on the
+    # user aspect itself, in modules/user/lunixose.nix, since they are
+    # inherently per-user. This aspect only configures the system-wide
+    # openssh server and ssh client.
     nixos = {
       services.openssh.enable = true;
       programs.ssh = {
