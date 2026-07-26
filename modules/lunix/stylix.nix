@@ -59,6 +59,7 @@
           kde.enable = true; # Plasma colors / fonts / cursor / wallpaper
           gtk.enable = true;
           qt.enable = true;
+          nushell.enable = true;
           noctalia.enable = true;
           yazi.enable = true;
           starship.enable = true;

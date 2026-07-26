@@ -54,6 +54,7 @@
       <lix/kanata>
       <lix/starship>
       <lix/bash>
+      <lix/nushell>
       <lix/claude>
       <lix/git>
     ];
