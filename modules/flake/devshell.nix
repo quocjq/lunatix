@@ -15,36 +15,42 @@
   perSystem =
     { pkgs, system, ... }:
     {
-      devShells.default = pkgs.mkShellNoCC {
-        packages = [
-          # Task runner + fetch — `just` mirrors the recipes in ./justfile,
-          # git is how you got here (and how you re-pull after edits on tty).
-          pkgs.just
-          pkgs.git
+      _module.args.pkgs = import inputs.nixpkgs {
+        inherit system;
+        overlays = [
+        ];
+        config = {
+          allowUnfree = true;
+        };
+      };
+      devShells.default = pkgs.mkShell {
+        packages = with pkgs; [
+          just
+          git
 
           # disko itself: `disko --mode destroy,format,mount <flake>#igloo` or
           # the one-shot `disko-install`. Pulled from the pinned input so it
           # matches flake.lock rather than the installer's channel.
-          inputs.disko.packages.${system}.disko
-          inputs.disko.packages.${system}.disko-install
 
           # Tools disko shells out to while formatting the Latitude layout.
+          inputs.disko.packages.${system}.disko
+          inputs.disko.packages.${system}.disko-install
           # Present on the graphical ISO but not the minimal one, so pin them.
-          pkgs.cryptsetup # LUKS2 containers (root + swap)
-          pkgs.btrfs-progs # btrfs + subvolumes (home, nix)
-          pkgs.dosfstools # mkfs.vfat for the ESP
-          pkgs.gptfdisk # sgdisk / GPT labels (EFI, root)
-          pkgs.parted
-          pkgs.util-linux # wipefs, lsblk, blkid — inspect before you destroy
+          cryptsetup # LUKS2 containers (root + swap)
+          btrfs-progs # btrfs + subvolumes (home, nix)
+          dosfstools # mkfs.vfat for the ESP
+          gptfdisk # sgdisk / GPT labels (EFI, root)
+          parted
+          util-linux # wipefs, lsblk, blkid — inspect before you destroy
 
           # Install the closure onto the freshly mounted /mnt.
-          pkgs.nixos-install-tools # nixos-install, nixos-generate-config, nixos-enter
+          nixos-install-tools # nixos-install, nixos-generate-config, nixos-enter
 
           # Secrets: the host decrypts *.age with its ssh host key, so the new
           # box must be a recipient in _secrets/secrets.nix before first switch.
+          age
+          openssh # ssh-keygen for a fresh host key / recipient pubkey
           inputs.agenix.packages.${system}.default
-          pkgs.age
-          pkgs.openssh # ssh-keygen for a fresh host key / recipient pubkey
         ];
 
         shellHook = ''

@@ -15,17 +15,23 @@ default:
 # nix with flakes + nix-command enabled explicitly (for the fresh installer).
 nix := "nix --extra-experimental-features 'nix-command flakes'"
 
+# Use agenix directly if installed, otherwise fall back to `nix run`.
+agenix_cmd := if `bash -c 'command -v agenix 2>/dev/null || true'` != "" { "agenix" } else { nix + " run github:ryantm/agenix --" }
+
+# Use devenv directly if installed, otherwise fall back to `nix run`.
+devenv_cmd := if `bash -c 'command -v devenv 2>/dev/null || true'` != "" { "devenv" } else { nix + " run github:cachix/devenv --" }
+
 # Enter the bootstrap toolbox shell (disko, cryptsetup, nixos-install-tools…).
 bootstrap:
     {{nix}} develop
 
 # Bootstrap via devenv — same toolbox, but powered by cachix/devenv.
 bootstrap-dev:
-    {{nix}} run github:cachix/devenv -- shell
+    {{devenv_cmd}} shell
 
 # Enter the daily devenv shell (mirrors `.envrc`'s `use flake .#dev`).
 dev:
-    {{nix}} run github:cachix/devenv -- shell dev
+    {{devenv_cmd}} shell dev
 
 # Partition, format and mount the Latitude 3250 disk at /mnt (DESTRUCTIVE).
 # Stash the LUKS passphrase first:  echo -n 'your-passphrase' > /tmp/secret.key
@@ -78,21 +84,21 @@ optimise:
 
 # Create or edit an encrypted secret, e.g. `just secret github`
 secret name:
-    cd {{secrets_dir}} && {{nix}} run github:ryantm/agenix -- -e {{name}}.age -i {{identity}}
+    cd {{secrets_dir}} && {{agenix_cmd}} -e {{name}}.age -i {{identity}}
 
 # Encrypt an existing plaintext file into a secret,
 # e.g. `just secret-import github ~/.ssh/github`
 secret-import name file:
-    cd {{secrets_dir}} && EDITOR="cp {{file}}" {{nix}} run github:ryantm/agenix -- -e {{name}}.age
+    cd {{secrets_dir}} && EDITOR="cp {{file}}" {{agenix_cmd}} -e {{name}}.age
 
 # Decrypt a secret to stdout (sanity check), e.g. `just secret-show github`
 secret-show name:
-    cd {{secrets_dir}} && {{nix}} run github:ryantm/agenix -- -d {{name}}.age -i {{identity}}
+    cd {{secrets_dir}} && {{agenix_cmd}} -d {{name}}.age -i {{identity}}
 
 # Re-encrypt every secret for the current recipients in secrets.nix.
 # Run this after adding/removing a key in secrets.nix.
 rekey:
-    cd {{secrets_dir}} && {{nix}} run github:ryantm/agenix -- --rekey -i {{identity}}
+    cd {{secrets_dir}} && {{agenix_cmd}} --rekey -i {{identity}}
 
 # Create new ssh key and add it to age & provide public key
 # Type of key: dsa, ecdsa, ecdsa-sk, ed25519, ed25519-sk, rsa
@@ -102,7 +108,7 @@ new-key type name:
     tmp="$(mktemp -d)"
     trap 'rm -rf "$tmp"' EXIT
     ssh-keygen -t {{type}} -f "$tmp/{{name}}" -N "" -C "lunixose@{{name}}"
-    ( cd {{secrets_dir}} && EDITOR="cp $tmp/{{name}}" {{nix}} run github:ryantm/agenix -- -e {{name}}.age )
+    ( cd {{secrets_dir}} && EDITOR="cp $tmp/{{name}}" {{agenix_cmd}} -e {{name}}.age )
     echo
     cat "$tmp/{{name}}.pub"
     echo
