@@ -9,6 +9,7 @@ Every file under `modules/` is imported automatically, so the configuration
 is organized as small, self-contained aspects rather than a single monolithic
 module tree.
 
+
 ## Overview
 
 - Host: `igloo` (hostname `nixos`), `x86_64-linux`
@@ -18,51 +19,6 @@ module tree.
 - State version: `26.05`
 - Filesystem: Btrfs on LUKS with `home`, `nix`, and boot partitions; encrypted swap
 - Boot: systemd-boot with EFI, latest kernel
-
-## Layout
-
-```
-flake.nix                 Auto-generated flake (via flake-file)
-justfile                  Task shortcuts
-modules/
-  flake/                  Flake-level configuration
-    defaults.nix          Default state versions and includes
-    dendritic.nix         Dendritic module wiring
-    namespaces.nix        Custom `lix` namespace
-    nh.nix                Per-host build apps for nh
-    vm.nix                `nix run .#vm` support
-    battery/              den "battery" helpers
-  hardware/
-    latitude3250.nix      Machine-specific kernel modules
-  hosts/
-    igloo.nix             Host definition, disks, bootloader
-  settings/               System-wide settings (aspects)
-    allsettings.nix       Aggregates the settings below
-    audio.nix             PipeWire
-    bluetooth.nix         Bluetooth
-    fonts.nix             System fonts
-    local.nix             Timezone and locale
-    network.nix           NetworkManager
-    nix-settings.nix      Nix daemon settings, GC, unfree
-    printing.nix          CUPS
-    ssh.nix               OpenSSH and SSH client config
-    x11.nix               X server and keyboard layout
-    homemanager.nix       Home Manager defaults
-  lunix/                  User-facing programs (`lix` namespace)
-    doomacs.nix           Doom Emacs (unstraightened) and toolchains
-    hyprland/             Hyprland compositor and Lua config
-    plasma.nix            KDE Plasma 6 desktop
-    zenwser.nix           Zen Browser
-    nixcord.nix           Discord via nixcord/Equicord
-    kanata.nix            Home-row mods keyboard remapping
-    starship.nix          Shell prompt
-    claude.nix            Claude Code
-  lig/                    Secret-management aspects (`lig` namespace)
-    agenix.nix            agenix consumer: turns `secrets` declarations into age.secrets
-    _secrets/             Encrypted *.age files + agenix rules (secrets.nix)
-  user/
-    lunixose.nix          User definition and packages
-```
 
 ## Reinstall on a fresh machine
 

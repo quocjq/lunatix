@@ -56,6 +56,10 @@
         targets = {
           hyprland.enable = true; # borders, shadows, groupbar, bg
           hyprpaper.enable = true;
+          bat.enable = true;
+          btop.enable = true;
+          fzf.enable = true;
+          ghostty.enable = true;
           kde.enable = true; # Plasma colors / fonts / cursor / wallpaper
           gtk.enable = true;
           qt.enable = true;
@@ -63,6 +67,8 @@
           noctalia.enable = true;
           yazi.enable = true;
           starship.enable = true;
+          mpv.enable = true;
+          sioyek.enable = true;
         };
       };
     };
