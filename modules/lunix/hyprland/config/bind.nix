@@ -30,6 +30,25 @@
           flags
         ];
       };
+
+      # Auto-open noctalia launcher when typing on an empty workspace.
+      # which decides based on activeworkspace.windows whether to open the
+      # launcher or forward the key to the focused window via wtype.
+      # FIXME: Currently broken
+      # letters = "abcdefghijklmnopqrstuvwxyz";
+      # letterBinds = lib.concatLists (
+      #   builtins.genList (
+      #     i:
+      #     let
+      #       lc = lib.substring i 1 letters;
+      #       uc = lib.toUpper lc;
+      #     in
+      #     [
+      #       (bind lc (dsp.exec "../scripts/type-search.sh ${lc}"))
+      #       (bind "SHIFT + ${uc}" (dsp.exec "../scripts/type-search.sh ${uc}"))
+      #     ]
+      #   )
+      # );
     in
     {
       wayland.windowManager.hyprland = {

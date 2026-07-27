@@ -1,4 +1,3 @@
-{ ... }:
 {
   den.aspects.nix-settings = {
     nixos =
@@ -6,15 +5,8 @@
       {
         nixpkgs.config.allowUnfree = true;
 
-        # nh: the friendly nix-helper CLI. `flake` makes `nh os switch` (and
-        # friends) default to this repo, so you can run nh from anywhere without
-        # passing a path. Cleanup is driven manually from the justfile
-        # (`just clean`), so nh's own scheduled clean stays off to avoid
-        # colliding with nix.gc below.
         programs.nh = {
           enable = true;
-          # Repo root, derived from this module's location so the username
-          # does not leak into the absolute path.
           flake = toString ./../..;
         };
 

@@ -1813,7 +1813,7 @@ notes to PDF/EPUB positions for annotated reading.
 
 #+begin_src emacs-lisp
 ;; Auto-start olivetti-mode in Org and Markdown modes
-;; (add-hook! (org-mode) #'olivetti-mode)
+;; (add-hook! (markdown-mode) #'olivetti-mode)
 
 ;; Manage line numbers based on olivetti-mode state
 ;; (add-hook! 'olivetti-mode-hook

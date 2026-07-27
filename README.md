@@ -1,9 +1,8 @@
 # LunatixOS
 
-Personal NixOS configuration for the `igloo` host, built on a dendritic
-flake layout using the [den](https://github.com/denful/den) framework,
-[flake-parts](https://github.com/hercules-ci/flake-parts), and
-[import-tree](https://github.com/vic/import-tree).
+Personal NixOS configuration for the `igloo` host, built on a dendritic flake
+layout using the [den](https://github.com/denful/den) framework,
+[flake-parts](https://github.com/hercules-ci/flake-parts), and [import-tree](https://github.com/vic/import-tree).
 
 Every file under `modules/` is imported automatically, so the configuration
 is organized as small, self-contained aspects rather than a single monolithic
@@ -114,8 +113,8 @@ nix run nixpkgs#mermaid-cli -- -i result/diag-igloo.mmd -o diag-igloo.svg
 Build and switch the host configuration:
 
 ```console
-nix run .#igloo           # build only
-nix run .#igloo -- switch # build and activate
+just build           # build only
+just switch          # build and activate
 ```
 
 Test changes in a VM before applying them to hardware:

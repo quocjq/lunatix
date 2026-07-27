@@ -12,13 +12,8 @@ default:
 # experimental features on from the command line. The only tool you need to
 # reach them is `just` itself:  nix-shell -p just git
 
-# nix with flakes + nix-command enabled explicitly (for the fresh installer).
 nix := "nix --extra-experimental-features 'nix-command flakes'"
-
-# Use agenix directly if installed, otherwise fall back to `nix run`.
 agenix_cmd := if `bash -c 'command -v agenix 2>/dev/null || true'` != "" { "agenix" } else { nix + " run github:ryantm/agenix --" }
-
-# Use devenv directly if installed, otherwise fall back to `nix run`.
 devenv_cmd := if `bash -c 'command -v devenv 2>/dev/null || true'` != "" { "devenv" } else { nix + " run github:cachix/devenv --" }
 
 # Enter the bootstrap toolbox shell (disko, cryptsetup, nixos-install-tools…).
@@ -102,7 +97,7 @@ rekey:
 
 # Create new ssh key and add it to age & provide public key
 # Type of key: dsa, ecdsa, ecdsa-sk, ed25519, ed25519-sk, rsa
-new-key type name:
+new-ssh-key type name:
     #!/usr/bin/env bash
     set -euo pipefail
     tmp="$(mktemp -d)"
