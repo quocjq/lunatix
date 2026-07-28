@@ -34,8 +34,12 @@ disko-format:
     sudo {{nix}} run github:nix-community/disko -- --mode destroy,format,mount --flake .#igloo
 
 # Install the igloo system onto the mounted /mnt.
-install:
+nixos-install:
     sudo nixos-install --flake .#igloo --no-root-passwd
+
+# Basically disko + nixos-install
+disko-install host disk:
+    sudo nix run 'github:nix-community/disko/latest#disko-install' -- --flake .#{{host}} --disk {{disk}}
 
 # Build the igloo host configuration (no activation)
 build:
