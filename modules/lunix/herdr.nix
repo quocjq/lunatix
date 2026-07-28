@@ -5,7 +5,7 @@
   lix.herdr = {
     os = { pkgs, ... }: {
       environment.systemPackages = [
-        inputs.herdr.packages.${pkgs.system}.default
+        inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
     };
   };

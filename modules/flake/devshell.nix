@@ -8,8 +8,10 @@
 #   nix develop            # you are now here
 #
 # The runbook printed by shellHook mirrors modules/disko/latitude3250.nix:
-# disko formats with `disko.enableConfig = false`, so it only partitions/
-# formats — the running system's mounts stay hand-written in the host module.
+# disko formats AND manages the running system's mounts/LUKS/swap via the
+# NixOS module (`disko.enableConfig = true`). That module is the single
+# source of truth for disk layout — the host module has no hand-written
+# mounts.
 { inputs, ... }:
 {
   perSystem =
@@ -80,9 +82,12 @@
                  just switch
 
           Notes:
-            * The host mounts in modules/hosts/igloo.nix are hand-written and pin
-              specific LUKS UUIDs. A fresh disko run creates NEW UUIDs, so update
-              those (and /boot's) to match the new disk before/after first switch.
+            * Disk layout lives in modules/disko/latitude3250.nix with
+              `disko.enableConfig = true` — that aspect is the single source of
+              truth and generates mounts, LUKS, and swap for any host including
+              <disko-latitude3250>. On an existing disk whose swap partition lacks
+              a partlabel, run `sudo sgdisk -c 3:swap /dev/nvme0n1` once before
+              the first rebuild.
             * Run `just` to list every recipe.
           EOF
         '';

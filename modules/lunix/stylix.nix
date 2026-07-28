@@ -69,6 +69,7 @@
           starship.enable = true;
           mpv.enable = true;
           sioyek.enable = true;
+          zen-browser.profileNames = [ "lunixose" ];
         };
       };
     };

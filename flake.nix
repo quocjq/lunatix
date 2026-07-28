@@ -11,6 +11,10 @@
         nixpkgs.follows = "nixpkgs";
       };
     };
+    agenix-rekey = {
+      url = "github:oddlama/agenix-rekey";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     den.url = "github:denful/den";
     den-diagram = {
       url = "github:denful/den-diagram";
@@ -26,6 +30,7 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    herdr.url = "github:ogulcancelik/herdr";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -5,11 +5,14 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  # Disko declaration mirroring the hand-made layout on the Latitude 3250's
-  # 256 GB KIOXIA NVMe drive:
+  # Disko declaration — single source of truth for disk layout on the
+  # Latitude 3250's 256 GB KIOXIA NVMe drive. With `disko.enableConfig = true`
+  # below, this aspect auto-generates `fileSystems`, `boot.initrd.luks.devices`,
+  # and `swapDevices` for any host that includes `<disko-latitude3250>` —
+  # `modules/hosts/igloo.nix` carries NO hand-written mounts.
   #
   #   nvme0n1 (GPT)
-  #   ├─ p1  1 GiB   EFI System                       vfat  -> /boot
+  #   ├─ p1  1 GiB   EFI System                       vfat       -> /boot
   #   ├─ p2  ~228 G  LUKS2 -> btrfs                          -> / (top-level, subvolid=5)
   #   │                                                subvol home -> /home
   #   │                                                subvol nix  -> /nix
@@ -21,17 +24,27 @@
   # NOTE: `/` is the btrfs top-level (subvolid=5), NOT a named subvolume — that
   # matches the current install. Disko expresses this with the `mountpoint` on
   # the btrfs content itself, alongside the two named subvolumes.
+  #
+  # `passwordFile` is read ONLY while formatting (disko/disko-install). Boot
+  # still prompts interactively.
+  #
+  # Adopting this config on an EXISTING disk: p3 (swap) currently has no GPT
+  # partlabel, so disko's partlabel-based LUKS resolution will not find it.
+  # Before the first rebuild, run once (non-destructive, milliseconds):
+  #
+  #   sudo sgdisk -c 3:swap /dev/nvme0n1
+  #   sudo partprobe /dev/nvme0n1
+  #
+  # Existing LUKS UUIDs persist — only the GPT name on p3 changes.
   den.aspects.disko-latitude3250 = {
     nixos = {
       imports = [ inputs.disko.nixosModules.disko ];
 
-      # Reinstall-only mode: declare the layout for `disko` to format a fresh
-      # disk, but do NOT let disko generate this system's fileSystems/luks/swap.
-      # The running igloo keeps the hand-written mounts in modules/hosts/igloo.nix,
-      # so activating this module never affects the current boot. Flip to `true`
-      # (and drop the manual block in igloo.nix) only on a clean install where the
-      # disk was partitioned by `disko` itself.
-      disko.enableConfig = false;
+      # Active mode: this aspect is the SINGLE source of truth for disk
+      # layout. It generates `fileSystems`, `boot.initrd.luks.devices`, and
+      # `swapDevices` for any host including `<disko-latitude3250>`. The host
+      # module (modules/hosts/igloo.nix) has no hand-written mounts.
+      disko.enableConfig = true;
 
       disko.devices = {
         disk.main = {
@@ -91,9 +104,13 @@
                 };
               };
 
-              # p3 — encrypted swap (fills the remaining space, ~8.8 GiB)
+              # p3 — encrypted swap (fills the remaining space, ~8.8 GiB). `label`
+              # pins the GPT partition name to "swap" so disko resolves p3 by
+              # /dev/disk/by-partlabel/swap. Existing disks that lack this
+              # label need a one-time `sgdisk -c 3:swap /dev/nvme0n1`.
               swap = {
                 priority = 3;
+                label = "swap";
                 size = "100%";
                 content = {
                   type = "luks";
