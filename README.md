@@ -23,71 +23,44 @@ module tree.
 
 Boot the NixOS installer ISO, connect to the network, then:
 
-1. **Get the repo and `just`.** `git` and `just` are the only things you pull
-   into the installer shell:
-
    ```console
-   nix-shell -p just git
+   nix-shell -p just git 
    git clone https://github.com/lunixose/lunatix
    cd lunatix
-   ```
-
-2. **Enter shell** This drops you into a shell with `disko`,
-   `cryptsetup`, `btrfs-progs`, `nixos-install-tools` and everything else the
-   install shells out to, pinned to `flake.lock`:
-
-   ```console
    just bootstrap
    ```
-
-   Prefer devenv? `just bootstrap-dev` exposes the same toolbox via
-   [cachix/devenv](https://devenv.sh); the runbook printed on shell entry is
-   identical.
-
-3. **Check the target disk.** :
 
    ```console
    lsblk -o NAME,SIZE,TYPE,MODEL,SERIAL
    ```
 
-4. **Stash the LUKS passphrase** where disko expects it while formatting. This
+ **Stash the LUKS passphrase** where disko expects it while formatting. This
    is used only during formatting — boot still prompts interactively:
 
    ```console
    echo -n 'your-passphrase' > /tmp/secret.key
    ```
 
-5. **Partition, format and mount** the disk at `/mnt`. This is DESTRUCTIVE — it
+ **Partition, format and mount** the disk at `/mnt`. This is DESTRUCTIVE — it
    wipes the target disk:
 
    ```console
    just disko-format
    ```
 
-6. **Install the system** onto the freshly mounted `/mnt`:
+**Install the system** onto the freshly mounted `/mnt`:
 
    ```console
    just install
-   ```
-
-7. **Reboot**, log in, then activate the full configuration from the installed
-   system:
-
-   ```console
    just switch
    ```
-
-> The host mounts in `modules/hosts/igloo.nix` pin specific LUKS UUIDs. A fresh
-> `disko` run generates new UUIDs, so update those (and `/boot`'s) to match the
-> new disk — or set `disko.enableConfig = true` in
-> `modules/disko/latitude3250.nix` and drop the hand-written block.
 
 ## Desktop
 
 Both a Wayland and an X11 desktop are configured:
 
 - KDE Plasma 6 with the SDDM display manager
-- Hyprland, configured in Lua, with the Noctalia shell (Catppuccin dark theme)
+- Hyprland, configured in Lua, with the Noctalia shell (Catppuccin Pink)
 
 ## Diagrams
 
