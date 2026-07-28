@@ -1,5 +1,3 @@
-# Ships the submap-gating daemon into ~/.local/bin and adds the socket
-# tool it depends on. Auto-loaded by flake-parts via import-tree.
 {
   lix.hyprland.homeManager =
     { pkgs, ... }:

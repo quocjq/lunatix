@@ -2,19 +2,17 @@
 {
   lix.greetd = {
     provides.to-hosts.nixos =
-      { pkgs, ... }:
+      { pkgs, user, ... }:
       {
         services.greetd = {
           enable = true;
           useTextGreeter = true;
           settings.default_session = {
-            command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions /run/current-system/sw/share/xsessions:/run/current-system/sw/share/wayland-sessions";
-            user = "lunixose";
+            command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions  ${pkgs.hyprland}/share/wayland-sessions";
+            user = "${user.userName}";
           };
         };
-        # tuigreet is not a service package in pinned nixpkgs; expose on PATH.
         environment.systemPackages = [ pkgs.tuigreet ];
-        # SDDM must not coexist with greetd.
         services.displayManager.sddm.enable = false;
       };
   };
