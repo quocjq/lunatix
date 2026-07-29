@@ -5,11 +5,6 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  # Disko declaration — single source of truth for disk layout on the
-  # Latitude 3250's 256 GB KIOXIA NVMe drive. With `disko.enableConfig = true`
-  # below, this aspect auto-generates `fileSystems`, `boot.initrd.luks.devices`,
-  # and `swapDevices` for any host that includes `<disko-latitude3250>` —
-  # `modules/hosts/igloo.nix` carries NO hand-written mounts.
   #
   #   nvme0n1 (GPT)
   #   ├─ p1  1 GiB   EFI System                       vfat       -> /boot
@@ -39,11 +34,6 @@
   den.aspects.disko-latitude3250 = {
     nixos = {
       imports = [ inputs.disko.nixosModules.disko ];
-
-      # Active mode: this aspect is the SINGLE source of truth for disk
-      # layout. It generates `fileSystems`, `boot.initrd.luks.devices`, and
-      # `swapDevices` for any host including `<disko-latitude3250>`. The host
-      # module (modules/hosts/igloo.nix) has no hand-written mounts.
       disko.enableConfig = true;
 
       disko.devices = {
