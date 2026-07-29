@@ -408,7 +408,6 @@ delimiters (=sp-up-sexp=).
 
 #+begin_src emacs-lisp
 (map! :leader
-        :desc "Toggle nix-eshell"       "n"     #'nix-eshell
         :desc "Toggle dirvish"          "o /"   #'dirvish
         :desc "Toggle vterm"            "v t"   #'+vterm/toggle
         :desc "New vterm"               "v n"   #'+vterm/here)
@@ -606,9 +605,6 @@ capture — while staying on top of Doom's Org module rather than
 replacing it.
 
 ** Appearance
-:PROPERTIES:
-:CUSTOM_ID: appearance-org
-:END:
 =org-modern= restyles headings, lists, tables, keywords, and
 timestamps for a cleaner, more typographic look. Beyond just enabling
 it, these settings pick a nicer bullet for lists, draw a fringe marker
@@ -648,16 +644,16 @@ font-locking in large files so typing doesn't feel sluggish.
 (add-hook 'org-mode-hook #'+org-pretty-mode)
 
 (custom-set-faces!
-  '(outline-1 :weight extra-bold :height 1.25)
-  '(outline-2 :weight bold :height 1.15)
-  '(outline-3 :weight bold :height 1.12)
+  '(outline-1 :weight extra-bold :height 1.3)
+  '(outline-2 :weight bold :height 1.25)
+  '(outline-3 :weight bold :height 1.15)
   '(outline-4 :weight semi-bold :height 1.09)
   '(outline-5 :weight semi-bold :height 1.06)
   '(outline-6 :weight semi-bold :height 1.03)
   '(outline-8 :weight semi-bold)
   '(outline-9 :weight semi-bold))
 (custom-set-faces!
-  '(org-document-title :height 1.2))
+  '(org-document-title :height 1.5))
 
 (after! org
   (setq org-fontify-quote-and-verse-blocks t
@@ -1005,66 +1001,168 @@ stays focused on real work.
                           (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
 #+end_src
 
-* Roam
-=org-roam= for networked note-taking, with tecosaur's modeline tweak
-and the =org-roam-ui= graph view.
-
-** Basic settings
-Point roam at a directory under your =org-directory=. Unlike
-tecosaur's hardcoded path, this derives from =org-directory= so it
-tracks wherever your Org files live. The directory is created on first
-use.
+* Note-taking
+** Install package
 
 #+begin_src emacs-lisp :tangle packages.el
-(package! org-roam)
+(package! denote)
+(package! denote-org)
+(package! denote-sequence)
+(package! denote-journal)
+(package! denote-merge
+  :recipe (:host github :repo "protesilaos/denote-merge")
+  :pin "2f8d168d37e66b5c8a3b983e211031b9abbf402e")
+(package! denote-silo)
+(package! denote-menu)
+(package! consult-denote)
 #+end_src
 
+** Configuration
+*** Basic
 #+begin_src emacs-lisp
-(setq org-roam-directory (expand-file-name "roam" org-directory))
-#+end_src
+(use-package denote
+  :ensure t
+  :hook
+  ((text-mode . denote-fontify-links-mode)
+   (dired-mode . denote-dired-mode))
 
-** Modeline file name
-Roam filenames are timestamp-prefixed (=20230104120000-my_note.org=),
-which is noisy in the modeline. This advice — tecosaur's — rewrites
-roam buffers' names to =(2023-01-04) my note= while leaving every
-other buffer untouched.
-
-#+begin_src emacs-lisp
-(defadvice! doom-modeline--buffer-file-name-roam-aware-a (orig-fun)
-  :around #'doom-modeline-buffer-file-name ; takes no args
-  (if (string-match-p (regexp-quote org-roam-directory) (or buffer-file-name ""))
-      (replace-regexp-in-string
-       "\\(?:^\\|.*/\\)\\([0-9]\\{4\\}\\)\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)[0-9]*-"
-       "🢔(\\1-\\2-\\3) "
-       (subst-char-in-string ?_ ?  buffer-file-name))
-    (funcall orig-fun)))
-#+end_src
-
-** Graph view
-=org-roam-ui= serves an interactive graph of your notes in the
-browser. =SPC n r u= (or =M-x org-roam-ui-open=) starts the server and
-opens it. =websocket= is its runtime dependency.
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! org-roam-ui)
-(package! websocket)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package! websocket
-  :after org-roam)
-
-(use-package! org-roam-ui
-  :after org-roam
-  :commands org-roam-ui-open
-  :hook (org-roam . org-roam-ui-mode)
   :config
-  (require 'org-roam) ; in case autoloaded
-  (defun org-roam-ui-open ()
-    "Ensure the server is active, then open the roam graph."
-    (interactive)
-    (unless org-roam-ui-mode (org-roam-ui-mode 1))
-    (browse-url-xdg-open (format "http://localhost:%d" org-roam-ui-port))))
+  (setq denote-directory (expand-file-name "~/Documents/notes/"))
+  (setq denote-save-buffers nil)
+  (setq denote-known-keywords '("emacs" "nixos" "personal" "learning" "thinking" "philosophy" "politics" "economics"))
+  (setq denote-infer-keywords t)
+  (setq denote-sort-keywords t)
+  (setq denote-prompts '(title keywords))
+  (setq denote-excluded-directories-regexp nil)
+  (setq denote-keywords-to-not-infer-regexp nil)
+  (setq denote-rename-confirmations '(rewrite-front-matter modify-file-name))
+  (setq denote-date-prompt-use-org-read-date t)
+  (denote-rename-buffer-mode 1)
+
+  ;; Integrate Denote with Doom's org module (resolves duplicate #+title
+  ;; when using `+org-tidy-properties` or similar org-module behaviour).
+  (after! denote-org (require 'denote-org-extras)))
+#+end_src
+
+*** Sequence
+#+begin_src emacs-lisp
+(use-package denote-sequence
+  :ensure t
+  :after denote
+  :config
+  (setq denote-sequence-scheme 'alphanumeric))
+#+end_src
+
+*** Journal
+#+begin_src emacs-lisp
+(use-package denote-journal
+  :ensure t
+  :after denote
+  :commands (denote-journal-new-entry
+             denote-journal-new-or-existing-entry
+             denote-journal-link-or-create-entry)
+  :hook (calendar-mode . denote-journal-calendar-mode)
+  :config
+  (setq denote-journal-directory
+        (expand-file-name "journal" denote-directory))
+  (setq denote-journal-keyword "journal")
+  (setq denote-journal-title-format 'day-date-month-year))
+#+end_src
+
+*** Silo
+#+begin_src emacs-lisp
+(use-package denote-silo
+  :ensure t
+  :after denote
+  :commands (denote-silo-create-note
+             denote-silo-open-or-create
+             denote-silo-select-silo-then-command
+             denote-silo-dired
+             denote-silo-cd)
+  :config
+  (setq denote-silo-directories
+        (list denote-directory
+              "~/Documents/personal/"
+              "~/Documents/work/")))
+#+end_src
+
+*** Browse
+#+begin_src emacs-lisp
+(use-package denote-menu
+  :ensure t
+  :after denote
+  :commands (denote-menu
+             denote-menu-open
+             denote-menu-filter-by-keyword)
+  :config
+  (setq denote-menu-heading-format 'two-lines))
+
+(use-package consult-denote
+  :ensure t
+  :after denote
+  :config
+  (consult-denote-mode 1)
+  (setq consult-denote-grep-command #'consult-ripgrep))
+#+end_src
+
+*** Keybinds
+#+begin_src emacs-lisp
+(after! doom
+  (map! :leader
+        (:prefix ("e" . "Notes (denote)")
+         :desc "new note"           "n" #'denote
+         :desc "find (fuzzy)"       "f" #'consult-denote-find
+         :desc "grep (ripgrep)"     "g" #'consult-denote-grep
+         :desc "menu (panel)"       "m" #'denote-menu
+         :desc "link"               "l" #'denote-link
+         :desc "add links"          "L" #'denote-add-links
+         :desc "backlinks"          "b" #'denote-backlinks
+         :desc "rename file"        "r" #'denote-rename-file
+         :desc "rename from FM"     "R" #'denote-rename-file-using-front-matter
+         (:prefix ("q" . "Query")
+          :desc "by contents"   "c" #'denote-query-contents-link
+          :desc "by filenames"  "f" #'denote-query-filenames-link)
+         (:prefix ("d" . "Dired")
+          :desc "open dired"       "d" #'denote-dired
+          :desc "link marked"      "i" #'denote-dired-link-marked-notes
+          :desc "rename marked"    "r" #'denote-dired-rename-files
+          :desc "rename + keyword" "k" #'denote-dired-rename-marked-files-with-keywords
+          :desc "rename marked FM" "R" #'denote-dired-rename-marked-files-using-front-matter)
+         (:prefix ("s" . "Sequence")
+          :desc "new sequence"  "s" #'denote-sequence
+          :desc "find sequence" "f" #'denote-sequence-find
+          :desc "link sequence" "l" #'denote-sequence-link
+          :desc "dired sequence" "d" #'denote-sequence-dired)
+         (:prefix ("j" . "Journal")
+          :desc "new entry"        "j" #'denote-journal-new-entry
+          :desc "new or existing"  "o" #'denote-journal-new-or-existing-entry
+          :desc "link or create"   "l" #'denote-journal-link-or-create-entry)
+         (:prefix ("S" . "Silos")
+          :desc "create"      "c" #'denote-silo-create-note
+          :desc "open/create" "o" #'denote-silo-open-or-create
+          :desc "select"      "s" #'denote-silo-select-silo-then-command
+          :desc "dired"       "d" #'denote-silo-dired))))
+#+end_src
+
+*** COMMENT Capture
+#+begin_src emacs-lisp
+;; (after! denote-org
+;;   (require 'denote-org-extras)
+
+;;   (defun my/denote-org-capture ()
+;;     "Capture a new note via Denote, integrated with org-capture."
+;;     (interactive)
+;;     (call-interactively #'denote))
+
+;;   (add-to-list 'org-capture-templates
+;;                '("n" "New Denote note" plain
+;;                  (file denote-last-path)
+;;                  #'my/denote-org-capture
+;;                  :no-save t
+;;                  :immediate-finish nil
+;;                  :kill-buffer t)))
+
+;; (map! :map global-map "SPC e c" #'org-capture)
 #+end_src
 
 * HTML Export
@@ -1821,4 +1919,8 @@ notes to PDF/EPUB positions for annotated reading.
 ;;     (if olivetti-mode
 ;;         (display-line-numbers-mode -1)
 ;;       (display-line-numbers-mode 'relative))))
+#+end_src
+** Show-font
+#+begin_src emacs-lisp :tangle packages.el
+(package! show-font)
 #+end_src
