@@ -11,7 +11,7 @@ Module activation declarations all tangle to =init.el= (one per
 category, below). Package declarations carry =:tangle packages.el=, and
 every other block tangles to =config.el=.
 
-* Doom Moudles
+* Doom Modules
 ** input
 Input sources — none active. Bidi, Chinese, Japanese, and layout all
 left disabled for now.
@@ -86,8 +86,8 @@ Evil everywhere, plus formatting, snippets, whitespace, parinfer.
        parinfer          ; turn lisp into python, sort of
        rotate-text       ; cycle region between text candidates
        snippets          ; my elves. They type so I don't have to
-       (whitespace +guess +trim))  ; a butler       ;;word-wrap         ; soft wrapping with language-aware indent)
-nguage-aware indent)
+       (whitespace +guess +trim)) ; a butler
+       ;;word-wrap                ; soft wrapping with language-aware indent
 #+end_src
 
 ** emacs
@@ -123,7 +123,6 @@ Syntax checker only. Spell + grammar left disabled.
 (doom! :checkers
        syntax)              ; tasing you for every        ;; (spell +flyspell) ; tasing you for misspelling mispelling
        ;; grammar           ; tasing grammar mistake every you make)
-take every you make)
 #+end_src
 
 ** tools
@@ -280,10 +279,6 @@ a TODO so it doesn't ship a placeholder address.
       user-mail-address "luniose@gmail.com")
 #+end_src
 * Better Defaults
-A handful of small, broadly-useful tweaks borrowed from
-[[https://tecosaur.github.io/emacs-config/config.html][tecosaur's config]]. None of these depend on a specific package — they
-just make the out-of-the-box behaviour a little nicer.
-
 
 #+begin_src emacs-lisp
 (setq-default delete-by-moving-to-trash t
@@ -299,34 +294,6 @@ just make the out-of-the-box behaviour a little nicer.
 (global-subword-mode 1)
 #+end_src
 
-Send Emacs' auto-generated =customize= settings to their own file
-instead of letting them clutter =config.el=, and load it if present.
-This keeps hand-written config and machine-written config separate.
-
-#+begin_src emacs-lisp
-(setq-default custom-file (expand-file-name ".custom.el" doom-user-dir))
-(when (file-exists-p custom-file)
-  (load custom-file))
-#+end_src
-
-Use =hippie-expand= for =M-/= completion — it tries a whole list of
-strategies (visible text, other buffers, filenasymbols) in turn, which is more capable than the default =dabbrev=.
-e default =dabbrev=.
-
-#+begin_src emacs-lisp
-(global-set-key [remap dabbrev-expand] #'hippie-expand)
-(setq hippie-expand-try-functions-list
-      '(try-expand-dabbrev-visible
-        try-expand-dabbrev
-        try-expand-dabbrev-all-buffers
-        try-expand-dabbrev-from-kill
-        try-complete-file-name-partially
-        try-complete-file-name
-        try-expand-all-abbrevs
-        try-expand-line
-        try-complete-lisp-symbol-partially
-        try-complete-lisp-symbol))
-#+end_src
 * Basic
 Core settings that shape the everyday editing experience: theme,
 fonts, how the frame opens, and a handful of quality-of-life tweaks.
@@ -369,10 +336,11 @@ version control covers recovery here.
 ** Completion
 Doom's =vertico= module (see init.el:30) is the sole completion UI.
 ** Buffer Behavior
-Auto-revert keeps buffers in sync with changes madnon-file buffers like Dired). The advice prompts for which buffer to
- for which buffer to
-show whenever a window is split, instead of duplicating the current
-one. The =flyspell= tweak stops it from flagging repeated words.
+Auto-revert keeps buffers in sync with changes (=global-auto-revert-mode=
+also covers non-file buffers like Dired). The =defadvice= prompts
+for which buffer to show whenever a window is split, instead of
+duplicating the current one. The =flyspell= tweak stops it from
+flagging repeated words.
 
 #+begin_src emacs-lisp
 (global-auto-revert-mode 1)
@@ -426,23 +394,31 @@ to =default-frame-alist= applies the same to new frames.
 Custom key bindings layered on top of Doom's defaults.
 
 ** Tabout
-Repurpose =TAB= in insert mode: inside an Org table it cycles to the
-next cell, and everywhere else it jumps out of the current pair of
-delimiters (=sp-up-sexp=).
+Repurpose =TAB= in insert mode: inside an Org / Markdown table it
+cycles to the next cell; in bare-text modes (=python=, =yaml=,
+=ruby=, =haskell=, =lua=, web modes) it indents; everywhere else it
+jumps out of the current pair of delimiters (=sp-up-sexp=). This
+replaces Doom's default =electric-indent-mode= binding for TAB in
+non-pair contexts so it actually does something.
 
 #+begin_src emacs-lisp
 (defun my/tabout ()
+  "Tabout-style TAB: in tables, jump to the next cell; otherwise
+jump out of the enclosing pair via smartparens, or fall back to
+indenting when there is no pair to escape."
   (interactive)
   (cond
    ((and (derived-mode-p 'org-mode)
-         (fboundp 'org-at-table-p)
-         (org-at-table-p))
-    (call-interac      ((and (derived-mode-p 'markdown-mode)
-de-p 'markdown-mode)
-         (bound-and-true-p orgtbl-mode)
-         (fboundp 'org-at-table-p)
          (org-at-table-p))
     (call-interactively #'org-table-next-field))
+   ((derived-mode-p 'markdown-mode)
+    (when (org-at-table-p)
+      (call-interactively #'org-table-next-field)))
+   ((derived-mode-p 'python-mode yaml-mode ruby-mode
+                    haskell-mode lua-mode
+                    web-mode css-mode javascript-mode typescript-mode
+                    json-mode nxml-mode)
+    (indent-for-tab-command))
    (t
     (ignore-errors (sp-up-sexp)))))
 (map! :i "TAB" #'my/tabout)
@@ -450,10 +426,11 @@ de-p 'markdown-mode)
 
 ** Toggle
 
-#+begin_src emac        :desc "Toggle dirvish"          "o /"   #'dirvish
-        :desc "Toggle vterm"            "v t"   #'+vterm/toggle
-        :desc "New vterm"               "v n"   #'+vterm/here)
- n"   #'+vterm/here)
+#+begin_src emacs-lisp
+(map! :leader
+      (:desc "Toggle dirvish" "o /" #'dirvish
+       :desc "Toggle vterm"   "v t" #'+vterm/toggle
+       :desc "New vterm"      "v n" #'+vterm/here))
 #+end_src
 
 * Editor
@@ -525,117 +502,83 @@ column for prose and let previews scale with the buffer font.
 
 #+begin_src emacs-lisp
 (after! latex
-  (setq TeX-fold-math-spec-list nil)    ; keep +fold's defaults
+  (setq TeX-fold-math-spec-list nil)    ;; keep +fold's defaults
   (setq-hook! 'LaTeX-mode-hook
     fill-column 100))
 #+end_src
 
 ** Markdown
 *** Titles
-#+begin_src emacs-lis'(markdown-header-delimiter-face :foreground "#616161" :height 0.9)
-'(markdown-header-face-1 :height 1.8 :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face)
-'(markdown-header-face-2 :height 1.4 :foreground "#EBCB8B" :weight extra-bold :inherit markdown-header-face)
-'(markdown-header-face-3 :height 1.2 :foreground "#D08770" :weight extra-bold :inherit markdown-header-face)
-'(markdown-header-face-4 :height 1.15 :foreground "#BF616A" :weight bold :inherit markdown-header-face)
-'(markdown-header-face-5 :height 1.1 :foreground "#b48ead" :weight bold :inherit markdown-header-face)
-'(markdown-header-face-6 :height 1.05 :foreground "#5e81ac" :weight semi-bold :inherit markdown-header-face))
-rkdown-header-face))
+#+begin_src emacs-lisp
+(custom-set-faces!
+  '(markdown-header-delimiter-face :foreground "#616161" :height 0.9)
+  '(markdown-header-face-1 :height 1.8 :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face)
+  '(markdown-header-face-2 :height 1.4 :foreground "#EBCB8B" :weight extra-bold :inherit markdown-header-face)
+  '(markdown-header-face-3 :height 1.2 :foreground "#D08770" :weight extra-bold :inherit markdown-header-face)
+  '(markdown-header-face-4 :height 1.15 :foreground "#BF616A" :weight bold :inherit markdown-header-face)
+  '(markdown-header-face-5 :height 1.1 :foreground "#b48ead" :weight bold :inherit markdown-header-face)
+  '(markdown-header-face-6 :height 1.05 :foreground "#5e81ac" :weight semi-bold :inherit markdown-header-face))
 #+end_src
 *** Autohide
 
 #+begin_src emacs-lisp
 (defvar nb/c   "(start . end) of current line in current buffer")
- (make-variable-buffer-local 'nb/current-line)
- (defun my/markdown-unhide-table (limit)
-   (when (re-search-forward "^[ \t]*|.*$" limit t)
-     (remove-text-properties (match-beginning 0) (match-end 0)
-                     '(invisible t display "" composition ""))
-     t))
+(make-variable-buffer-local 'nb/current-line)
+(defun my/markdown-unhide-table (limit)
+  (when (re-search-forward "^[ \t]*|.*$" limit t)
+    (remove-text-properties (match-beginning 0) (match-end 0)
+                            '(invisible t display "" composition ""))
+    t))
 
- (defun my/markdown-pad-table (limit)
-   (when (re-search-forward "^[ \t]*|.*$" limit t)
-     (let ((row-end (match-end 0))
-           (cell-start (match-beginning 0)))
-       (goto-char cell-start)
-       (while (search-forward "|" row-end t)
-         (let ((pipe-pos (1- (point)))
-               (hidden 0))
-           (save-excursion
-             (goto-char cell-start)
-             (while (< (point) pipe-pos)
-               (when (or (get-text-property (point) 'invisible)
-                         (equal (get-text-property (point) 'display) ""))
-                 (setq hidden (1+ hidden)))
-               (forward-char 1)))
-           (when (> hidden 0)
-             (put-text-property pipe-pos (1+ pipe-pos) 'display
-                                (concat (make-string hidden ?\s) "|")))
-           (setq cell-start (point))))
-       (goto-char row-end))
-     t))
+(defun my/markdown-pad-table (limit)
+  (when (re-search-forward "^[ \t]*|.*$" limit t)
+    (let ((row-end (match-end 0))
+          (cell-start (match-beginning 0)))
+      (goto-char cell-start)
+      (while (search-forward "|" row-end t)
+        (let ((pipe-pos (1- (point)))
+              (hidden 0))
+          (save-excursion
+            (goto-char cell-start)
+            (while (< (point) pipe-pos)
+              (when (or (get-text-property (point) 'invisible)
+                        (equal (get-text-property (point) 'display) ""))
+                (setq hidden (1+ hidden)))
+              (forward-char 1)))
+          (when (> hidden 0)
+            (put-text-property pipe-pos (1+ pipe-pos) 'display
+                               (concat (make-string hidden ?\s) "|")))
+          (setq cell-start (point))))
+      (goto-char row-end))
+    t))
 
- (defun nb/unhide-current-line (limit)
-   "Font-lock function"
-   (let ((start (max (point) (car nb/current-line)))
-         (end (min limit (cdr nb/current-line))))
-     (when (< start end)
-       (remove-text-properties start end
-                       '(invisible t display "" composition ""))
-       (goto-char limit)
-       t)))
+(defun nb/unhide-current-line (limit)
+  "Font-lock function"
+  (let ((start (max (point) (car nb/current-line)))
+        (end (min limit (cdr nb/current-line))))
+    (when (< start end)
+      (remove-text-properties start end
+                              '(invisible t display "" composition ""))
+      (goto-char limit)
+      t)))
 
- (defun nb/refontify-on-linemove ()
-   "Post-command-hook"
-   (let* ((start (line-beginning-position))
-          (end (line-beginning-position 2))
-          (needs-update (not (equal start (car nb/current-line)))))
-     (setq nb/current-line (cons start end))
-     (when needs-update
-       (font-lock-fontify-block 3))))
+(defun nb/refontify-on-linemove ()
+  "Post-command-hook"
+  (let* ((start (line-beginning-position))
+         (end (line-beginning-position 2))
+         (needs-update (not (equal start (car nb/current-line)))))
+    (setq nb/current-line (cons start end))
+    (when needs-update
+      (font-lock-fontify-block 3))))
 
- (defun nb/markdown-unhighlight ()
-   "Enable markdown concealling"
-   (interactive)
-   (markdown-toggle-markup-hiding 'toggle)
-   (font-lock-add-keywords nil '((nb/unhide-current-line)
-                                 (my/markdown-pad-table)) t)
-   (add-hook 'post-command-hook #'nb/refontify-on-linemove nil t))
-- (add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
-arkdown-unhighlight)
-#+end_src
-
-*** Tables
-Turn on =orgtbl-mode= in Markdown buffers so Org's table editor
-works on GFM tables.
-
-#+named:lol
-#+begin_src emacs-lisp
-;; (use-package markdown-mode
-;;   :defer t
-;;   :commands (org-table-begin org-table-end orgtbl-mode)
-;;   :config
-;;   (progn
-;;     (require 'org-table)
-;;     (eval-when-compile
-;;       (require 'whitespace))
-
-;;     (defun advice:org-table-align:markdown ()
-;;       "Replace \"+\" sign with \"|\" in org-table."
-;;       (save-excursion
-;;   	(save-restriction
-;;           (narrow-to-region (org-table-begin) (org-table-end))
-;;           (goto-char (point-min))
-;;           (while (search-forward "-+-" nil t)
-;;             (replace-match "-|-")))))
-
-;;     (add-hook 'markdown-mode-hook
-;;               (lambda ()
-;; 		(whitespace-mode 1)
-;;                 (set (make-local-variable 'whitespace-action) nil)
-;;                 (setq indent-tabs-mode nil)
-;;   		(setq markdown-indent-on-enter nil)
-;;                 (orgtbl-mode)
-;; 		(advice-add 'org-table-align :after 'advice:org-table-align:markdown)))))
+(defun nb/markdown-unhighlight ()
+  "Enable markdown concealling"
+  (interactive)
+  (markdown-toggle-markup-hiding 'toggle)
+  (font-lock-add-keywords nil '((nb/unhide-current-line)
+                                (my/markdown-pad-table)) t)
+  (add-hook 'post-command-hook #'nb/refontify-on-linemove nil t))
+(add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
 #+end_src
 
 * Orgmode
@@ -916,8 +859,8 @@ appropriate.  In tables, insert a new row or end the table."
 ** Capture Templates
 Quick capture entry points, patterned after tecosaur's richer set but
 kept to the essentials: a general TODO, a dated note, and a project
-task. They target files under your =org-directory=n=) opens the capture menu.
-ns the capture menu.
+task. They target files under your =org-directory=. The capture key
+=SPC n= (=+org-capture/navigation=) opens the capture menu.
 
 #+begin_src emacs-lisp
 (after! org
@@ -1192,27 +1135,6 @@ stays focused on real work.
           :desc "dired"       "d" #'denote-silo-dired))))
 #+end_src
 
-*** COMMENT Capture
-#+begin_src emacs-lisp
-;; (after! denote-org
-;;   (require 'denote-org-extras)
-
-;;   (defun my/denote-org-capture ()
-;;     "Capture a new note via Denote, integrated with org-capture."
-;;     (interactive)
-;;     (call-interactively #'denote))
-
-;;   (add-to-list 'org-capture-templates
-;;                '("n" "New Denote note" plain
-;;                  (file denote-last-path)
-;;                  #'my/denote-org-capture
-;;                  :no-save t
-;;                  :immediate-finish nil
-;;                  :kill-buffer t)))
-
-;; (map! :map global-map "SPC e c" #'org-capture)
-#+end_src
-
 * HTML Export
 
 I want to tweak a whole bunch of things. While I'll want my tweaks almost all
@@ -1225,14 +1147,14 @@ appropriate architecture to use.
   (define-minor-mode org-fancy-html-export-mode
     "Toggle my fabulous org export tweaks. While this mode itself does a little bit,
   the vast majority of the change in behaviour comes from switch statements in:
-   - `org-html-template-fancier'
-   - `org-html--build-meta-info-extended'
-   - `org-html-src-block-collapsable'
-   - `org-html-block-collapsable'
-   - `org-html-table-wrapped'
-   - `org-html--format-toc-headline-colapseable'
-   - `org-html--toc-text-stripped-leaves'
-   - `org-export-html-headline-anchor'"
+    - `org-html-template-fancier'
+    - `org-html--build-meta-info-extended'
+    - `org-html-src-block-collapsable'
+    - `org-html-block-collapsable'
+    - `org-html-table-wrapped'
+    - `org-html--format-toc-headline-colapseable'
+    - `org-html--toc-text-stripped-leaves'
+    - `org-export-html-headline-anchor'"
     :global t
     :init-value t
     (if org-fancy-html-export-mode
@@ -1241,8 +1163,7 @@ appropriate architecture to use.
               org-html-checkbox-type 'html-span)
       (setq org-html-style-default org-html-style-plain
             org-html-meta-tags #'org-html-meta-tags-default
-            org-html-ch)
-ox-type 'html)))
+            org-html-checkbox-type 'html)))
   )
 #+end_src
 
@@ -1342,8 +1263,7 @@ ox-type 'html)))
                  "\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\""
                  org-html-klipse-css "\"/>"))
        ;; Closing document.
-       "</div>\n)
-dy>\n</html>")))
+       "</div>\n</body>\n</html>")))
   )
 #+end_src
 
@@ -1379,8 +1299,7 @@ dy>\n</html>")))
                                 (org-html--translate "Table of Contents" info)
                                 top-level))
                       toc
-                      (format "</%s>\)
-uter-tag))))))))
+                      (format "</%s>\n" outer-tag))))))))
   )
 #+end_src
 
@@ -1451,8 +1370,7 @@ uter-tag))))))))
 
   (unless (functionp #'org-html-meta-tags-default)
     (defalias 'org-html-meta-tags-default #'ignore))
-  (setq org-html-meta-tags #'org-h)
-meta-tags-fancy)
+  (setq org-html-meta-tags #'org-html-meta-tags-fancy)
   )
 #+end_src
 
@@ -1505,9 +1423,7 @@ Suffice to say I've snatched it, with a few of my own tweaks applied.
                 (buffer-string)))
         (when org-fancy-html-export-mode
           (setq org-html-style-default org-html-style-fancy)))))
-  (org-html)
-oad-fancy-style)
-  )
+  (org-html-reload-fancy-style))
 #+end_src
 
 ** Collapsable src and example blocks
@@ -1527,8 +1443,7 @@ setting this, but I haven't quite been able to get that working (yet).
   (defvar org-html-export-collapsed nil)
   (eval '(cl-pushnew '(:collapsed "COLLAPSED" "collapsed" org-html-export-collapsed t)
                      (org-export-backend-options (org-export-get-backend 'html))))
-  (add-to-list 'org-default-properties)
-PORT_COLLAPSED")
+  (add-to-list 'org-default-properties "EXPORT_COLLAPSED")
   )
 #+end_src
 
@@ -1654,8 +1569,8 @@ and a button to copy the content of the block.
                        ("vhdl" "VHDL")
                        ("xml" "XML")
                        ("nxml" "XML")
-                       ("conf" "Configuration File)
-)
+                       ("conf" "Configuration File")
+                       )))
         mode))
   )
 #+end_src
@@ -1695,8 +1610,7 @@ and a button to copy the content of the block.
 
   (advice-add 'org-html-example-block   :around #'org-html-block-collapsable)
   (advice-add 'org-html-fixed-width     :around #'org-html-block-collapsable)
-  (advice-add 'org-html-property-drawer :around #'org-htm)
-ock-collapsable)
+  (advice-add 'org-html-property-drawer :around #'org-html-block-collapsable)
   )
 #+end_src
 
@@ -1728,8 +1642,7 @@ While we're at it, we can a link gutter, as we did with src blocks, and show the
                 (if name
                     (replace-regexp-in-string (format "<table id=\"%s\"" ref) "<table"
                                               (funcall orig-fn table contents info))
-                  (funcall orig-fn table)
-tents info))))))
+                  (funcall orig-fn table contents info))))))
   )
 #+end_src
 
@@ -1740,24 +1653,25 @@ achieve this with CSS alone. Thankfully we can avoid JS though, by adapting the
 TOC generation code to use a ~label~ for each item, and a hidden ~checkbox~ to keep
 track of state.
 
-To add this, we need to change one line in [[file:lisp/org/lisp/ox-html.el::(format "<a href=\"#%s\">%s</a>"][org-html--forSince we can actually accomplish the desired effect by adding advice /around/ the
-function, without overriding it --- let's do that to reduce the bug surface of
-this config a tad.
+To add this, we need to change one line in
+~org-html--format-toc-headline~. Since we can actually accomplish
+the desired effect by adding advice /around/ the function, without
+overriding it --- let's do that to reduce the bug surface of this
+config a tad.
 #+begin_src emacs-lisp
 (after! ox-html
   (defadvice! org-html--format-toc-headline-colapseable (orig-fn headline info)
     "Add a label and checkbox to `org-html--format-toc-headline's usual output,
-line's usual output,
-  to allow the TOC to be a    :around #'org-html--format-toc-headline
+  to allow the TOC to be a collapsable tree."
+    :around #'org-html--format-toc-headline
     (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
         (funcall orig-fn headline info)
       (let ((id (or (org-element-property :CUSTOM_ID headline)
                     (org-export-get-reference headline info))))
         (format "<input type='checkbox' id='toc--%s'/><label for='toc--%s'>%s</label>"
-                id id (funcall orig-fn headline info)))))
-)
+                id id (funcall orig-fn headline info))))))
 #+end_src
- Now, leaves (headings with no children) shouldn't have the ~label~ item. The
+Now, leaves (headings with no children) shouldn't have the ~label~ item. The
 obvious way to achieve this is by including some /if no children.../ logic in
 ~org-html--format-toc-headline-colapseable~. Unfortunately, I can't my elisp isn't
 up to par to extract the number of child headings from the mountain of info that
@@ -1770,17 +1684,11 @@ org provides.
     (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
         (apply orig-fn args)
       (replace-regexp-in-string "<input [^>]+><label [^>]+>\\(.+?\\)</label></li>" "\\1</li>"
-                                (apply orig-fn args))))
-)
+                                (apply orig-fn args)))))
 #+end_src
 
 ** Make verbatim different to code
-iSince we have =verbatim= and ~code~, let's make use of the difference.
-eWe can use ~code~ exclusively for code snippets and commands like: "calling
-mands like: "calling
-src_elisp{(message "Hello")} in batch-mode Emacs prints to Then we can use =verbatim= for miscellaneous 'other monospace' like keyboard
-shortcuts: "either =C-c C-c= or =C-g= is likely the most useful keybinding in Emacs",
-or file names: "I keep my configuration in =~/.config/doom/=", among other things.
+Since we have =verbatim= and ~code~, let's make use of the difference. We can use ~code~ exclusively for code snippets and commands like: src_elisp{(message "Hello")} in batch-mode Emacs prints to stdout. Then we can use =verbatim= for miscellaneous 'other monospace' like keyboard shortcuts: "either =C-c C-c= or =C-g= is likely the most useful keybinding in Emacs", or file names: "I keep my configuration in =~/.config/doom/=", among other things.
 
 Then, styling these two cases differently can help improve clarity in a document.
 
@@ -1792,8 +1700,7 @@ Then, styling these two cases differently can help improve clarity in a document
           (italic . "<i>%s</i>")
           (strike-through . "<del>%s</del>")
           (underline . "<span class=\"underline\">%s</span>")
-          (verbatim . "<kbd>%s</kbd>")))
-)
+          (verbatim . "<kbd>%s</kbd>"))))
 #+end_src
 
 ** Change checkbox type
@@ -1806,12 +1713,8 @@ We also want to use HTML checkboxes, however we want to get a bit fancier than d
                (on . "<span class='checkbox'></span>")
                (off . "<span class='checkbox'></span>")
                (trans . "<span class='checkbox'></span>"))))
-  (setq org-html-checkbox-type 'html-span)
-)
+  (setq org-html-checkbox-type 'html-span))
 #+end_src
-- [ ] I'm yet to do this
-- [-] Work in progress
-- [X] This is done
 
 ** Extra special strings
 
@@ -1833,11 +1736,11 @@ before this stage of output processing.
   (pushnew! org-html-special-string-regexps
             '("-&gt;" . "&#8594;")
             '("&lt;-" . "&#8592;"))
-)
+  )
 #+end_src
 
 ** Header anchors
-@I want to add GitHub-style links on hover for headings.
+I want to add GitHub-style links on hover for headings.
 #+begin_src emacs-lisp
 (after! ox-html
   (defun org-export-html-headline-anchor (text backend info)
@@ -1852,7 +1755,7 @@ before this stage of output processing.
 
   (add-to-list 'org-export-filter-headline-functions
                'org-export-html-headline-anchor)
-)
+  )
 #+end_src
 
 ** LaTeX Rendering
@@ -1863,7 +1766,7 @@ very well at the moment.
 #+begin_src emacs-lisp
 (after! ox-html
   ;; (setq-default org-html-with-latex `dvisvgm)
-)
+  )
 #+end_src
 
 *** MathJax
@@ -1878,7 +1781,7 @@ are part of my LaTeX preamble.
 
   (setq org-html-mathjax-template
     "<script>
-           "<script>
+           <script>
     window.MathJax = {
       loader: {
         load: ['[tex]/mathtools'],
@@ -1933,7 +1836,9 @@ are part of my LaTeX preamble.
   <script
     id=\"MathJax-script\"
     async
-    src=\"%P)
+    src=\"%PATH\">
+  </script>")
+  )
 #+end_src
 
 * Other Packages
@@ -1946,33 +1851,14 @@ X colours. =svg-tag-mode= renders tags and keywords as SVG labels.
 =doct= is a declarative syntax for =org-capture-templates= (the
 Capture section above could be rewritten with it). =org-noter= links
 notes to PDF/EPUB positions for annotated reading.
- #+begin_src emacs-lisp :tangle packages.el
+#+begin_src emacs-lisp :tangle packages.el
 (package! theme-magic)
 (package! svg-tag-mode)
 (package! doct)
 (package! org-noter)
 #+end_src
-** Olivetti
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! olivetti)
-#+end_src
-
-#+begin_src emacs-lisp
-;; Auto-start olivetti-mode in Org and Markdown modes
-;; (add-hook! (markdown-mode) #'olivetti-mode)
-
-;; Manage line numbers based on olivetti-mode state
-;; (add-hook! 'olivetti-mode-hook
-;;   (defun +olivetti-toggle-line-numbers-h ()
-;;     (if olivetti-mode
-;;         (display-line-numbers-mode -1)
-;;       (display-line-numbers-mode 'relative))))
-#+end_src
 ** Show-font
 #+begin_src emacs-lisp :tangle packages.el
 (package! show-font)
 #+end_src
- * Footnotes
- [fn:1] DEFINITION NOT FOUND.
-EFINITION NOT FOUND.
+

@@ -25,6 +25,4 @@
 (package! doct)
 (package! org-noter)
 
-(package! olivetti)
-
 (package! show-font)

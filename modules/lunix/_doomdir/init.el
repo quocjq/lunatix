@@ -7,11 +7,11 @@
 
 (doom! :completion
        ;; company           ; the ultimate code completion backend
-       (corfu +orderless)  ; complete with cap(f), cape and a flying feather!
-       ;;helm              ; the *other* search engine for love and life
+              (corfu +orderless)  ; complete with cap(f), cape and a flying fe       ather!
+       ;;helm              ; the *other* search engine for        love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
-       vertico)           ; the search engine of the future
+       (vertico +icons +childframe))           ; the search engine of the future
 
 (doom! :ui
        deft              ; notational velocity for Emacs
@@ -28,7 +28,7 @@
        ;;neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
-       (smooth-scroll +interpolate)     ; So smooth you won't believe it's not butter
+       smooth-scroll      ; So smooth you won't believe it's not butter
        ;;tabs              ; a tab bar for Emacs
        ;;treemacs          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
@@ -50,8 +50,8 @@
        parinfer          ; turn lisp into python, sort of
        rotate-text       ; cycle region between text candidates
        snippets          ; my elves. They type so I don't have to
-       (whitespace +guess +trim))  ; a butler for your whitespace
-       ;;word-wrap         ; soft wrapping with language-aware indent)
+       (whitespace +guess +trim)) ; a butler
+       ;;word-wrap                ; soft wrapping with language-aware indent
 
 (doom! :emacs
        dired             ; making dired pretty [functional]
@@ -59,7 +59,7 @@
        eww               ; the internet is gross
        (ibuffer +icons)           ; interactive buffer management
        tramp             ; remote files at your arthritic fingertips
-       (undo +tree)              ; persistent, smarter undo for your inevitable mistakes
+       undo               ; persistent, smarter undo for your inevitable mistakes
        vc)               ; version-control and Emacs, sitting in a tree
 
 (doom! :term
@@ -69,8 +69,7 @@
        vterm)            ; the best terminal emulation in Emacs
 
 (doom! :checkers
-       syntax)              ; tasing you for every semicolon you forget
-       ;; (spell +flyspell) ; tasing you for misspelling mispelling
+       syntax)              ; tasing you for every        ;; (spell +flyspell) ; tasing you for misspelling mispelling
        ;; grammar           ; tasing grammar mistake every you make)
 
 (doom! :tools
@@ -97,7 +96,7 @@
 
 (doom! :os
        (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience)
+       tty)               ; improve the terminal Emacs experience)
 
 (doom! :lang
        ;;ada               ; In strong typing we (blindly) trust
@@ -143,7 +142,7 @@
        (nix +lsp +tree-sitter)               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        ;;odin              ; C, minus its footguns
-       org               ; organize your plain life in plain text
+       (org +pandoc)               ; organize your plain life in plain text
        php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;graphviz          ; diagrams for confusing yourself even more
@@ -169,9 +168,9 @@
 ;;zig               ; C, but simpler)
 
 (doom! :email
-       (mu4e +org +gmail))
        ;;notmuch
        ;;(wanderlust +gmail))
+       (wanderlust +gmail))
 
 (doom! :app
        calendar
