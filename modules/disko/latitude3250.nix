@@ -4,6 +4,7 @@
     nixos = {
       imports = [ inputs.disko.nixosModules.disko ];
       disko.enableConfig = true;
+      hardware.facter.reportPath = ../hardware/latitude3250.json;
 
       disko.devices = {
         disk.main = {
