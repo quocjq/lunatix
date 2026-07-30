@@ -7,29 +7,44 @@ together, and the code blocks below are extracted ("tangled") into the
 =.el= files Emacs actually loads. Doom's =:config literate= module
 handles that tangling automatically on save — so there is no need for
 =org-auto-tangle=. Blocks are routed by their =:tangle= header: the
-Doom modules block sends it to =init.el=, package declarations carry
-=:tangle packages.el=, and every other block tangles to =config.el=.
+Module activation declarations all tangle to =init.el= (one per
+category, below). Package declarations carry =:tangle packages.el=, and
+every other block tangles to =config.el=.
 
-* Doom modules
-This block tangles to =init.el=
+* Doom Moudles
+** input
+Input sources — none active. Bidi, Chinese, Japanese, and layout all
+left disabled for now.
+
 #+begin_src emacs-lisp :tangle init.el
 ;;; $DOOMDIR/init.el -*- lexical-binding: t; -*-
+;; (doom! :input)
+;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
+;;chinese
+;;japanese
+;;layout            ; auie,ctsrnm is the superior home row)
+#+end_src
 
-(doom! :input
-       ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
-       ;;chinese
-       ;;japanese
-       ;;layout            ; auie,ctsrnm is the superior home row
+** completion
+Vertico for minibuffer, Corfu for in-buffer. Both with Orderless for
+flexible matching.
 
-       :completion
+#+begin_src emacs-lisp :tangle init.el
+(doom! :completion
        ;; company           ; the ultimate code completion backend
-       (corfu +orderless)  ; complete with cap(f), cape and a flying feather!
-       ;;helm              ; the *other* search engine for love and life
+              (corfu +orderless)  ; complete with cap(f), cape and a flying fe       ather!
+       ;;helm              ; the *other* search engine for        love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
-       vertico           ; the search engine of the future
+       (vertico +icons +childframe))           ; the search engine of the future
+#+end_src
 
-       :ui
+** ui
+Visual chrome: modeline, popup, ligatures, dashboard, smooth-scroll,
+unicode, etc.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :ui
        deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        dashboard         ; a nifty splash screen for Emacs
@@ -40,89 +55,127 @@ This block tangles to =init.el=
        (ligatures +extra)         ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
-       ;; nav-flash         ; blink cursor line after big motions
+       ;;nav-flash         ; blink cursor line after big motions
        ;;neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
-       smooth-scroll     ; So smooth you won't believe it's not butter
+       smooth-scroll      ; So smooth you won't believe it's not butter
        ;;tabs              ; a tab bar for Emacs
        ;;treemacs          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
        (vc-gutter +pretty) ; vcs diff in the fringe
        ;; vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
-       workspaces        ; tab emulation, persistence & separate workspaces
-       ;; zen               ; distraction-free coding or writing
+       workspaces)        ; tab emulation, persistence & separate workspaces
+;; zen               ; distraction-free coding or writing)
+#+end_src
 
-       :editor
+** editor
+Evil everywhere, plus formatting, snippets, whitespace, parinfer.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :editor
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
        (format +onsave)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
-       multiple-cursors  ; editing in many places at once
+       ;; multiple-cursors  ; editing in many places at once
        ;;objed             ; text object editing for the innocent
        parinfer          ; turn lisp into python, sort of
-       rotate-text       ; cycle region at point between text candidates
+       rotate-text       ; cycle region between text candidates
        snippets          ; my elves. They type so I don't have to
-       (whitespace +guess +trim)  ; a butler for your whitespace
-       ;;word-wrap         ; soft wrapping with language-aware indent
+       (whitespace +guess +trim))  ; a butler       ;;word-wrap         ; soft wrapping with language-aware indent)
+nguage-aware indent)
+#+end_src
 
-       :emacs
+** emacs
+Built-in Emacs conveniences wrapped by dired, eww, ibuffer,
+tramp, undo, vc.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :emacs
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        eww               ; the internet is gross
-       ibuffer           ; interactive buffer management
+       (ibuffer +icons)           ; interactive buffer management
        tramp             ; remote files at your arthritic fingertips
-       undo              ; persistent, smarter undo for your inevitable mistakes
-       vc                ; version-control and Emacs, sitting in a tree
+       undo               ; persistent, smarter undo for your inevitable mistakes
+       vc)               ; version-control and Emacs, sitting in a tree
+#+end_src
 
-       :term
+** term
+Eshell and Vterm. Plain =term= left disabled — eshell handles most.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :term
        eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
-       vterm             ; the best terminal emulation in Emacs
+       vterm)            ; the best terminal emulation in Emacs
+#+end_src
 
-       :checkers
-       syntax              ; tasing you for every semicolon you forget
-       ;; (spell +flyspell) ; tasing you for misspelling mispelling
-       ;; grammar           ; tasing grammar mistake every you make
+** checkers
+Syntax checker only. Spell + grammar left disabled.
 
-       :tools
+#+begin_src emacs-lisp :tangle init.el
+(doom! :checkers
+       syntax)              ; tasing you for every        ;; (spell +flyspell) ; tasing you for misspelling mispelling
+       ;; grammar           ; tasing grammar mistake every you make)
+take every you make)
+#+end_src
+
+** tools
+External tool integrations: LSP, magit, docker, pass, tree-sitter, etc.
+=(eval +overlay)= is present but =SPC e= was reassigned to Denote.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :tools
        ;; ansible
        biblio            ; Writes a PhD for you (citation needed)
        ;;collab            ; buffers with friends
-       debugger          ; stepping through code, to help you add bugs
+       ;; debugger          ; stepping through code, to help you add bugs
        ;; direnv
-       docker
+       (docker +tree-sitter)
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
        ;;llm               ; when I said you needed friends, I didn't mean...
-       (lsp +eglot)      ; M-x vscode
-       magit             ; a git porcelain for Emacs
-       make              ; run make tasks from Emacs
+       lsp      ; M-x vscode
+       (magit +forge)             ; a git porcelain for Emacs
+       ;; make              ; run make tasks from Emacs
        pass              ; password manager for nerds
        pdf               ; pdf enhancements
        ;;terraform         ; infrastructure as code
        ;; tmux              ; an API for interacting with tmux
        tree-sitter       ; syntax and parsing, sitting in a tree...
-       upload            ; map local to remote projects via ssh/ftp
+       upload)           ; map local to remote projects via ssh/ftp
+#+end_src
 
-       :os
+** os
+Mac-specific tweaks only on macOS. TTY left disabled.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :os
        (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience
+       tty)               ; improve the terminal Emacs experience)
+#+end_src
 
-       :lang
+** lang
+Languages with LSP and tree-sitter where supported. Many commented
+out as unused.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :lang
        ;;ada               ; In strong typing we (blindly) trust
        (agda +local)     ; types of types of types of types...
        ;;beancount         ; mind the GAAP
        (cc +lsp)         ; C > C++ == 1
        ;;clojure           ; java with a lisp
        common-lisp       ; if you've seen one lisp, you've seen them all
-       ;;coq               ; proofs-as-programs
+       ;;coq               ; proofs-as proofs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
@@ -159,7 +212,7 @@ This block tangles to =init.el=
        (nix +lsp +tree-sitter)               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        ;;odin              ; C, minus its footguns
-       org               ; organize your plain life in plain text
+       (org +pandoc)               ; organize your plain life in plain text
        php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;graphviz          ; diagrams for confusing yourself even more
@@ -181,26 +234,42 @@ This block tangles to =init.el=
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        (web +lsp +tree-sitter)               ; the tubes
-       yaml              ; JSON, but readable
-       ;;zig               ; C, but simpler
+       yaml)              ; JSON, but readable
+;;zig               ; C, but simpler)
+#+end_src
 
-       :email
-       (mu4e +org +gmail)
+** email
+mu4e wired to Gmail. Notmuch and Wanderlust left disabled.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :email
        ;;notmuch
-       ;;(wanderlust +gmail)
+       ;;(wanderlust +gmail))
+       (wanderlust +gmail))
+#+end_src
 
-       :app
+** app
+Standalone applications: calendar, IRC, RSS reader.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :app
        calendar
        ;;emms
        ;;everywhere        ; *leave* Emacs!? You must be joking
        irc               ; how neckbeards socialize
-       (rss +org)        ; emacs as an RSS reader
+       (rss +org))       ; emacs as an RSS reader
+#+end_src
 
-       :config
+** config
+Literate config (=config.org=) with default Doom bindings and
+smartparens.
+
+#+begin_src emacs-lisp :tangle init.el
+(doom! :config
        literate
        (default +bindings +smartparens))
-
 #+end_src
+
 * Personal Information
 Some packages (Magit commits, mu4e, snippets, GPG) read these
 variables to know who you are. Fill in the email below — it's left as
@@ -215,23 +284,6 @@ A handful of small, broadly-useful tweaks borrowed from
 [[https://tecosaur.github.io/emacs-config/config.html][tecosaur's config]]. None of these depend on a specific package — they
 just make the out-of-the-box behaviour a little nicer.
 
-- =delete-by-moving-to-trash= sends deletions to the system trash
-  instead of erasing them outright.
-- =window-combination-resize= takes space for a new window from all
-  others, not just the current one.
-- =x-stretch-cursor= widens the block cursor to the glyph under it (so
-  it covers a TAB fully).
-- =evil-want-fine-undo= makes undo step through edits in smaller,
-  more predictable chunks.
-- =undo-limit= raises how much undo history is kept in memory.
-- =truncate-string-ellipsis= swaps the =...= truncation marker for a
-  single =…= glyph.
-- =password-cache-expiry= keeps entered passwords cached for the
-  session instead of expiring after a couple of minutes.
-- =global-subword-mode= lets word motions stop at CamelCase
-  boundaries.
-- =display-time-mode= puts a clock in the modeline.
-- =which-key-idle-delay= shows the keybinding popup sooner.
 
 #+begin_src emacs-lisp
 (setq-default delete-by-moving-to-trash t
@@ -258,8 +310,8 @@ This keeps hand-written config and machine-written config separate.
 #+end_src
 
 Use =hippie-expand= for =M-/= completion — it tries a whole list of
-strategies (visible text, other buffers, filenames, kill-ring, lisp
-symbols) in turn, which is more capable than the default =dabbrev=.
+strategies (visible text, other buffers, filenasymbols) in turn, which is more capable than the default =dabbrev=.
+e default =dabbrev=.
 
 #+begin_src emacs-lisp
 (global-set-key [remap dabbrev-expand] #'hippie-expand)
@@ -315,18 +367,10 @@ version control covers recovery here.
 #+end_src
 
 ** Completion
-Enable =fido-mode=, a lightweight built-in completion UI, layered on
-top of Doom's Vertico stack.
-
-#+begin_src emacs-lisp
-(use-package! icomplete
-  :config
-  (fido-mode 1))
-#+end_src
-
+Doom's =vertico= module (see init.el:30) is the sole completion UI.
 ** Buffer Behavior
-Auto-revert keeps buffers in sync with changes made on disk (including
-non-file buffers like Dired). The advice prompts for which buffer to
+Auto-revert keeps buffers in sync with changes madnon-file buffers like Dired). The advice prompts for which buffer to
+ for which buffer to
 show whenever a window is split, instead of duplicating the current
 one. The =flyspell= tweak stops it from flagging repeated words.
 
@@ -393,8 +437,8 @@ delimiters (=sp-up-sexp=).
    ((and (derived-mode-p 'org-mode)
          (fboundp 'org-at-table-p)
          (org-at-table-p))
-    (call-interactively #'org-cycle))
-      ((and (derived-mode-p 'markdown-mode)
+    (call-interac      ((and (derived-mode-p 'markdown-mode)
+de-p 'markdown-mode)
          (bound-and-true-p orgtbl-mode)
          (fboundp 'org-at-table-p)
          (org-at-table-p))
@@ -406,11 +450,10 @@ delimiters (=sp-up-sexp=).
 
 ** Toggle
 
-#+begin_src emacs-lisp
-(map! :leader
-        :desc "Toggle dirvish"          "o /"   #'dirvish
+#+begin_src emac        :desc "Toggle dirvish"          "o /"   #'dirvish
         :desc "Toggle vterm"            "v t"   #'+vterm/toggle
         :desc "New vterm"               "v n"   #'+vterm/here)
+ n"   #'+vterm/here)
 #+end_src
 
 * Editor
@@ -489,21 +532,19 @@ column for prose and let previews scale with the buffer font.
 
 ** Markdown
 *** Titles
-#+begin_src emacs-lisp
-(custom-set-faces!
-'(markdown-header-delimiter-face :foreground "#616161" :height 0.9)
+#+begin_src emacs-lis'(markdown-header-delimiter-face :foreground "#616161" :height 0.9)
 '(markdown-header-face-1 :height 1.8 :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face)
 '(markdown-header-face-2 :height 1.4 :foreground "#EBCB8B" :weight extra-bold :inherit markdown-header-face)
 '(markdown-header-face-3 :height 1.2 :foreground "#D08770" :weight extra-bold :inherit markdown-header-face)
 '(markdown-header-face-4 :height 1.15 :foreground "#BF616A" :weight bold :inherit markdown-header-face)
 '(markdown-header-face-5 :height 1.1 :foreground "#b48ead" :weight bold :inherit markdown-header-face)
 '(markdown-header-face-6 :height 1.05 :foreground "#5e81ac" :weight semi-bold :inherit markdown-header-face))
+rkdown-header-face))
 #+end_src
 *** Autohide
 
 #+begin_src emacs-lisp
-(defvar nb/current-line '(0 . 0)
-   "(start . end) of current line in current buffer")
+(defvar nb/c   "(start . end) of current line in current buffer")
  (make-variable-buffer-local 'nb/current-line)
  (defun my/markdown-unhide-table (limit)
    (when (re-search-forward "^[ \t]*|.*$" limit t)
@@ -559,8 +600,8 @@ column for prose and let previews scale with the buffer font.
    (font-lock-add-keywords nil '((nb/unhide-current-line)
                                  (my/markdown-pad-table)) t)
    (add-hook 'post-command-hook #'nb/refontify-on-linemove nil t))
-
- (add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
+- (add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
+arkdown-unhighlight)
 #+end_src
 
 *** Tables
@@ -620,7 +661,7 @@ machinery.
 (after! org
   (setq org-modern-star 'replace                 ; swap heading asterisks for bullets
         org-modern-list '((?- . "•") (?+ . "◦") (?* . "▪"))
-        org-modern-block-fringe nil              ; keep blocks aligned with text
+        org-modern-block-fringe 3             ; keep blocks aligned with text
         org-modern-table t
         org-modern-timestamp t)
   ;; Nicer folding ellipsis and pretty entities (\alpha -> α, etc.)
@@ -634,8 +675,8 @@ machinery.
 :PROPERTIES:
 :CUSTOM_ID: fonts-and-headings
 :END:
-Straight from tecosaur: turn on Doom's =+org-pretty-mode= (mixed-pitch
-prose with monospace code), scale headings so the outline is easy to
+Straight from tecosaur: turn on Doom's =+org-prettprose with monospace code), scale headings so the outline is easy to
+e outline is easy to
 skim, enlarge the document title, italicise quote/verse blocks, and
 paint passed deadlines in the error face. The last block defers
 font-locking in large files so typing doesn't feel sluggish.
@@ -654,7 +695,6 @@ font-locking in large files so typing doesn't feel sluggish.
   '(outline-9 :weight semi-bold))
 (custom-set-faces!
   '(org-document-title :height 1.5))
-
 (after! org
   (setq org-fontify-quote-and-verse-blocks t
         org-agenda-deadline-faces
@@ -876,8 +916,8 @@ appropriate.  In tables, insert a new row or end the table."
 ** Capture Templates
 Quick capture entry points, patterned after tecosaur's richer set but
 kept to the essentials: a general TODO, a dated note, and a project
-task. They target files under your =org-directory=. =SPC X= (or =SPC n
-n=) opens the capture menu.
+task. They target files under your =org-directory=n=) opens the capture menu.
+ns the capture menu.
 
 #+begin_src emacs-lisp
 (after! org
@@ -894,12 +934,6 @@ n=) opens the capture menu.
 #+end_src
 
 ** Source Blocks
-Since this very config is written in Org source blocks, these settings
-make editing them pleasant: real syntax highlighting inside blocks,
-=TAB= behaving as it would in the block's language, and =C-c '= (edit
-block) opening in the current window instead of splitting.
-=org-src-preserve-indentation= keeps whitespace-sensitive code intact
-when tangled.
 
 #+begin_src emacs-lisp
 (after! org
@@ -907,6 +941,20 @@ when tangled.
         org-src-tab-acts-natively t
         org-src-preserve-indentation t
         org-src-window-setup 'current-window))
+#+end_src
+
+Polymode
+#+begin_src emacs-lisp :tangle packages.el
+(package! polymode)
+(package! poly-org)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package polymode
+  :ensure t)
+
+(use-package poly-org
+  :ensure t)
 #+end_src
 
 * Agenda
@@ -1193,8 +1241,9 @@ appropriate architecture to use.
               org-html-checkbox-type 'html-span)
       (setq org-html-style-default org-html-style-plain
             org-html-meta-tags #'org-html-meta-tags-default
-            org-html-checkbox-type 'html)))
-)
+            org-html-ch)
+ox-type 'html)))
+  )
 #+end_src
 
 ** Extra header contents
@@ -1267,7 +1316,7 @@ appropriate architecture to use.
                   (concat "<div class=\"page-meta\">"
                           (when (plist-get info :with-date)
                             (org-export-data (plist-get info :date) info))
-                          (when (and (plist-get info :with-date) (plist-get info :with-author)) ", ")
+                          (when (and (plist-get info :with-date) (plist-get info :with-author)) " ")
                           (when (plist-get info :with-author)
                             (org-export-data (plist-get info :author) info))
                           "</div>\n")
@@ -1293,8 +1342,9 @@ appropriate architecture to use.
                  "\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\""
                  org-html-klipse-css "\"/>"))
        ;; Closing document.
-       "</div>\n</body>\n</html>")))
-)
+       "</div>\n)
+dy>\n</html>")))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1329,8 +1379,9 @@ appropriate architecture to use.
                                 (org-html--translate "Table of Contents" info)
                                 top-level))
                       toc
-                      (format "</%s>\n" outer-tag))))))))
-)
+                      (format "</%s>\)
+uter-tag))))))))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1400,8 +1451,9 @@ appropriate architecture to use.
 
   (unless (functionp #'org-html-meta-tags-default)
     (defalias 'org-html-meta-tags-default #'ignore))
-  (setq org-html-meta-tags #'org-html-meta-tags-fancy)
-)
+  (setq org-html-meta-tags #'org-h)
+meta-tags-fancy)
+  )
 #+end_src
 
 ** Custom CSS/JS
@@ -1453,8 +1505,9 @@ Suffice to say I've snatched it, with a few of my own tweaks applied.
                 (buffer-string)))
         (when org-fancy-html-export-mode
           (setq org-html-style-default org-html-style-fancy)))))
-  (org-html-reload-fancy-style)
-)
+  (org-html)
+oad-fancy-style)
+  )
 #+end_src
 
 ** Collapsable src and example blocks
@@ -1474,8 +1527,9 @@ setting this, but I haven't quite been able to get that working (yet).
   (defvar org-html-export-collapsed nil)
   (eval '(cl-pushnew '(:collapsed "COLLAPSED" "collapsed" org-html-export-collapsed t)
                      (org-export-backend-options (org-export-get-backend 'html))))
-  (add-to-list 'org-default-properties "EXPORT_COLLAPSED")
-)
+  (add-to-list 'org-default-properties)
+PORT_COLLAPSED")
+  )
 #+end_src
 
 We can take our src block modification a step further, and add a gutter on the
@@ -1600,9 +1654,10 @@ and a button to copy the content of the block.
                        ("vhdl" "VHDL")
                        ("xml" "XML")
                        ("nxml" "XML")
-                       ("conf" "Configuration File"))))
-        mode))
+                       ("conf" "Configuration File)
 )
+        mode))
+  )
 #+end_src
 
 #+name: Example, fixed width, and property blocks
@@ -1640,8 +1695,9 @@ and a button to copy the content of the block.
 
   (advice-add 'org-html-example-block   :around #'org-html-block-collapsable)
   (advice-add 'org-html-fixed-width     :around #'org-html-block-collapsable)
-  (advice-add 'org-html-property-drawer :around #'org-html-block-collapsable)
-)
+  (advice-add 'org-html-property-drawer :around #'org-htm)
+ock-collapsable)
+  )
 #+end_src
 
 ** Handle table overflow
@@ -1672,8 +1728,9 @@ While we're at it, we can a link gutter, as we did with src blocks, and show the
                 (if name
                     (replace-regexp-in-string (format "<table id=\"%s\"" ref) "<table"
                                               (funcall orig-fn table contents info))
-                  (funcall orig-fn table contents info))))))
-)
+                  (funcall orig-fn table)
+tents info))))))
+  )
 #+end_src
 
 ** TOC as a collapsable tree
@@ -1683,17 +1740,15 @@ achieve this with CSS alone. Thankfully we can avoid JS though, by adapting the
 TOC generation code to use a ~label~ for each item, and a hidden ~checkbox~ to keep
 track of state.
 
-To add this, we need to change one line in [[file:lisp/org/lisp/ox-html.el::(format "<a href=\"#%s\">%s</a>"][org-html--format-toc-headline]].
-
-Since we can actually accomplish the desired effect by adding advice /around/ the
+To add this, we need to change one line in [[file:lisp/org/lisp/ox-html.el::(format "<a href=\"#%s\">%s</a>"][org-html--forSince we can actually accomplish the desired effect by adding advice /around/ the
 function, without overriding it --- let's do that to reduce the bug surface of
 this config a tad.
 #+begin_src emacs-lisp
 (after! ox-html
   (defadvice! org-html--format-toc-headline-colapseable (orig-fn headline info)
     "Add a label and checkbox to `org-html--format-toc-headline's usual output,
-  to allow the TOC to be a collapseable tree."
-    :around #'org-html--format-toc-headline
+line's usual output,
+  to allow the TOC to be a    :around #'org-html--format-toc-headline
     (if (or (not org-fancy-html-export-mode) (bound-and-true-p org-msg-export-in-progress))
         (funcall orig-fn headline info)
       (let ((id (or (org-element-property :CUSTOM_ID headline)
@@ -1702,8 +1757,7 @@ this config a tad.
                 id id (funcall orig-fn headline info)))))
 )
 #+end_src
-
-Now, leaves (headings with no children) shouldn't have the ~label~ item. The
+ Now, leaves (headings with no children) shouldn't have the ~label~ item. The
 obvious way to achieve this is by including some /if no children.../ logic in
 ~org-html--format-toc-headline-colapseable~. Unfortunately, I can't my elisp isn't
 up to par to extract the number of child headings from the mountain of info that
@@ -1721,12 +1775,10 @@ org provides.
 #+end_src
 
 ** Make verbatim different to code
-
-Since we have =verbatim= and ~code~, let's make use of the difference.
-
-We can use ~code~ exclusively for code snippets and commands like: "calling
-src_elisp{(message "Hello")} in batch-mode Emacs prints to stdout like ~echo~".
-Then we can use =verbatim= for miscellaneous 'other monospace' like keyboard
+iSince we have =verbatim= and ~code~, let's make use of the difference.
+eWe can use ~code~ exclusively for code snippets and commands like: "calling
+mands like: "calling
+src_elisp{(message "Hello")} in batch-mode Emacs prints to Then we can use =verbatim= for miscellaneous 'other monospace' like keyboard
 shortcuts: "either =C-c C-c= or =C-g= is likely the most useful keybinding in Emacs",
 or file names: "I keep my configuration in =~/.config/doom/=", among other things.
 
@@ -1785,8 +1837,7 @@ before this stage of output processing.
 #+end_src
 
 ** Header anchors
-
-I want to add GitHub-style links on hover for headings.
+@I want to add GitHub-style links on hover for headings.
 #+begin_src emacs-lisp
 (after! ox-html
   (defun org-export-html-headline-anchor (text backend info)
@@ -1827,6 +1878,7 @@ are part of my LaTeX preamble.
 
   (setq org-html-mathjax-template
     "<script>
+           "<script>
     window.MathJax = {
       loader: {
         load: ['[tex]/mathtools'],
@@ -1881,9 +1933,7 @@ are part of my LaTeX preamble.
   <script
     id=\"MathJax-script\"
     async
-    src=\"%PATH\">
-  </script>")
-)
+    src=\"%P)
 #+end_src
 
 * Other Packages
@@ -1896,8 +1946,7 @@ X colours. =svg-tag-mode= renders tags and keywords as SVG labels.
 =doct= is a declarative syntax for =org-capture-templates= (the
 Capture section above could be rewritten with it). =org-noter= links
 notes to PDF/EPUB positions for annotated reading.
-
-#+begin_src emacs-lisp :tangle packages.el
+ #+begin_src emacs-lisp :tangle packages.el
 (package! theme-magic)
 (package! svg-tag-mode)
 (package! doct)
@@ -1924,3 +1973,6 @@ notes to PDF/EPUB positions for annotated reading.
 #+begin_src emacs-lisp :tangle packages.el
 (package! show-font)
 #+end_src
+ * Footnotes
+ [fn:1] DEFINITION NOT FOUND.
+EFINITION NOT FOUND.
