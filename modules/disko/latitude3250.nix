@@ -1,9 +1,5 @@
 { inputs, ... }:
 {
-  flake-file.inputs.disko = {
-    url = "github:nix-community/disko";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
 
   #
   #   nvme0n1 (GPT)
@@ -31,7 +27,7 @@
   #   sudo partprobe /dev/nvme0n1
   #
   # Existing LUKS UUIDs persist — only the GPT name on p3 changes.
-  den.aspects.disko-latitude3250 = {
+  den.aspects.latitude3250 = {
     nixos = {
       imports = [ inputs.disko.nixosModules.disko ];
       disko.enableConfig = true;
