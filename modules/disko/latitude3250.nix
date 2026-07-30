@@ -1,32 +1,5 @@
 { inputs, ... }:
 {
-
-  #
-  #   nvme0n1 (GPT)
-  #   ├─ p1  1 GiB   EFI System                       vfat       -> /boot
-  #   ├─ p2  ~228 G  LUKS2 -> btrfs                          -> / (top-level, subvolid=5)
-  #   │                                                subvol home -> /home
-  #   │                                                subvol nix  -> /nix
-  #   └─ p3  rest    LUKS2 -> swap
-  #
-  # The two LUKS containers share one passphrase, so initrd only prompts once
-  # (NixOS caches the entered passphrase and retries it on the swap device).
-  #
-  # NOTE: `/` is the btrfs top-level (subvolid=5), NOT a named subvolume — that
-  # matches the current install. Disko expresses this with the `mountpoint` on
-  # the btrfs content itself, alongside the two named subvolumes.
-  #
-  # `passwordFile` is read ONLY while formatting (disko/disko-install). Boot
-  # still prompts interactively.
-  #
-  # Adopting this config on an EXISTING disk: p3 (swap) currently has no GPT
-  # partlabel, so disko's partlabel-based LUKS resolution will not find it.
-  # Before the first rebuild, run once (non-destructive, milliseconds):
-  #
-  #   sudo sgdisk -c 3:swap /dev/nvme0n1
-  #   sudo partprobe /dev/nvme0n1
-  #
-  # Existing LUKS UUIDs persist — only the GPT name on p3 changes.
   den.aspects.latitude3250 = {
     nixos = {
       imports = [ inputs.disko.nixosModules.disko ];
@@ -35,8 +8,6 @@
       disko.devices = {
         disk.main = {
           type = "disk";
-          # Stable, unique by-id path for this exact NVMe drive. Change this if
-          # you deploy the layout to a different disk.
           device = "/dev/disk/by-id/nvme-eui.01000000000000008ce38e0402c27c5c";
           content = {
             type = "gpt";
