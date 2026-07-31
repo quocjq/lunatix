@@ -8,8 +8,7 @@
   den.default.homeManager.home.stateVersion = "26.05";
   den.default.includes = [
     den.aspects.settings
-    # den.batteries.os-user
-    den.batteries.inputs'
+    den.batteries.hostname
     (den.batteries.user-shell "bash")
   ];
   # enable hm by default
