@@ -13,9 +13,6 @@
           content = {
             type = "gpt";
             partitions = {
-              # p1 — EFI System Partition. `label` pins the GPT partition name
-              # to "EFI", matching the existing on-disk label so
-              # /dev/disk/by-partlabel/EFI keeps resolving.
               ESP = {
                 priority = 1;
                 label = "EFI";
@@ -31,8 +28,6 @@
                   ];
                 };
               };
-
-              # p2 — encrypted btrfs root.
               luks = {
                 priority = 2;
                 label = "root";
@@ -61,11 +56,6 @@
                   };
                 };
               };
-
-              # p3 — encrypted swap (fills the remaining space, ~8.8 GiB). `label`
-              # pins the GPT partition name to "swap" so disko resolves p3 by
-              # /dev/disk/by-partlabel/swap. Existing disks that lack this
-              # label need a one-time `sgdisk -c 3:swap /dev/nvme0n1`.
               swap = {
                 priority = 3;
                 label = "swap";
