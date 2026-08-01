@@ -45,21 +45,21 @@ unicode, etc.
 
 #+begin_src emacs-lisp :tangle init.el
 (doom! :ui
-       deft              ; notational velocity for Emacs
-       doom              ; what makes DOOM look the way it does
-       dashboard         ; a nifty splash screen for Emacs
-       ;;(emoji +unicode)  ; 🙂
-       hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       indent-guides     ; highlighted indent columns
-       (ligatures +extra)         ; ligatures and symbols to make your code pretty again
-       modeline          ; snazzy, Atom-inspired modeline, plus API
-       ophints           ; highlight the region an operation acts on
-       (popup +defaults)   ; tame sudden yet inevitable temporary windows
+       deft               ; notational velocity for Emacs
+       doom               ; what makes DOOM look the way it does
+       dashboard          ; a nifty splash screen for Emacs
+       ;;(emoji +unicode) ; 🙂
+       hl-todo            ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+       indent-guides      ; highlighted indent columns
+       (ligatures +extra) ; ligatures and symbols to make your code pretty again
+       modeline           ; snazzy, Atom-inspired modeline, plus API
+       ophints            ; highlight the region an operation acts on
+       (popup +defaults)  ; tame sudden yet inevitable temporary windows
        smooth-scroll      ; So smooth you won't believe it's not butter
-       ;;tabs              ; a tab bar for Emacs
-       unicode           ; extended unicode support for various languages
-       (vc-gutter +pretty) ; vcs diff in the fringe
-       window-select     ; visually switch windows
+       ;;tabs             ; a tab bar for Emacs
+       unicode            ; extended unicode support for various languages
+       (vc-gutter +pretty); vcs diff in the fringe
+       window-select      ; visually switch windows
        workspaces)        ; tab emulation, persistence & separate workspaces
 #+end_src
 
@@ -75,10 +75,10 @@ Evil everywhere, plus formatting, snippets, whitespace, parinfer.
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
        ;; multiple-cursors  ; editing in many places at once
-       ;;objed             ; text object editing for the innocent
-       parinfer          ; turn lisp into python, sort of
-       rotate-text       ; cycle region between text candidates
-       snippets          ; my elves. They type so I don't have to
+       ;;objed
+       parinfer                   ; turn lisp into python, sort of
+       rotate-text                ; cycle region between text candidates
+       snippets                   ; my elves. They type so I don't have to
        (whitespace +guess +trim)) ; a butler
        ;;word-wrap                ; soft wrapping with language-aware indent
 #+end_src
@@ -597,7 +597,7 @@ machinery.
 (after! org
   (setq org-modern-star 'replace                 ; swap heading asterisks for bullets
         org-modern-list '((?- . "•") (?+ . "◦") (?* . "▪"))
-        org-modern-block-fringe 3             ; keep blocks aligned with text
+        org-modern-block-fringe 15             ; keep blocks aligned with text
         org-modern-table t
         org-modern-timestamp t)
   ;; Nicer folding ellipsis and pretty entities (\alpha -> α, etc.)
@@ -879,18 +879,111 @@ task. They target files under your =org-directory=. The capture key
         org-src-window-setup 'current-window))
 #+end_src
 
-Polymode
+Polymode + my-poly-org (vendored from poly-org.el)
 #+begin_src emacs-lisp :tangle packages.el
 (package! polymode)
-(package! poly-org)
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package polymode
-  :ensure t)
+** My poly-org
 
-(use-package poly-org
-  :ensure t)
+Vendored from upstream =poly-org.el= (Vitalie Spinu, MIT) under our
+own name so we can wire parinfer (and any future =emacs-lisp-mode-hook=
+consumer) into the emacs-lisp src-block inner buffer.  Polymode uses
+=delay-mode-hooks=-style deferral when cloning inner buffers, so the
+plain =emacs-lisp-mode-hook= never fires inside Org src blocks; the
+hook is invoked explicitly from a =switch-buffer-functions= slot.
+
+#+begin_src emacs-lisp
+;;; my-poly-org.el --- Vendored poly-org, renamed. -*- lexical-binding: t -*-
+;;;
+
+(require 'polymode)
+(require 'org)
+(require 'org-src)
+
+(defun my-poly-org-mode-matcher ()
+  (let ((case-fold-search t))
+    (when (re-search-forward "#\\+begin_\\(src\\|example\\|export\\) +\\([^ \t\n]+\\)" (point-at-eol) t)
+      (let ((lang (match-string-no-properties 2)))
+        (or (cdr (assoc lang org-src-lang-modes))
+            lang)))))
+
+(defvar ess-local-process-name)
+(defun my-poly-org-convey-src-block-params-to-inner-modes (_ this-buf)
+  "Move src block parameters to innermode specific locals.
+Used in :switch-buffer-functions slot."
+  (cond
+   ((derived-mode-p 'ess-mode)
+    (with-current-buffer (pm-base-buffer)
+      (let* ((params (nth 2 (org-babel-get-src-block-info t)))
+             (session (cdr (assq :session params))))
+        (when (and session (org-babel-comint-buffer-livep session))
+          (let ((proc (buffer-local-value 'ess-local-process-name
+                                          (get-buffer session))))
+            (with-current-buffer this-buf
+              (setq-local ess-local-process-name proc)))))))
+   ((derived-mode-p 'emacs-lisp-mode)
+    (with-current-buffer (pm-base-buffer)
+      (let ((params (nth 2 (org-babel-get-src-block-info t))))
+        (with-current-buffer this-buf
+          (setq-local lexical-binding
+                      (string-equal "t" (cdr (assq :lexical params))))
+          ;; Activate parinfer inside emacs-lisp src blocks.
+          (parinfer-rust-mode 1)))))))
+
+(define-hostmode my-poly-org-hostmode
+  :mode 'org-mode
+  :protect-syntax nil
+  :protect-font-lock nil)
+
+(define-auto-innermode my-poly-org-innermode
+  :fallback-mode 'host
+  :head-mode 'host
+  :tail-mode 'host
+  :head-matcher "^[ \t]*#\\+begin_\\(src\\|example\\|export\\) .*\n"
+  :tail-matcher "^[ \t]*#\\+end_\\(src\\|example\\|export\\)"
+  :mode-matcher #'my-poly-org-mode-matcher
+  :head-adjust-face nil
+  :switch-buffer-functions '(my-poly-org-convey-src-block-params-to-inner-modes)
+  :body-indent-offset 'org-edit-src-content-indentation
+  :indent-offset 'org-edit-src-content-indentation)
+
+(define-innermode my-poly-org-latex-innermode nil
+  "Innermode for matching latex fragments in `org-mode'"
+  :mode 'latex-mode
+  :body-indent-offset 'LaTeX-indent-level
+  :head-matcher "^[ \t]*\\\\begin{.+}.*$"
+  :tail-matcher "^[ \t]*\\\\end{.+}.*$"
+  :head-mode 'host
+  :tail-mode 'host)
+
+(define-polymode my-poly-org-mode
+  :hostmode 'my-poly-org-hostmode
+  :innermodes '(my-poly-org-innermode my-poly-org-latex-innermode)
+  (setq-local org-src-fontify-natively t)
+  (setq-local polymode-run-these-before-change-functions-in-other-buffers
+              (append '(org-before-change-function
+                        org-element--cache-before-change
+                        org-table-remove-rectangle-highlight)
+                      polymode-run-these-before-change-functions-in-other-buffers))
+  (setq-local polymode-run-these-after-change-functions-in-other-buffers
+              (append '(org-element--cache-after-change
+                        org-indent-refresh-maybe)
+                      polymode-run-these-after-change-functions-in-other-buffers)))
+
+(pm-around-advice 'org-element-at-point #'polymode-with-current-base-buffer)
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.org\\'" . my-poly-org-mode))
+#+end_src
+
+** Parinfer mode
+
+#+begin_src emacs-lisp
+(use-package parinfer-rust-mode
+  :hook emacs-lisp-mode
+  :init
+  (setq parinfer-rust-auto-download t))
 #+end_src
 
 * Agenda
@@ -1068,6 +1161,7 @@ stays focused on real work.
         (list denote-directory
               "~/Documents/personal/"
               "~/Documents/work/")))
+
 #+end_src
 
 *** Browse
@@ -1097,7 +1191,7 @@ stays focused on real work.
          :desc "new note"           "n" #'denote
          :desc "find (fuzzy)"       "f" #'consult-denote-find
          :desc "grep (ripgrep)"     "g" #'consult-denote-grep
-         :desc "menu (panel)"       "m" #'denote-menu
+         :desc "menu (panel)"       "m" #'list-denotes
          :desc "link"               "l" #'denote-link
          :desc "add links"          "L" #'denote-add-links
          :desc "backlinks"          "b" #'denote-backlinks
