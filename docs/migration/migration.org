@@ -76,7 +76,7 @@ The headline benefit is that pins become editable Nix code. =npins/sources.nix= 
 
 The second benefit is operational: =npins= is a single binary with no daemon, no fetchers registry, no flake CLI. It works on Nix 2.18 stable without =--extra-experimental-features 'nix-command flakes'=. The =with-inputs= library that consumes =sources.nix= is also pure Nix — no flake-parts required. So the entire pin pipeline runs in environments where flakes are deliberately disabled (NixOS installers, recovery shells, =nix-shell -p=).
 
-The third benefit, specific to this repo, is that *flake-file disappears*. Lunatix currently has =flake-file= as a flake input that consumes =flake-file.inputs.*= declarations from at least nine module files (see [[#current-state][Current state]]). Each declaration is a side-channel for "this module secretly needs a flake input". No-flake replaces this with a single hand-curated =flake.nix= (the shim) whose =inputs= attrset is the only place inputs live. Adding an input is =npins add -n foo github:owner/repo= plus one line in =follows.nix= if it follows something.
+The third benefit, specific to this repo, is that *flake-file stays as the input aggregator, but its output target shifts from =flake.nix= to =npins/sources.json=*. Lunatix currently has =flake-file= as a flake input that consumes =flake-file.inputs.*= declarations from at least nine module files (see [[#current-state][Current state]]). Each declaration is a side-channel for "this module secretly needs a flake input". The [[https://github.com/vic/vix/tree/unflake][vix unflake pattern]] preserves this aggregator role: modules still declare inputs as Nix module options, but =write-npins= (instead of =write-flake=) emits =npins/sources.json=, and =with-inputs= reads that. This is the canonical Dendritic pattern — modules declare *what they need*, the aggregator collects, the resolver (with-inputs) feeds them into the eval.
 
 The fourth benefit is decoupling. Den philosophy: /Den does not replace NixOS, home-manager, or flake-parts — it sits on top of them and generates the same flake outputs you are used to./ With no-flake, the resolver and the module composer are separate concerns. You can swap =npins= for the canonical [[https://codeberg.org/goldstein/unflake][goldstein/unflake]] resolver (=unflake.nix=) without touching =default.nix='s module assembly, and vice versa.
 
@@ -100,7 +100,7 @@ The single-host profile (=x86_64-linux.igloo=, user =lunixose=) means there is n
 
 *** Vendoring
 
-Today, =flake-file= is a flake input, which means =nix flake update= bumps it automatically. With no-flake, you vendor =flake-file= into the migration and then drop it entirely ([[#step-8--drop-flake-file-from-inputs][step 8]]). There is no upstream to bump, so the migration also slightly reduces the dependency surface.
+Today, =flake-file= is a flake input, which means =nix flake update= bumps it automatically. With no-flake, =flake-file= stays as the input aggregator (its role is unchanged) but =flake-file.inputs.*= declarations now flow into =npins/sources.json= via =write-npins= instead of into =flake.nix= via =write-flake=. There is no upstream to bump — =flake-file= is loaded like any other input, =with-inputs= reads its outputs.
 
 *** Transitive input complexity
 
@@ -108,7 +108,7 @@ The current flake has 19 top-level inputs and =flake.lock= records 88 non-root n
 
 *** Learning curve
 
-Anyone who clones the repo has to install =npins= before they can build. =justfile= recipes can wrap this (a =bootstrap= recipe should run =npins init && npins update=), but the failure mode is silent — =nix build .#igloo= on a fresh checkout fails with a confusing =default.nix= error if =npins= was never run. The =bootstrap= recipe in [[#commands][Commands]] adds a guard.
+Anyone who clones the repo has to install =npins= before they can build. =justfile= recipes can wrap this (a =bootstrap= recipe should run =nix run .#write-npins=), but the failure mode is silent — =nix build .#igloo= on a fresh checkout fails with a confusing =default.nix= error if =npins= was never populated. The =bootstrap= recipe in [[#commands][Commands]] adds a guard.
 
 *** Lockfile ownership
 
@@ -177,7 +177,7 @@ These files contain =flake-file.inputs.*= declarations that =flake-file= collect
 - =modules/lunix/lotus.nix= — declares =lotus=.
 - =modules/lunix/doomacs.nix= — declares =nix-doom-emacs-unstraightened= plus others.
 
-After the migration, these =flake-file.inputs.*= calls become no-ops. The inputs they declared move to =npins/sources.json= and =follows.nix= directly. To keep the diff small, leave the =flake-file.inputs.*= blocks in place — they will silently do nothing once =flake-file= is dropped from inputs ([[#step-8--drop-flake-file-from-inputs][step 8]]). A follow-up commit can clean them up cosmetically.
+After the migration, these =flake-file.inputs.*= declarations remain live. They continue to be the source of truth for input URLs and follows; =write-npins= reads them and writes =npins/sources.json=. The wiring layer above them ([[#step-8--switch-flake-file-output-to-npins][step 8]]) shifts flake-file's output target from =flake.nix= to =npins/sources.json=, but the modules don't change.
 
 ** Build entry points
 
@@ -188,15 +188,15 @@ After the migration, these =flake-file.inputs.*= calls become no-ops. The inputs
 | =just build=   | =nix run .#igloo=                                | unchanged (shim preserves it)                  |
 | =just switch=  | =nix run .#igloo -- switch=                      | unchanged                                      |
 | =just vm=      | =nix run .#vm=                                   | unchanged                                      |
-| =just update=  | =nix flake update=                               | becomes =npins update=                         |
-| =just write-flake= | =nix run .#write-flake=                      | removed (replaced by shim)                     |
-| =just bootstrap= | =nix develop=                                   | gains =npins init && npins update= guard       |
+| =just update=  | =nix flake update=                               | becomes ~nix run .#write-npins~                |
+| =just write-flake= | =nix run .#write-flake=                      | removed (=write-npins= replaces it)            |
+| =just bootstrap= | =nix develop=                                   | gains ~nix run .#write-npins~ guard            |
 
 =README.md= also documents the =flake-file= regeneration workflow and is part of the docs that need updating in [[#step-10--update-ci-and-docs][step 10]].
 
 ** Module surface touched by the migration
 
-The migration does not change any module under =modules/hosts/=, =modules/settings/=, =modules/user/=, =modules/lunix/=, or =modules/disko/=. The only module that needs editing is =modules/flake/dendritic.nix= — the line importing =flake-file.flakeModules.dendritic= is removed in [[#step-8--drop-flake-file-from-inputs][step 8]]. Everything else is identical because the evalModules tree (=inputs.import-tree ./modules=) is unchanged.
+The migration does *not* require deleting any of the =flake-file.inputs.*= declarations in modules under =modules/flake/=, =modules/hosts/=, =modules/settings/=, =modules/user/=, =modules/lunix/=, or =modules/disko/=. They remain the *source of truth* for input URLs and follows. The only module that may need editing is =modules/flake/dendritic.nix= — its =flake-file.flakeModules.dendritic= import stays, but the file's =flake-file.inputs.*= declarations are read by =write-npins= instead of by =write-flake=.
 
 ** Lockfile size and git history
 
@@ -405,26 +405,41 @@ in { outputs = outputs; }
 
 *Verify:* =nix flake check= passes. =nix flake show= lists =nixosConfigurations.igloo=. =nix build .#igloo= works.
 
-** Step 8 — Drop flake-file from inputs
+** Step 8 — Switch flake-file output to npins
 
-After step 7, =flake-file= is unused. Remove it from =npins/sources.json=:
+flake-file stays as the input-declaration aggregator, but its output target changes from =flake.nix= to =npins/sources.json=. This is the [[https://github.com/vic/vix/tree/unflake][vix unflake pattern]]: modules declare inputs as Nix module options under =flake-file.inputs.X.url = "github:..."=, flake-file aggregates them across the module tree, and =write-npins= emits =npins/sources.json=.
 
-#+BEGIN_SRC sh
-npins remove flake-file
-#+END_SRC
+*Why keep flake-file:* Dendritic pattern means modules declare *what they need*, not *how to fetch it*. The aggregator (flake-file) lives at the wiring layer; the actual config modules stay pure-Nix. Dropping flake-file would force every module to declare pins directly, breaking the separation.
 
-Edit =modules/flake/dendritic.nix= to remove the =inputs.flake-file.flakeModules.dendritic= import:
+Steps:
 
-#+BEGIN_SRC diff
-   imports = [
--    (inputs.flake-file.flakeModules.dendritic or { })
-     (inputs.den.flakeModules.dendritic or { })
-   ];
-#+END_SRC
+1. Verify flake-file's npins writer is available:
+   #+BEGIN_SRC sh
+   nix run .#write-lock          # or nix run .#write-npins directly
+   #+END_SRC
+   First run will create =npins/sources.json= if missing — that's expected.
 
-Leave the =flake-file.inputs.*= declarations in =modules/lunix/*.nix= and =modules/flake/dendritic.nix= in place — they become inert (the option no longer exists in the module system, so they are silently ignored). Removing them is a cosmetic follow-up.
+2. Inspect the result:
+   #+BEGIN_SRC sh
+   cat npins/sources.json | jq '.pins | keys'
+   #+END_SRC
+   Should list 20 input names matching the =flake-file.inputs.*= declarations.
 
-*Verify:* =just build= still succeeds. =nix flake check= passes.
+3. The =flake-file.inputs.*= blocks in =modules/flake/dendritic.nix= and =modules/lunix/*.nix= stay as the *source of truth* for input URLs and follows. Edit them in modules, then re-run =write-npins= to refresh =npins/sources.json=.
+
+4. The =flake.nix= shim from [[#step-7--convert-flakenix-to-a-generated-shim][step 7]] stays as a hand-written file. flake-file no longer regenerates it.
+
+5. Add a =justfile= recipe for the workflow:
+   #+BEGIN_SRC just
+   update:
+       nix run .#write-npins
+       # Regenerate flake.lock if downstream tools need it:
+       nix flake lock
+   #+END_SRC
+
+6. Remove the auto-generation marker from the old =flake.nix= (step 7 already replaced it with the shim). Delete the =write-flake= recipe from =justfile= if it exists.
+
+*Verify:* =just build= succeeds. =nix flake check= passes. =npins/sources.json= has 20 pins. The =flake-file.inputs.*= blocks in modules are unchanged.
 
 ** Step 9 — Retire flake.lock
 
@@ -439,13 +454,13 @@ For Lunatix, *option A is cleaner* — the =justfile= already has an =update= re
 
 ** Step 10 — Update CI and docs
 
-- =README.md= line 99 ("The flake file is generated by =flake-file=...") becomes "The flake file is a thin shim around =default.nix=. Pin management uses =npins=; update with =npins update=."
+- =README.md= line 99 ("The flake file is generated by =flake-file=...") becomes "The flake file is a thin shim around =default.nix=. Pin declarations live in modules under =flake-file.inputs.*=; refresh with =nix run .#write-npins= (=write-lock= auto-dispatches)."
 - =justfile=:
-  - =write-flake= recipe (line 57–58) is removed or repurposed.
-  - =update= recipe (line 61–62) becomes =npins update=.
+  - =write-flake= recipe (line 57–58) is removed.
+  - =update= recipe (line 61–62) becomes ~nix run .#write-npins~.
   - =build= / =switch= / =vm= recipes (lines 45–54) keep their =nix run .#igloo= form — the shim preserves it.
-  - =bootstrap= recipe gains an =npins init && npins update= guard.
-- =.github/workflows/*.yml= (if any): replace =nix flake update= with =npins update=; replace =nix flake check= with ~nix-build -A flake.checks.x86_64-linux.igloo~.
+  - =bootstrap= recipe gains a guard: ~[ -f npins/sources.json ] || nix run .#write-npins~.
+- =.github/workflows/*.yml= (if any): replace =nix flake update= with ~nix run .#write-npins~; replace =nix flake check= with ~nix-build -A flake.checks.x86_64-linux.igloo~.
 
 *Verify:* =just --list= shows the updated recipes. =just build= succeeds. [[#verify][Verify]] walks the full end-state equivalence check.
 
@@ -458,7 +473,7 @@ The migration runs while the existing flake keeps working. The trick is that =fl
 - *Before step 5* (no =default.nix= yet): flake is the only source of truth. =flake.nix= is the auto-generated file from =flake-file=. Builds use =nix build .#igloo=.
 - *Between step 5 and step 7* (both files exist): =default.nix= is the canonical source of truth. =flake.nix= is still the auto-generated file from =flake-file=. Builds can use either — ~nix-build -A flake.nixosConfigurations.igloo.config.system.build.toplevel~ (uses =default.nix=) or =nix build .#igloo= (uses =flake.nix=). To prevent drift, run =just build= after every change to either and confirm the resulting =/nix/store/...-nixos-system-...= path is identical.
 - *After step 7* (=flake.nix= is a shim): =default.nix= is the only file with logic. =flake.nix= is a 1-line shim that does =import .=. Builds via =nix build .#igloo= and =nix-build -A ...= are now functionally identical because the shim delegates.
-- *After step 8* (flake-file dropped): the =flake-file.inputs.*= declarations in modules are inert. No behaviour change.
+- *After step 8* (flake-file redirected to =write-npins=): =flake-file.inputs.*= declarations in modules are still the source of truth for input URLs and follows. flake-file now writes =npins/sources.json= instead of =flake.nix=. The hand-written shim from step 7 is =flake.nix=.
 - *After step 9* (=flake.lock= deleted): the lockfile is regenerated on demand. The git diff is small.
 
 ** Why the shim works
@@ -481,8 +496,8 @@ This produces a =flake.lock= whose =nodes= are identical in shape to the one bef
 ** Run order during the migration window
 
 #+BEGIN_SRC sh
-# 1. Edit modules/flake/dendritic.nix         (drop flake-file import, step 8)
-# 2. npins update                              (refresh sources.json)
+# 1. Edit a flake-file.inputs.* declaration   (e.g. in modules/flake/dendritic.nix, step 8)
+# 2. nix run .#write-npins                     (regenerate npins/sources.json)
 # 3. Edit follows.nix                          (if any follows changed)
 # 4. just build                                (verify default.nix path)
 # 5. cp flake.nix flake.nix.bak                (snapshot pre-shim)
@@ -519,16 +534,16 @@ This is the reference table for translating between the old and new workflows. T
 | Build igloo                                   | =nix build .#igloo=                                                        | ~nix-build -A flake.nixosConfigurations.igloo.config.system.build.toplevel~ (or =nix build .#igloo= if the shim is in place)                      |
 | Build & activate                              | =nixos-rebuild switch --flake .#igloo=                                     | =nix run .#igloo -- switch= (the existing =just switch= recipe still works)                                                                      |
 | VM test                                       | =nix run .#vm=                                                             | same (=just vm=)                                                                                                                                 |
-| Update one input (e.g. nixpkgs)               | =nix flake lock --update-input nixpkgs=                                    | =npins update nixpkgs=                                                                                                                           |
-| Update all inputs                             | =nix flake update=                                                         | =npins update=                                                                                                                                   |
-| Add a new input (e.g. =foo= from GitHub)      | Edit =flake.nix=, then =nix flake lock=                                    | =npins add -n foo github:owner/repo=, then add to =follows.nix= if it follows something, then =npins update=                                    |
-| Remove an input                               | Delete from =flake.nix=, run =nix flake lock=                              | =npins remove foo=, then delete from =follows.nix= if present                                                                                    |
-| Pin a specific revision                       | Edit =flake.nix= =inputs.X.url = "github:owner/repo/<rev>"=, lock          | Edit =npins/sources.json= ~pins.foo.revision = "<rev>"~, then =npins update --hide-warning foo=                                                  |
+| Update one input (e.g. nixpkgs)               | =nix flake lock --update-input nixpkgs=                                    | ~nix run .#write-npins -- nixpkgs= (or edit module's =flake-file.inputs.nixpkgs.url= and re-run =write-npins=)                                  |
+| Update all inputs                             | =nix flake update=                                                         | ~nix run .#write-npins~                                                                                                                          |
+| Add a new input (e.g. =foo= from GitHub)      | Edit =flake.nix=, then =nix flake lock=                                    | Add ~flake-file.inputs.foo.url = "github:owner/repo";~ to a module, then ~nix run .#write-npins~                                                  |
+| Remove an input                               | Delete from =flake.nix=, run =nix flake lock=                              | Remove the =flake-file.inputs.foo= declaration from the module, then ~nix run .#write-npins~                                                       |
+| Pin a specific revision                       | Edit =flake.nix= =inputs.X.url = "github:owner/repo/<rev>"=, lock          | Edit the module's ~flake-file.inputs.X.url = "github:owner/repo/<rev>"~ declaration, then ~nix run .#write-npins~                                |
 | Check whole repo                              | =nix flake check=                                                          | ~nix-build -A flake.checks.x86_64-linux.igloo~                                                                                                   |
 | Show all outputs                              | =nix flake show=                                                           | same (=flake.nix= shim preserves it)                                                                                                              |
-| Override an input for one build               | =nix build .#igloo --override-input nixpkgs /path/to/nixpkgs=              | edit =sources.nix= temporarily, or use a custom =default.nix= overlay                                                                            |
+| Override an input for one build               | =nix build .#igloo --override-input nixpkgs /path/to/nixpkgs=              | edit =npins/sources.json= temporarily, or use a custom =default.nix= overlay                                                                      |
 | Format                                        | =nix fmt=                                                                  | same (works on shim)                                                                                                                             |
-| Generate flake.nix                            | =nix run .#write-flake= (flake-file recipe)                                | not needed — =flake.nix= is hand-written                                                                                                         |
+| Generate flake.nix                            | =nix run .#write-flake= (flake-file recipe)                                | not needed — =flake.nix= is hand-written; =write-npins= produces =npins/sources.json= instead                                                    |
 | Inspect a single derivation                   | ~nix eval .#nixosConfigurations.igloo.config.system.build.toplevel.drvPath~ | same (shim preserves =nix eval=)                                                                                                                 |
 | Build inside a devenv shell                   | =devenv shell=                                                             | same (=just dev=)                                                                                                                                |
 
@@ -538,24 +553,24 @@ This is the reference table for translating between the old and new workflows. T
 - update:
 -     {{nix}} flake update
 + update:
-+     {{npins}} update
++     nix run .#write-npins
 +     # Regenerate flake.lock from sources if downstream tools need it:
-+     {{nix}} flake lock
++     nix flake lock
 
 - write-flake:
 -     {{nix}} run .#write-flake
-+ # removed — flake.nix is hand-written now
++ # removed — write-npins replaces it
 #+END_SRC
 
 =build=, =switch=, =vm=, =fmt=, =clean=, =secret*=, =rekey=, =new-ssh-key= are unchanged because they don't touch the pin pipeline.
 
 ** Bootstrap gotcha
 
-=just bootstrap= runs =nix develop=, which uses the flake. After migration, the shim preserves this, but on a fresh checkout you must run =npins init && npins update= first or the bootstrap fails. Add a guard:
+=just bootstrap= runs =nix develop=, which uses the flake. After migration, the shim preserves this, but on a fresh checkout you must run ~nix run .#write-npins~ first or the bootstrap fails. Add a guard:
 
 #+BEGIN_SRC diff
   bootstrap:
-+     [ -f npins/sources.nix ] || {{npins}} init && {{npins}} update
++     [ -f npins/sources.json ] || nix run .#write-npins
       {{nix}} develop
 #+END_SRC
 
@@ -565,7 +580,7 @@ The same =default.nix= entry point works with either resolver:
 
 #+BEGIN_SRC sh
 # npins + with-inputs (chosen for this guide)
-npins update
+nix run .#write-npins
 
 # goldstein/unflake (alternative — fewer moving parts)
 nix run -f https://ln-s.sh/unflake unflake
@@ -580,7 +595,7 @@ Once the migration is complete, the typical commands a Lunatix user runs are:
 #+BEGIN_SRC sh
 just build           # build igloo (via shim)
 just switch          # build + activate
-just update          # npins update all pins
+just update          # nix run .#write-npins (regenerates npins/sources.json)
 just vm              # build the VM
 just bootstrap       # first-time setup on a new clone
 #+END_SRC
@@ -618,7 +633,7 @@ If the paths differ, check:
 nix flake check
 #+END_SRC
 
-Must succeed with no warnings about unused inputs or missing checks. If it fails with "input 'flake-file' has no URL", you forgot [[#step-8--drop-flake-file-from-inputs][step 8]].
+Must succeed with no warnings about unused inputs or missing checks. If it fails with "input 'flake-file' has no URL", =write-npins= was never run.
 
 ** 3. =nix flake show= lists the expected outputs
 
@@ -642,14 +657,14 @@ nixos-rebuild build --file . -A flake.nixosConfigurations.igloo
 
 This exercises =nix-build= semantics against =default.nix= directly. Confirms the no-flake entry point works even without the shim. If this fails but =nix flake check= passes, you have a problem in =default.nix='s top-level expression (most often a typo in the =with-inputs= arguments).
 
-** 5. =npins= round-trips
+** 5. =write-npins= round-trips
 
 #+BEGIN_SRC sh
-npins update
+nix run .#write-npins
 git diff --stat npins/sources.json npins/sources.nix
 #+END_SRC
 
-The diff should be empty unless upstream changed. If =sources.nix= keeps regenerating different hashes, you have a non-deterministic fetch (e.g., a GitHub tarball with non-pinned ref). Fix by pinning the =revision= field explicitly in =sources.json=.
+The diff should be empty unless an upstream input changed. If =sources.json= keeps regenerating different hashes, you have a non-deterministic fetch (e.g., a GitHub tarball with non-pinned ref). Fix by pinning the =revision= field explicitly in the module's =flake-file.inputs.X.url= declaration.
 
 ** 6. Git history is clean
 
@@ -666,28 +681,24 @@ Expected:
 - =npins/sources.json= and =npins/sources.nix= added in one commit ([[#step-2--initialise-npins-in-repo-root][steps 2–3]]).
 - =follows.nix= added in one commit ([[#step-4--generate-followsnix][step 4]]).
 
-** 7. =flake-file= references are inert
+** 7. =flake-file= references are still live (not inert)
 
 #+BEGIN_SRC sh
-grep -rn 'flake-file.inputs' /home/lunixose/Proj/lunatix/modules
+grep -rn 'flake-file.inputs' /home/lunixose/Proj/lunatix/modules | wc -l
 #+END_SRC
 
-The grep should still find references (cleanup is cosmetic). Confirm they cause no errors at evaluation time:
+Should print a non-zero number — at minimum 5 declarations in =modules/flake/dendritic.nix= plus one each in the modules under =modules/lunix/= that already declare them. These declarations are now consumed by =write-npins= instead of =write-flake=.
+
+Confirm the workflow:
 
 #+BEGIN_SRC sh
-nix-instantiate --eval --strict --json -E '
-  let
-    sources = import /home/lunixose/Proj/lunatix/npins;
-    follows = import /home/lunixose/Proj/lunatix/follows.nix;
-    with-inputs = import sources.with-inputs sources follows;
-    outputs = inputs:
-      inputs.flake-parts.lib.mkFlake { inherit inputs; }
-        (inputs.import-tree /home/lunixose/Proj/lunatix/modules);
-    inputs = with-inputs;
-  in outputs.config.den.hosts.x86_64-linux.igloo.users.lunixose' | grep lunixose
+# Edit a flake-file.inputs declaration
+sed -i 's/github:denful\/den/github:denful\/den-fork/' /home/lunixose/Proj/lunatix/modules/flake/dendritic.nix
+nix run .#write-npins
+git diff --stat npins/sources.json   # should show a change to den's URL
+git checkout /home/lunixose/Proj/lunatix/modules/flake/dendritic.nix   # revert
+nix run .#write-npins                # restore sources.json
 #+END_SRC
-
-Should print the user attrset without errors. The =flake-file.inputs.*= declarations in modules become no-ops because =flake-file.flakeModules.dendritic= is no longer in =inputs=.
 
 ** 8. CI / justfile works end-to-end
 
@@ -695,16 +706,16 @@ Should print the user attrset without errors. The =flake-file.inputs.*= declarat
 just build       # nix run .#igloo → should still work via the shim
 just switch      # builds and switches
 just vm          # builds VM
-just update      # now runs npins update
+just update      # now runs `nix run .#write-npins`
 just bootstrap   # npins init/update guard runs, then nix develop
 #+END_SRC
 
-All five must succeed on a clean checkout that has run =npins init= once.
+All five must succeed on a clean checkout that has run =write-npins= once.
 
 ** 9. Documentation reflects the new workflow
 
-- =README.md= no longer mentions "flake-file" as the generator.
-- =justfile= =update= recipe runs =npins update=.
+- =README.md= no longer claims "flake-file regenerates =flake.nix=". It should describe flake-file as the input aggregator that produces =npins/sources.json=.
+- =justfile= =update= recipe runs ~nix run .#write-npins~.
 - =justfile= no longer has =write-flake=.
 - =docs/migration/migration.org= (this file) exists in the repo.
 
@@ -724,12 +735,12 @@ The migration is complete when all ten checks pass. If any check fails:
 | Failing check | Likely cause                              | Playbook step to revisit |
 |---------------+-------------------------------------------+--------------------------|
 | 1             | =follows.nix= missing an entry            | [[#step-4--generate-followsnix][step 4]]                   |
-| 2             | =flake-file= still in inputs              | [[#step-8--drop-flake-file-from-inputs][step 8]]                   |
+| 2             | =write-npins= never ran; =npins/sources.json= missing | [[#step-2--initialise-npins-in-repo-root][step 2]] or [[#step-8--switch-flake-file-output-to-npins][step 8]] |
 | 3             | =flake.nix= shim malformed                | [[#step-7--convert-flakenix-to-a-generated-shim][step 7]]                   |
 | 4             | =default.nix= typo                        | [[#step-5--create-defaultnix-flake-parts-retained][step 5]]                   |
-| 5             | =npins= not installed or non-deterministic pin | [[#step-1--install-npins-one-time][step 1]] or [[#step-3--populate-sourcesjson-from-the-existing-flakelock][step 3]]        |
+| 5             | =write-npins= non-deterministic fetch     | [[#step-3--populate-sourcesjson-from-the-existing-flakelock][step 3]] or [[#step-8--switch-flake-file-output-to-npins][step 8]] |
 | 6             | Commit ordering wrong                     | [[#step-9--retire-flakelock][step 9]] or [[#step-10--update-ci-and-docs][step 10]]                |
-| 7             | =dendritic.nix= still imports =flake-file= | [[#step-8--drop-flake-file-from-inputs][step 8]]                   |
+| 7             | =flake-file.inputs.*= declarations drifted from =sources.json= | [[#step-8--switch-flake-file-output-to-npins][step 8]]       |
 | 8             | =justfile= recipes not updated            | [[#step-10--update-ci-and-docs][step 10]]                  |
 | 9             | Docs not updated                          | [[#step-10--update-ci-and-docs][step 10]]                  |
 | 10            | =sources.json= regeneration script bug    | [[#step-3--populate-sourcesjson-from-the-existing-flakelock][step 3]]                   |
