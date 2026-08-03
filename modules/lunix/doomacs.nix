@@ -39,7 +39,6 @@
         extraPackages =
           epkgs: with epkgs; [
             eglot
-            vterm
             nix-ts-mode
             treesit-grammars.with-all-grammars
           ];

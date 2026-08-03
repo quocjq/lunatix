@@ -99,14 +99,15 @@ tramp, undo, vc.
 #+end_src
 
 ** term
-Eshell and Vterm. Plain =term= left disabled — eshell handles most.
+Eshell only inside the doom =:term= block. Mistty handles the in-Emacs
+terminal (see the Mistty section below). Plain =term= left disabled.
 
 #+begin_src emacs-lisp :tangle init.el
 (doom! :term
-       eshell            ; the elisp shell that works everywhere
+       eshell)            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
-       vterm)            ; the best terminal emulation in Emacs
+       ;; vterm)            ; the best terminal emulation in Emacs (no longer used)
 #+end_src
 
 ** checkers
@@ -422,8 +423,12 @@ indenting when there is no pair to escape."
 #+begin_src emacs-lisp
 (map! :leader
       (:desc "Toggle dirvish" "o /" #'dirvish
-       :desc "Toggle vterm"   "v t" #'+vterm/toggle
-       :desc "New vterm"      "v n" #'+vterm/here))
+       :desc "Mistty toggle"  "v t" #'mistty-toggle
+       :desc "Mistty new"     "v n" #'mistty-new
+       :desc "Mistty clear"   "v c" #'mistty-clear
+       :desc "Mistty reset"   "v r" #'mistty-reset
+       :desc "Send region"    "v s" #'mistty-send-region
+       :desc "Send line"      "v l" #'mistty-send-line))
 #+end_src
 
 * Editor
@@ -436,7 +441,7 @@ Use emacs mode as editing mode
 (define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state)
 #+end_src
 
-** Snippets
+* Snippets
 Doom ships YASnippet. This points it at a personal snippets directory
 and lets one snippet expand into another (nested expansion), which is
 handy for building larger templates out of small pieces.
@@ -445,6 +450,119 @@ handy for building larger templates out of small pieces.
 (after! yasnippet
   (setq yas-triggers-in-field t)        ; allow nested snippet expansion
   (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" doom-user-dir)))
+#+end_src
+
+See =snippets-guide.org= for the format.
+
+
+** Snippets
+#+property: header-args :comments no
+
+Literate source for YASnippet. Each =#+begin_src= block tangles to a
+single =.yasnippet= file under =$DOOMDIR/snippets/<mode>/=. Pulled
+into =config.org= via =#+INCLUDE:=, so saving =config.org= re-tangles
+all of these along with the rest of the Doom config.
+
+=:comments no= matters — yasnippet reads the file as raw text and
+anything org-babel adds as wrap comments would be misinterpreted as
+snippet metadata.
+
+See =snippets-guide.org= for the snippet file format, placeholders,
+and how to add new ones.
+
+*** Org-mode
+
+**** today — current date (YYYY-MM-DD)
+#+begin_src snippet :tangle snippets/org-mode/today.yasnippet
+# -*- mode: snippet -*-
+# name: today
+# key: today
+# --
+`(format-time-string "%Y-%m-%d")`
+#+end_src
+
+**** time — current time (HH:MM)
+#+begin_src snippet :tangle snippets/org-mode/time.yasnippet
+# -*- mode: snippet -*-
+# name: time
+# key: time
+# --
+`(format-time-string "%H:%M")`
+#+end_src
+
+**** now — current date and time
+#+begin_src snippet :tangle snippets/org-mode/now.yasnippet
+# -*- mode: snippet -*-
+# name: now
+# key: now
+# --
+`(format-time-string "%Y-%m-%d %H:%M")`
+#+end_src
+
+**** denote-note — new note skeleton
+#+begin_src snippet :tangle snippets/org-mode/denote-note.yasnippet
+# -*- mode: snippet -*-
+# name: denote-note
+# key: denote-note
+# --
+#+title: $1
+#+filetags: $2
+#+date: `(format-time-string "%Y-%m-%d")
+
+$0
+#+end_src
+
+**** denote-journal — journal entry skeleton
+#+begin_src snippet :tangle snippets/org-mode/denote-journal.yasnippet
+# -*- mode: snippet -*-
+# name: denote-journal
+# key: denote-journal
+# --
+#+title: `(format-time-string "%Y-%m-%d %A")`
+#+filetags: journal
+#+date: `(format-time-string "%Y-%m-%d")
+
+$0
+#+end_src
+
+**** denote-link — insert denote-style link
+#+begin_src snippet :tangle snippets/org-mode/denote-link.yasnippet
+# -*- mode: snippet -*-
+# name: denote-link
+# key: denote-link
+# --
+[[denote:$1]]$0
+#+end_src
+
+**** denote-backlink — backlink to current note
+#+begin_src snippet :tangle snippets/org-mode/denote-backlink.yasnippet
+# -*- mode: snippet -*-
+# name: denote-backlink
+# key: denote-backlink
+# --
+[[denote-backlink:$1]]$0
+#+end_src
+
+
+* Mistty
+Mistty is an in-Emacs terminal that uses Emacs' built-in =comint=
+(/"emulator"/ mode) instead of libvterm. No C dependency; uses bash as
+the shell. Replaces vterm (which has been removed from the =:term=
+block above).
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! mistty
+          :recipe (:host githb :repo szermatt/mistty)
+          :pin "4d32106dc2a60183c0df8716502ed4048a45d50f")
+
+#+end_src
+
+#+begin_src emacs-lisp
+(setq mistty-process-type 'emulator
+      mistty-shell "/usr/bin/env nu"
+      mistty-shell-arg '("-i")
+      mistty-width 80
+      mistty-height 24)
 #+end_src
 
 * Languages
@@ -716,7 +834,17 @@ enters the emphasized region, so editing stays easy.
   :config
   (setq org-appear-autoemphasis t
         org-appear-autolinks t
-        org-appear-autosubmarkers t))
+        org-appear-autosubmarkers t)
+
+  (setq org-appear-trigger 'manual)
+(add-hook 'org-mode-hook
+  (lambda ()
+    ;; Insert state hooks
+    (add-hook 'evil-insert-state-entry-hook #'org-appear-manual-start nil t)
+    (add-hook 'evil-insert-state-exit-hook #'org-appear-manual-stop nil t)
+    ;; Emacs state hooks
+    (add-hook 'evil-emacs-state-entry-hook #'org-appear-manual-start nil t)
+    (add-hook 'evil-emacs-state-exit-hook #'org-appear-manual-stop nil t)))
 #+end_src
 
 ** Behaviour
@@ -1090,7 +1218,6 @@ stays focused on real work.
   :recipe (:host github :repo "protesilaos/denote-merge")
   :pin "2f8d168d37e66b5c8a3b983e211031b9abbf402e")
 (package! denote-silo)
-(package! denote-menu)
 (package! consult-denote)
 #+end_src
 

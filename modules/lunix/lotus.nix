@@ -8,7 +8,7 @@
   };
 
   lix.lotus = {
-    provides.to-hosts.nixos = { pkgs, ... }: {
+    os = { pkgs, ... }: {
       imports = [ inputs.lotus.nixosModules.fcitx5-lotus ];
       services.fcitx5-lotus = {
         enable = true;
@@ -16,20 +16,37 @@
         users = [ "lunixose" ];
       };
 
-      # Wire up the fcitx5 framework + session env vars (XMODIFIERS / GTK_IM_MODULE /
-      # QT_IM_MODULE / INPUT_METHOD). The lotus module only adds itself to the addon list.
       i18n.inputMethod = {
         enable = true;
         type = "fcitx5";
       };
     };
 
-    provides.to-hosts.homeManager = { ... }: {
-      # Same env-var wiring for the Hyprland session (no DM, so the NixOS-level
-      # i18n vars don't reach Hyprland directly).
+    homeManager = { pkgs, ... }: {
       i18n.inputMethod = {
         enable = true;
         type = "fcitx5";
+        fcitx5 = {
+          waylandFrontend = true;
+          addons = [
+            inputs.lotus.packages.${pkgs.stdenv.hostPlatform.system}.fcitx5-lotus
+          ];
+          settings = {
+            globalOptions = {
+              "Hotkey/TriggerKeys"."0" = "Control+space";
+            };
+            inputMethod = {
+              GroupOrder."0" = "Default";
+              "Groups/0" = {
+                Name = "Default";
+                "Default Layout" = "us";
+                DefaultIM = "keyboard-us";
+              };
+              "Groups/0/Items/0".Name = "keyboard-us";
+              "Groups/0/Items/1".Name = "lotus";
+            };
+          };
+        };
       };
     };
   };

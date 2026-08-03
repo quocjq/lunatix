@@ -1,0 +1,137 @@
+#+title: Snippets Guide
+
+How the YASnippet setup in this Doom config works, and how to add new
+snippets.
+
+* Overview
+
+- Snippet files live under =$DOOMDIR/snippets/<mode>/<trigger>.yasnippet=
+  (in this repo: =modules/lunix/_doomdir/snippets/<mode>/=).
+- The directory is registered with YASnippet in =config.org= via:
+  #+begin_src emacs-lisp
+  (add-to-list 'yas-snippet-dirs
+               (expand-file-name "snippets" doom-user-dir))
+  #+end_src
+- Doom's =:editor snippets= module auto-loads YASnippet in most
+  editing modes. No further setup needed.
+- Snippet *definitions* live in =snippets.org= (literate source).
+  Each =#+begin_src= block tangles to one =.yasnippet= file.
+
+* Tangling flow
+
+1. =snippets.org= is pulled into =config.org= via =#+INCLUDE: snippets.org=.
+2. Saving =config.org= triggers Doom's =:config literate= module,
+  which runs =org-babel-tangle= on the whole tree.
+3. Every src block in =snippets.org= with a =:tangle= header writes
+  its body to =snippets/<mode>/<trigger>.yasnippet=.
+4. YASnippet picks up the new files on next Emacs start (or
+                                                         =M-x yas-reload-all=).
+
+Nix-side tangle: =doomacs.nix= sets =tangleArgs = "--all config.org"=,
+which runs the same tangle during =home-manager switch= so the files
+exist on disk before Emacs starts.
+
+* Existing snippets
+
+| Trigger         | Mode | What it does                           |
+|-----------------+------+----------------------------------------|
+| =today=           | org  | Current date as =YYYY-MM-DD=             |
+| =time=            | org  | Current time as =HH:MM=                  |
+| =now=             | org  | Current date and time                  |
+| =denote-note=     | org  | New note skeleton with title + tags    |
+| =denote-journal=  | org  | Journal entry skeleton with date title |
+| =denote-link=     | org  | Insert =[[denote:...]]= link             |
+| =denote-backlink= | org  | Insert =[[denote-backlink:...]]=         |
+
+* Snippet file format
+
+A =.yasnippet= file looks like:
+
+#+begin_example
+# -*- mode: snippet -*-
+# name: <display name>
+# key: <trigger>
+# group: <optional category>
+# condition: <optional elisp predicate>
+# expand-env: <optional alist of bindings>
+# --
+<body>
+#+end_example
+
+Anything after the =# --= line is the snippet body. Headers above it
+control where, when, and how the snippet fires.
+
+** Placeholders
+
+- =$1=, =$2=, ... are tab stops, jumped to in order.
+- =$0= is the final cursor position after all stops are visited.
+- =${1:default}= — stop with a default value.
+- =${2:$(yas-text)}= — stop with a transformation (=yas-text= inlines
+                                                   the field's text at expansion time).
+- Mirror placeholders: write the same stop number at multiple sites,
+  they're linked and edit together.
+
+** Embedded elisp
+
+Backtick syntax evaluates elisp at expansion time:
+
+#+begin_example
+`(`(format-time-string "%Y-%m-%d")`)`
+#+end_example
+
+Use it for date stamps, computed values, or any dynamic content.
+
+** Transforming a stop
+
+Use =$>{...}= after a stop to apply a transform:
+
+#+begin_example
+${1:some text}$>{ (upcase yas-text)}
+#+end_example
+
+* Adding a new snippet
+
+1. Open =snippets.org=.
+2. Add a new section under =* Org-mode= (or a new =* <mode>= heading
+                                         for a different major mode — denote uses org, markdown, and text
+                                         by default).
+3. Inside that section, write:
+   #+begin_example
+   ** <trigger> — <short description>
+   ,#+begin_src snippet :tangle snippets/<mode>/<trigger>.yasnippet
+   # -*- mode: snippet -*-
+   # name: <trigger>
+   # key: <trigger>
+   # --
+   <body with $1, $2, ... placeholders and/or `(...)` elisp>
+   ,#+end_src
+   #+end_example
+4. Save =config.org=. The =:config literate= module re-tangles;
+   =snippets/<mode>/<trigger>.yasnippet= appears on disk.
+5. Reload YASnippet: =M-x yas-reload-all= (or restart Emacs).
+
+* Common gotchas
+
+- *Mode directory must exist.* The =#+property: header-args :comments link=
+  at the top of =snippets.org= doesn't auto-mkdir. Create the
+  =snippets/<mode>/= subdir if you're adding a new major mode.
+- *Trigger conflict.* If two snippets share a trigger, the last one
+  loaded wins. Pick distinct prefixes for related snippets (the
+                                                            =denote-= prefix is already taken).
+- *Headers before =# --=.* All header lines must be at the top of the
+  file, with no blank line between them. The =# --= line is the
+  divider — anything above is metadata, below is body.
+- *Backticks vs quotes.* Single backticks =`=` around an elisp form
+  evaluate it. Without backticks, the form is inserted literally.
+- *Include path.* =#+INCLUDE: snippets.org= in =config.org= resolves
+  relative to the file containing the =INCLUDE= — so it picks up the
+  version in the same =_doomdir=.
+
+* Testing a snippet
+
+1. Open an =.org= file (e.g. one in =~/Documents/notes/=).
+2. Type the trigger (e.g. =today=) and press =TAB= (or =C-i=).
+3. Confirm the expansion matches what you wrote in =snippets.org=.
+4. If nothing happens: check =M-x yas-describe-tables= — the snippet
+   should appear under =org-mode=.
+5. If still nothing: =M-x yas-reload-all= and try again.
