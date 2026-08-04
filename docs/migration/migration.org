@@ -306,26 +306,41 @@ npins update --hide-warning
 
 ** Step 4 — Generate follows.nix
 
-=follows.nix= mirrors the =inputs.X.inputs.Y.follows= block of =flake.nix=. The shape is:
+=follows.nix= mirrors the =inputs.X.inputs.Y.follows= block of =flake.nix=. The shape uses the *spec* format expected by [[https://github.com/denful/with-inputs][with-inputs]] — each top-level entry must have an =inputs= subkey (with the =Y.follows = "Z"= shape), or =follows.nix= will be silently ignored and the underlying flake's default follows will be used:
 
 #+BEGIN_SRC nix
 {
-  # Most inputs follow nixpkgs by default — they need no entry here.
-  # Override only when an input has unusual follows or shims.
+  # Each entry: { inputs.Y.follows = "Z"; } or { inputs = { Y.follows = "Z"; }; }
+  # The bare { Y = "Z"; } shape is NOT a spec — with-inputs will treat it as a
+  # raw value and your follows will be lost.
 
   # Inputs that follow extra inputs besides nixpkgs:
-  agenix = { nixpkgs = "nixpkgs"; home-manager = "home-manager"; };
-  flake-parts = { nixpkgs-lib = "nixpkgs"; };
-  plasma-manager = { nixpkgs = "nixpkgs"; home-manager = "home-manager"; };
+  agenix = {
+    inputs = {
+      nixpkgs.follows = "nixpkgs";
+      home-manager.follows = "home-manager";
+    };
+  };
+  flake-parts = {
+    inputs.nixpkgs-lib.follows = "nixpkgs";
+  };
+  plasma-manager = {
+    inputs = {
+      nixpkgs.follows = "nixpkgs";
+      home-manager.follows = "home-manager";
+    };
+  };
 
   # Inputs that explicitly do NOT follow nixpkgs:
-  nix-doom-emacs-unstraightened = { nixpkgs = ""; };
+  nix-doom-emacs-unstraightened = {
+    inputs.nixpkgs.follows = "";
+  };
 }
 #+END_SRC
 
-The conversion rule: every =inputs.X.inputs.Y.follows = "Z"= in =flake.nix= becomes ~"X" = { "Y" = "Z"; };~ in =follows.nix=. Empty follows (=''=) become ~{ Y = ""; }~ to signal "do not follow".
+The conversion rule: every =inputs.X.inputs.Y.follows = "Z"= in =flake.nix= becomes ~"X" = { inputs.Y.follows = "Z"; };~ in =follows.nix=. Empty follows (=''=) become ~{ inputs.Y.follows = ""; }~ to signal "do not follow". The bare ={ Y = "Z"; }= shape (without an =inputs= subkey) is silently ignored by =with-inputs= — easy mistake.
 
-Save the file at =/home/lunixose/Proj/lunatix/follows.nix=. The rest of the inputs default to ~{ nixpkgs = "nixpkgs"; }~ and do not need entries. Refer to =flake.nix= lines 6–69 for the source-of-truth follows block.
+Save the file at =/home/lunixose/Proj/lunatix/follows.nix=. The rest of the inputs default to following the root =nixpkgs= and do not need entries. Refer to =flake.nix= lines 6–69 for the source-of-truth follows block.
 
 *Verify:* ~nix-instantiate --eval --strict --json -E 'builtins.attrNames (import /home/lunixose/Proj/lunatix/follows.nix)'~ prints a JSON list of input names. Spot-check against the follows block in =flake.nix=.
 
@@ -982,6 +997,30 @@ The guide is descriptive — it does not run the migration. To execute:
 2. Run steps in order; each has a verify check.
 3. After [[#step-7--convert-flakenix-to-a-generated-shim][step 7]], the migration is functionally complete. Steps 8–10 are cleanup.
 4. After [[#step-10--update-ci-and-docs][step 10]], run every check in [[#verify][Verify]]. They are the regression bar.
+
+* Known limitations (as of August 2026)
+
+Captured while attempting an end-to-end migration in =/home/lunixose/Proj/lunatix-unflaked/= (branch =no-flake-applied=). These are real issues, not deal-breakers — flag them before you commit to the migration.
+
+** 1. =follows.nix= syntax is easy to get wrong
+
+=with-inputs= interprets each follows entry as a *spec* with only =inputs.Y.follows = "Z"= (or =follows = "Z"=) keys. The natural-looking shape ={ Y = "Z"; }= is NOT a spec — =with-inputs= returns it as a raw value, and your follows are silently lost. Symptom: =inputs.flake-parts.lib= is missing because =flake-parts.nixpkgs-lib= gets resolved as a raw string instead of an input. Always use the ={ inputs.Y.follows = "Z"; }= shape (or the equivalent =inputs = { Y.follows = "Z"; };=). See [[#step-4--generate-followsnix][step 4]] for the corrected template.
+
+** 2. Transitive flake inputs are not auto-resolved
+
+A real flake.lock records every transitive input (=flake-parts_2=, =nixpkgs_2=, =systems=, =nur=, ~67 extra pins for this config). =npins= only tracks direct pins, and =with-inputs= does not auto-fetch transitive flake inputs. Symptom: builds fail inside a transitive flake's =outputs= function with errors like =cannot coerce a set to a string= or =attribute 'X' missing=. Workaround: pre-populate =npins/sources.json= with all transitive pins lifted from the original =flake.lock= (script that does this for =lunatix= is in the =no-flake-applied= branch's commit history). For configs that pin simpler flake trees (vix-style), this isn't needed.
+
+** 3. =with-inputs= does not expose =self= on flake inputs
+
+In flake mode, every input has a magic =self= attribute that points back to the flake's =outputs=. =with-inputs= does NOT replicate this on resolved flake inputs (=inputs.X.self= is missing for all X). Symptom: flakes whose =outputs= function does =pkgs.callPackages self mergedArgs= or otherwise references =self= as a package set break. Affected in =lunatix=: =nix-doom-emacs-unstraightened= (line 78 of its =flake.nix=). Workarounds: (a) pin a fork of =with-inputs= that exposes =self= on flake-resolved entries, (b) vendor the affected flake as a non-flake source (=flake = false;= in npins), or (c) patch the upstream flake. The vix repo works because its flakes don't use =self= in their outputs functions.
+
+** 4. =flake.nix= shim interacts oddly with =nix flake lock=
+
+Running =nix flake lock= against the two-line shim (={ outputs = _: import ./.; }=) produces a =flake.lock= with only the root node. Transitive deps are resolved at evaluation time against the underlying =npins/sources.json=, so the lock file is no longer a full record of what will actually be built. If you keep =flake.lock= for tooling that reads it, treat it as informational only — =npins/sources.json= is the real source of truth.
+
+** 5. Cold-cache evaluation can be slower, not faster
+
+The "unflake is faster" claim circulating online usually refers to =flake-parts= evaluation overhead on warm caches, not full system builds. The first build after switching to no-flake was observably slower for =lunatix= because every transitive flake input had to be re-fetched individually rather than from the pre-locked =flake.lock= tree. Warm-cache rebuilds are roughly equivalent.
 
 * Sources
 
