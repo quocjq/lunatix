@@ -1,0 +1,1148 @@
+{
+  "pins": {
+    "agenix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "ryantm",
+        "repo": "agenix"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "b027ee29d959fda4b60b57566d64c98a202e0feb",
+      "url": "https://github.com/ryantm/agenix/archive/b027ee29d959fda4b60b57566d64c98a202e0feb.tar.gz",
+      "hash": "sha256-9VnK6Oqai65puVJ4WYtCTvlJeXxMzAp/69HhQuTdl/I="
+    },
+    "agenix-rekey": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "oddlama",
+        "repo": "agenix-rekey"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "8b9c179bc1300ab130c90f2d25426bf0e7a2b58d",
+      "url": "https://github.com/oddlama/agenix-rekey/archive/8b9c179bc1300ab130c90f2d25426bf0e7a2b58d.tar.gz",
+      "hash": "sha256-GvINrdGznE7mGlDNjW0/PMgOJlC+Nl9MkfxALB4QvWs="
+    },
+    "den": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "denful",
+        "repo": "den"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "2040b61346a7215fd7b7f51d4a457544b6e597d0",
+      "url": "https://github.com/denful/den/archive/2040b61346a7215fd7b7f51d4a457544b6e597d0.tar.gz",
+      "hash": "sha256-ipFk5ANEHhemDusdTZeuxVyFysyALjj8rRgpcTsjD4Y="
+    },
+    "den-diagram": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "denful",
+        "repo": "den-diagram"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "ff9952d6320d8a6052801f8aa1f47fe1dc9a54d3",
+      "url": "https://github.com/denful/den-diagram/archive/ff9952d6320d8a6052801f8aa1f47fe1dc9a54d3.tar.gz",
+      "hash": "sha256-NtOMbKnrhQPnpnJ5d/P47r1wK1r958XFu0apEsbE3Jg="
+    },
+    "devenv": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "devenv"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "9d93b838def889d5bcff302cac49c9322d34d33c",
+      "url": "https://github.com/cachix/devenv/archive/9d93b838def889d5bcff302cac49c9322d34d33c.tar.gz",
+      "hash": "sha256-xVVP8WR9/yQ0AvvVQMeMQbHrHXJTKBq7dqcPyphXDek="
+    },
+    "disko": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "disko"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "ff8702b4de27f72b4c78573dfb89ec74e36abdf1",
+      "url": "https://github.com/nix-community/disko/archive/ff8702b4de27f72b4c78573dfb89ec74e36abdf1.tar.gz",
+      "hash": "sha256-RxWs5ND31KzTG7wvMM+PMfUjyNpmIEr999lqNARaM5o="
+    },
+    "flake-file": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "denful",
+        "repo": "flake-file"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "56c46842d70754345c4a4581b8cbebe87b8fc067",
+      "url": "https://github.com/denful/flake-file/archive/56c46842d70754345c4a4581b8cbebe87b8fc067.tar.gz",
+      "hash": "sha256-ZwdMXUu0Udb4yzI65+psyJeUF+wexByNEvTUSx1xjVs="
+    },
+    "flake-parts": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hercules-ci",
+        "repo": "flake-parts"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "427bf4bd9435fdf21321c8cc628c24efc14c0f7a",
+      "url": "https://github.com/hercules-ci/flake-parts/archive/427bf4bd9435fdf21321c8cc628c24efc14c0f7a.tar.gz",
+      "hash": "sha256-4dtXQk/NMePegK/nWp5NSeuZKLATItOq61lpEvmXqGw="
+    },
+    "herdr": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "ogulcancelik",
+        "repo": "herdr"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "eacea2daf0b72973173b728936b27478374f2cd2",
+      "url": "https://github.com/ogulcancelik/herdr/archive/eacea2daf0b72973173b728936b27478374f2cd2.tar.gz",
+      "hash": "sha256-QEx40plgXYSDMo0ll/2HbvIKoaq/bUhCJ1TKq21ChjQ="
+    },
+    "home-manager": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "home-manager"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "bf9ce9fec78f95f374e8dd3b503863a3ec128ebe",
+      "url": "https://github.com/nix-community/home-manager/archive/bf9ce9fec78f95f374e8dd3b503863a3ec128ebe.tar.gz",
+      "hash": "sha256-vkMnV0JIyw+g/NmcfoajlGaAO+9a0ezia+FZohQJrik="
+    },
+    "hyprland": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "Hyprland"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "5c6f0aa2df6d1698ee7174c69d3123cb236c6fde",
+      "url": "https://github.com/hyprwm/Hyprland/archive/5c6f0aa2df6d1698ee7174c69d3123cb236c6fde.tar.gz",
+      "hash": "sha256-jAmsP9iHn18sEN/yxduanGVNGIHxoJCEMCjKBdM2vjk="
+    },
+    "import-tree": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "vic",
+        "repo": "import-tree"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "4ebb10ae17d5f1ad366e7aef5b92cb8eecf24f69",
+      "url": "https://github.com/vic/import-tree/archive/4ebb10ae17d5f1ad366e7aef5b92cb8eecf24f69.tar.gz",
+      "hash": "sha256-iI88R3wHz8wTKQb5orvpc51L/Xr64AJyxid/0MKa/b8="
+    },
+    "lotus": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "lotusinputmethod",
+        "repo": "fcitx5-lotus"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "db89d0d60e667e2c092eccbd5602def8b0befcf9",
+      "url": "https://github.com/lotusinputmethod/fcitx5-lotus/archive/db89d0d60e667e2c092eccbd5602def8b0befcf9.tar.gz",
+      "hash": "sha256-S5UlX+XxqfwOS2utfIp22BRBJVlA9W459BA6gCZPCjE="
+    },
+    "nix-doom-emacs-unstraightened": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "marienz",
+        "repo": "nix-doom-emacs-unstraightened"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "251a473a9a5c7f38421cb34b509996652763442d",
+      "url": "https://github.com/marienz/nix-doom-emacs-unstraightened/archive/251a473a9a5c7f38421cb34b509996652763442d.tar.gz",
+      "hash": "sha256-0zd/ct2syfOf8mwJMFSLVtWzVfcZk0ffKrgwkQnbaDk="
+    },
+    "nixcord": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "4evy",
+        "repo": "nixcord"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "b4680467264fe34f9a7d01244e96235564b4157c",
+      "url": "https://github.com/4evy/nixcord/archive/b4680467264fe34f9a7d01244e96235564b4157c.tar.gz",
+      "hash": "sha256-ciEL3ySgQsHuzuc6NFZgFB6pLiEG6+Q4ynuRnYW70oA="
+    },
+    "nixpkgs": {
+      "type": "Url",
+      "url": "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz",
+      "unpack": true,
+      "hash": "sha256-NqaCaIITVSDaBYdcWcfCyEu1erL7paTPEQbISQp9xwQ="
+    },
+    "noctalia": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "noctalia-dev",
+        "repo": "noctalia"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "50f0f095053a4b5c10874c4e7080f55dc15d3b38",
+      "url": "https://github.com/noctalia-dev/noctalia/archive/50f0f095053a4b5c10874c4e7080f55dc15d3b38.tar.gz",
+      "hash": "sha256-9foQ31PSKpIu8UWGalt+4G5o4TU21g4a1qwMwJmeOy4="
+    },
+    "plasma-manager": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "plasma-manager"
+      },
+      "branch": "trunk",
+      "submodules": false,
+      "revision": "a19a2a029fa180911bd89c554dca1616e10f4c1d",
+      "url": "https://github.com/nix-community/plasma-manager/archive/a19a2a029fa180911bd89c554dca1616e10f4c1d.tar.gz",
+      "hash": "sha256-jZhZkzAwc7f3exzcTDJWP2WCAchCv0iNC3UF/QsahdQ="
+    },
+    "stylix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "stylix"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "04b284060ffa638f080ab1b2d05cf1f236217995",
+      "url": "https://github.com/nix-community/stylix/archive/04b284060ffa638f080ab1b2d05cf1f236217995.tar.gz",
+      "hash": "sha256-e26BuraMqnara0VXVk9nsQLgGC+8nvEgYNc6odv5Yi8="
+    },
+    "with-inputs": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "denful",
+        "repo": "with-inputs"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "bae062d25220d7970e1d73856b966e8287853f28",
+      "url": "https://github.com/denful/with-inputs/archive/bae062d25220d7970e1d73856b966e8287853f28.tar.gz",
+      "hash": "sha256-jsPUcrjTv+JbPJjp5g3TX8t38QTmuZY9niQlHAUuGy0="
+    },
+    "zen-browser": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "b899cc7f943c8fd7abb0416d438d3f8a0ebc9540",
+      "url": "https://github.com/0xc000022070/zen-browser-flake/archive/b899cc7f943c8fd7abb0416d438d3f8a0ebc9540.tar.gz",
+      "hash": "sha256-8wqlvoK8KjquQX3ohj7fXiDApXdUjJYklw6/wT1ZPnQ="
+    },
+    "aquamarine": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "aquamarine"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "fc39af0ccec9171aec8185eaea8afb71a46eff90",
+      "url": null,
+      "hash": "sha256-RTKedehLwWxGblFY5Nop3T08EGKH1T+4zmDTddmZ8k4="
+    },
+    "base16": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "SenchoPens",
+        "repo": "base16.nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "75ed5e5e3fce37df22e49125181fa37899c3ccd6",
+      "url": null,
+      "hash": "sha256-qcMhnL7aGAuFuutH4rq9fvAhCpJWVHLcHVZLtPctPlo="
+    },
+    "base16-fish": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "tomyun",
+        "repo": "base16-fish"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "86cbea4dca62e08fb7fd83a70e96472f92574782",
+      "url": null,
+      "hash": "sha256-XCUQLoLfBJ8saWms2HCIj4NEN+xNsWBlU1NrEPcQG4s="
+    },
+    "base16-helix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "tinted-theming",
+        "repo": "base16-helix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "4d508123037e7851ad36ebf7d9c48b0e9e1eb581",
+      "url": null,
+      "hash": "sha256-E3OAK27smtATTmX45uoTSRsVD+Y+ZiVVfgM/tjpbtYg="
+    },
+    "base16-vim": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "tinted-theming",
+        "repo": "base16-vim"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "577fe8125d74ff456cf942c733a85d769afe58b7",
+      "url": null,
+      "hash": "sha256-e0bpPySdJf0F68Ndanwm+KWHgQiZ0s7liLhvJSWDNsA="
+    },
+    "cachix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "cachix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "a66a440c321d35f7193472c317f42a55ccd1cb93",
+      "url": null,
+      "hash": "sha256-TuvKVBX60mqyMT6OB5JqVEh1YIWtFMR/igLCaCdC9tw="
+    },
+    "crate2nix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "rossng",
+        "repo": "crate2nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "ba5dd398e31ee422fbe021767eb83b0650303a6e",
+      "url": null,
+      "hash": "sha256-8s28pzmQ6TOIUzznwFibtW1CMieMUl1rYJIxoQYor58="
+    },
+    "darwin": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "lnl7",
+        "repo": "nix-darwin"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "43975d782b418ebf4969e9ccba82466728c2851b",
+      "url": null,
+      "hash": "sha256-dyN+teG9G82G+m+PX/aSAagkC+vUv0SgUw3XkPhQodQ="
+    },
+    "devshell": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "numtide",
+        "repo": "devshell"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "dd6b80932022cea34a019e2bb32f6fa9e494dfef",
+      "url": null,
+      "hash": "sha256-xRJ2nPOXb//u1jaBnDP56M7v5ldavjbtR6lfGqSvcKg="
+    },
+    "doomdir": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "marienz",
+        "repo": "nix-doom-emacs-unstraightened"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "4c63e8a411f815bd2473e5ced94dc4b8bf31d240",
+      "url": null,
+      "hash": "sha256-PXn0v4NR75U7/FpkaZ9GD6HPepVY5vVT48tMd1tMgdQ="
+    },
+    "doomemacs": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "doomemacs",
+        "repo": "core"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "6ba99cb50cddc4441963a0ef68f971112ab4807e",
+      "url": null,
+      "hash": "sha256-cmQ2/kRScuwyywxWbiofdlL/KCQL9txWQecYC63uf+k="
+    },
+    "doomemacs-modules": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "doomemacs",
+        "repo": "modules"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "28f09d8afe81fa47ab83020b072f0dfa2f79dbdb",
+      "url": null,
+      "hash": "sha256-Z+ngNBXal5ENx3PnAFEj8VSuihL6aZbSuRjFoy6HBKQ="
+    },
+    "emacs-overlay": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "emacs-overlay"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "c14a125daa840fe4616fe8a550b2615217273b64",
+      "url": null,
+      "hash": "sha256-CBCKduyUQEoRAz/FqTJ54WRBrFwBvYhybss9p6hvTjQ="
+    },
+    "firefox-gnome-theme": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "rafaelmardojai",
+        "repo": "firefox-gnome-theme"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "981bd332015397fb1ca033fa982bd61635160c78",
+      "url": null,
+      "hash": "sha256-PbnJr+eB+9Czol3ReI83dUgEhcn0sDK6TSy6ODTQm88="
+    },
+    "flake-compat": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "edolstra",
+        "repo": "flake-compat"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "0f9255e01c2351cc7d116c072cb317785dd33b33",
+      "url": null,
+      "hash": "sha256-kvjfFW7WAETZlt09AgDn1MrtKzP7t90Vf7vypd3OL1U="
+    },
+    "flake-compat_2": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "edolstra",
+        "repo": "flake-compat"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
+      "url": null,
+      "hash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns="
+    },
+    "flake-compat_3": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "flake-compat"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
+      "url": null,
+      "hash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns="
+    },
+    "flake-compat_4": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "edolstra",
+        "repo": "flake-compat"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "b4a34015c698c7793d592d66adbab377907a2be8",
+      "url": null,
+      "hash": "sha256-Z+s0J8/r907g149rllvwhb4pKi8Wam5ij0st8PwAh+E="
+    },
+    "flake-parts_2": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hercules-ci",
+        "repo": "flake-parts"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "f7c1a2d347e4c52d5fb8d10cb4d94b5884e546fb",
+      "url": null,
+      "hash": "sha256-m1Yf0wZ8j1OHjTc2UwHwyQRSnNeSgLJOd7q5Y45hzi4="
+    },
+    "flake-parts_3": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hercules-ci",
+        "repo": "flake-parts"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+      "url": null,
+      "hash": "sha256-vp6Y/Grm98ESt6ceOkWiHWyZRDV3J1RID4w+6NWK9yA="
+    },
+    "flake-parts_4": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hercules-ci",
+        "repo": "flake-parts"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+      "url": null,
+      "hash": "sha256-vp6Y/Grm98ESt6ceOkWiHWyZRDV3J1RID4w+6NWK9yA="
+    },
+    "flake-parts_5": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hercules-ci",
+        "repo": "flake-parts"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+      "url": null,
+      "hash": "sha256-vp6Y/Grm98ESt6ceOkWiHWyZRDV3J1RID4w+6NWK9yA="
+    },
+    "flake-utils": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "numtide",
+        "repo": "flake-utils"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "ff7b65b44d01cf9ba6a71320833626af21126384",
+      "url": null,
+      "hash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY="
+    },
+    "flake-utils-plus": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "gytis-ivaskevicius",
+        "repo": "flake-utils-plus"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "3542fe9126dc492e53ddd252bb0260fe035f2c0f",
+      "url": null,
+      "hash": "sha256-fT4ppWeCJ0uR300EH3i7kmgRZnAVxrH+XtK09jQWihk="
+    },
+    "fromYaml": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "SenchoPens",
+        "repo": "fromYaml"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "106af9e2f715e2d828df706c386a685698f3223b",
+      "url": null,
+      "hash": "sha256-lq95WydhbUTWig/JpqiB7oViTcHFP8Lv41IGtayokA8="
+    },
+    "ghostty": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "ghostty-org",
+        "repo": "ghostty"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "88b4cd047fa627cdca6781bc7e7dc8b75a2cecb9",
+      "url": null,
+      "hash": "sha256-298x90knBUWX5GHGXh2SKsAKvStjU2ri9UgOGoF79/8="
+    },
+    "git-hooks": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "git-hooks.nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "9f7e99119ece7705299595299f3b031f39356de1",
+      "url": null,
+      "hash": "sha256-wLMOrPgVyeF3XmP+qfYcLqnVdTxikdcSvbIY7rA9jTA="
+    },
+    "gitignore": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "637db329424fd7e46cf4185293b9cc8c88c95394",
+      "url": null,
+      "hash": "sha256-HG2cCnktfHsKV0s4XW83gU3F57gaTljL9KNSuG6bnQs="
+    },
+    "gnome-shell": {
+      "type": "Git",
+      "repository": {
+        "type": "GitLab",
+        "server": "https://gitlab.gnome.org",
+        "repo_path": "GNOME/gnome-shell"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "e0fdc4c13250e9a9b8ea9594c83925274f4a5dca",
+      "url": null,
+      "hash": "sha256-RJFlFW8GiMei6oqUGrMkGEvVqOH8U7Q8abc1yK4VKD8="
+    },
+    "home-manager_2": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "home-manager"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "a45a7c451455a51ae740ec3bce4024b312809c29",
+      "url": null,
+      "hash": "sha256-r376E2XpakiXwModDHIxlvB6qLq4iFVEq730vxOO4JY="
+    },
+    "hyprcursor": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprcursor"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "39435900785d0c560c6ae8777d29f28617d031ef",
+      "url": null,
+      "hash": "sha256-fCpwFiTW0rT7oKJqr3cqHMnkwypSwQKpbtUEtxdkgrM="
+    },
+    "hyprgraphics": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprgraphics"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "c6e7b9f673f4360bc813d3dc75028f75ee88d3f8",
+      "url": null,
+      "hash": "sha256-haEZcHzYrePnjFOYSWTbxm/Nrla0aPslJfmvdCvqtVc="
+    },
+    "hyprland-guiutils": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprland-guiutils"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "a16ad89ed5fb4192c966018a80c652de8d96f748",
+      "url": null,
+      "hash": "sha256-Ee78BRFi+MrmgHmmW+2dZUEI1R3cssEzza0ar3fsNX8="
+    },
+    "hyprland-protocols": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprland-protocols"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "1cb6db5fd6bb8aee419f4457402fa18293ace917",
+      "url": null,
+      "hash": "sha256-/6G/MsPvtn7bc4Y32pserBT/Z4SUUdBd4XYJpOEKVR4="
+    },
+    "hyprlang": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprlang"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "090117506ddc3d7f26e650ff344d378c2ec329cc",
+      "url": null,
+      "hash": "sha256-Qu+Wf2Bp5qUjyn2YpZNq8a7JyzTGowhT1knrwE38a9U="
+    },
+    "hyprtoolkit": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprtoolkit"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "bdba25ced39ea39ab004a8f31593ba0b0ff1ca35",
+      "url": null,
+      "hash": "sha256-+p3MlyN/nqRefcf2IckPlGRUn9+hielqpS9XClbLleM="
+    },
+    "hyprutils": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprutils"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "83da5ee98d806cef2d05a1072b8d8b832bf52891",
+      "url": null,
+      "hash": "sha256-A9Gb5wW2vMkYEec7DyCOBpEM6LwwpmQ/TIXEHhGgHUY="
+    },
+    "hyprwayland-scanner": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprwayland-scanner"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "b8632713a6beaf28b56f2a7b0ab2fb7088dbb404",
+      "url": null,
+      "hash": "sha256-Jxixw6wZphUp+nHYxOKUYSckL17QMBx2d5Zp0rJHr1g="
+    },
+    "hyprwire": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprwire"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "7d935bb54674aa0fbd327d2a6888bd0630079ed0",
+      "url": null,
+      "hash": "sha256-ak5fWEmWZyax8trkV4aphdvjrbUiSyl6qS+y5GwBS7Y="
+    },
+    "nix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "f33db89fd6db6edc337d93212f6628ab6d25f407",
+      "url": null,
+      "hash": "sha256-JSD8lPe5kalvPKx5X+inX8ZZdGLeXkAbd3Jiv7UDf+I="
+    },
+    "nixd": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "nixd"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "a64cd33e53b316b6b092ea0a966640cd2309bf3d",
+      "url": null,
+      "hash": "sha256-IAQ14nteIKXAz4cd75UcZrsHGEVJ7QNrkUwX9rmeZ/Y="
+    },
+    "nixpkgs-lib": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "db3f255737b94216eb71cce308e2912cf6bc2d7c",
+      "url": null,
+      "hash": "sha256-ePjCwr1sNm9NYUqywL7QfK3JnlS015msC+eBu2zKlp8="
+    },
+    "nixpkgs-nixcord": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "21ea275a7c46aef9d4d6ddc962e6d562e9d94183",
+      "url": null,
+      "hash": "sha256-sPS3CaXH8RAT3FZRuy4VcV47iuYIWMMfa0GbyJKC3o4="
+    },
+    "nixpkgs-src": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "3e41b24abd260e8f71dbe2f5737d24122f972158",
+      "url": null,
+      "hash": "sha256-rxO+uc/KFbSJp+pgyXRuAX6QlG9hJdnt0BXpEQRXY+U="
+    },
+    "nixpkgs_2": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "devenv-nixpkgs"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "12866ae2dddbc0ab8b329915f8072bb9c75bde89",
+      "url": null,
+      "hash": "sha256-ZnAVHdVrotp80iIMm5CSR1fdxPlw7Uwmwxb+O/wsgZ8="
+    },
+    "nixpkgs_3": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "f83fc3c307e74bc5fd5adb7eb6b8b13ffd2a36e1",
+      "url": null,
+      "hash": "sha256-cCO8aTqss5x9Ky8GWkpY0Hy5fyTZEbtifSUV8QjSzic="
+    },
+    "nixpkgs_4": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "1559d3daa3ecc813a650b79375ea61b6741b8746",
+      "url": null,
+      "hash": "sha256-LQy14TZp77TwbQf40gg1V3jo8FwJG0jGDkAH+zRHqg8="
+    },
+    "nixpkgs_5": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "21ea275a7c46aef9d4d6ddc962e6d562e9d94183",
+      "url": null,
+      "hash": "sha256-sPS3CaXH8RAT3FZRuy4VcV47iuYIWMMfa0GbyJKC3o4="
+    },
+    "nixpkgs_6": {
+      "type": "Tarball",
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1044894.59ea0b1c043c/nixexprs.tar.xz",
+      "hash": "sha256-II2tuu61ElXqjvw0FyZPlwzFrz6zWLczg8xljsZyQRg=",
+      "unpack": true
+    },
+    "nur": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "NUR"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "b70bb66c7bcd162642f3a609bc16843c7059f503",
+      "url": null,
+      "hash": "sha256-WUr8JF2v3n4Y30E5dxv4sAgNJXpVDBoCQNoQ/V4+n4o="
+    },
+    "pre-commit-hooks": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "pre-commit-hooks.nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "a5a961387e75ae44cc20f0a57ae463da5e959656",
+      "url": null,
+      "hash": "sha256-3FZAG+pGt3OElQjesCAWeMkQ7C/nB1oTHLRQ8ceP110="
+    },
+    "pre-commit-hooks_2": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "git-hooks.nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "43b3c1ab9d40fb1dbb008f451988a91e375825e9",
+      "url": null,
+      "hash": "sha256-ReRHaLgr/uVqdD8afFSn+myXIfpHeOhP0yYe0TJqAA8="
+    },
+    "rust-overlay": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "oxalica",
+        "repo": "rust-overlay"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "13139aefa973f3d96c60c0fbab801de058ae25ca",
+      "url": null,
+      "hash": "sha256-5eqDcnBjb1424HRQdnhuhNOBZguq1Z2tqSa2OMF/m2c="
+    },
+    "rust-overlay_2": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "oxalica",
+        "repo": "rust-overlay"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "4cdea398dc491b082dccdce0fad1ed0b75fa3394",
+      "url": null,
+      "hash": "sha256-EWMxOWrJ031f8f/lrcEmhTRs4npw1/5N3Hcjin846c8="
+    },
+    "snowfall-lib": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "snowfallorg",
+        "repo": "lib"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "c566ad8b7352c30ec3763435de7c8f1c46ebb357",
+      "url": null,
+      "hash": "sha256-kX0Dp/kYSRbQ+yd9e3lmmUWdNbipufvKfL2IzbrSpnY="
+    },
+    "systems": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-systems",
+        "repo": "default"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+      "url": null,
+      "hash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768="
+    },
+    "systems_2": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-systems",
+        "repo": "default-linux"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "31732fcf5e8fea42e59c2488ad31a0e651500f68",
+      "url": null,
+      "hash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80="
+    },
+    "systems_3": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-systems",
+        "repo": "default"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+      "url": null,
+      "hash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768="
+    },
+    "systems_4": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-systems",
+        "repo": "default"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+      "url": null,
+      "hash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768="
+    },
+    "systems_5": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-systems",
+        "repo": "default"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+      "url": null,
+      "hash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768="
+    },
+    "tinted-kitty": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "tinted-theming",
+        "repo": "tinted-kitty"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "de6f888497f2c6b2279361bfc790f164bfd0f3fa",
+      "url": null,
+      "hash": "sha256-4KtB+FiUzIeK/4aHCKce3V9HwRvYaxX+F1edUrfgzb8="
+    },
+    "tinted-schemes": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "tinted-theming",
+        "repo": "schemes"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "2ccef2f4b22e3cab5a9292811f7133a07eeba4a7",
+      "url": null,
+      "hash": "sha256-yYO3Vw2M0y3TAUqt+9+Mj0zwP3XDTF5/PXcPhhFQ1ZM="
+    },
+    "tinted-tmux": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "tinted-theming",
+        "repo": "tinted-tmux"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "8c4e750f738a742bd73377ee41d3dadedebedef4",
+      "url": null,
+      "hash": "sha256-2iDiD8DQLwS1lGuD9TS8WlvNyDoTs6krWntJbtB2zGo="
+    },
+    "tinted-zed": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "tinted-theming",
+        "repo": "base16-zed"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "5e8350bcd354e3241ab681a265fa6ef060c40be1",
+      "url": null,
+      "hash": "sha256-VUhBjpGvWqHI7rWeyMYb/u87YJSXHKfVV6S+IelWeO8="
+    },
+    "treefmt-nix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "numtide",
+        "repo": "treefmt-nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "9e09d30a644c57257715902efbb3adc56c79cf28",
+      "url": null,
+      "hash": "sha256-8T3K5amndEavxnludPyfj3Z1IkcFdRpR23q+T0BVeZE="
+    },
+    "treefmt-nix_2": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "numtide",
+        "repo": "treefmt-nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "db947814a175b7ca6ded66e21383d938df01c227",
+      "url": null,
+      "hash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM="
+    },
+    "treefmt-nix_3": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "numtide",
+        "repo": "treefmt-nix"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "d1187f8bc71fb8aab02395869ec3f5c1920f75c0",
+      "url": null,
+      "hash": "sha256-XE1lKgQ3eIO3E7zWryqcRsax+mYXod/5RHBn4YaR9YE="
+    },
+    "xdph": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "xdg-desktop-portal-hyprland"
+      },
+      "branch": null,
+      "submodules": false,
+      "revision": "cc8e5ef8fb2acef3db488b9a33b0c48c2a4ee204",
+      "url": null,
+      "hash": "sha256-sRAGZVUPgwxpx19uZwaSERa86g1AbsBUQ3SxhaRPgeg="
+    }
+  },
+  "version": 8
+}
