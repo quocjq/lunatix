@@ -2,14 +2,7 @@
 #+author: Lunixose
 #+OPTIONS: broken-links:t
 
-This is a [[https://en.wikipedia.org/wiki/Literate_programming][literate]] Doom Emacs configuration: prose and code live
-together, and the code blocks below are extracted ("tangled") into the
-=.el= files Emacs actually loads. Doom's =:config literate= module
-handles that tangling automatically on save — so there is no need for
-=org-auto-tangle=. Blocks are routed by their =:tangle= header: the
-Module activation declarations all tangle to =init.el= (one per
-category, below). Package declarations carry =:tangle packages.el=, and
-every other block tangles to =config.el=.
+This is a [[https://en.wikipedia.org/wiki/Literate_programming][literate]] Doom Emacs configuration
 
 * Doom Modules
 ** input
@@ -36,7 +29,7 @@ flexible matching.
        ;;helm
        ;;ido
        ;;ivy
-       (vertico +icons +childframe))
+       (vertico +icons))
 #+end_src
 
 ** ui
@@ -115,7 +108,8 @@ Syntax checker only. Spell + grammar left disabled.
 
 #+begin_src emacs-lisp :tangle init.el
 (doom! :checkers
-       syntax)              ; tasing you for every        ;; (spell +flyspell) ; tasing you for misspelling mispelling
+       syntax)              ; tasing you for every
+       ;; (spell +flyspell) ; tasing you for misspelling mispelling
        ;; grammar           ; tasing grammar mistake every you make)
 #+end_src
 
@@ -272,7 +266,11 @@ a TODO so it doesn't ship a placeholder address.
 (setq user-full-name "Lunixose"
       user-mail-address "luniose@gmail.com")
 #+end_src
-* Better Defaults
+* Basic
+Core settings that shape the everyday editing experience: theme,
+fonts, how the frame opens, and a handful of quality-of-life tweaks.
+
+** Better Defaults
 
 #+begin_src emacs-lisp
 (setq-default delete-by-moving-to-trash t
@@ -288,53 +286,22 @@ a TODO so it doesn't ship a placeholder address.
 (global-subword-mode 1)
 #+end_src
 
-* Basic
-Core settings that shape the everyday editing experience: theme,
-fonts, how the frame opens, and a handful of quality-of-life tweaks.
-
-** Theme and Fonts
-Pick the Monokai Octagon theme and set JetBrainsMono Nerd Font as the
-default. The Nerd Font variant ships the glyphs used by the modeline
-and dashboard icons.
-
-#+begin_src emacs-lisp
-(setq doom-theme 'doom-monokai-octagon)
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 18 :weight 'medium))
-#+end_src
-
-** Display
-Open maximized and use relative line numbers, which pair well with
-Evil's count-based motions.
-
-#+begin_src emacs-lisp
-(setq display-line-numbers-type 'relative)
-#+end_src
-
-** Org Directory
-Where Org files live by default. Agenda, capture, and refile all read
-from here.
-
-#+begin_src emacs-lisp
-(setq org-directory "~/Org/")
-#+end_src
-
 ** Editing Defaults
 Indent with two spaces and disable Emacs' auto-save (=#file#=) files —
 version control covers recovery here.
 
 #+begin_src emacs-lisp
 (setq-default tab-width 2)
+(setq-default evil-shift-width 2)
+(setq-default indent-tabs-mode nil)
 (setq auto-save-default nil)
 #+end_src
 
-** Completion
-Doom's =vertico= module (see init.el:30) is the sole completion UI.
 ** Buffer Behavior
 Auto-revert keeps buffers in sync with changes (=global-auto-revert-mode=
 also covers non-file buffers like Dired). The =defadvice= prompts
 for which buffer to show whenever a window is split, instead of
-duplicating the current one. The =flyspell= tweak stops it from
-flagging repeated words.
+duplicating the current one.
 
 #+begin_src emacs-lisp
 (global-auto-revert-mode 1)
@@ -343,6 +310,14 @@ flagging repeated words.
   :after 'window-split (switch-to-buffer))
 #+end_src
 * Appearance
+** Display
+Open maximized and use relative line numbers, which pair well with
+Evil's count-based motions.
+
+#+begin_src emacs-lisp
+(setq display-line-numbers-type 'relative)
+#+end_src
+
 ** Splash Screen
 
 #+begin_src emacs-lisp
@@ -375,60 +350,14 @@ flagging repeated words.
         +dashboard-widget-footer
         +dashboard-widget-loaded))
 #+end_src
-** Transparency
-Make the frame slightly translucent. The =(active . inactive)= pair
-sets background opacity for the focused and unfocused frame; adding it
-to =default-frame-alist= applies the same to new frames.
+** Theme and Fonts
+Pick the Monokai Octagon theme and set JetBrainsMono Nerd Font as the
+default. The Nerd Font variant ships the glyphs used by the modeline
+and dashboard icons.
 
 #+begin_src emacs-lisp
-(set-frame-parameter (selected-frame) 'alpha '(96 . 97))
-(add-to-list 'default-frame-alist '(alpha . (96 . 97)))
-#+end_src
-* Keybind
-Custom key bindings layered on top of Doom's defaults.
-
-** Tabout
-Repurpose =TAB= in insert mode: inside an Org / Markdown table it
-cycles to the next cell; in bare-text modes (=python=, =yaml=,
-=ruby=, =haskell=, =lua=, web modes) it indents; everywhere else it
-jumps out of the current pair of delimiters (=sp-up-sexp=). This
-replaces Doom's default =electric-indent-mode= binding for TAB in
-non-pair contexts so it actually does something.
-
-#+begin_src emacs-lisp
-(defun my/tabout ()
-  "Tabout-style TAB: in tables, jump to the next cell; otherwise
-jump out of the enclosing pair via smartparens, or fall back to
-indenting when there is no pair to escape."
-  (interactive)
-  (cond
-   ((and (derived-mode-p 'org-mode)
-         (org-at-table-p))
-    (call-interactively #'org-table-next-field))
-   ((derived-mode-p 'markdown-mode)
-    (when (org-at-table-p)
-      (call-interactively #'org-table-next-field)))
-   ((derived-mode-p 'python-mode yaml-mode ruby-mode
-                    haskell-mode lua-mode
-                    web-mode css-mode javascript-mode typescript-mode
-                    json-mode nxml-mode)
-    (indent-for-tab-command))
-   (t
-    (ignore-errors (sp-up-sexp)))))
-(map! :i "TAB" #'my/tabout)
-#+end_src
-
-** Toggle
-
-#+begin_src emacs-lisp
-(map! :leader
-      (:desc "Toggle dirvish" "o /" #'dirvish
-       :desc "Mistty toggle"  "v t" #'mistty-toggle
-       :desc "Mistty new"     "v n" #'mistty-new
-       :desc "Mistty clear"   "v c" #'mistty-clear
-       :desc "Mistty reset"   "v r" #'mistty-reset
-       :desc "Send region"    "v s" #'mistty-send-region
-       :desc "Send line"      "v l" #'mistty-send-line))
+(setq doom-theme 'doom-monokai-octagon)
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 18 :weight 'medium))
 #+end_src
 
 * Editor
@@ -436,12 +365,69 @@ General editing behaviour that isn't tied to a single language.
 
 ** Evil-mode
 Use emacs mode as editing mode
+
 #+begin_src emacs-lisp
+(setq! evil-disable-insert-state-bindings t)
 (defalias 'evil-insert-state 'evil-emacs-state)
 (define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state)
+(define-key evil-emacs-state-map (kbd "C-g") 'evil-normal-state)
 #+end_src
 
-* Snippets
+** Mistty
+Mistty is an in-Emacs terminal that uses Emacs' built-in =comint=
+(/"emulator"/ mode) instead of libvterm. No C dependency; uses bash as
+the shell. Replaces vterm (which has been removed from the =:term=
+block above).
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! mistty
+  :recipe (:host github :repo "szermatt/mistty") :pin "4d32106dc2a60183c0df8716502ed4048a45d50f")
+#+end_src
+
+*** Config
+#+begin_src emacs-lisp
+(after! mistty
+  (setq mistty-process-type 'emulator
+        mistty-shell-command "nu"
+        mistty-shell "/usr/bin/env nu"
+        mistty-shell-arg '("-i")
+        mistty-width 80
+        mistty-height 24))
+#+end_src
+*** Keybind
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("v" . "Term")
+        :desc "Open in project"           "t" #'mistty-in-project
+        :desc "Open in project"           "o" #'mistty
+        :desc "sudo"                      "s" #'mistty-sudo
+        :desc "SSH"                       "h" #'mistty-ssh
+        :desc "Send key"                  "q" #'mistty-send-key
+        :desc "Mistty clear"              "c" #'mistty-clear
+        :desc "Next input"                "n" #'mistty-next-input
+        :desc "Previous input"            "p" #'mistty-previous-input))
+#+end_src
+
+** Tabout
+Repurpose =TAB= in insert mode to navigate bracket pairs dynamically
+(tab-in, between, out) with graceful fallback to indent or snippet
+expansion.
+
+- package:
+#+begin_src emacs-lisp :tangle packages.el
+(package! lnav
+  :recipe (:host github :repo "quocjq/lnav")
+  :pin "e9e6b626d4e4c0f57518724c20662528410e911f")
+#+end_src
+- config:
+#+begin_src emacs-lisp
+(map! :e "M-]" #'lnav-next-chunk
+      :e "M-[" #'lnav-previous-chunk
+      :n "M-]" #'lnav-next-chunk
+      :n "M-[" #'lnav-previous-chunk)
+#+end_src
+
+** Snippets
 Doom ships YASnippet. This points it at a personal snippets directory
 and lets one snippet expand into another (nested expansion), which is
 handy for building larger templates out of small pieces.
@@ -452,124 +438,21 @@ handy for building larger templates out of small pieces.
   (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" doom-user-dir)))
 #+end_src
 
-See =snippets-guide.org= for the format.
-
-
-** Snippets
-#+property: header-args :comments no
-
-Literate source for YASnippet. Each =#+begin_src= block tangles to a
-single =.yasnippet= file under =$DOOMDIR/snippets/<mode>/=. Pulled
-into =config.org= via =#+INCLUDE:=, so saving =config.org= re-tangles
-all of these along with the rest of the Doom config.
-
-=:comments no= matters — yasnippet reads the file as raw text and
-anything org-babel adds as wrap comments would be misinterpreted as
-snippet metadata.
-
 See =snippets-guide.org= for the snippet file format, placeholders,
 and how to add new ones.
-
-*** Org-mode
-
-**** today — current date (YYYY-MM-DD)
-#+begin_src snippet :tangle snippets/org-mode/today.yasnippet
-# -*- mode: snippet -*-
-# name: today
-# key: today
-# --
-`(format-time-string "%Y-%m-%d")`
-#+end_src
-
-**** time — current time (HH:MM)
-#+begin_src snippet :tangle snippets/org-mode/time.yasnippet
-# -*- mode: snippet -*-
-# name: time
-# key: time
-# --
-`(format-time-string "%H:%M")`
-#+end_src
-
-**** now — current date and time
-#+begin_src snippet :tangle snippets/org-mode/now.yasnippet
-# -*- mode: snippet -*-
-# name: now
-# key: now
-# --
-`(format-time-string "%Y-%m-%d %H:%M")`
-#+end_src
-
-**** denote-note — new note skeleton
-#+begin_src snippet :tangle snippets/org-mode/denote-note.yasnippet
-# -*- mode: snippet -*-
-# name: denote-note
-# key: denote-note
-# --
-#+title: $1
-#+filetags: $2
-#+date: `(format-time-string "%Y-%m-%d")
-
-$0
-#+end_src
-
-**** denote-journal — journal entry skeleton
-#+begin_src snippet :tangle snippets/org-mode/denote-journal.yasnippet
-# -*- mode: snippet -*-
-# name: denote-journal
-# key: denote-journal
-# --
-#+title: `(format-time-string "%Y-%m-%d %A")`
-#+filetags: journal
-#+date: `(format-time-string "%Y-%m-%d")
-
-$0
-#+end_src
-
-**** denote-link — insert denote-style link
-#+begin_src snippet :tangle snippets/org-mode/denote-link.yasnippet
-# -*- mode: snippet -*-
-# name: denote-link
-# key: denote-link
-# --
-[[denote:$1]]$0
-#+end_src
-
-**** denote-backlink — backlink to current note
-#+begin_src snippet :tangle snippets/org-mode/denote-backlink.yasnippet
-# -*- mode: snippet -*-
-# name: denote-backlink
-# key: denote-backlink
-# --
-[[denote-backlink:$1]]$0
-#+end_src
-
-
-* Mistty
-Mistty is an in-Emacs terminal that uses Emacs' built-in =comint=
-(/"emulator"/ mode) instead of libvterm. No C dependency; uses bash as
-the shell. Replaces vterm (which has been removed from the =:term=
-block above).
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! mistty
-          :recipe (:host githb :repo szermatt/mistty)
-          :pin "4d32106dc2a60183c0df8716502ed4048a45d50f")
-
-#+end_src
-
-#+begin_src emacs-lisp
-(setq mistty-process-type 'emulator
-      mistty-shell "/usr/bin/env nu"
-      mistty-shell-arg '("-i")
-      mistty-width 80
-      mistty-height 24)
-#+end_src
 
 * Languages
 Per-language tweaks. Doom's =:lang= modules already do the heavy
 lifting (LSP, tree-sitter, formatting) — these just adjust a few
 defaults, in the same spirit as tecosaur's language section but pared
 down to the languages you have enabled.
+
+** Polymode
+
+- Install Polymode
+#+begin_src emacs-lisp :tangle packages.el
+(package! polymode)
+#+end_src
 
 ** LSP
 Trim the LSP client for responsiveness: raise the debounce a touch so
@@ -605,17 +488,6 @@ Python lacks readline, and prefer =pytest= as the test runner.
 #+begin_src emacs-lisp
 (after! python
   (setq python-shell-completion-native-enable nil))
-#+end_src
-
-** LaTeX
-You have =(latex +lsp +fold +cdlatex)= enabled. Set a wider fill
-column for prose and let previews scale with the buffer font.
-
-#+begin_src emacs-lisp
-(after! latex
-  (setq TeX-fold-math-spec-list nil)    ;; keep +fold's defaults
-  (setq-hook! 'LaTeX-mode-hook
-    fill-column 100))
 #+end_src
 
 ** Markdown
@@ -692,14 +564,8 @@ column for prose and let previews scale with the buffer font.
 (add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
 #+end_src
 
-* Orgmode
-Tweaks to how Org buffers look and behave. This is where tecosaur's
-config spends most of its effort, so it's where the borrowed ideas are
-densest — restyling headings, revealing markup on demand, and smarter
-capture — while staying on top of Doom's Org module rather than
-replacing it.
-
-** Appearance
+** Orgmode
+*** Appearance
 =org-modern= restyles headings, lists, tables, keywords, and
 timestamps for a cleaner, more typographic look. Beyond just enabling
 it, these settings pick a nicer bullet for lists, draw a fringe marker
@@ -725,15 +591,18 @@ machinery.
   (global-org-modern-mode))
 #+end_src
 
-** Fonts and Headings
+*** Org Directory
+Where Org files live by default. Agenda, capture, and refile all read
+from here.
+
+#+begin_src emacs-lisp
+(setq org-directory (expand-file-name "~/Documents/notes/"))
+#+end_src
+
+*** Fonts and Headings
 :PROPERTIES:
 :CUSTOM_ID: fonts-and-headings
 :END:
-Straight from tecosaur: turn on Doom's =+org-prettprose with monospace code), scale headings so the outline is easy to
-e outline is easy to
-skim, enlarge the document title, italicise quote/verse blocks, and
-paint passed deadlines in the error face. The last block defers
-font-locking in large files so typing doesn't feel sluggish.
 
 #+begin_src emacs-lisp
 (add-hook 'org-mode-hook #'+org-pretty-mode)
@@ -756,69 +625,9 @@ font-locking in large files so typing doesn't feel sluggish.
           (1.0 . org-warning)
           (0.5 . org-upcoming-deadline)
           (0.0 . org-upcoming-distant-deadline))))
-
-(defun locally-defer-font-lock ()
-  "Set jit-lock defer and stealth, when buffer is over a certain size."
-  (when (> (buffer-size) 50000)
-    (setq-local jit-lock-defer-time 0.05
-                jit-lock-stealth-time 1)))
-(add-hook 'org-mode-hook #'locally-defer-font-lock)
 #+end_src
 
-** Symbols
-
-Use Doom's ligature system to prettify a handful of Org tokens that
-=org-modern= doesn't touch — property drawers, priority cookies, the
-=::= description separator, and arrows. tecosaur wires these to
-=nerd-icons= faces so priorities get colour. The =defadvice!= re-runs
-after Doom sets up Org appearance so the substitutions stick.
-
-#+begin_src emacs-lisp
-(after! org
-  (setq org-priority-highest ?A
-        org-priority-lowest ?E
-        org-priority-faces
-        '((?A . nerd-icons-red)
-          (?B . nerd-icons-orange)
-          (?C . nerd-icons-yellow)
-          (?D . nerd-icons-green)
-          (?E . nerd-icons-blue))))
-
-(appendq! +ligatures-extra-symbols
-          (list :list_property "∷"
-                :em_dash       "—"
-                :ellipses      "…"
-                :arrow_right   "→"
-                :arrow_left    "←"
-                :arrow_lr      "↔"
-                :properties    "⚙"
-                :end           "∎"
-                :priority_a    #("⚑" 0 1 (face nerd-icons-red))
-                :priority_b    #("⬆" 0 1 (face nerd-icons-orange))
-                :priority_c    #("■" 0 1 (face nerd-icons-yellow))
-                :priority_d    #("⬇" 0 1 (face nerd-icons-green))
-                :priority_e    #("❓" 0 1 (face nerd-icons-blue))))
-
-(defadvice! +org-init-appearance-h--no-ligatures-a ()
-  :after #'+org-init-appearance-h
-  (set-ligatures! 'org-mode nil)
-  (set-ligatures! 'org-mode
-    :list_property "::"
-    :em_dash       "---"
-    :ellipsis      "..."
-    :arrow_right   "->"
-    :arrow_left    "<-"
-    :arrow_lr      "<->"
-    :properties    ":PROPERTIES:"
-    :end           ":END:"
-    :priority_a    "[#A]"
-    :priority_b    "[#B]"
-    :priority_c    "[#C]"
-    :priority_d    "[#D]"
-    :priority_e    "[#E]"))
-#+end_src
-
-** Emphasis Markers
+*** Emphasis Markers
 With =org-hide-emphasis-markers= on (above), the =/slashes/= and
 =*stars*= around emphasized text are hidden — nice to read, awkward to
 edit. =org-appear= restores them automatically whenever the cursor
@@ -837,23 +646,18 @@ enters the emphasized region, so editing stays easy.
         org-appear-autosubmarkers t)
 
   (setq org-appear-trigger 'manual)
-(add-hook 'org-mode-hook
-  (lambda ()
-    ;; Insert state hooks
-    (add-hook 'evil-insert-state-entry-hook #'org-appear-manual-start nil t)
-    (add-hook 'evil-insert-state-exit-hook #'org-appear-manual-stop nil t)
-    ;; Emacs state hooks
-    (add-hook 'evil-emacs-state-entry-hook #'org-appear-manual-start nil t)
-    (add-hook 'evil-emacs-state-exit-hook #'org-appear-manual-stop nil t)))
+  (add-hook 'org-mode-hook (lambda ()
+                              (add-hook 'evil-emacs-state-entry-hook
+                                          #'org-appear-manual-start
+                                          nil
+                                          t)
+                              (add-hook 'evil-emacs-state-exit-hook
+                                    #'org-appear-manual-stop
+                                    nil
+                                    t))))
 #+end_src
 
-** Behaviour
-Everyday behaviour tweaks, merging tecosaur's "tweaking defaults" with
-a few of my own: record a timestamp when a task is marked DONE, fold
-on open, indent content under its heading, hide leading stars, let
-properties inherit, allow alphabetical list bullets, guard against
-accidental edits in folded regions, and require explicit ={}= for
-sub/superscripts on export.
+*** Behaviour
 
 #+begin_src emacs-lisp
 (after! org
@@ -866,7 +670,7 @@ sub/superscripts on export.
         org-list-allow-alphabetical t     ; a. A. a) A) list bullets
         org-catch-invisible-edits 'smart  ; don't silently edit folded text
         org-export-with-sub-superscripts '{}  ; require x_{i}, not x_i
-        org-image-actual-width '(0.9)))   ; inline images at 90% of window
+        org-image-actual-width '(0.9))   ; inline images at 90% of window
 #+end_src
 
 By default Doom turns =visual-line-mode= on in text buffers. That
@@ -887,133 +691,7 @@ structural motions.
       :n "g <right>" #'org-down-element)
 #+end_src
 
-Hiding in org-modern will annoy me.
-#+begin_src emacs-lisp :tangle packages.el
-(package! org-fragtog)
-#+end_src
-Add hook
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'org-fragtog-mode)
-#+end_src
-
-** Nicer Return
-:PROPERTIES:
-:CUSTOM_ID: nicer-return
-:END:
-tecosaur's context-aware =RET= (originally from [[https://github.com/alphapapa/unpackaged.el][unpackaged.el]]). On a
-heading it jumps past the entry content; in a list it inserts the next
-item — or ends the list if the current item is empty — carrying a
-checkbox when appropriate; in a table it adds a row. Everywhere else
-it behaves like a normal return.
-
-#+begin_src emacs-lisp
-(defun unpackaged/org-element-descendant-of (type element)
-  "Return non-nil if ELEMENT is a descendant of TYPE.
-TYPE should be an element type, like `item' or `paragraph'.
-ELEMENT should be a list like that returned by `org-element-context'."
-  (when-let* ((parent (org-element-property :parent element)))
-    (or (eq type (car parent))
-        (unpackaged/org-element-descendant-of type parent))))
-
-;;;###autoload
-(defun unpackaged/org-return-dwim (&optional default)
-  "A helpful replacement for `org-return-indent'.  With prefix, call `org-return-indent'.
-
-On headings, move point to position after entry content.  In
-lists, insert a new item or end the list, with checkbox if
-appropriate.  In tables, insert a new row or end the table."
-  (interactive "P")
-  (if default
-      (org-return t)
-    (cond
-     ((org-at-heading-p)
-      (let ((heading-start (org-entry-beginning-position)))
-        (goto-char (org-entry-end-position))
-        (cond ((and (org-at-heading-p)
-                    (= heading-start (org-entry-beginning-position)))
-               (end-of-line)
-               (insert "\n\n"))
-              (t
-               (forward-line -1)
-               (end-of-line)
-               (when (org-at-heading-p)
-                 (forward-line)
-                 (insert "\n")
-                 (forward-line -1))
-               (while (not (looking-back "\\(?:[[:blank:]]?\n\\)\\{3\\}" nil))
-                 (insert "\n"))
-               (forward-line -1)))))
-     ((org-at-item-checkbox-p)
-      (org-insert-todo-heading nil))
-     ((org-in-item-p)
-      (let ((context (org-element-context)))
-        (if (or (eq 'plain-list (car context))
-                (and (eq 'item (car context))
-                     (not (eq (org-element-property :contents-begin context)
-                              (org-element-property :contents-end context))))
-                (unpackaged/org-element-descendant-of 'item context))
-            (org-insert-item)
-          (delete-region (line-beginning-position) (line-end-position))
-          (insert "\n"))))
-     ((when (fboundp 'org-inlinetask-in-task-p)
-        (org-inlinetask-in-task-p))
-      (org-return t))
-     ((org-at-table-p)
-      (if (save-excursion
-            (beginning-of-line)
-            (cl-loop with end = (line-end-position)
-                     for cell = (org-element-table-cell-parser)
-                     always (equal (org-element-property :contents-begin cell)
-                                   (org-element-property :contents-end cell))
-                     while (re-search-forward "|" end t)))
-          (org-return t)
-        (org-table-next-row)))
-     (t
-      (org-return t)))))
-
-(map!
- :after evil-org
- :map evil-org-mode-map
- :i [return] #'unpackaged/org-return-dwim)
-#+end_src
-
-** Capture Templates
-Quick capture entry points, patterned after tecosaur's richer set but
-kept to the essentials: a general TODO, a dated note, and a project
-task. They target files under your =org-directory=. The capture key
-=SPC n= (=+org-capture/navigation=) opens the capture menu.
-
-#+begin_src emacs-lisp
-(after! org
-  (setq org-capture-templates
-        '(("t" "Todo" entry
-           (file+headline "todo.org" "Inbox")
-           "* TODO %?\n  %U\n  %i" :empty-lines 1)
-          ("n" "Note" entry
-           (file+headline "notes.org" "Notes")
-           "* %? :NOTE:\n  %U\n  %i" :empty-lines 1)
-          ("j" "Journal" entry
-           (file+olp+datetree "journal.org")
-           "* %?\n  %U" :empty-lines 1))))
-#+end_src
-
-** Source Blocks
-
-#+begin_src emacs-lisp
-(after! org
-  (setq org-src-fontify-natively t
-        org-src-tab-acts-natively t
-        org-src-preserve-indentation t
-        org-src-window-setup 'current-window))
-#+end_src
-
-Polymode + my-poly-org (vendored from poly-org.el)
-#+begin_src emacs-lisp :tangle packages.el
-(package! polymode)
-#+end_src
-
-** My poly-org
-
+*** Poly-org
 Vendored from upstream =poly-org.el= (Vitalie Spinu, MIT) under our
 own name so we can wire parinfer (and any future =emacs-lisp-mode-hook=
 consumer) into the emacs-lisp src-block inner buffer.  Polymode uses
@@ -1031,7 +709,7 @@ hook is invoked explicitly from a =switch-buffer-functions= slot.
 
 (defun my-poly-org-mode-matcher ()
   (let ((case-fold-search t))
-    (when (re-search-forward "#\\+begin_\\(src\\|example\\|export\\) +\\([^ \t\n]+\\)" (point-at-eol) t)
+    (when (re-search-forward "#\\+begin_\\(src\\|example\\|export\\) +\\([^ \t\n]+\\)" (pos-eol) t)
       (let ((lang (match-string-no-properties 2)))
         (or (cdr (assoc lang org-src-lang-modes))
             lang)))))
@@ -1105,16 +783,7 @@ Used in :switch-buffer-functions slot."
 (add-to-list 'auto-mode-alist '("\\.org\\'" . my-poly-org-mode))
 #+end_src
 
-** Parinfer mode
-
-#+begin_src emacs-lisp
-(use-package parinfer-rust-mode
-  :hook emacs-lisp-mode
-  :init
-  (setq parinfer-rust-auto-download t))
-#+end_src
-
-* Agenda
+*** Agenda
 tecosaur's souped-up agenda, built on =org-super-agenda=. This groups
 the =alltodo= view by tag, priority, and deadline so a single =SPC o A
 o= "Overview" gives you Today's time-grid plus everything else bucketed
@@ -1211,13 +880,8 @@ stays focused on real work.
 
 #+begin_src emacs-lisp :tangle packages.el
 (package! denote)
-(package! denote-org)
 (package! denote-sequence)
 (package! denote-journal)
-(package! denote-merge
-  :recipe (:host github :repo "protesilaos/denote-merge")
-  :pin "2f8d168d37e66b5c8a3b983e211031b9abbf402e")
-(package! denote-silo)
 (package! consult-denote)
 #+end_src
 
@@ -1241,11 +905,7 @@ stays focused on real work.
   (setq denote-keywords-to-not-infer-regexp nil)
   (setq denote-rename-confirmations '(rewrite-front-matter modify-file-name))
   (setq denote-date-prompt-use-org-read-date t)
-  (denote-rename-buffer-mode 1)
-
-  ;; Integrate Denote with Doom's org module (resolves duplicate #+title
-  ;; when using `+org-tidy-properties` or similar org-module behaviour).
-  (after! denote-org (require 'denote-org-extras)))
+  (denote-rename-buffer-mode 1))
 #+end_src
 
 *** Sequence
@@ -1273,35 +933,8 @@ stays focused on real work.
   (setq denote-journal-title-format 'day-date-month-year))
 #+end_src
 
-*** Silo
-#+begin_src emacs-lisp
-(use-package denote-silo
-  :ensure t
-  :after denote
-  :commands (denote-silo-create-note
-             denote-silo-open-or-create
-             denote-silo-select-silo-then-command
-             denote-silo-dired
-             denote-silo-cd)
-  :config
-  (setq denote-silo-directories
-        (list denote-directory
-              "~/Documents/personal/"
-              "~/Documents/work/")))
-
-#+end_src
-
 *** Browse
 #+begin_src emacs-lisp
-(use-package denote-menu
-  :ensure t
-  :after denote
-  :commands (denote-menu
-             denote-menu-open
-             denote-menu-filter-by-keyword)
-  :config
-  (setq denote-menu-heading-format 'two-lines))
-
 (use-package consult-denote
   :ensure t
   :after denote
@@ -1318,7 +951,6 @@ stays focused on real work.
          :desc "new note"           "n" #'denote
          :desc "find (fuzzy)"       "f" #'consult-denote-find
          :desc "grep (ripgrep)"     "g" #'consult-denote-grep
-         :desc "menu (panel)"       "m" #'list-denotes
          :desc "link"               "l" #'denote-link
          :desc "add links"          "L" #'denote-add-links
          :desc "backlinks"          "b" #'denote-backlinks
@@ -1341,12 +973,7 @@ stays focused on real work.
          (:prefix ("j" . "Journal")
           :desc "new entry"        "j" #'denote-journal-new-entry
           :desc "new or existing"  "o" #'denote-journal-new-or-existing-entry
-          :desc "link or create"   "l" #'denote-journal-link-or-create-entry)
-         (:prefix ("S" . "Silos")
-          :desc "create"      "c" #'denote-silo-create-note
-          :desc "open/create" "o" #'denote-silo-open-or-create
-          :desc "select"      "s" #'denote-silo-select-silo-then-command
-          :desc "dired"       "d" #'denote-silo-dired))))
+          :desc "link or create"   "l" #'denote-journal-link-or-create-entry))))
 #+end_src
 
 * HTML Export
@@ -2054,25 +1681,3 @@ are part of my LaTeX preamble.
   </script>")
   )
 #+end_src
-
-* Other Packages
-These packages are installed but not yet configured — their
-declarations live here so nothing gets lost. Move each =package!= up
-next to a real configuration block when you set the package up.
-
-=theme-magic= applies your Emacs theme to the rest of your Linux TTY /
-X colours. =svg-tag-mode= renders tags and keywords as SVG labels.
-=doct= is a declarative syntax for =org-capture-templates= (the
-Capture section above could be rewritten with it). =org-noter= links
-notes to PDF/EPUB positions for annotated reading.
-#+begin_src emacs-lisp :tangle packages.el
-(package! theme-magic)
-(package! svg-tag-mode)
-(package! doct)
-(package! org-noter)
-#+end_src
-** Show-font
-#+begin_src emacs-lisp :tangle packages.el
-(package! show-font)
-#+end_src
-

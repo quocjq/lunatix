@@ -33,7 +33,43 @@
           ];
           settings = {
             globalOptions = {
-              "Hotkey/TriggerKeys"."0" = "Control+space";
+              "Hotkey" = {
+                "EnumerateWithTriggerKeys" = "True";
+                "ActivateKeys" = "";
+                "DeactivateKeys" = "";
+                "AltTriggerKeys" = "";
+                "EnumerateForwardKeys" = "";
+                "EnumerateBackwardKeys" = "";
+                "EnumerateSkipFirst" = "False";
+                "PrevPage" = "";
+                "NextPage" = "";
+                "PrevCandidate" = "";
+                "NextCandidate" = "";
+                "TogglePreedit" = "";
+                "ModifierOnlyKeyTimeout" = "250";
+              };
+              "Hotkey/TriggerKeys"."0" = "Control+backslash";
+              "Hotkey/EnumerateGroupForwardKeys"."0" = "Control+backslash";
+              "Hotkey/EnumerateGroupBackwardKeys"."0" = "Shift+Super+blackslash";
+              "Behavior" = {
+                "ActiveByDefault" = "False";
+                "resetStateWhenFocusIn" = "No";
+                "ShareInputState" = "All";
+                "PreeditEnabledByDefault" = "True";
+                "ShowInputMethodInformation" = "True";
+                "showInputMethodInformationWhenFocusIn" = "False";
+                "CompactInputMethodInformation" = "True";
+                "ShowFirstInputMethodInformation" = "True";
+                "DefaultPageSize" = "5";
+                "OverrideXkbOption" = "False";
+                "CustomXkbOption" = " ";
+                "EnabledAddons" = " ";
+                "DisabledAddons" = " ";
+                "PreloadInputMethod" = "True";
+                "AllowInputMethodForPassword" = "False";
+                "ShowPreeditForPassword" = "False";
+                "AutoSavePeriod" = "30";
+              };
             };
             inputMethod = {
               GroupOrder."0" = "Default";

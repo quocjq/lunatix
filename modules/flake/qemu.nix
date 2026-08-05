@@ -13,7 +13,6 @@
 # Build with:  nix build .#qemu
 # Run with:    ./result/bin/qemu
 # Override:    DISK=foo.qcow2 MEMORY=8G CPUS=8 ./result/bin/qemu
-{ inputs, den, ... }:
 {
   perSystem =
     { pkgs, ... }:

@@ -14,34 +14,17 @@ snippets.
   #+end_src
 - Doom's =:editor snippets= module auto-loads YASnippet in most
   editing modes. No further setup needed.
-- Snippet *definitions* live in =snippets.org= (literate source).
-  Each =#+begin_src= block tangles to one =.yasnippet= file.
-
-* Tangling flow
-
-1. =snippets.org= is pulled into =config.org= via =#+INCLUDE: snippets.org=.
-2. Saving =config.org= triggers Doom's =:config literate= module,
-  which runs =org-babel-tangle= on the whole tree.
-3. Every src block in =snippets.org= with a =:tangle= header writes
-  its body to =snippets/<mode>/<trigger>.yasnippet=.
-4. YASnippet picks up the new files on next Emacs start (or
-                                                         =M-x yas-reload-all=).
-
-Nix-side tangle: =doomacs.nix= sets =tangleArgs = "--all config.org"=,
-which runs the same tangle during =home-manager switch= so the files
-exist on disk before Emacs starts.
+- Snippet *definitions* are standalone =.yasnippet= files — they are
+  NOT tangled from =config.org=. Edit them directly, or create new
+  files; reload YASnippet to pick them up.
 
 * Existing snippets
 
-| Trigger         | Mode | What it does                           |
-|-----------------+------+----------------------------------------|
-| =today=           | org  | Current date as =YYYY-MM-DD=             |
-| =time=            | org  | Current time as =HH:MM=                  |
-| =now=             | org  | Current date and time                  |
-| =denote-note=     | org  | New note skeleton with title + tags    |
-| =denote-journal=  | org  | Journal entry skeleton with date title |
-| =denote-link=     | org  | Insert =[[denote:...]]= link             |
-| =denote-backlink= | org  | Insert =[[denote-backlink:...]]=         |
+| Trigger  | Mode | What it does            |
+|----------+------+-------------------------|
+| =today=    | org  | Current date as =YYYY-MM-DD= |
+| =time=     | org  | Current time as =HH:MM=      |
+| =now=      | org  | Current date and time       |
 
 * Snippet file format
 
@@ -91,30 +74,29 @@ ${1:some text}$>{ (upcase yas-text)}
 
 * Adding a new snippet
 
-1. Open =snippets.org=.
-2. Add a new section under =* Org-mode= (or a new =* <mode>= heading
-                                         for a different major mode — denote uses org, markdown, and text
-                                         by default).
-3. Inside that section, write:
+1. Decide the major mode (=org=, =markdown=, =text=, ...). The
+   per-mode directory must exist.
+2. Create the file at =snippets/<mode>/<trigger>.yasnippet= with:
    #+begin_example
-   ** <trigger> — <short description>
-   ,#+begin_src snippet :tangle snippets/<mode>/<trigger>.yasnippet
    # -*- mode: snippet -*-
    # name: <trigger>
    # key: <trigger>
    # --
    <body with $1, $2, ... placeholders and/or `(...)` elisp>
-   ,#+end_src
    #+end_example
-4. Save =config.org=. The =:config literate= module re-tangles;
-   =snippets/<mode>/<trigger>.yasnippet= appears on disk.
-5. Reload YASnippet: =M-x yas-reload-all= (or restart Emacs).
+3. Reload YASnippet: =M-x yas-reload-all= (or restart Emacs). The
+   snippet is now active.
+
+* Editing an existing snippet
+
+1. Open =snippets/<mode>/<trigger>.yasnippet= directly.
+2. Change the body or headers.
+3. Save the file, then =M-x yas-reload-all= (or restart Emacs).
 
 * Common gotchas
 
-- *Mode directory must exist.* The =#+property: header-args :comments link=
-  at the top of =snippets.org= doesn't auto-mkdir. Create the
-  =snippets/<mode>/= subdir if you're adding a new major mode.
+- *Mode directory must exist.* =snippets/<mode>/= is not auto-created.
+  If you're adding a new major mode, create the directory first.
 - *Trigger conflict.* If two snippets share a trigger, the last one
   loaded wins. Pick distinct prefixes for related snippets (the
                                                             =denote-= prefix is already taken).
@@ -123,15 +105,110 @@ ${1:some text}$>{ (upcase yas-text)}
   divider — anything above is metadata, below is body.
 - *Backticks vs quotes.* Single backticks =`=` around an elisp form
   evaluate it. Without backticks, the form is inserted literally.
-- *Include path.* =#+INCLUDE: snippets.org= in =config.org= resolves
-  relative to the file containing the =INCLUDE= — so it picks up the
-  version in the same =_doomdir=.
+- *Snippets are not tangled.* Do not edit them inside =config.org=;
+  edit the =.yasnippet= file directly under =snippets/<mode>/=.
 
 * Testing a snippet
 
-1. Open an =.org= file (e.g. one in =~/Documents/notes/=).
+1. Open an =.org= file (e.g. one in =~/Documents/notes/).
 2. Type the trigger (e.g. =today=) and press =TAB= (or =C-i=).
-3. Confirm the expansion matches what you wrote in =snippets.org=.
+3. Confirm the expansion matches what you wrote in the =.yasnippet=
+   file.
 4. If nothing happens: check =M-x yas-describe-tables= — the snippet
    should appear under =org-mode=.
 5. If still nothing: =M-x yas-reload-all= and try again.
+
+* LaTeX snippets
+
+The =latex-mode= snippet directory contains word-style math snippets,
+inspired by Gilles Castel's Vim/UltiSnips setup. Triggers are explicit
+keywords (=//=, =sr=, =par=, =mat=, =hat=, ...) rather than inline
+symbol shortcuts, so they don't fire while typing prose.
+
+** Files
+
+- =snippets/latex-mode/math.yasnippet= — fractions, superscripts,
+  integrals, sums, decorations (=//=, =sr=, =cb=, =mk=, =dm=, =par=,
+  =hat=, =bar=, =vec=, =tilde=, =dot=, =ddot=, =und=, =invs=, =neq=,
+  =sum=, =int=, =lim=, arrows...)
+- =snippets/latex-mode/envs.yasnippet= — matrices, align, equation,
+  cases, itemize, enumerate (=mat=, =pmat=, =bmat=, =case=, =alg=,
+  =eq=, =itm=, =enum=...)
+- =snippets/latex-mode/delimiters.yasnippet= — sized delimiters via
+  =\left \right= (=lr(=, =lr[=, =lr{=, =lr|=, =lr<=, =lrc=, =lrf=...)
+- =snippets/latex-mode/sub-sup.yasnippet= — sub/superscript variants
+  (=_1=, =_i=, =_n=, =^T=, =^*=, =^d=...)
+
+** Math-only firing
+
+Every snippet is gated by =(texmathp)=, so triggers only expand inside
+math environments (=$..$=, =$$..$$=, =\[..\]=, =\begin{...}...)=. The
+same trigger in prose does nothing.
+
+#+begin_example
+# condition: (texmathp)
+#+end_example
+
+This relies on the buffer-local state of AUCTeX's =texmathp=. After
+installing AUCTeX, =texmathp= is non-nil whenever the cursor is inside
+recognized math.
+
+** The shared Tab key
+
+YASnippet and cdlatex are wired together in the *Tab unification*
+section of =config.org= (under =** LaTeX=). A single <tab> press
+follows this priority order:
+
+1. *Inside an active yasnippet field* → run cdlatex expansion (if any)
+   then advance to the next field.
+2. *Outside a yasnippet field, cdlatex active* → expand the backslash
+   abbreviation (e.g. =\a<TAB>= → =\alpha=) then try yasnippet trigger.
+3. *Otherwise* → standard yasnippet field advance.
+
+This is from Karthink's canonical helper. See the *Tab unification*
+section of =config.org= for the implementation (=my/cdlatex-in-yas-field=
+and =my/yas-next-field-or-cdlatex=).
+
+** cdlatex backslash abbreviations
+
+The same file installs Castel's full Greek-letter table as cdlatex
+backslashed abbreviations. Inside math, type:
+
+#+begin_example
+\a<TAB> → \alpha
+\G<TAB> → \Gamma
+\ha<TAB> → \hat
+\fr<TAB> → \frac
+#+end_example
+
+A few operator shorthands (=ha=, =ba=, =ve=, =sq=, =fr=, =in=, =su=,
+=pr=, =li=, =ri=, ...) are added alongside the Greek set.
+
+** Adding a new LaTeX snippet
+
+1. Pick the file matching the snippet's category (math, env, delimiters,
+   sub-sup). If it's a new category, create a new file with the
+   multi-snippet format documented in *Snippet file format* above.
+2. Add a snippet block with:
+   - =# name:= — display name (used by =yas-describe-tables=)
+   - =# key:= — trigger string
+   - =# condition: (texmathp)= — math-only gate
+   - body with =$1=, =$2=, ..., =$0= placeholders
+3. =M-x yas-reload-all= to pick up the change.
+
+** Why no `auto` snippets
+
+The Castel-style word triggers were chosen over Obsidian-style inline
+symbol triggers (e.g. =x/y<TAB>= → =\frac{x}{y}=) because:
+
+- Explicit triggers never collide with prose that happens to contain
+  the trigger sequence.
+- =texmathp= gating keeps math-only snippets away from paragraph text.
+- cdlatex already handles the most common inline math ergonomics
+  (=a_b= → =a_{b}=, =\alp<TAB>= → =\alpha=, etc.) without competing
+  for the =/= key.
+
+To switch to inline fraction expansion later, see the Obsidian LaTeX
+Suite's `frac-replace` regex pattern and add a
+=post-self-insert-hook= in the *Tab unification* section of
+=config.org= that calls =yas-expand= with a custom snippet condition.

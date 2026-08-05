@@ -6,7 +6,7 @@
       inputs.nixpkgs.follows = "";
     };
     # doom-config = {
-    #   url = "github:quocjq/doomdir";
+    #   url = "...";
     #   flake = false;
     # };
   };
@@ -39,11 +39,9 @@
         extraPackages =
           epkgs: with epkgs; [
             eglot
-            nix-ts-mode
             treesit-grammars.with-all-grammars
           ];
       };
-
       home.packages = with pkgs; [
         (pkgs.aspellWithDicts (dicts: [
           dicts.en
@@ -51,16 +49,12 @@
         ]))
         languagetool
         nerd-fonts.symbols-only
-        # twemoji-color-font
-        # emacs-lsp-booster
-        # findutils
-        # coreutils
         fd
         ripgrep
         ddate
         shfmt
         shellcheck
-        # nodejs_24
+        nodejs_24
         sqlite
         # :emacs dired +dirvish (for file previews)
         ffmpegthumbnailer
@@ -80,10 +74,12 @@
         marksman # markdown language server
         pandoc
         multimarkdown
-        hugo
         dockfmt
         html-tidy
         universal-ctags
+
+        # TeX (required by latex-preview for dvisvgm-backed inline rendering)
+        texliveFull
         jdt-language-server
         bash-language-server
         yaml-language-server
@@ -102,8 +98,6 @@
         nixd
         nixfmt
         nixfmt-tree
-        deadnix
-        nixpkgs-review
 
         # lisp
         sbcl
