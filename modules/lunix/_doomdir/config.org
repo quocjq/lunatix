@@ -451,7 +451,8 @@ down to the languages you have enabled.
 
 - Install Polymode
 #+begin_src emacs-lisp :tangle packages.el
-(package! polymode)
+(package! polymode
+         :recipe (:host github :repo "polymode/polymode") :pin "8cb72fa5dcc0d98746c680043dc121edc7621e3a")
 #+end_src
 
 ** LSP
@@ -634,7 +635,9 @@ edit. =org-appear= restores them automatically whenever the cursor
 enters the emphasized region, so editing stays easy.
 
 #+begin_src emacs-lisp :tangle packages.el
-(package! org-appear)
+(package! org-appear
+        :recipe (:host github :repo "awth13/org-appear") :pin "77d23efec5f5c25fc0798364d2b51a3ce3d8d518")
+
 #+end_src
 
 #+begin_src emacs-lisp
@@ -646,15 +649,15 @@ enters the emphasized region, so editing stays easy.
         org-appear-autosubmarkers t)
 
   (setq org-appear-trigger 'manual)
-  (add-hook 'org-mode-hook (lambda ()
-                              (add-hook 'evil-emacs-state-entry-hook
-                                          #'org-appear-manual-start
-                                          nil
-                                          t)
-                              (add-hook 'evil-emacs-state-exit-hook
-                                    #'org-appear-manual-stop
-                                    nil
-                                    t))))
+  (add-hook 'org-mode-hook (lambda ())
+                           (add-hook 'evil-emacs-state-entry-hook
+                                     #'org-appear-manual-start
+                                     nil
+                                     t)
+                           (add-hook 'evil-emacs-state-exit-hook
+                                     #'org-appear-manual-stop
+                                     nil
+                                     t)))
 #+end_src
 
 *** Behaviour
@@ -698,18 +701,23 @@ consumer) into the emacs-lisp src-block inner buffer.  Polymode uses
 =delay-mode-hooks=-style deferral when cloning inner buffers, so the
 plain =emacs-lisp-mode-hook= never fires inside Org src blocks; the
 hook is invoked explicitly from a =switch-buffer-functions= slot.
+#+begin_src emacs-lisp
+(use-package parinfer-rust-mode
+  :hook emacs-lisp-mode
+  :init
+  (setq parinfer-rust-auto-download t))
+#+end_src
 
 #+begin_src emacs-lisp
 ;;; my-poly-org.el --- Vendored poly-org, renamed. -*- lexical-binding: t -*-
 ;;;
-
 (require 'polymode)
 (require 'org)
 (require 'org-src)
 
 (defun my-poly-org-mode-matcher ()
   (let ((case-fold-search t))
-    (when (re-search-forward "#\\+begin_\\(src\\|example\\|export\\) +\\([^ \t\n]+\\)" (pos-eol) t)
+    (when (re-search-forward "#\\+begin_\\(src\\|example\\|export\\) +\\([^ \t\n]+\\)" (point-at-eol) t)
       (let ((lang (match-string-no-properties 2)))
         (or (cdr (assoc lang org-src-lang-modes))
             lang)))))

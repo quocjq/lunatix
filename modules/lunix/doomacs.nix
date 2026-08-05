@@ -33,6 +33,11 @@
       services.emacs.enable = true;
       programs.doom-emacs = {
         enable = true;
+        # Skip per-package .eln (native-comp) build step for faster rebuilds.
+        # See https://github.com/nix-community/emacs-overlay/issues/369#issuecomment-4427696458
+        emacs = pkgs.emacs.overrideAttrs (old: {
+          passthru = old.passthru // { withNativeCompilation = false; };
+        });
         # doomDir = inputs.doom-config;
         doomDir = ./_doomdir;
         tangleArgs = "--all config.org";
