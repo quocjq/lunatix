@@ -1,0 +1,2300 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/nixos.org) (preloaded format=pdflatex 1980.1.1)  5 AUG 2026 18:17
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**config.tex
+(./config.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/base/article.cls
+Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/base/size11.clo
+File: size11.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count275
+\c@section=\count276
+\c@subsection=\count277
+\c@subsubsection=\count278
+\c@paragraph=\count279
+\c@subparagraph=\count280
+\c@figure=\count281
+\c@table=\count282
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen148
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/base/inputenc.sty
+Package: inputenc 2024/02/08 v1.3d Input encoding file
+\inpenc@prehook=\toks17
+\inpenc@posthook=\toks18
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/base/fontenc.sty
+Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks19
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/graphics/graphics.sty
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/graphics/trig.sty
+Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 106.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2025/09/29 v1.2d Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen149
+\Gin@req@width=\dimen150
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/tools/longtable.sty
+Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
+\LTleft=\skip51
+\LTright=\skip52
+\LTpre=\skip53
+\LTpost=\skip54
+\LTchunksize=\count283
+\LTcapwidth=\dimen151
+\LT@head=\box53
+\LT@firsthead=\box54
+\LT@foot=\box55
+\LT@lastfoot=\box56
+\LT@gbox=\box57
+\LT@cols=\count284
+\LT@rows=\count285
+\c@LT@tables=\count286
+\c@LT@chunks=\count287
+\LT@p@ftn=\toks20
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen152
+\WF@size=\dimen153
+\c@WF@wrappedlines=\count288
+\WF@box=\box58
+\WF@everypar=\toks21
+Package: wrapfig 2003/01/31  v 3.6
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/graphics/rotating.sty
+Package: rotating 2025/01/14 v2.16e rotated objects in LaTeX
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/base/ifthen.sty
+Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
+)
+\c@r@tfl@t=\count289
+\rotFPtop=\skip55
+\rotFPbot=\skip56
+\rot@float@box=\box59
+\rot@mess@toks=\toks22
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/ulem/ulem.sty
+\UL@box=\box60
+\UL@hyphenbox=\box61
+\UL@skip=\skip57
+\UL@hook=\toks23
+\UL@height=\dimen154
+\UL@pe=\count290
+\UL@pixel=\dimen155
+\ULC@box=\box62
+Package: ulem 2019/11/18
+\ULdepth=\dimen156
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2025/07/09 v2.17z AMS math features
+\@mathmargin=\skip58
+
+For additional information on amsmath, use the `?' option.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsmath/amstext.sty
+Package: amstext 2024/11/17 v2.01 AMS text
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks24
+\ex@=\dimen157
+))
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen158
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count291
+LaTeX Info: Redefining \frac on input line 233.
+\uproot@=\count292
+\leftroot@=\count293
+LaTeX Info: Redefining \overline on input line 398.
+LaTeX Info: Redefining \colon on input line 409.
+\classnum@=\count294
+\DOTSCASE@=\count295
+LaTeX Info: Redefining \ldots on input line 495.
+LaTeX Info: Redefining \dots on input line 498.
+LaTeX Info: Redefining \cdots on input line 619.
+\Mathstrutbox@=\box63
+\strutbox@=\box64
+LaTeX Info: Redefining \big on input line 721.
+LaTeX Info: Redefining \Big on input line 722.
+LaTeX Info: Redefining \bigg on input line 723.
+LaTeX Info: Redefining \Bigg on input line 724.
+\big@size=\dimen159
+LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
+\macc@depth=\count296
+LaTeX Info: Redefining \bmod on input line 904.
+LaTeX Info: Redefining \pmod on input line 909.
+LaTeX Info: Redefining \smash on input line 939.
+LaTeX Info: Redefining \relbar on input line 969.
+LaTeX Info: Redefining \Relbar on input line 970.
+\c@MaxMatrixCols=\count297
+\dotsspace@=\muskip17
+\c@parentequation=\count298
+\dspbrk@lvl=\count299
+\tag@help=\toks25
+\row@=\count300
+\column@=\count301
+\maxfields@=\count302
+\andhelp@=\toks26
+\eqnshift@=\dimen160
+\alignsep@=\dimen161
+\tagshift@=\dimen162
+\tagwidth@=\dimen163
+\totwidth@=\dimen164
+\lineht@=\dimen165
+\@envbody=\toks27
+\multlinegap=\skip59
+\multlinetaggap=\skip60
+\mathdisplay@stack=\toks28
+LaTeX Info: Redefining \[ on input line 2950.
+LaTeX Info: Redefining \] on input line 2951.
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/capt-of/capt-of.sty
+Package: capt-of 2009/12/29 v0.2 standard captions outside of floats
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2026-01-29 v7.01p Hypertext links for LaTeX
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/iftex/iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+))
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/hyperref/nameref.sty
+Package: nameref 2026-01-29 v2.58 Cross-referencing by name of section
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+))
+\c@section@level=\count303
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count304
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/stringenc/stringenc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\@linkdim=\dimen166
+\Hy@linkcounter=\count305
+\Hy@pagecounter=\count306
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2026-01-29 v7.01p Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+\Hy@SavedSpaceFactor=\count307
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/hyperref/puenc.def
+File: puenc.def 2026-01-29 v7.01p Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Hyper figures OFF on input line 4201.
+Package hyperref Info: Link nesting OFF on input line 4206.
+Package hyperref Info: Hyper index ON on input line 4209.
+Package hyperref Info: Plain pages OFF on input line 4216.
+Package hyperref Info: Backreferencing OFF on input line 4221.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4468.
+\c@Hy@tempcnt=\count308
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/url/url.sty
+\Urlmuskip=\muskip18
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4807.
+\XeTeXLinkMargin=\dimen167
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count309
+\Field@Width=\dimen168
+\Fld@charsize=\dimen169
+Package hyperref Info: Hyper figures OFF on input line 6084.
+Package hyperref Info: Link nesting OFF on input line 6089.
+Package hyperref Info: Hyper index ON on input line 6092.
+Package hyperref Info: backreferencing OFF on input line 6099.
+Package hyperref Info: Link coloring OFF on input line 6104.
+Package hyperref Info: Link coloring with OCG OFF on input line 6109.
+Package hyperref Info: PDF/A mode OFF on input line 6114.
+\Hy@abspage=\count310
+\c@Item=\count311
+\c@Hfootnote=\count312
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2026-01-29 v7.01p Hyperref driver for pdfTeX
+\Fld@listcount=\count313
+\c@bookmark@seq@number=\count314
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2025-06-21 v1.11 Rerun checks for auxiliary files (HO)
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+84.
+)
+\Hy@SectionHShift=\skip61
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/biblatex.sty
+Package: biblatex 2025/07/10 v3.21 programmable bibliographies (PK/MW)
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/logreq/logreq.sty
+Package: logreq 2010/08/04 v1.0 xml request logger
+\lrq@indent=\count315
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/logreq/logreq.def
+File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
+))
+\c@tabx@nest=\count316
+\c@listtotal=\count317
+\c@listcount=\count318
+\c@liststart=\count319
+\c@liststop=\count320
+\c@citecount=\count321
+\c@citetotal=\count322
+\c@multicitecount=\count323
+\c@multicitetotal=\count324
+\c@instcount=\count325
+\c@maxnames=\count326
+\c@minnames=\count327
+\c@maxitems=\count328
+\c@minitems=\count329
+\c@citecounter=\count330
+\c@maxcitecounter=\count331
+\c@savedcitecounter=\count332
+\c@uniquelist=\count333
+\c@uniquename=\count334
+\c@refsection=\count335
+\c@refsegment=\count336
+\c@maxextratitle=\count337
+\c@maxextratitleyear=\count338
+\c@maxextraname=\count339
+\c@maxextradate=\count340
+\c@maxextraalpha=\count341
+\c@abbrvpenalty=\count342
+\c@highnamepenalty=\count343
+\c@lownamepenalty=\count344
+\c@maxparens=\count345
+\c@parenlevel=\count346
+\blx@tempcnta=\count347
+\blx@tempcntb=\count348
+\blx@tempcntc=\count349
+\c@blx@maxsection=\count350
+\blx@maxsegment@0=\count351
+\blx@notetype=\count352
+\blx@parenlevel@text=\count353
+\blx@parenlevel@foot=\count354
+\blx@sectionciteorder@0=\count355
+\blx@sectionciteorderinternal@0=\count356
+\blx@entrysetcounter=\count357
+\blx@biblioinstance=\count358
+\labelnumberwidth=\skip62
+\labelalphawidth=\skip63
+\biblabelsep=\skip64
+\bibitemsep=\skip65
+\bibnamesep=\skip66
+\bibinitsep=\skip67
+\bibparsep=\skip68
+\bibhang=\skip69
+\blx@bcfin=\read2
+\blx@bcfout=\write3
+\blx@langwohyphens=\language90
+\c@mincomprange=\count359
+\c@maxcomprange=\count360
+\c@mincompwidth=\count361
+Package biblatex Info: Trying to load biblatex default data model...
+Package biblatex Info: ... file 'blx-dm.def' found.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/blx-dm.def
+File: blx-dm.def 2025/07/10 v3.21 biblatex datamodel (PK/MW)
+)
+Package biblatex Info: Trying to load biblatex custom data model...
+Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
+\c@afterword=\count362
+\c@savedafterword=\count363
+\c@annotator=\count364
+\c@savedannotator=\count365
+\c@author=\count366
+\c@savedauthor=\count367
+\c@bookauthor=\count368
+\c@savedbookauthor=\count369
+\c@commentator=\count370
+\c@savedcommentator=\count371
+\c@editor=\count372
+\c@savededitor=\count373
+\c@editora=\count374
+\c@savededitora=\count375
+\c@editorb=\count376
+\c@savededitorb=\count377
+\c@editorc=\count378
+\c@savededitorc=\count379
+\c@foreword=\count380
+\c@savedforeword=\count381
+\c@holder=\count382
+\c@savedholder=\count383
+\c@introduction=\count384
+\c@savedintroduction=\count385
+\c@namea=\count386
+\c@savednamea=\count387
+\c@nameb=\count388
+\c@savednameb=\count389
+\c@namec=\count390
+\c@savednamec=\count391
+\c@translator=\count392
+\c@savedtranslator=\count393
+\c@shortauthor=\count394
+\c@savedshortauthor=\count395
+\c@shorteditor=\count396
+\c@savedshorteditor=\count397
+\c@labelname=\count398
+\c@savedlabelname=\count399
+\c@institution=\count400
+\c@savedinstitution=\count401
+\c@lista=\count402
+\c@savedlista=\count403
+\c@listb=\count404
+\c@savedlistb=\count405
+\c@listc=\count406
+\c@savedlistc=\count407
+\c@listd=\count408
+\c@savedlistd=\count409
+\c@liste=\count410
+\c@savedliste=\count411
+\c@listf=\count412
+\c@savedlistf=\count413
+\c@location=\count414
+\c@savedlocation=\count415
+\c@organization=\count416
+\c@savedorganization=\count417
+\c@origlocation=\count418
+\c@savedoriglocation=\count419
+\c@origpublisher=\count420
+\c@savedorigpublisher=\count421
+\c@publisher=\count422
+\c@savedpublisher=\count423
+\c@language=\count424
+\c@savedlanguage=\count425
+\c@origlanguage=\count426
+\c@savedoriglanguage=\count427
+\c@pageref=\count428
+\c@savedpageref=\count429
+\shorthandwidth=\skip70
+\shortjournalwidth=\skip71
+\shortserieswidth=\skip72
+\shorttitlewidth=\skip73
+\shortauthorwidth=\skip74
+\shorteditorwidth=\skip75
+\locallabelnumberwidth=\skip76
+\locallabelalphawidth=\skip77
+\localshorthandwidth=\skip78
+\localshortjournalwidth=\skip79
+\localshortserieswidth=\skip80
+\localshorttitlewidth=\skip81
+\localshortauthorwidth=\skip82
+\localshorteditorwidth=\skip83
+Package biblatex Info: Trying to load compatibility code...
+Package biblatex Info: ... file 'blx-compat.def' found.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/blx-compat.def
+File: blx-compat.def 2025/07/10 v3.21 biblatex compatibility (PK/MW)
+)
+Package biblatex Info: Trying to load generic definitions...
+Package biblatex Info: ... file 'biblatex.def' found.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/biblatex.def
+File: biblatex.def 2025/07/10 v3.21 biblatex compatibility (PK/MW)
+\c@textcitecount=\count430
+\c@textcitetotal=\count431
+\c@textcitemaxnames=\count432
+\c@biburlbigbreakpenalty=\count433
+\c@biburlbreakpenalty=\count434
+\c@biburlnumpenalty=\count435
+\c@biburlucpenalty=\count436
+\c@biburllcpenalty=\count437
+\biburlbigskip=\muskip19
+\biburlnumskip=\muskip20
+\biburlucskip=\muskip21
+\biburllcskip=\muskip22
+\c@smartand=\count438
+)
+Package biblatex Info: Trying to load bibliography style 'numeric'...
+Package biblatex Info: ... file 'numeric.bbx' found.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/bbx/numeric.bbx
+File: numeric.bbx 2025/07/10 v3.21 biblatex bibliography style (PK/MW)
+Package biblatex Info: Trying to load bibliography style 'standard'...
+Package biblatex Info: ... file 'standard.bbx' found.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/bbx/standard.bbx
+File: standard.bbx 2025/07/10 v3.21 biblatex bibliography style (PK/MW)
+\c@bbx:relatedcount=\count439
+\c@bbx:relatedtotal=\count440
+))
+Package biblatex Info: Trying to load citation style 'numeric'...
+Package biblatex Info: ... file 'numeric.cbx' found.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/cbx/numeric.cbx
+File: numeric.cbx 2025/07/10 v3.21 biblatex citation style (PK/MW)
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\supercite'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\textcites'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\smartcites'.
+)
+Package biblatex Info: Trying to load configuration file...
+Package biblatex Info: ... file 'biblatex.cfg' found.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/biblatex.cfg
+File: biblatex.cfg 
+)
+Package biblatex Info: Input encoding 'utf8' detected.
+Package biblatex Info: Document encoding is UTF8 ....
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2026-01-19 L3 programming layer (loader) 
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count441
+))
+Package biblatex Info: ... and expl3
+(biblatex)             2026-01-19 L3 programming layer (loader) 
+(biblatex)             is new enough (at least 2020/04/06),
+(biblatex)             setting 'casechanger=expl3'.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/blx-case-expl3.sty
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2025-10-09 L3 Experimental document command parser
+)
+Package: blx-case-expl3 2025/07/10 v3.21 expl3 case changing code for biblatex
+))
+\@quotelevel=\count442
+\@quotereset=\count443
+ (./config.aux)
+\openout1 = `config.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count444
+\scratchdimen=\dimen170
+\scratchbox=\box65
+\nofMPsegments=\count445
+\nofMParguments=\count446
+\everyMPshowfont=\toks29
+\MPscratchCnt=\count447
+\MPscratchDim=\dimen171
+\MPnumerator=\count448
+\makeMPintoPDFobject=\count449
+\everyMPtoPDFconversion=\toks30
+)
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package hyperref Info: Link coloring OFF on input line 28.
+ (./config.out) (./config.out)
+\@outlinefile=\write4
+\openout4 = `config.out'.
+
+Package biblatex Info: Trying to load language 'english'...
+Package biblatex Info: ... file 'english.lbx' found.
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/biblatex/lbx/english.lbx
+File: english.lbx 2025/07/10 v3.21 biblatex localization (PK/MW)
+)
+Package biblatex Info: Input encoding 'utf8' detected.
+Package biblatex Info: Automatic encoding selection.
+(biblatex)             Assuming data encoding 'utf8'.
+\openout3 = `config.bcf'.
+
+Package biblatex Info: Trying to load bibliographic data...
+Package biblatex Info: ... file 'config.bbl' found.
+ (./config.bbl)
+Package biblatex Info: Reference section=0 on input line 28.
+Package biblatex Info: Reference segment=0 on input line 28.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
+
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
+
+
+(/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) (./config.toc [1
+
+{/nix/store/h9zkjd9m4y38d7ib0nhhr97gar84zmdl-texlive-2025-r78234-final-env/shar
+e/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/nix/store/nkgjac3kzix6yg9c89cc
+9l9q50a6bfkj-texlive-2025-r78234-final-env-texmfdist/fonts/enc/dvips/cm-super/c
+m-super-t1.enc}] [2])
+\tf@toc=\write5
+\openout5 = `config.toc'.
+
+
+[3]
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 doom               ; what makes DOOM look the way i
+t does[] 
+ []
+
+
+./config.tex:86: LaTeX Error: Unicode character 🙂 (U+1F642)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.86 \end{verbatim}
+                   
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+Overfull \hbox (70.0362pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 hl-todo            ; highlight TODO/FIXME/NOTE/DEPR
+ECATED/HACK/REVIEW[] 
+ []
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 (ligatures +extra) ; ligatures and symbols to make 
+your code pretty again[] 
+ []
+
+
+Overfull \hbox (24.76923pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 modeline           ; snazzy, Atom-inspired modeline
+, plus API[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 ophints            ; highlight the region an operat
+ion acts on[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 (popup +defaults)  ; tame sudden yet inevitable tem
+porary windows[] 
+ []
+
+
+Overfull \hbox (41.74434pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 smooth-scroll      ; So smooth you won't believe it
+'s not butter[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 unicode            ; extended unicode support for v
+arious languages[] 
+ []
+
+
+Overfull \hbox (70.0362pt too wide) in paragraph at lines 86--86
+[]       \T1/cmtt/m/n/10.95 workspaces)        ; tab emulation, persistence & s
+eparate workspaces[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 106--106
+[]       \T1/cmtt/m/n/10.95 (evil +everywhere); come to the dark side, we have 
+cookies[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 106--106
+[]       \T1/cmtt/m/n/10.95 ;;god               ; run Emacs commands without mo
+difier keys[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 106--106
+[]       \T1/cmtt/m/n/10.95 ;;lispy             ; vim for lisp, for people who 
+don't like vim[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 106--106
+[]       \T1/cmtt/m/n/10.95 parinfer                   ; turn lisp into python,
+ sort of[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 106--106
+[]       \T1/cmtt/m/n/10.95 rotate-text                ; cycle region between t
+ext candidates[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 106--106
+[]       \T1/cmtt/m/n/10.95 snippets                   ; my elves. They type so
+ I don't have to[] 
+ []
+
+
+Overfull \hbox (70.0362pt too wide) in paragraph at lines 106--106
+[]       \T1/cmtt/m/n/10.95 ;;word-wrap                ; soft wrapping with lan
+guage-aware indent[] 
+ []
+
+[4]
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 121--121
+[]       \T1/cmtt/m/n/10.95 electric          ; smarter, keyword-based electric
+-indent[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 121--121
+[]       \T1/cmtt/m/n/10.95 (ibuffer +icons)           ; interactive buffer man
+agement[] 
+ []
+
+
+Overfull \hbox (24.76923pt too wide) in paragraph at lines 121--121
+[]       \T1/cmtt/m/n/10.95 tramp             ; remote files at your arthritic 
+fingertips[] 
+ []
+
+
+Overfull \hbox (98.32805pt too wide) in paragraph at lines 121--121
+[]       \T1/cmtt/m/n/10.95 undo               ; persistent, smarter undo for y
+our inevitable mistakes[] 
+ []
+
+
+Overfull \hbox (41.74434pt too wide) in paragraph at lines 121--121
+[]       \T1/cmtt/m/n/10.95 vc)               ; version-control and Emacs, sitt
+ing in a tree[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 133--133
+[]       \T1/cmtt/m/n/10.95 eshell)            ; the elisp shell that works eve
+rywhere[] 
+ []
+
+
+Overfull \hbox (109.64479pt too wide) in paragraph at lines 133--133
+[]       \T1/cmtt/m/n/10.95 ;; vterm)            ; the best terminal emulation 
+in Emacs (no longer used)[] 
+ []
+
+
+Overfull \hbox (19.11086pt too wide) in paragraph at lines 143--143
+[]       \T1/cmtt/m/n/10.95 ;; (spell +flyspell) ; tasing you for misspelling m
+ispelling[] 
+ []
+
+
+Overfull \hbox (24.76923pt too wide) in paragraph at lines 143--143
+[]       \T1/cmtt/m/n/10.95 ;; grammar           ; tasing grammar mistake every
+ you make)[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 171--171
+[]       \T1/cmtt/m/n/10.95 biblio            ; Writes a PhD for you (citation 
+needed)[] 
+ []
+
+
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 171--171
+[]       \T1/cmtt/m/n/10.95 ;; debugger          ; stepping through code, to he
+lp you add bugs[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 171--171
+[]       \T1/cmtt/m/n/10.95 editorconfig      ; let someone else argue about ta
+bs vs spaces[] 
+ []
+
+[5]
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 171--171
+[]       \T1/cmtt/m/n/10.95 lookup              ; navigate your code and its do
+cumentation[] 
+ []
+
+
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 171--171
+[]       \T1/cmtt/m/n/10.95 ;;llm               ; when I said you needed friend
+s, I didn't mean...[] 
+ []
+
+
+Overfull \hbox (19.11086pt too wide) in paragraph at lines 171--171
+[]       \T1/cmtt/m/n/10.95 tree-sitter       ; syntax and parsing, sitting in 
+a tree...[] 
+ []
+
+
+Overfull \hbox (19.11086pt too wide) in paragraph at lines 171--171
+[]       \T1/cmtt/m/n/10.95 upload)           ; map local to remote projects vi
+a ssh/ftp[] 
+ []
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 180--180
+[]       \T1/cmtt/m/n/10.95 (:if (featurep :system 'macos) macos)  ; improve co
+mpatibility with macOS[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 180--180
+[]       \T1/cmtt/m/n/10.95 tty)               ; improve the terminal Emacs exp
+erience)[] 
+ []
+
+
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 ;;ada               ; In strong typing we (blindly)
+ trust[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 common-lisp       ; if you've seen one lisp, you've
+ seen them all[] 
+ []
+
+[6]
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 ;;erlang            ; an elegant language for a mor
+e civilized age[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 ;;fortran           ; in FORTRAN, GOD is REAL (unle
+ss declared INTEGER)[] 
+ []
+
+
+Overfull \hbox (64.37782pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 ;;fstar             ; (dependent) types and (monadi
+c) effects and Z3[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 ;;hy                ; readability of scheme w/ spee
+d of python[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (java +lsp)       ; the poster child for carpal tun
+nel syndrome[] 
+ []
+
+
+Overfull \hbox (19.11086pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 javascript        ; all(hope(abandon(ye(who(enter(h
+ere))))))[] 
+ []
+
+
+Overfull \hbox (171.88687pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (latex +lsp +fold +cdlatex)             ; writing p
+apers in Emacs has never been so fun[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (lua +lsp)               ; one-based indices? one-b
+ased indices[] 
+ []
+
+
+Overfull \hbox (126.6199pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (markdown +lsp +tree-sitter +grip)          ; writi
+ng docs for people to ignore[] 
+ []
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (nix +lsp +tree-sitter)               ; I hereby de
+clare "nix geht mehr!"[] 
+ []
+
+
+Overfull \hbox (64.37782pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (org +pandoc)               ; organize your plain l
+ife in plain text[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 ;;graphviz          ; diagrams for confusing yourse
+lf even more[] 
+ []
+
+
+Overfull \hbox (70.0362pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (python +lsp +tree-sitter)            ; beautiful i
+s better than ugly[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (qt +lsp +tree-sitter)                ; the 'cutest
+' gui framework ever[] 
+ []
+
+[7]
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even
+? ? 'love' : 'life'}"}[] 
+ []
+
+
+Overfull \hbox (24.76923pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap(
+).unwrap()[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 ;;scad              ; trust the preview, regret the
+ render[] 
+ []
+
+
+Overfull \hbox (64.37782pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 (sh +lsp)                ; she sells {ba,z,fi}sh sh
+ells on the C xor[] 
+ []
+
+
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 255--255
+[]       \T1/cmtt/m/n/10.95 ;;terra             ; Earth and Moon in alignment f
+or performance.[] 
+ []
+
+[8] [9]
+Overfull \hbox (41.74434pt too wide) in paragraph at lines 384--384
+[]\T1/cmtt/m/n/10.95 ;; (setq fancy-splash-image (expand-file-name "my-banner.p
+ng" doomdir))[] 
+ []
+
+[10]
+Overfull \hbox (41.74434pt too wide) in paragraph at lines 384--384
+[]               \T1/cmtt/m/n/10.95 ;; Try 'font-lock-string-face or 'font-lock
+-comment-face[] 
+ []
+
+
+Overfull \hbox (132.27827pt too wide) in paragraph at lines 394--394
+[]\T1/cmtt/m/n/10.95 (setq doom-font (font-spec :family "JetBrainsMono Nerd Fon
+t" :size 18 :weight 'medium))[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 407--407
+[]\T1/cmtt/m/n/10.95 (define-key evil-emacs-state-map (kbd "<escape>") 'evil-no
+rmal-state)[] 
+ []
+
+
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 407--407
+[]\T1/cmtt/m/n/10.95 (define-key evil-emacs-state-map (kbd "C-g") 'evil-normal-
+state)[] 
+ []
+
+
+Overfull \hbox (188.86198pt too wide) in paragraph at lines 418--418
+[]  \T1/cmtt/m/n/10.95 :recipe (:host github :repo "szermatt/mistty") :pin "4d3
+2106dc2a60183c0df8716502ed4048a45d50f")[] 
+ []
+
+[11]
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 443--443
+[]        \T1/cmtt/m/n/10.95 :desc "Open in project"           "t" #'mistty-in-
+project[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 443--443
+[]        \T1/cmtt/m/n/10.95 :desc "Next input"                "n" #'mistty-nex
+t-input[] 
+ []
+
+
+Overfull \hbox (41.74434pt too wide) in paragraph at lines 443--443
+[]        \T1/cmtt/m/n/10.95 :desc "Previous input"            "p" #'mistty-pre
+vious-input))[] 
+ []
+
+[12{/nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-t
+exmfdist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 477--477
+[]  \T1/cmtt/m/n/10.95 (setq yas-triggers-in-field t)        ; allow nested sni
+ppet expansion[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 477--477
+[]  \T1/cmtt/m/n/10.95 (add-to-list 'yas-snippet-dirs (expand-file-name "snippe
+ts" doom-user-dir)))[] 
+ []
+
+
+Overfull \hbox (239.78732pt too wide) in paragraph at lines 496--496
+[]         \T1/cmtt/m/n/10.95 :recipe (:host github :repo "polymode/polymode") 
+:pin "8cb72fa5dcc0d98746c680043dc121edc7621e3a")[] 
+ []
+
+
+Overfull \hbox (20.41219pt too wide) in paragraph at lines 515--517
+\T1/cmr/m/n/10.95 Two-space in-den-ta-tion for HTML/CSS/JS, which matches your 
+global \T1/cmtt/m/n/10.95 tab-width
+ []
+
+[13]
+Overfull \hbox (0.44653pt too wide) in paragraph at lines 526--528
+\T1/cmr/m/n/10.95 Silence the native-completion warn-ing that pops up when the 
+run-ning Python
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 546--546
+[]  \T1/cmtt/m/n/10.95 '(markdown-header-delimiter-face :foreground "#616161" :
+height 0.9)[] 
+ []
+
+
+Overfull \hbox (262.4208pt too wide) in paragraph at lines 546--546
+[]  \T1/cmtt/m/n/10.95 '(markdown-header-face-1 :height 1.8 :foreground "#A3BE8
+C" :weight extra-bold :inherit markdown-header-face)[] 
+ []
+
+
+Overfull \hbox (262.4208pt too wide) in paragraph at lines 546--546
+[]  \T1/cmtt/m/n/10.95 '(markdown-header-face-2 :height 1.4 :foreground "#EBCB8
+B" :weight extra-bold :inherit markdown-header-face)[] 
+ []
+
+
+Overfull \hbox (262.4208pt too wide) in paragraph at lines 546--546
+[]  \T1/cmtt/m/n/10.95 '(markdown-header-face-3 :height 1.2 :foreground "#D0877
+0" :weight extra-bold :inherit markdown-header-face)[] 
+ []
+
+
+Overfull \hbox (234.12895pt too wide) in paragraph at lines 546--546
+[]  \T1/cmtt/m/n/10.95 '(markdown-header-face-4 :height 1.15 :foreground "#BF61
+6A" :weight bold :inherit markdown-header-face)[] 
+ []
+
+
+Overfull \hbox (228.47058pt too wide) in paragraph at lines 546--546
+[]  \T1/cmtt/m/n/10.95 '(markdown-header-face-5 :height 1.1 :foreground "#b48ea
+d" :weight bold :inherit markdown-header-face)[] 
+ []
+
+
+Overfull \hbox (268.07918pt too wide) in paragraph at lines 546--546
+[]  \T1/cmtt/m/n/10.95 '(markdown-header-face-6 :height 1.05 :foreground "#5e81
+ac" :weight semi-bold :inherit markdown-header-face))[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 608--608
+[]\T1/cmtt/m/n/10.95 (defvar nb/c   "(start . end) of current line in current b
+uffer")[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 608--608
+[]                            \T1/cmtt/m/n/10.95 '(invisible t display "" compo
+sition ""))[] 
+ []
+
+[14]
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 608--608
+[]                        \T1/cmtt/m/n/10.95 (equal (get-text-property (point) 
+'display) ""))[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 608--608
+[]                               \T1/cmtt/m/n/10.95 (concat (make-string hidden
+ ?\s) "|")))[] 
+ []
+
+
+Overfull \hbox (41.74434pt too wide) in paragraph at lines 608--608
+[]                              \T1/cmtt/m/n/10.95 '(invisible t display "" com
+position ""))[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 608--608
+[]         \T1/cmtt/m/n/10.95 (needs-update (not (equal start (car nb/current-l
+ine)))))[] 
+ []
+
+[15]
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 608--608
+[]  \T1/cmtt/m/n/10.95 (add-hook 'post-command-hook #'nb/refontify-on-linemove 
+nil t))[] 
+ []
+
+
+Overfull \hbox (120.96153pt too wide) in paragraph at lines 636--636
+[]  \T1/cmtt/m/n/10.95 (setq org-modern-star 'replace                 ; swap he
+ading asterisks for bullets[] 
+ []
+
+
+./config.tex:636: LaTeX Error: Unicode character ▪ (U+25AA)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.636 \end{verbatim}
+                    
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 636--636
+[]        \T1/cmtt/m/n/10.95 org-modern-block-fringe 15             ; keep bloc
+ks aligned with text[] 
+ []
+
+
+./config.tex:636: LaTeX Error: Unicode character α (U+03B1)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.636 \end{verbatim}
+                    
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 636--636
+[]  \T1/cmtt/m/n/10.95 ;; Nicer folding ellipsis and pretty entities (\alpha ->
+ , etc.)[] 
+ []
+
+
+./config.tex:636: LaTeX Error: Unicode character ▾ (U+25BE)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.636 \end{verbatim}
+                    
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+[16]
+Overfull \hbox (17.10461pt too wide) in paragraph at lines 671--675
+\T1/cmr/m/n/10.95 around em-pha-sized text are hid-den ^^V nice to read, awk-wa
+rd to edit. \T1/cmtt/m/n/10.95 org-appear
+ []
+
+
+Overfull \hbox (234.12895pt too wide) in paragraph at lines 680--680
+[]        \T1/cmtt/m/n/10.95 :recipe (:host github :repo "awth13/org-appear") :
+pin "77d23efec5f5c25fc0798364d2b51a3ce3d8d518")[] 
+ []
+
+[17]
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 700--700
+[]                           \T1/cmtt/m/n/10.95 (add-hook 'evil-emacs-state-ent
+ry-hook[] 
+ []
+
+
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 700--700
+[]                           \T1/cmtt/m/n/10.95 (add-hook 'evil-emacs-state-exi
+t-hook[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 716--716
+[]        \T1/cmtt/m/n/10.95 org-return-follows-link t         ; RET opens the 
+link under point[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 716--716
+[]        \T1/cmtt/m/n/10.95 org-use-property-inheritance t    ; properties app
+ly to child headings[] 
+ []
+
+
+Overfull \hbox (24.76923pt too wide) in paragraph at lines 716--716
+[]        \T1/cmtt/m/n/10.95 org-list-allow-alphabetical t     ; a. A. a) A) li
+st bullets[] 
+ []
+
+
+Overfull \hbox (64.37782pt too wide) in paragraph at lines 716--716
+[]        \T1/cmtt/m/n/10.95 org-catch-invisible-edits 'smart  ; don't silently
+ edit folded text[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 716--716
+[]        \T1/cmtt/m/n/10.95 org-export-with-sub-superscripts '{}  ; require x_
+{i}, not x_i[] 
+ []
+
+
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 716--716
+[]        \T1/cmtt/m/n/10.95 org-image-actual-width '(0.9))   ; inline images a
+t 90% of window[] 
+ []
+
+
+Overfull \hbox (36.14575pt too wide) in paragraph at lines 737--743
+\T1/cmr/m/n/10.95 sumer) into the emacs-lisp src-block in-ner buffer. Poly-mode
+ uses \T1/cmtt/m/n/10.95 delay-mode-hooks\T1/cmr/m/n/10.95 -
+ []
+
+[18]
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 831--831
+[]\T1/cmtt/m/n/10.95 ;;; my-poly-org.el --- Vendored poly-org, renamed. -*- lex
+ical-binding: t -*-[] 
+ []
+
+
+Overfull \hbox (228.47058pt too wide) in paragraph at lines 831--831
+[]    \T1/cmtt/m/n/10.95 (when (re-search-forward "#\\+begin_\\(src\\|example\\
+|export\\) +\\([^ \t\n]+\\)" (point-at-eol) t)[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 831--831
+[]\T1/cmtt/m/n/10.95 (defun my-poly-org-convey-src-block-params-to-inner-modes 
+(_ this-buf)[] 
+ []
+
+
+Overfull \hbox (19.11086pt too wide) in paragraph at lines 831--831
+[]        \T1/cmtt/m/n/10.95 (when (and session (org-babel-comint-buffer-livep 
+session))[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 831--831
+[]          \T1/cmtt/m/n/10.95 (let ((proc (buffer-local-value 'ess-local-proce
+ss-name[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 831--831
+[]                                          \T1/cmtt/m/n/10.95 (get-buffer sess
+ion))))[] 
+ []
+
+[19]
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 831--831
+[]                      \T1/cmtt/m/n/10.95 (string-equal "t" (cdr (assq :lexica
+l params))))[] 
+ []
+
+
+Overfull \hbox (24.76923pt too wide) in paragraph at lines 831--831
+[]  \T1/cmtt/m/n/10.95 :head-matcher "^[ \t]*#\\+begin_\\(src\\|example\\|expor
+t\\) .*\n"[] 
+ []
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 831--831
+[]  \T1/cmtt/m/n/10.95 :switch-buffer-functions '(my-poly-org-convey-src-block-
+params-to-inner-modes)[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 831--831
+[]  \T1/cmtt/m/n/10.95 :innermodes '(my-poly-org-innermode my-poly-org-latex-in
+nermode)[] 
+ []
+
+
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 831--831
+[]  \T1/cmtt/m/n/10.95 (setq-local polymode-run-these-before-change-functions-i
+n-other-buffers[] 
+ []
+
+[20]
+Overfull \hbox (109.64479pt too wide) in paragraph at lines 831--831
+[]                      \T1/cmtt/m/n/10.95 polymode-run-these-before-change-fun
+ctions-in-other-buffers))[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 831--831
+[]  \T1/cmtt/m/n/10.95 (setq-local polymode-run-these-after-change-functions-in
+-other-buffers[] 
+ []
+
+
+Overfull \hbox (109.64479pt too wide) in paragraph at lines 831--831
+[]                      \T1/cmtt/m/n/10.95 polymode-run-these-after-change-func
+tions-in-other-buffers)))[] 
+ []
+
+
+Overfull \hbox (70.0362pt too wide) in paragraph at lines 831--831
+[]\T1/cmtt/m/n/10.95 (pm-around-advice 'org-element-at-point #'polymode-with-cu
+rrent-base-buffer)[] 
+ []
+
+
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 831--831
+[]\T1/cmtt/m/n/10.95 (add-to-list 'auto-mode-alist '("\\.org\\'" . my-poly-org-
+mode))[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 923--923
+[]      \T1/cmtt/m/n/10.95 org-agenda-tags-column 100 ;; from testing this seem
+s to be a good value[] 
+ []
+
+[21] [22]
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 923--923
+[]                          \T1/cmtt/m/n/10.95 (:discard (:tag ("Chore" "Routin
+e" "Daily")))))))))))[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 958--958
+[]  \T1/cmtt/m/n/10.95 (setq denote-directory (expand-file-name "~/Documents/no
+tes/"))[] 
+ []
+
+
+Overfull \hbox (307.68777pt too wide) in paragraph at lines 958--958
+[]  \T1/cmtt/m/n/10.95 (setq denote-known-keywords '("emacs" "nixos" "personal"
+ "learning" "thinking" "philosophy" "politics" "economics"))[] 
+ []
+
+[23]
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 958--958
+[]  \T1/cmtt/m/n/10.95 (setq denote-rename-confirmations '(rewrite-front-matter
+ modify-file-name))[] 
+ []
+
+[24]
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1026--1026
+[]         \T1/cmtt/m/n/10.95 :desc "rename from FM"     "R" #'denote-rename-fi
+le-using-front-matter[] 
+ []
+
+
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "by contents"   "c" #'denote-query-content
+s-link[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "by filenames"  "f" #'denote-query-filenam
+es-link)[] 
+ []
+
+
+Overfull \hbox (41.74434pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "link marked"      "i" #'denote-dired-link
+-marked-notes[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "rename marked"    "r" #'denote-dired-rena
+me-files[] 
+ []
+
+
+Overfull \hbox (132.27827pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "rename + keyword" "k" #'denote-dired-rena
+me-marked-files-with-keywords[] 
+ []
+
+
+Overfull \hbox (166.2285pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "rename marked FM" "R" #'denote-dired-rena
+me-marked-files-using-front-matter)[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "new entry"        "j" #'denote-journal-ne
+w-entry[] 
+ []
+
+
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "new or existing"  "o" #'denote-journal-ne
+w-or-existing-entry[] 
+ []
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 1026--1026
+[]          \T1/cmtt/m/n/10.95 :desc "link or create"   "l" #'denote-journal-li
+nk-or-create-entry))))[] 
+ []
+
+[25]
+Overfull \hbox (115.30316pt too wide) in paragraph at lines 1058--1058
+[]    \T1/cmtt/m/n/10.95 "Toggle my fabulous org export tweaks. While this mode
+ itself does a little bit,[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1058--1058
+[]  \T1/cmtt/m/n/10.95 the vast majority of the change in behaviour comes from 
+switch statements in:[] 
+ []
+
+
+Overfull \hbox (154.91176pt too wide) in paragraph at lines 1158--1158
+[]    \T1/cmtt/m/n/10.95 (if (or (not org-fancy-html-export-mode) (bound-and-tr
+ue-p org-msg-export-in-progress))[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 1158--1158
+[]       \T1/cmtt/m/n/10.95 (when (and (not (org-html-html5-p info)) (org-html-
+xhtml-p info))[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 1158--1158
+[]         \T1/cmtt/m/n/10.95 (let* ((xml-declaration (plist-get info :html-xml
+-declaration))[] 
+ []
+
+
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 1158--1158
+[]                \T1/cmtt/m/n/10.95 (decl (or (and (stringp xml-declaration) x
+ml-declaration)[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 1158--1158
+[]                          \T1/cmtt/m/n/10.95 (cdr (assoc (plist-get info :htm
+l-extension)[] 
+ []
+
+[26]
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 1158--1158
+[]                                      \T1/cmtt/m/n/10.95 (fboundp 'coding-sys
+tem-get)[] 
+ []
+
+
+Overfull \hbox (177.54524pt too wide) in paragraph at lines 1158--1158
+[]                                      \T1/cmtt/m/n/10.95 (coding-system-get o
+rg-html-coding-system 'mime-charset))[] 
+ []
+
+
+Overfull \hbox (160.57013pt too wide) in paragraph at lines 1158--1158
+[]                       \T1/cmtt/m/n/10.95 " xmlns=\"http://www.w3.org/1999/xh
+tml\" lang=\"%s\" xml:lang=\"%s\""[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 1158--1158
+[]                       \T1/cmtt/m/n/10.95 (plist-get info :language) (plist-g
+et info :language)))[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 1158--1158
+[]                      \T1/cmtt/m/n/10.95 (format " lang=\"%s\"" (plist-get in
+fo :language))))[] 
+ []
+
+
+Overfull \hbox (347.29637pt too wide) in paragraph at lines 1158--1158
+[]       \T1/cmtt/m/n/10.95 "<body>\n<input type='checkbox' id='theme-switch'><
+div id='page'><label id='switch-label' for='theme-switch'></label>"[] 
+ []
+
+
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 1158--1158
+[]       \T1/cmtt/m/n/10.95 (let ((link-up (org-trim (plist-get info :html-link
+-up)))[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 1158--1158
+[]             \T1/cmtt/m/n/10.95 (link-home (org-trim (plist-get info :html-li
+nk-home))))[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 1158--1158
+[]         \T1/cmtt/m/n/10.95 (unless (and (string= link-up "") (string= link-h
+ome ""))[] 
+ []
+
+[27]
+Overfull \hbox (171.88687pt too wide) in paragraph at lines 1158--1158
+[]                  \T1/cmtt/m/n/10.95 "<header class=\"page-header\">%s\n<h1 c
+lass=\"title\">%s</h1>\n%s</header>"[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 1158--1158
+[]                            \T1/cmtt/m/n/10.95 (org-export-data (plist-get in
+fo :date) info))[] 
+ []
+
+
+Overfull \hbox (205.8371pt too wide) in paragraph at lines 1158--1158
+[]                          \T1/cmtt/m/n/10.95 (when (and (plist-get info :with
+-date) (plist-get info :with-author)) " ")[] 
+ []
+
+
+Overfull \hbox (70.0362pt too wide) in paragraph at lines 1158--1158
+[]                            \T1/cmtt/m/n/10.95 (org-export-data (plist-get in
+fo :author) info))[] 
+ []
+
+
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 1158--1158
+[]                       \T1/cmtt/m/n/10.95 "<p class=\"subtitle\" role=\"doc-s
+ubtitle\">%s</p>\n"[] 
+ []
+
+
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 1158--1158
+[]                     \T1/cmtt/m/n/10.95 (concat "\n" (org-html-close-tag "br"
+ nil info) "\n"[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 1158--1158
+[]                             \T1/cmtt/m/n/10.95 "<span class=\"subtitle\">%s<
+/span>\n"))[] 
+ []
+
+
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 1158--1158
+[]       \T1/cmtt/m/n/10.95 (format "</%s>\n" (nth 1 (assq 'content (plist-get 
+info :html-divs))))[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 1158--1158
+[]         \T1/cmtt/m/n/10.95 (concat "<script>" (plist-get info :html-klipse-s
+election-script)[] 
+ []
+
+
+Overfull \hbox (98.32805pt too wide) in paragraph at lines 1158--1158
+[]                 \T1/cmtt/m/n/10.95 "\"></script><link rel=\"stylesheet\" typ
+e=\"text/css\" href=\""[] 
+ []
+
+[28]
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 1194--1194
+[]  \T1/cmtt/m/n/10.95 Just like `org-html-toc', except the header is a link to
+ \"#\".[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 1194--1194
+[]  \T1/cmtt/m/n/10.95 DEPTH is an integer specifying the depth of the table.  
+INFO is[] 
+ []
+
+
+Overfull \hbox (19.11086pt too wide) in paragraph at lines 1194--1194
+[]  \T1/cmtt/m/n/10.95 a plist used as a communication channel.  Optional argum
+ent SCOPE[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 1194--1194
+[]  \T1/cmtt/m/n/10.95 is an element defining the scope of the table.  Return t
+he table[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 1194--1194
+[]                     \T1/cmtt/m/n/10.95 (cons (org-html--format-toc-headline 
+headline info)[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 1194--1194
+[]                           \T1/cmtt/m/n/10.95 (org-export-get-relative-level 
+headline info)))[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 1194--1194
+[]                   \T1/cmtt/m/n/10.95 (org-export-collect-headlines info dept
+h scope))))[] 
+ []
+
+
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 1194--1194
+[]        \T1/cmtt/m/n/10.95 (let ((toc (concat "<div id=\"text-table-of-conten
+ts\">"[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 1194--1194
+[]              \T1/cmtt/m/n/10.95 (concat (format "<%s id=\"table-of-contents\
+">\n" outer-tag)[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1194--1194
+[]                      \T1/cmtt/m/n/10.95 (let ((top-level (plist-get info :ht
+ml-toplevel-hlevel)))[] 
+ []
+
+
+Overfull \hbox (290.71266pt too wide) in paragraph at lines 1194--1194
+[]                        \T1/cmtt/m/n/10.95 (format "<h%d><a href=\"#\" style=
+\"color:inherit; text-decoration: none;\">%s</a></h%d>\n"[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 1194--1194
+[]                                \T1/cmtt/m/n/10.95 (org-html--translate "Tabl
+e of Contents" info)[] 
+ []
+
+[29]
+Overfull \hbox (183.20361pt too wide) in paragraph at lines 1265--1265
+[]    \T1/cmtt/m/n/10.95 "Plist of og:image:PROP properties and their value, fo
+r use in `org-html-meta-tags-fancy'.")[] 
+ []
+
+
+Overfull \hbox (149.25339pt too wide) in paragraph at lines 1265--1265
+[]    \T1/cmtt/m/n/10.95 "Use the INFO plist to construct the meta tags, as des
+cribed in `org-html-meta-tags'."[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 1265--1265
+[]                   \T1/cmtt/m/n/10.95 (org-element-interpret-data (plist-get 
+info :title)) info))[] 
+ []
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 1265--1265
+[]                                     \T1/cmtt/m/n/10.95 (org-element-interpre
+t-data auth) info)))))[] 
+ []
+
+
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 1265--1265
+[]                   \T1/cmtt/m/n/10.95 (if (string-match "\\`\\(.+?\\) +\\(.+?
+\\)\\'" author)[] 
+ []
+
+
+Overfull \hbox (64.37782pt too wide) in paragraph at lines 1265--1265
+[]        \T1/cmtt/m/n/10.95 (let ((subtitle (org-export-data (plist-get info :
+subtitle) info)))[] 
+ []
+
+
+Overfull \hbox (188.86198pt too wide) in paragraph at lines 1265--1265
+[]         \T1/cmtt/m/n/10.95 (list (list "property" "og:image" (plist-get org-
+html-meta-tags-opengraph-image :image))[] 
+ []
+
+
+Overfull \hbox (211.49547pt too wide) in paragraph at lines 1265--1265
+[]               \T1/cmtt/m/n/10.95 (list "property" "og:image:type" (plist-get
+ org-html-meta-tags-opengraph-image :type))[] 
+ []
+
+
+Overfull \hbox (222.81221pt too wide) in paragraph at lines 1265--1265
+[]               \T1/cmtt/m/n/10.95 (list "property" "og:image:width" (plist-ge
+t org-html-meta-tags-opengraph-image :width))[] 
+ []
+
+
+Overfull \hbox (234.12895pt too wide) in paragraph at lines 1265--1265
+[]               \T1/cmtt/m/n/10.95 (list "property" "og:image:height" (plist-g
+et org-html-meta-tags-opengraph-image :height))[] 
+ []
+
+
+Overfull \hbox (211.49547pt too wide) in paragraph at lines 1265--1265
+[]               \T1/cmtt/m/n/10.95 (list "property" "og:image:alt" (plist-get 
+org-html-meta-tags-opengraph-image :alt))))[] 
+ []
+
+[30]
+Overfull \hbox (109.64479pt too wide) in paragraph at lines 1265--1265
+[]          \T1/cmtt/m/n/10.95 (list "property" "og:article:author:first_name" 
+(car author-first-last)))[] 
+ []
+
+
+Overfull \hbox (103.98642pt too wide) in paragraph at lines 1265--1265
+[]          \T1/cmtt/m/n/10.95 (list "property" "og:article:author:last_name" (
+cdr author-first-last)))[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1265--1265
+[]                \T1/cmtt/m/n/10.95 (when-let ((date-str (cadar (org-collect-k
+eywords '("DATE")))))[] 
+ []
+
+
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 1265--1265
+[]                  \T1/cmtt/m/n/10.95 (unless (string= date-str (format-time-s
+tring "%F"))[] 
+ []
+
+
+Overfull \hbox (115.30316pt too wide) in paragraph at lines 1265--1265
+[]                    \T1/cmtt/m/n/10.95 (ignore-errors (encode-time (org-parse
+-time-string date-str)))))[] 
+ []
+
+
+Overfull \hbox (143.59502pt too wide) in paragraph at lines 1265--1265
+[]                    \T1/cmtt/m/n/10.95 (file-attribute-modification-time (fil
+e-attributes buffer-file-name))[] 
+ []
+
+
+Overfull \hbox (330.32126pt too wide) in paragraph at lines 1265--1265
+[]                \T1/cmtt/m/n/10.95 (format-time-string "%FT%T%z" (file-attrib
+ute-modification-time (file-attributes buffer-file-name)))))))))[] 
+ []
+
+
+Overfull \hbox (126.6199pt too wide) in paragraph at lines 1281--1281
+[]\T1/cmtt/m/n/10.95 <link rel="icon" href="https://tecosaur.com/resources/org/
+nib.ico" type="image/ico" />[] 
+ []
+
+
+Overfull \hbox (449.14705pt too wide) in paragraph at lines 1281--1281
+[]\T1/cmtt/m/n/10.95 <link rel="preload" as="font" crossorigin="anonymous" type
+="font/woff2" href="https://tecosaur.com/resources/org/etbookot-roman-webfont.w
+off2">[] 
+ []
+
+
+Overfull \hbox (454.80542pt too wide) in paragraph at lines 1281--1281
+[]\T1/cmtt/m/n/10.95 <link rel="preload" as="font" crossorigin="anonymous" type
+="font/woff2" href="https://tecosaur.com/resources/org/etbookot-italic-webfont.
+woff2">[] 
+ []
+
+
+Overfull \hbox (460.46379pt too wide) in paragraph at lines 1281--1281
+[]\T1/cmtt/m/n/10.95 <link rel="preload" as="font" crossorigin="anonymous" type
+="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextRegular
+.woff2">[] 
+ []
+
+
+Overfull \hbox (454.80542pt too wide) in paragraph at lines 1281--1281
+[]\T1/cmtt/m/n/10.95 <link rel="preload" as="font" crossorigin="anonymous" type
+="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextItalic.
+woff2">[] 
+ []
+
+
+Overfull \hbox (443.48868pt too wide) in paragraph at lines 1281--1281
+[]\T1/cmtt/m/n/10.95 <link rel="preload" as="font" crossorigin="anonymous" type
+="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextBold.wo
+ff2">[] 
+ []
+
+[31]
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 1317--1317
+[]    \T1/cmtt/m/n/10.95 "Rebuild `org-html-style-fancy' from the asset files u
+nder misc/org-css/.[] 
+ []
+
+
+Overfull \hbox (47.40271pt too wide) in paragraph at lines 1317--1317
+[]  \T1/cmtt/m/n/10.95 If any asset is missing, keep the default style rather t
+han erroring ^^V[] 
+ []
+
+
+Overfull \hbox (64.37782pt too wide) in paragraph at lines 1317--1317
+[]  \T1/cmtt/m/n/10.95 run =doom sync= is not needed, just place the files and 
+call this again."[] 
+ []
+
+
+Overfull \hbox (98.32805pt too wide) in paragraph at lines 1317--1317
+[]    \T1/cmtt/m/n/10.95 (let ((header (expand-file-name "misc/org-export-heade
+r.html" doom-user-dir))[] 
+ []
+
+
+Overfull \hbox (58.71945pt too wide) in paragraph at lines 1317--1317
+[]          \T1/cmtt/m/n/10.95 (js     (expand-file-name "misc/org-css/main.js"
+ doom-user-dir))[] 
+ []
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 1317--1317
+[]          \T1/cmtt/m/n/10.95 (css    (expand-file-name "misc/org-css/main.min
+.css" doom-user-dir)))[] 
+ []
+
+
+Overfull \hbox (109.64479pt too wide) in paragraph at lines 1317--1317
+[]      \T1/cmtt/m/n/10.95 (if (not (and (file-exists-p header) (file-exists-p 
+js) (file-exists-p css)))[] 
+ []
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 1317--1317
+[]            \T1/cmtt/m/n/10.95 (message "org-html fancy style assets missing 
+under %smisc/org-css/"[] 
+ []
+
+
+Overfull \hbox (2.13574pt too wide) in paragraph at lines 1317--1317
+[]          \T1/cmtt/m/n/10.95 (setq org-html-style-default org-html-style-fanc
+y)))))[] 
+ []
+
+[32]
+Overfull \hbox (126.6199pt too wide) in paragraph at lines 1338--1338
+[]  \T1/cmtt/m/n/10.95 (eval '(cl-pushnew '(:collapsed "COLLAPSED" "collapsed" 
+org-html-export-collapsed t)[] 
+ []
+
+
+Overfull \hbox (103.98642pt too wide) in paragraph at lines 1338--1338
+[]                     \T1/cmtt/m/n/10.95 (org-export-backend-options (org-expo
+rt-get-backend 'html))))[] 
+ []
+
+
+Overfull \hbox (81.35294pt too wide) in paragraph at lines 1465--1465
+[]  \T1/cmtt/m/n/10.95 (defadvice! org-html-src-block-collapsable (orig-fn src-
+block contents info)[] 
+ []
+
+
+Overfull \hbox (154.91176pt too wide) in paragraph at lines 1465--1465
+[]    \T1/cmtt/m/n/10.95 (if (or (not org-fancy-html-export-mode) (bound-and-tr
+ue-p org-msg-export-in-progress))[] 
+ []
+
+
+Overfull \hbox (188.86198pt too wide) in paragraph at lines 1465--1465
+[]             \T1/cmtt/m/n/10.95 (collapsed-p (member (or (org-export-read-att
+ribute :attr_html src-block :collapsed)[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 1465--1465
+[]                                      \T1/cmtt/m/n/10.95 (plist-get info :col
+lapsed))[] 
+ []
+
+
+Overfull \hbox (24.76923pt too wide) in paragraph at lines 1465--1465
+[]                                  \T1/cmtt/m/n/10.95 '("y" "yes" "t" t "true"
+ "all"))))[] 
+ []
+
+
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 1465--1465
+[]         \T1/cmtt/m/n/10.95 "<details id='%s' class='code'%s><summary%s>%s</s
+ummary>[] 
+ []
+
+
+./config.tex:1465: LaTeX Error: Unicode character ⎘ (U+2398)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1465 \end{verbatim}
+                     
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 1465--1465
+[]  \T1/cmtt/m/n/10.95 <button title='Copy to clipboard' onclick='copyPreToClip
+bord(this)'></button>\[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 1465--1465
+[]          \T1/cmtt/m/n/10.95 (when name (concat "<span class=\"name\">" name 
+"</span>"))[] 
+ []
+
+[33]
+Overfull \hbox (228.47058pt too wide) in paragraph at lines 1465--1465
+[]             \T1/cmtt/m/n/10.95 (replace-regexp-in-string (format "<pre\\( cl
+ass=\"[^\"]+\"\\)? id=\"%s\">" ref) "<pre\\1>"[] 
+ []
+
+
+Overfull \hbox (98.32805pt too wide) in paragraph at lines 1465--1465
+[]                                       \T1/cmtt/m/n/10.95 (funcall orig-fn sr
+c-block contents info))[] 
+ []
+
+[34] [35]
+Overfull \hbox (7.79411pt too wide) in paragraph at lines 1503--1503
+[]  \T1/cmtt/m/n/10.95 (defun org-html-block-collapsable (orig-fn block content
+s info)[] 
+ []
+
+
+Overfull \hbox (154.91176pt too wide) in paragraph at lines 1503--1503
+[]    \T1/cmtt/m/n/10.95 (if (or (not org-fancy-html-export-mode) (bound-and-tr
+ue-p org-msg-export-in-progress))[] 
+ []
+
+
+Overfull \hbox (120.96153pt too wide) in paragraph at lines 1503--1503
+[]            \T1/cmtt/m/n/10.95 (collapsed-value (org-export-read-attribute :a
+ttr_html block :collapsed))[] 
+ []
+
+
+Overfull \hbox (160.57013pt too wide) in paragraph at lines 1503--1503
+[]            \T1/cmtt/m/n/10.95 (collapsed-p (or (member (org-export-read-attr
+ibute :attr_html block :collapsed)[] 
+ []
+
+
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 1503--1503
+[]                             \T1/cmtt/m/n/10.95 (member (plist-get info :coll
+apsed) '("all")))))[] 
+ []
+
+
+./config.tex:1503: LaTeX Error: Unicode character ⎘ (U+2398)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1503 \end{verbatim}
+                     
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+Overfull \hbox (92.66968pt too wide) in paragraph at lines 1503--1503
+[]  \T1/cmtt/m/n/10.95 <button title='Copy to clipboard' onclick='copyPreToClip
+bord(this)'></button>\[] 
+ []
+
+[36]
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 1503--1503
+[]         \T1/cmtt/m/n/10.95 (if type (format "<span class='type'>%s</span>" t
+ype) "")[] 
+ []
+
+
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 1503--1503
+[]  \T1/cmtt/m/n/10.95 (advice-add 'org-html-example-block   :around #'org-html
+-block-collapsable)[] 
+ []
+
+
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 1503--1503
+[]  \T1/cmtt/m/n/10.95 (advice-add 'org-html-fixed-width     :around #'org-html
+-block-collapsable)[] 
+ []
+
+
+Overfull \hbox (75.69456pt too wide) in paragraph at lines 1503--1503
+[]  \T1/cmtt/m/n/10.95 (advice-add 'org-html-property-drawer :around #'org-html
+-block-collapsable)[] 
+ []
+
+
+Overfull \hbox (13.45248pt too wide) in paragraph at lines 1535--1535
+[]  \T1/cmtt/m/n/10.95 (defadvice! org-html-table-wrapped (orig-fn table conten
+ts info)[] 
+ []
+
+
+Overfull \hbox (154.91176pt too wide) in paragraph at lines 1535--1535
+[]    \T1/cmtt/m/n/10.95 (if (or (not org-fancy-html-export-mode) (bound-and-tr
+ue-p org-msg-export-in-progress))[] 
+ []
+
+
+Overfull \hbox (126.6199pt too wide) in paragraph at lines 1535--1535
+[]                    \T1/cmtt/m/n/10.95 (replace-regexp-in-string (format "<ta
+ble id=\"%s\"" ref) "<table"[] 
+ []
+
+
+Overfull \hbox (115.30316pt too wide) in paragraph at lines 1535--1535
+[]                                              \T1/cmtt/m/n/10.95 (funcall ori
+g-fn table contents info))[] 
+ []
+
+[37]
+Overfull \hbox (17.70905pt too wide) in paragraph at lines 1544--1549
+[]\T1/cmr/m/n/10.95 To add this, we need to change one line in \T1/cmtt/m/n/10.
+95 org-html--format-toc-headline\T1/cmr/m/n/10.95 .
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1561--1561
+[]  \T1/cmtt/m/n/10.95 (defadvice! org-html--format-toc-headline-colapseable (o
+rig-fn headline info)[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1561--1561
+[]    \T1/cmtt/m/n/10.95 "Add a label and checkbox to `org-html--format-toc-hea
+dline's usual output,[] 
+ []
+
+
+Overfull \hbox (154.91176pt too wide) in paragraph at lines 1561--1561
+[]    \T1/cmtt/m/n/10.95 (if (or (not org-fancy-html-export-mode) (bound-and-tr
+ue-p org-msg-export-in-progress))[] 
+ []
+
+
+Overfull \hbox (126.6199pt too wide) in paragraph at lines 1561--1561
+[]        \T1/cmtt/m/n/10.95 (format "<input type='checkbox' id='toc--%s'/><lab
+el for='toc--%s'>%s</label>"[] 
+ []
+
+
+Overfull \hbox (30.4276pt too wide) in paragraph at lines 1576--1576
+[]  \T1/cmtt/m/n/10.95 (defadvice! org-html--toc-text-stripped-leaves (orig-fn 
+&rest args)[] 
+ []
+
+
+Overfull \hbox (154.91176pt too wide) in paragraph at lines 1576--1576
+[]    \T1/cmtt/m/n/10.95 (if (or (not org-fancy-html-export-mode) (bound-and-tr
+ue-p org-msg-export-in-progress))[] 
+ []
+
+
+Overfull \hbox (166.2285pt too wide) in paragraph at lines 1576--1576
+[]      \T1/cmtt/m/n/10.95 (replace-regexp-in-string "<input [^>]+><label [^>]+
+>\\(.+?\\)</label></li>" "\\1</li>"[] 
+ []
+
+[38] [39]
+Overfull \hbox (36.08597pt too wide) in paragraph at lines 1649--1649
+[]               \T1/cmtt/m/n/10.95 (not (org-export-derived-backend-p backend 
+'re-reveal))[] 
+ []
+
+
+Overfull \hbox (511.38913pt too wide) in paragraph at lines 1649--1649
+[]         \T1/cmtt/m/n/10.95 "<h\\([0-9]\\) id=\"\\([a-z0-9-]+\\)\">\\(.*[^ ]\
+\)<\\/h[0-9]>" ; this is quite restrictive, but due to `org-reference-contracti
+on' I can do this[] 
+ []
+
+
+Overfull \hbox (103.98642pt too wide) in paragraph at lines 1649--1649
+[]         \T1/cmtt/m/n/10.95 "<h\\1 id=\"\\2\">\\3<a aria-hidden=\"true\" href
+=\"#\\2\">#</a> </h\\1>"[] 
+ []
+
+[40]
+Overfull \hbox (53.06108pt too wide) in paragraph at lines 1733--1733
+[]          \T1/cmtt/m/n/10.95 (list "https://cdn.jsdelivr.net/npm/mathjax@3/es
+5/tex-svg.js"))[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1733--1733
+[]          \T1/cmtt/m/n/10.95 RR: ['\\\\ifstrempty{#1}{\\\\mathbb{R}}{\\\\math
+bb{R}^{#1}}', 1, ''],[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1733--1733
+[]          \T1/cmtt/m/n/10.95 NN: ['\\\\ifstrempty{#1}{\\\\mathbb{N}}{\\\\math
+bb{N}^{#1}}', 1, ''],[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1733--1733
+[]          \T1/cmtt/m/n/10.95 ZZ: ['\\\\ifstrempty{#1}{\\\\mathbb{Z}}{\\\\math
+bb{Z}^{#1}}', 1, ''],[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1733--1733
+[]          \T1/cmtt/m/n/10.95 QQ: ['\\\\ifstrempty{#1}{\\\\mathbb{Q}}{\\\\math
+bb{Q}^{#1}}', 1, ''],[] 
+ []
+
+
+Overfull \hbox (87.0113pt too wide) in paragraph at lines 1733--1733
+[]          \T1/cmtt/m/n/10.95 CC: ['\\\\ifstrempty{#1}{\\\\mathbb{C}}{\\\\math
+bb{C}^{#1}}', 1, ''],[] 
+ []
+
+[41] [42] (./config.aux)
+ ***********
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+ ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package rerunfilecheck Info: File `config.out' has not changed.
+(rerunfilecheck)             Checksum: 883F621E6FAFC0DA8F1ABCC04B09EC64;7550.
+Package logreq Info: Writing requests to 'config.run.xml'.
+\openout1 = `config.run.xml'.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 17605 strings out of 467535
+ 309353 string characters out of 5388798
+ 1149759 words of memory out of 5000000
+ 46207 multiletter control sequences out of 15000+600000
+ 642605 words of font info for 78 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 75i,6n,79p,695b,803s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-te
+xmfdist/fonts/type1/public/cm-super/sfbx0800.pfb></nix/store/nkgjac3kzix6yg9c89
+cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texmfdist/fonts/type1/public/cm-su
+per/sfbx1095.pfb></nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r782
+34-final-env-texmfdist/fonts/type1/public/cm-super/sfbx1200.pfb></nix/store/nkg
+jac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texmfdist/fonts/typ
+e1/public/cm-super/sfbx1440.pfb></nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-te
+xlive-2025-r78234-final-env-texmfdist/fonts/type1/public/cm-super/sfrm0800.pfb>
+</nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texm
+fdist/fonts/type1/public/cm-super/sfrm1095.pfb></nix/store/nkgjac3kzix6yg9c89cc
+9l9q50a6bfkj-texlive-2025-r78234-final-env-texmfdist/fonts/type1/public/cm-supe
+r/sfrm1200.pfb></nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234
+-final-env-texmfdist/fonts/type1/public/cm-super/sfrm1728.pfb></nix/store/nkgja
+c3kzix6yg9c89cc9l9q50a6bfkj-texlive-2025-r78234-final-env-texmfdist/fonts/type1
+/public/cm-super/sfti1095.pfb></nix/store/nkgjac3kzix6yg9c89cc9l9q50a6bfkj-texl
+ive-2025-r78234-final-env-texmfdist/fonts/type1/public/cm-super/sftt1095.pfb>
+Output written on config.pdf (42 pages, 256510 bytes).
+PDF statistics:
+ 611 PDF objects out of 1000 (max. 8388607)
+ 539 compressed objects within 6 object streams
+ 111 named destinations out of 1000 (max. 500000)
+ 537 words of extra memory for PDF output out of 10000 (max. 10000000)
+

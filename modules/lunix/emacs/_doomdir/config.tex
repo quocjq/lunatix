@@ -1,28 +1,57 @@
-#+title: Config
-#+author: Lunixose
-#+OPTIONS: broken-links:t
+% Created 2026-08-05 T4 18:16
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
 
-This is a [[https://en.wikipedia.org/wiki/Literate_programming][literate]] Doom Emacs configuration
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Lunixose}
+\date{\today}
+\title{Config}
+\hypersetup{
+ pdfauthor={Lunixose},
+ pdftitle={Config},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={},
+ pdflang={English}}
+\usepackage{biblatex}
 
-* Doom Modules
-** input
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+This is a \href{https://en.wikipedia.org/wiki/Literate\_programming}{literate} Doom Emacs configuration
+\section{Doom Modules}
+\label{sec:orgace259a}
+\subsection{input}
+\label{sec:org34a78f3}
 Input sources — none active. Bidi, Chinese, Japanese, and layout all
 left disabled for now.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 ;;; $DOOMDIR/init.el -*- lexical-binding: t; -*-
 ;; (doom! :input)
 ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
 ;;chinese
 ;;japanese
 ;;layout            ; auie,ctsrnm is the superior home row)
-#+end_src
-
-** completion
+\end{verbatim}
+\subsection{completion}
+\label{sec:org16881ec}
 Vertico for minibuffer, Corfu for in-buffer. Both with Orderless for
 flexible matching.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :completion
        ;; company
        (corfu +orderless)
@@ -30,13 +59,13 @@ flexible matching.
        ;;ido
        ;;ivy
        (vertico +icons))
-#+end_src
-
-** ui
+\end{verbatim}
+\subsection{ui}
+\label{sec:org7fefa92}
 Visual chrome: modeline, popup, ligatures, dashboard, smooth-scroll,
 unicode, etc.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :ui
        deft               ; notational velocity for Emacs
        doom               ; what makes DOOM look the way it does
@@ -54,12 +83,12 @@ unicode, etc.
        (vc-gutter +pretty); vcs diff in the fringe
        window-select      ; visually switch windows
        workspaces)        ; tab emulation, persistence & separate workspaces
-#+end_src
-
-** editor
+\end{verbatim}
+\subsection{editor}
+\label{sec:orgd7ac2ff}
 Evil everywhere, plus formatting, snippets, whitespace, parinfer.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :editor
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
@@ -74,13 +103,13 @@ Evil everywhere, plus formatting, snippets, whitespace, parinfer.
        snippets                   ; my elves. They type so I don't have to
        (whitespace +guess +trim)) ; a butler
        ;;word-wrap                ; soft wrapping with language-aware indent
-#+end_src
-
-** emacs
+\end{verbatim}
+\subsection{emacs}
+\label{sec:org9a63355}
 Built-in Emacs conveniences wrapped by dired, eww, ibuffer,
 tramp, undo, vc.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :emacs
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
@@ -89,35 +118,35 @@ tramp, undo, vc.
        tramp             ; remote files at your arthritic fingertips
        undo               ; persistent, smarter undo for your inevitable mistakes
        vc)               ; version-control and Emacs, sitting in a tree
-#+end_src
+\end{verbatim}
+\subsection{term}
+\label{sec:orgfcb913e}
+Eshell only inside the doom \texttt{:term} block. Mistty handles the in-Emacs
+terminal (see the Mistty section below). Plain \texttt{term} left disabled.
 
-** term
-Eshell only inside the doom =:term= block. Mistty handles the in-Emacs
-terminal (see the Mistty section below). Plain =term= left disabled.
-
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :term
        eshell)            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
        ;; vterm)            ; the best terminal emulation in Emacs (no longer used)
-#+end_src
-
-** checkers
+\end{verbatim}
+\subsection{checkers}
+\label{sec:org5d13642}
 Syntax checker only. Spell + grammar left disabled.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :checkers
        syntax)              ; tasing you for every
        ;; (spell +flyspell) ; tasing you for misspelling mispelling
        ;; grammar           ; tasing grammar mistake every you make)
-#+end_src
-
-** tools
+\end{verbatim}
+\subsection{tools}
+\label{sec:org236d880}
 External tool integrations: LSP, magit, docker, pass, tree-sitter, etc.
-=(eval +overlay)= is present but =SPC e= was reassigned to Denote.
+\texttt{(eval +overlay)} is present but \texttt{SPC e} was reassigned to Denote.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :tools
        ;; ansible
        biblio            ; Writes a PhD for you (citation needed)
@@ -139,22 +168,22 @@ External tool integrations: LSP, magit, docker, pass, tree-sitter, etc.
        ;; tmux              ; an API for interacting with tmux
        tree-sitter       ; syntax and parsing, sitting in a tree...
        upload)           ; map local to remote projects via ssh/ftp
-#+end_src
-
-** os
+\end{verbatim}
+\subsection{os}
+\label{sec:orgc680619}
 Mac-specific tweaks only on macOS. TTY left disabled.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :os
        (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
        tty)               ; improve the terminal Emacs experience)
-#+end_src
-
-** lang
+\end{verbatim}
+\subsection{lang}
+\label{sec:org0e75e27}
 Languages with LSP and tree-sitter where supported. Many commented
 out as unused.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :lang
        ;;ada               ; In strong typing we (blindly) trust
        (agda +local)     ; types of types of types of types...
@@ -223,56 +252,57 @@ out as unused.
        (web +lsp +tree-sitter)               ; the tubes
        yaml)              ; JSON, but readable
 ;;zig               ; C, but simpler)
-#+end_src
-
-** email
+\end{verbatim}
+\subsection{email}
+\label{sec:org0b4ae70}
 mu4e wired to Gmail. Notmuch and Wanderlust left disabled.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :email
        ;;notmuch
        ;;(wanderlust +gmail))
        (wanderlust +gmail))
-#+end_src
-
-** app
+\end{verbatim}
+\subsection{app}
+\label{sec:org82cd0a5}
 Standalone applications: calendar, IRC, RSS reader.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :app
        calendar
        ;;emms
        ;;everywhere        ; *leave* Emacs!? You must be joking
        irc               ; how neckbeards socialize
        (rss +org))       ; emacs as an RSS reader
-#+end_src
-
-** config
-Literate config (=config.org=) with default Doom bindings and
+\end{verbatim}
+\subsection{config}
+\label{sec:orgb84e20f}
+Literate config (\texttt{config.org}) with default Doom bindings and
 smartparens.
 
-#+begin_src emacs-lisp :tangle init.el
+\begin{verbatim}
 (doom! :config
        literate
        (default +bindings +smartparens))
-#+end_src
-
-* Personal Information
+\end{verbatim}
+\section{Personal Information}
+\label{sec:org6e59325}
 Some packages (Magit commits, mu4e, snippets, GPG) read these
 variables to know who you are. Fill in the email below — it's left as
 a TODO so it doesn't ship a placeholder address.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (setq user-full-name "Lunixose"
       user-mail-address "luniose@gmail.com")
-#+end_src
-* Basic
+\end{verbatim}
+\section{Basic}
+\label{sec:orga32d1ea}
 Core settings that shape the everyday editing experience: theme,
 fonts, how the frame opens, and a handful of quality-of-life tweaks.
+\subsection{Better Defaults}
+\label{sec:org05f4414}
 
-** Better Defaults
-
-#+begin_src emacs-lisp
+\begin{verbatim}
 (setq-default delete-by-moving-to-trash t
               window-combination-resize t
               x-stretch-cursor t)
@@ -284,43 +314,45 @@ fonts, how the frame opens, and a handful of quality-of-life tweaks.
       which-key-idle-delay 0.4)
 (display-time-mode 1)
 (global-subword-mode 1)
-#+end_src
-
-** Editing Defaults
-Indent with two spaces and disable Emacs' auto-save (=#file#=) files —
+\end{verbatim}
+\subsection{Editing Defaults}
+\label{sec:org952c2ab}
+Indent with two spaces and disable Emacs' auto-save (\texttt{\#file\#}) files —
 version control covers recovery here.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (setq-default tab-width 2)
 (setq-default evil-shift-width 2)
 (setq-default indent-tabs-mode nil)
 (setq auto-save-default nil)
-#+end_src
-
-** Buffer Behavior
-Auto-revert keeps buffers in sync with changes (=global-auto-revert-mode=
-also covers non-file buffers like Dired). The =defadvice= prompts
+\end{verbatim}
+\subsection{Buffer Behavior}
+\label{sec:org03c48c7}
+Auto-revert keeps buffers in sync with changes (\texttt{global-auto-revert-mode}
+also covers non-file buffers like Dired). The \texttt{defadvice} prompts
 for which buffer to show whenever a window is split, instead of
 duplicating the current one.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (global-auto-revert-mode 1)
 (setq global-auto-revert-non-file-buffers t)
 (defadvice! prompt-for-buffer (&rest _)
   :after 'window-split (switch-to-buffer))
-#+end_src
-* Appearance
-** Display
+\end{verbatim}
+\section{Appearance}
+\label{sec:orgaa8754a}
+\subsection{Display}
+\label{sec:org9657e38}
 Open maximized and use relative line numbers, which pair well with
 Evil's count-based motions.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (setq display-line-numbers-type 'relative)
-#+end_src
+\end{verbatim}
+\subsection{Splash Screen}
+\label{sec:org55eddda}
 
-** Splash Screen
-
-#+begin_src emacs-lisp
+\begin{verbatim}
 ;; Place 'my-banner.png' inside your ~/.config/doom/ directory
 ;; (setq fancy-splash-image (expand-file-name "my-banner.png" doomdir))
 (defun my-custom-ascii-banner-fn ()
@@ -349,43 +381,44 @@ Evil's count-based motions.
         my-dashboard-widget-welcome
         +dashboard-widget-footer
         +dashboard-widget-loaded))
-#+end_src
-** Theme and Fonts
+\end{verbatim}
+\subsection{Theme and Fonts}
+\label{sec:org7053c1a}
 Pick the Monokai Octagon theme and set JetBrainsMono Nerd Font as the
 default. The Nerd Font variant ships the glyphs used by the modeline
 and dashboard icons.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (setq doom-theme 'doom-monokai-octagon)
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 18 :weight 'medium))
-#+end_src
-
-* Editor
+\end{verbatim}
+\section{Editor}
+\label{sec:org95ce70f}
 General editing behaviour that isn't tied to a single language.
-
-** Evil-mode
+\subsection{Evil-mode}
+\label{sec:org6225f31}
 Use emacs mode as editing mode
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (setq! evil-disable-insert-state-bindings t)
 (defalias 'evil-insert-state 'evil-emacs-state)
 (define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state)
 (define-key evil-emacs-state-map (kbd "C-g") 'evil-normal-state)
-#+end_src
-
-** Mistty
-Mistty is an in-Emacs terminal that uses Emacs' built-in =comint=
-(/"emulator"/ mode) instead of libvterm. No C dependency; uses bash as
-the shell. Replaces vterm (which has been removed from the =:term=
+\end{verbatim}
+\subsection{Mistty}
+\label{sec:org122b025}
+Mistty is an in-Emacs terminal that uses Emacs' built-in \texttt{comint}
+(\emph{``emulator''} mode) instead of libvterm. No C dependency; uses bash as
+the shell. Replaces vterm (which has been removed from the \texttt{:term}
 block above).
 
-#+begin_src emacs-lisp :tangle packages.el
+\begin{verbatim}
 (package! mistty
   :recipe (:host github :repo "szermatt/mistty") :pin "4d32106dc2a60183c0df8716502ed4048a45d50f")
-#+end_src
-
-*** Config
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsubsection{Config}
+\label{sec:org335483f}
+\begin{verbatim}
 (after! mistty
   (setq mistty-process-type 'emulator
         mistty-shell-command "nu"
@@ -393,9 +426,10 @@ block above).
         mistty-shell-arg '("-i")
         mistty-width 80
         mistty-height 24))
-#+end_src
-*** Keybind
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsubsection{Keybind}
+\label{sec:org43a5159}
+\begin{verbatim}
 (map! :leader
       (:prefix ("v" . "Term")
         :desc "Open in project"           "t" #'mistty-in-project
@@ -406,62 +440,68 @@ block above).
         :desc "Mistty clear"              "c" #'mistty-clear
         :desc "Next input"                "n" #'mistty-next-input
         :desc "Previous input"            "p" #'mistty-previous-input))
-#+end_src
-
-** Tabout
-Repurpose =TAB= in insert mode to navigate bracket pairs dynamically
+\end{verbatim}
+\subsection{Tabout}
+\label{sec:org875783b}
+Repurpose \texttt{TAB} in insert mode to navigate bracket pairs dynamically
 (tab-in, between, out) with graceful fallback to indent or snippet
 expansion.
 
-- package:
-#+begin_src emacs-lisp :tangle packages.el
+\begin{itemize}
+\item package:
+\end{itemize}
+\begin{verbatim}
 (package! lnav
   :recipe (:host github :repo "quocjq/lnav")
   :pin "e9e6b626d4e4c0f57518724c20662528410e911f")
-#+end_src
-- config:
-#+begin_src emacs-lisp
+\end{verbatim}
+\begin{itemize}
+\item config:
+\end{itemize}
+\begin{verbatim}
 (map! :e "M-]" #'lnav-next-chunk
       :e "M-[" #'lnav-previous-chunk
       :n "M-]" #'lnav-next-chunk
       :n "M-[" #'lnav-previous-chunk)
-#+end_src
-
-** Snippets
+\end{verbatim}
+\subsection{Snippets}
+\label{sec:org72253f3}
 Doom ships YASnippet. This points it at a personal snippets directory
 and lets one snippet expand into another (nested expansion), which is
 handy for building larger templates out of small pieces.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! yasnippet
   (setq yas-triggers-in-field t)        ; allow nested snippet expansion
   (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" doom-user-dir)))
-#+end_src
+\end{verbatim}
 
-See =snippets-guide.org= for the snippet file format, placeholders,
+See \texttt{snippets-guide.org} for the snippet file format, placeholders,
 and how to add new ones.
-
-* Languages
-Per-language tweaks. Doom's =:lang= modules already do the heavy
+\section{Languages}
+\label{sec:orge2a445d}
+Per-language tweaks. Doom's \texttt{:lang} modules already do the heavy
 lifting (LSP, tree-sitter, formatting) — these just adjust a few
 defaults, in the same spirit as tecosaur's language section but pared
 down to the languages you have enabled.
+\subsection{Polymode}
+\label{sec:org13694f4}
 
-** Polymode
-
-- Install Polymode
-#+begin_src emacs-lisp :tangle packages.el
+\begin{itemize}
+\item Install Polymode
+\end{itemize}
+\begin{verbatim}
 (package! polymode
          :recipe (:host github :repo "polymode/polymode") :pin "8cb72fa5dcc0d98746c680043dc121edc7621e3a")
-#+end_src
-
-** LSP
+\end{verbatim}
+\subsection{LSP}
+\label{sec:org9f35834}
 Trim the LSP client for responsiveness: raise the debounce a touch so
 completion isn't recomputed on every keystroke, and stop it from
 scanning huge trees of files for changes. Disabling the doc-glance
 popup keeps hovers from stealing focus.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! lsp-mode
   (setq lsp-idle-delay 0.5
         lsp-enable-file-watchers nil
@@ -469,31 +509,32 @@ popup keeps hovers from stealing focus.
 (after! lsp-ui
   (setq lsp-ui-doc-enable nil
         lsp-ui-sideline-enable nil))
-#+end_src
-
-** Web
+\end{verbatim}
+\subsection{Web}
+\label{sec:orga27a8cb}
 Two-space indentation for HTML/CSS/JS, which matches your global
-=tab-width= and the common convention for web files.
+\texttt{tab-width} and the common convention for web files.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! web-mode
   (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2))
-#+end_src
-
-** Python
+\end{verbatim}
+\subsection{Python}
+\label{sec:org16e4114}
 Silence the native-completion warning that pops up when the running
-Python lacks readline, and prefer =pytest= as the test runner.
+Python lacks readline, and prefer \texttt{pytest} as the test runner.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! python
   (setq python-shell-completion-native-enable nil))
-#+end_src
-
-** Markdown
-*** Titles
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsection{Markdown}
+\label{sec:org39a8418}
+\subsubsection{Titles}
+\label{sec:org4008825}
+\begin{verbatim}
 (custom-set-faces!
   '(markdown-header-delimiter-face :foreground "#616161" :height 0.9)
   '(markdown-header-face-1 :height 1.8 :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face)
@@ -502,10 +543,11 @@ Python lacks readline, and prefer =pytest= as the test runner.
   '(markdown-header-face-4 :height 1.15 :foreground "#BF616A" :weight bold :inherit markdown-header-face)
   '(markdown-header-face-5 :height 1.1 :foreground "#b48ead" :weight bold :inherit markdown-header-face)
   '(markdown-header-face-6 :height 1.05 :foreground "#5e81ac" :weight semi-bold :inherit markdown-header-face))
-#+end_src
-*** Autohide
+\end{verbatim}
+\subsubsection{Autohide}
+\label{sec:orge6439c6}
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (defvar nb/c   "(start . end) of current line in current buffer")
 (make-variable-buffer-local 'nb/current-line)
 (defun my/markdown-unhide-table (limit)
@@ -563,22 +605,23 @@ Python lacks readline, and prefer =pytest= as the test runner.
                                 (my/markdown-pad-table)) t)
   (add-hook 'post-command-hook #'nb/refontify-on-linemove nil t))
 (add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
-#+end_src
-
-** Orgmode
-*** Appearance
-=org-modern= restyles headings, lists, tables, keywords, and
+\end{verbatim}
+\subsection{Orgmode}
+\label{sec:org3c0c647}
+\subsubsection{Appearance}
+\label{sec:org76a2c88}
+\texttt{org-modern} restyles headings, lists, tables, keywords, and
 timestamps for a cleaner, more typographic look. Beyond just enabling
 it, these settings pick a nicer bullet for lists, draw a fringe marker
 beside source blocks, and give TODO/DONE labels pill-shaped faces —
 the visual polish tecosaur is known for, without the custom SVG
 machinery.
 
-#+begin_src emacs-lisp :tangle packages.el
+\begin{verbatim}
 (package! org-modern)
-#+end_src
+\end{verbatim}
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! org
   (setq org-modern-star 'replace                 ; swap heading asterisks for bullets
         org-modern-list '((?- . "•") (?+ . "◦") (?* . "▪"))
@@ -590,22 +633,18 @@ machinery.
         org-pretty-entities t
         org-hide-emphasis-markers t)
   (global-org-modern-mode))
-#+end_src
-
-*** Org Directory
+\end{verbatim}
+\subsubsection{Org Directory}
+\label{sec:orga0c9911}
 Where Org files live by default. Agenda, capture, and refile all read
 from here.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (setq org-directory (expand-file-name "~/Documents/notes/"))
-#+end_src
-
-*** Fonts and Headings
-:PROPERTIES:
-:CUSTOM_ID: fonts-and-headings
-:END:
-
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsubsection{Fonts and Headings}
+\label{fonts-and-headings}
+\begin{verbatim}
 (add-hook 'org-mode-hook #'+org-pretty-mode)
 
 (custom-set-faces!
@@ -626,21 +665,21 @@ from here.
           (1.0 . org-warning)
           (0.5 . org-upcoming-deadline)
           (0.0 . org-upcoming-distant-deadline))))
-#+end_src
-
-*** Emphasis Markers
-With =org-hide-emphasis-markers= on (above), the =/slashes/= and
-=*stars*= around emphasized text are hidden — nice to read, awkward to
-edit. =org-appear= restores them automatically whenever the cursor
+\end{verbatim}
+\subsubsection{Emphasis Markers}
+\label{sec:org822b585}
+With \texttt{org-hide-emphasis-markers} on (above), the \texttt{/slashes/} and
+\texttt{*stars*} around emphasized text are hidden — nice to read, awkward to
+edit. \texttt{org-appear} restores them automatically whenever the cursor
 enters the emphasized region, so editing stays easy.
 
-#+begin_src emacs-lisp :tangle packages.el
+\begin{verbatim}
 (package! org-appear
         :recipe (:host github :repo "awth13/org-appear") :pin "77d23efec5f5c25fc0798364d2b51a3ce3d8d518")
 
-#+end_src
+\end{verbatim}
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (use-package! org-appear
   :hook (org-mode . org-appear-mode)
   :config
@@ -658,11 +697,11 @@ enters the emphasized region, so editing stays easy.
                                      #'org-appear-manual-stop
                                      nil
                                      t)))
-#+end_src
+\end{verbatim}
+\subsubsection{Behaviour}
+\label{sec:orga018083}
 
-*** Behaviour
-
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! org
   (setq org-log-done 'time
         org-startup-folded 'content
@@ -674,15 +713,15 @@ enters the emphasized region, so editing stays easy.
         org-catch-invisible-edits 'smart  ; don't silently edit folded text
         org-export-with-sub-superscripts '{}  ; require x_{i}, not x_i
         org-image-actual-width '(0.9))   ; inline images at 90% of window
-#+end_src
+\end{verbatim}
 
-By default Doom turns =visual-line-mode= on in text buffers. That
-wraps in a way that fights Org tables and LaTeX, so swap it for
-=auto-fill-mode= (hard wrapping) here — you can still toggle visual
-wrap per buffer. Also add arrow-key equivalents for Org's =hjkl=
+By default Doom turns \texttt{visual-line-mode} on in text buffers. That
+wraps in a way that fights Org tables and \LaTeX{}, so swap it for
+\texttt{auto-fill-mode} (hard wrapping) here — you can still toggle visual
+wrap per buffer. Also add arrow-key equivalents for Org's \texttt{hjkl}
 structural motions.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (remove-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'auto-fill-mode)
 
@@ -692,23 +731,23 @@ structural motions.
       :n "g <down>"  #'org-forward-heading-same-level
       :n "g <left>"  #'org-up-element
       :n "g <right>" #'org-down-element)
-#+end_src
-
-*** Poly-org
-Vendored from upstream =poly-org.el= (Vitalie Spinu, MIT) under our
-own name so we can wire parinfer (and any future =emacs-lisp-mode-hook=
+\end{verbatim}
+\subsubsection{Poly-org}
+\label{sec:org8528f4c}
+Vendored from upstream \texttt{poly-org.el} (Vitalie Spinu, MIT) under our
+own name so we can wire parinfer (and any future \texttt{emacs-lisp-mode-hook}
 consumer) into the emacs-lisp src-block inner buffer.  Polymode uses
-=delay-mode-hooks=-style deferral when cloning inner buffers, so the
-plain =emacs-lisp-mode-hook= never fires inside Org src blocks; the
-hook is invoked explicitly from a =switch-buffer-functions= slot.
-#+begin_src emacs-lisp
+\texttt{delay-mode-hooks}-style deferral when cloning inner buffers, so the
+plain \texttt{emacs-lisp-mode-hook} never fires inside Org src blocks; the
+hook is invoked explicitly from a \texttt{switch-buffer-functions} slot.
+\begin{verbatim}
 (use-package parinfer-rust-mode
   :hook emacs-lisp-mode
   :init
   (setq parinfer-rust-auto-download t))
-#+end_src
+\end{verbatim}
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 ;;; my-poly-org.el --- Vendored poly-org, renamed. -*- lexical-binding: t -*-
 ;;;
 (require 'polymode)
@@ -789,28 +828,28 @@ Used in :switch-buffer-functions slot."
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.org\\'" . my-poly-org-mode))
-#+end_src
-
-*** Agenda
-tecosaur's souped-up agenda, built on =org-super-agenda=. This groups
-the =alltodo= view by tag, priority, and deadline so a single =SPC o A
-o= "Overview" gives you Today's time-grid plus everything else bucketed
+\end{verbatim}
+\subsubsection{Agenda}
+\label{sec:org87907ff}
+tecosaur's souped-up agenda, built on \texttt{org-super-agenda}. This groups
+the \texttt{alltodo} view by tag, priority, and deadline so a single \texttt{SPC o A
+o} ``Overview'' gives you Today's time-grid plus everything else bucketed
 sensibly.
 
-#+begin_src emacs-lisp :tangle packages.el
+\begin{verbatim}
 (package! org-super-agenda)
-#+end_src
+\end{verbatim}
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (use-package! org-super-agenda
   :commands org-super-agenda-mode)
-#+end_src
+\end{verbatim}
 
-The custom command below is tecosaur's, verbatim. The =:discard= at
+The custom command below is tecosaur's, verbatim. The \texttt{:discard} at
 the end drops chore/routine/daily-tagged items from the overview so it
 stays focused on real work.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! org-agenda
   (let ((inhibit-message t))
     (org-super-agenda-mode)))
@@ -881,21 +920,23 @@ stays focused on real work.
                            :todo ("SOMEDAY" )
                            :order 90)
                           (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
-#+end_src
+\end{verbatim}
+\section{Note-taking}
+\label{sec:orgacaddf7}
+\subsection{Install package}
+\label{sec:org7c3ebcd}
 
-* Note-taking
-** Install package
-
-#+begin_src emacs-lisp :tangle packages.el
+\begin{verbatim}
 (package! denote)
 (package! denote-sequence)
 (package! denote-journal)
 (package! consult-denote)
-#+end_src
-
-** Configuration
-*** Basic
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsection{Configuration}
+\label{sec:org703695a}
+\subsubsection{Basic}
+\label{sec:org10e584c}
+\begin{verbatim}
 (use-package denote
   :ensure t
   :hook
@@ -914,19 +955,19 @@ stays focused on real work.
   (setq denote-rename-confirmations '(rewrite-front-matter modify-file-name))
   (setq denote-date-prompt-use-org-read-date t)
   (denote-rename-buffer-mode 1))
-#+end_src
-
-*** Sequence
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsubsection{Sequence}
+\label{sec:org8a236c8}
+\begin{verbatim}
 (use-package denote-sequence
   :ensure t
   :after denote
   :config
   (setq denote-sequence-scheme 'alphanumeric))
-#+end_src
-
-*** Journal
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsubsection{Journal}
+\label{sec:org446e2bf}
+\begin{verbatim}
 (use-package denote-journal
   :ensure t
   :after denote
@@ -939,20 +980,20 @@ stays focused on real work.
         (expand-file-name "journal" denote-directory))
   (setq denote-journal-keyword "journal")
   (setq denote-journal-title-format 'day-date-month-year))
-#+end_src
-
-*** Browse
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsubsection{Browse}
+\label{sec:org2f12a30}
+\begin{verbatim}
 (use-package consult-denote
   :ensure t
   :after denote
   :config
   (consult-denote-mode 1)
   (setq consult-denote-grep-command #'consult-ripgrep))
-#+end_src
-
-*** Keybinds
-#+begin_src emacs-lisp
+\end{verbatim}
+\subsubsection{Keybinds}
+\label{sec:org5009a78}
+\begin{verbatim}
 (after! doom
   (map! :leader
         (:prefix ("e" . "Notes (denote)")
@@ -982,16 +1023,16 @@ stays focused on real work.
           :desc "new entry"        "j" #'denote-journal-new-entry
           :desc "new or existing"  "o" #'denote-journal-new-or-existing-entry
           :desc "link or create"   "l" #'denote-journal-link-or-create-entry))))
-#+end_src
-
-* HTML Export
+\end{verbatim}
+\section{HTML Export}
+\label{sec:org1a4ec06}
 
 I want to tweak a whole bunch of things. While I'll want my tweaks almost all
 the time, occasionally I may want to test how something turns out using a more
 default config. With that in mind, a global minor mode seems like the most
 appropriate architecture to use.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (define-minor-mode org-fancy-html-export-mode
     "Toggle my fabulous org export tweaks. While this mode itself does a little bit,
@@ -1014,11 +1055,11 @@ appropriate architecture to use.
             org-html-meta-tags #'org-html-meta-tags-default
             org-html-checkbox-type 'html)))
   )
-#+end_src
+\end{verbatim}
+\subsection{Extra header contents}
+\label{sec:org85c6736}
 
-** Extra header contents
-
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defadvice! org-html-template-fancier (orig-fn contents info)
     "Return complete document string after HTML conversion.
@@ -1114,9 +1155,9 @@ appropriate architecture to use.
        ;; Closing document.
        "</div>\n</body>\n</html>")))
   )
-#+end_src
+\end{verbatim}
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defadvice! org-html-toc-linked (depth info &optional scope)
     "Build a table of contents.
@@ -1150,9 +1191,9 @@ appropriate architecture to use.
                       toc
                       (format "</%s>\n" outer-tag))))))))
   )
-#+end_src
+\end{verbatim}
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defvar org-html-meta-tags-opengraph-image
     '(:image "https://tecosaur.com/resources/org/nib.png"
@@ -1221,15 +1262,15 @@ appropriate architecture to use.
     (defalias 'org-html-meta-tags-default #'ignore))
   (setq org-html-meta-tags #'org-html-meta-tags-fancy)
   )
-#+end_src
+\end{verbatim}
+\subsection{Custom CSS/JS}
+\label{sec:orgcf9754f}
 
-** Custom CSS/JS
-
-The default org HTML export is ... alright, but we can really jazz it up.
-[[https://lepisma.xyz][lepisma.xyz]] has a really nice style, and from and org export too!
+The default org HTML export is \ldots{} alright, but we can really jazz it up.
+\href{https://lepisma.xyz}{lepisma.xyz} has a really nice style, and from and org export too!
 Suffice to say I've snatched it, with a few of my own tweaks applied.
 
-#+begin_src html :tangle misc/org-export-header.html :comments no
+\begin{verbatim}
 <link rel="icon" href="https://tecosaur.com/resources/org/nib.ico" type="image/ico" />
 
 <link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/etbookot-roman-webfont.woff2">
@@ -1237,9 +1278,9 @@ Suffice to say I've snatched it, with a few of my own tweaks applied.
 <link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextRegular.woff2">
 <link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextItalic.woff2">
 <link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="https://tecosaur.com/resources/org/Merriweather-TextBold.woff2">
-#+end_src
+\end{verbatim}
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (setq org-html-style-plain org-html-style-default
         org-html-htmlize-output-type 'css
@@ -1273,35 +1314,34 @@ Suffice to say I've snatched it, with a few of my own tweaks applied.
         (when org-fancy-html-export-mode
           (setq org-html-style-default org-html-style-fancy)))))
   (org-html-reload-fancy-style))
-#+end_src
+\end{verbatim}
+\subsection{Collapsable src and example blocks}
+\label{sec:orgf4a47c2}
 
-** Collapsable src and example blocks
-
-By wrapping the ~<pre>~ element in a ~<details>~ block, we can obtain collapsable
+By wrapping the \texttt{<pre>} element in a \texttt{<details>} block, we can obtain collapsable
 blocks with no CSS, though we will toss a little in anyway to have this looking
 somewhat spiffy.
 
 Since this collapsability seems useful to have on by default for certain chunks
-of code, it would be nice if you could set it with =#+attr_html: :collapsed t=.
+of code, it would be nice if you could set it with \texttt{\#+attr\_html: :collapsed t}.
 
 It would be nice to also have a corresponding global / session-local way of
 setting this, but I haven't quite been able to get that working (yet).
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defvar org-html-export-collapsed nil)
   (eval '(cl-pushnew '(:collapsed "COLLAPSED" "collapsed" org-html-export-collapsed t)
                      (org-export-backend-options (org-export-get-backend 'html))))
   (add-to-list 'org-default-properties "EXPORT_COLLAPSED")
   )
-#+end_src
+\end{verbatim}
 
 We can take our src block modification a step further, and add a gutter on the
 side of the src block containing both an anchor referencing the current block,
 and a button to copy the content of the block.
 
-#+name: Src blocks
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defadvice! org-html-src-block-collapsable (orig-fn src-block contents info)
     "Wrap the usual <pre> block in a <details>"
@@ -1422,10 +1462,9 @@ and a button to copy the content of the block.
                        )))
         mode))
   )
-#+end_src
+\end{verbatim}
 
-#+name: Example, fixed width, and property blocks
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defun org-html-block-collapsable (orig-fn block contents info)
     "Wrap the usual block in a <details>"
@@ -1461,18 +1500,18 @@ and a button to copy the content of the block.
   (advice-add 'org-html-fixed-width     :around #'org-html-block-collapsable)
   (advice-add 'org-html-property-drawer :around #'org-html-block-collapsable)
   )
-#+end_src
-
-** Handle table overflow
+\end{verbatim}
+\subsection{Handle table overflow}
+\label{sec:org4e95313}
 
 In order to accommodate wide tables ---particularly on mobile devices--- we want
 to set a maximum width and scroll overflow. Unfortunately, this cannot be applied
-directly to the ~table~ element, so we have to wrap it in a ~div~.
+directly to the \texttt{table} element, so we have to wrap it in a \texttt{div}.
 
 While we're at it, we can a link gutter, as we did with src blocks, and show the
-~#+name~, if one is given.
+\texttt{\#+name}, if one is given.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defadvice! org-html-table-wrapped (orig-fn table contents info)
     "Wrap the usual <table> in a <div>"
@@ -1493,21 +1532,21 @@ While we're at it, we can a link gutter, as we did with src blocks, and show the
                                               (funcall orig-fn table contents info))
                   (funcall orig-fn table contents info))))))
   )
-#+end_src
-
-** TOC as a collapsable tree
+\end{verbatim}
+\subsection{TOC as a collapsable tree}
+\label{sec:org7ce0c12}
 
 The TOC is much nicer to navigate as a collapsable tree. Unfortunately we cannot
 achieve this with CSS alone. Thankfully we can avoid JS though, by adapting the
-TOC generation code to use a ~label~ for each item, and a hidden ~checkbox~ to keep
+TOC generation code to use a \texttt{label} for each item, and a hidden \texttt{checkbox} to keep
 track of state.
 
 To add this, we need to change one line in
-~org-html--format-toc-headline~. Since we can actually accomplish
-the desired effect by adding advice /around/ the function, without
+\texttt{org-html-{}-{}format-toc-headline}. Since we can actually accomplish
+the desired effect by adding advice \emph{around} the function, without
 overriding it --- let's do that to reduce the bug surface of this
 config a tad.
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defadvice! org-html--format-toc-headline-colapseable (orig-fn headline info)
     "Add a label and checkbox to `org-html--format-toc-headline's usual output,
@@ -1519,13 +1558,13 @@ config a tad.
                     (org-export-get-reference headline info))))
         (format "<input type='checkbox' id='toc--%s'/><label for='toc--%s'>%s</label>"
                 id id (funcall orig-fn headline info))))))
-#+end_src
-Now, leaves (headings with no children) shouldn't have the ~label~ item. The
-obvious way to achieve this is by including some /if no children.../ logic in
-~org-html--format-toc-headline-colapseable~. Unfortunately, I can't my elisp isn't
+\end{verbatim}
+Now, leaves (headings with no children) shouldn't have the \texttt{label} item. The
+obvious way to achieve this is by including some \emph{if no children\ldots{}} logic in
+\texttt{org-html-{}-{}format-toc-headline-colapseable}. Unfortunately, I can't my elisp isn't
 up to par to extract the number of child headings from the mountain of info that
 org provides.
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defadvice! org-html--toc-text-stripped-leaves (orig-fn &rest args)
     "Remove label"
@@ -1534,14 +1573,14 @@ org provides.
         (apply orig-fn args)
       (replace-regexp-in-string "<input [^>]+><label [^>]+>\\(.+?\\)</label></li>" "\\1</li>"
                                 (apply orig-fn args)))))
-#+end_src
-
-** Make verbatim different to code
-Since we have =verbatim= and ~code~, let's make use of the difference. We can use ~code~ exclusively for code snippets and commands like: src_elisp{(message "Hello")} in batch-mode Emacs prints to stdout. Then we can use =verbatim= for miscellaneous 'other monospace' like keyboard shortcuts: "either =C-c C-c= or =C-g= is likely the most useful keybinding in Emacs", or file names: "I keep my configuration in =~/.config/doom/=", among other things.
+\end{verbatim}
+\subsection{Make verbatim different to code}
+\label{sec:org151ae31}
+Since we have \texttt{verbatim} and \texttt{code}, let's make use of the difference. We can use \texttt{code} exclusively for code snippets and commands like: \texttt{Hello} in batch-mode Emacs prints to stdout. Then we can use \texttt{verbatim} for miscellaneous 'other monospace' like keyboard shortcuts: ``either \texttt{C-c C-c} or \texttt{C-g} is likely the most useful keybinding in Emacs'', or file names: ``I keep my configuration in \texttt{\textasciitilde{}/.config/doom/}'', among other things.
 
 Then, styling these two cases differently can help improve clarity in a document.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (setq org-html-text-markup-alist
         '((bold . "<b>%s</b>")
@@ -1550,12 +1589,12 @@ Then, styling these two cases differently can help improve clarity in a document
           (strike-through . "<del>%s</del>")
           (underline . "<span class=\"underline\">%s</span>")
           (verbatim . "<kbd>%s</kbd>"))))
-#+end_src
-
-** Change checkbox type
+\end{verbatim}
+\subsection{Change checkbox type}
+\label{sec:org545b70e}
 
 We also want to use HTML checkboxes, however we want to get a bit fancier than default
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (appendq! org-html-checkbox-types
             '((html-span
@@ -1563,34 +1602,36 @@ We also want to use HTML checkboxes, however we want to get a bit fancier than d
                (off . "<span class='checkbox'></span>")
                (trans . "<span class='checkbox'></span>"))))
   (setq org-html-checkbox-type 'html-span))
-#+end_src
+\end{verbatim}
+\subsection{Extra special strings}
+\label{sec:orge96618b}
 
-** Extra special strings
-
-The ~org-html-special-string-regexps~ variable defines substitutions for:
-+ =\-=, a shy hyphen
-+ =---=, an em dash
-+ =--=, an en dash
-+ =...=, (horizontal) ellipses
+The \texttt{org-html-special-string-regexps} variable defines substitutions for:
+\begin{itemize}
+\item \texttt{\textbackslash{}-}, a shy hyphen
+\item \texttt{-{}-{}-}, an em dash
+\item \texttt{-{}-{}}, an en dash
+\item \texttt{...}, (horizontal) ellipses
+\end{itemize}
 
 However I think it would be nice if there was also a substitution for left/right
-arrows (=->= and =<-=). This is a ~defconst~, but as you may tell from the amount of
+arrows (\texttt{->} and \texttt{<-}). This is a \texttt{defconst}, but as you may tell from the amount of
 advice in this config, I'm not above messing with things I'm not 'supposed' to.
 
-The only minor complication is that =<= and =>= are converted to =&lt;= and =&gt;=
+The only minor complication is that \texttt{<} and \texttt{>} are converted to \texttt{\&lt;} and \texttt{\&gt;}
 before this stage of output processing.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (pushnew! org-html-special-string-regexps
             '("-&gt;" . "&#8594;")
             '("&lt;-" . "&#8592;"))
   )
-#+end_src
-
-** Header anchors
+\end{verbatim}
+\subsection{Header anchors}
+\label{sec:org3b0aa7f}
 I want to add GitHub-style links on hover for headings.
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (defun org-export-html-headline-anchor (text backend info)
     (when (and (org-export-derived-backend-p backend 'html)
@@ -1605,25 +1646,26 @@ I want to add GitHub-style links on hover for headings.
   (add-to-list 'org-export-filter-headline-functions
                'org-export-html-headline-anchor)
   )
-#+end_src
+\end{verbatim}
+\subsection{\LaTeX{} Rendering}
+\label{sec:org172069a}
+\subsubsection{Pre-rendered}
+\label{sec:org6e87b9e}
 
-** LaTeX Rendering
-*** Pre-rendered
-
-I consider ~dvisvgm~ to be a rather compelling option. However this isn't scaled
+I consider \texttt{dvisvgm} to be a rather compelling option. However this isn't scaled
 very well at the moment.
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   ;; (setq-default org-html-with-latex `dvisvgm)
   )
-#+end_src
-
-*** MathJax
+\end{verbatim}
+\subsubsection{MathJax}
+\label{sec:org7b3582e}
 
 I want to use svg MathJax by default, and with a few of the custom commands that
-are part of my LaTeX preamble.
+are part of my \LaTeX{} preamble.
 
-#+begin_src emacs-lisp
+\begin{verbatim}
 (after! ox-html
   (setcdr (assoc 'path org-html-mathjax-options)
           (list "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"))
@@ -1688,4 +1730,5 @@ are part of my LaTeX preamble.
     src=\"%PATH\">
   </script>")
   )
-#+end_src
+\end{verbatim}
+\end{document}
