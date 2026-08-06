@@ -25,6 +25,26 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    eaf = {
+      url = "github:emacs-eaf/emacs-application-framework";
+      flake = false;
+    };
+    eaf-browser = {
+      url = "github:emacs-eaf/eaf-browser";
+      flake = false;
+    };
+    eaf-file-manager = {
+      url = "github:emacs-eaf/eaf-file-manager";
+      flake = false;
+    };
+    eaf-image-viewer = {
+      url = "github:emacs-eaf/eaf-image-viewer";
+      flake = false;
+    };
+    eaf-pdf-viewer = {
+      url = "github:emacs-eaf/eaf-pdf-viewer";
+      flake = false;
+    };
     flake-file.url = "github:denful/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -43,7 +63,7 @@
     };
     nix-doom-emacs-unstraightened = {
       url = "github:marienz/nix-doom-emacs-unstraightened";
-      inputs.nixpkgs.follows = "";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixcord.url = "github:4evy/nixcord";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";

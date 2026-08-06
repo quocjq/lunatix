@@ -371,6 +371,86 @@
         "type": "github"
       }
     },
+    "eaf": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779731915,
+        "narHash": "sha256-TrjFcs/I8FqSC2VwejTeu/P+48SBmNJRzL+MJy8PmUg=",
+        "owner": "emacs-eaf",
+        "repo": "emacs-application-framework",
+        "rev": "d0ee517b247fa3c6d1d98caaa00d33fee7f33b1f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-eaf",
+        "repo": "emacs-application-framework",
+        "type": "github"
+      }
+    },
+    "eaf-browser": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1778904917,
+        "narHash": "sha256-y8UlstGppN/LtXh2HFulNP6H5cTYZaMBsok8p9/BZM4=",
+        "owner": "emacs-eaf",
+        "repo": "eaf-browser",
+        "rev": "194e132a8129e7a952ef0d885da44f03c34f0244",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-eaf",
+        "repo": "eaf-browser",
+        "type": "github"
+      }
+    },
+    "eaf-file-manager": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768122663,
+        "narHash": "sha256-KZ6zv1vRBm4t7yR4ERyQFk1N/Vd500GKhrM4NB8HAUI=",
+        "owner": "emacs-eaf",
+        "repo": "eaf-file-manager",
+        "rev": "bb5048ea65deb96d5ad8b289c78f6793163ecec0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-eaf",
+        "repo": "eaf-file-manager",
+        "type": "github"
+      }
+    },
+    "eaf-image-viewer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1688116702,
+        "narHash": "sha256-5MJibLr4UJOKl79PsDmXEZR+XFBx1xvcoykX4z/XbrI=",
+        "owner": "emacs-eaf",
+        "repo": "eaf-image-viewer",
+        "rev": "154685532ff42bd7ff4fe5a80e96e0d3d56b4ee0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-eaf",
+        "repo": "eaf-image-viewer",
+        "type": "github"
+      }
+    },
+    "eaf-pdf-viewer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1753498205,
+        "narHash": "sha256-7JAWgCECHnMGPH9GM8pi9lDzR+B4T6xgYQCor032zbM=",
+        "owner": "emacs-eaf",
+        "repo": "eaf-pdf-viewer",
+        "rev": "ff08a6b48faac2d231fb1cfe968cec7e41bbeb98",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-eaf",
+        "repo": "eaf-pdf-viewer",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "inputs": {
         "nixpkgs": [
@@ -1186,7 +1266,9 @@
         "doomemacs": "doomemacs",
         "doomemacs-modules": "doomemacs-modules",
         "emacs-overlay": "emacs-overlay",
-        "nixpkgs": [],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "systems": "systems_4"
       },
       "locked": {
@@ -1515,6 +1597,11 @@
         "den-diagram": "den-diagram",
         "devenv": "devenv",
         "disko": "disko",
+        "eaf": "eaf",
+        "eaf-browser": "eaf-browser",
+        "eaf-file-manager": "eaf-file-manager",
+        "eaf-image-viewer": "eaf-image-viewer",
+        "eaf-pdf-viewer": "eaf-pdf-viewer",
         "flake-file": "flake-file",
         "flake-parts": "flake-parts_3",
         "herdr": "herdr",

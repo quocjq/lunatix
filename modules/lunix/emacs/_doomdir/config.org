@@ -442,38 +442,78 @@ See =snippets-guide.org= for the snippet file format, placeholders,
 and how to add new ones.
 
 ** EAF
-*** Install eaf
-#+begin_src emacs-lisp :tangle init.el
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/emacs-application-framework/" ))
-(require 'eaf)
+Manage through nix! Lol
+
+*** Install package
+#+begin_src emacs-lisp :tangle packages.el
+;; The four EAF apps are sourced from the Nix-side composite built in
+;; ../eaf.nix (which itself reads ../_eaf/) — the framework's `eaf.el`
+;; copies their elisp into `eaf-<version>/app/` at build time, so they
+;; load via `(require 'eaf-browser)` etc. Listing them as `package!`
+;; keeps Doom's package-lockfile aware of them.
+(package! eaf-browser)
+(package! eaf-pdf-viewer)
+(package! eaf-file-manager)
+(package! eaf-image-viewer)
 #+end_src
-*** config:
+
+*** Config
 #+begin_src emacs-lisp :tangle yes
 (use-package eaf
-  :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-  :custom
-  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-  (eaf-browser-continue-where-left-off t)
-  (eaf-browser-enable-adblocker t)
-  (browse-url-browser-function 'eaf-open-browser)
   :config
   (defalias 'browse-web #'eaf-open-browser)
-  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key take_photo "p" eaf-camera-keybinding)
-  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+  :custom
+  (eaf-browser-continue-where-left-off t)
+  (eaf-browser-enable-adblocker t)
+  (browse-url-browser-function 'eaf-open-browser))
 #+end_src
-*** eaf-browser
-#+begin_src emacs-lisp :tangle yes
-(require 'eaf-browser)
-#+end_src
+
+*** Vendored EAF, not nixpkgs
+#+begin_quote
+The =eaf= Emacs package is /not/ pulled from nixpkgs — nixpkgs' copies run
+~6–10 months behind upstream. Source is vendored at =../_eaf/= (one
+file per app) and fed from =flake=false= flake inputs declared in
+=../eaf.nix=. Update loop:
+#+end_quote
+
+- =nix flake update eaf= (or =eaf-browser=, =eaf-pdf-viewer=,
+  =eaf-file-manager=, =eaf-image-viewer=) bumps the lock entry. The
+  version string is derived from the input's =lastModifiedDate= (see
+  =../_eaf/version.nix=); =melpaBuild= matches =^.*-unstable-YYYY-MM-DD$=
+  and turns it into =melpaVersion= for the LISPDIR, so the format is
+  load-bearing.
+- Three inputs need an =npmDepsHash= in =../_eaf/npm-hashes.nix= that
+  =nix flake update= does /not/ refresh (=browser=, =file-manager=,
+  =image-viewer=; =pdf-viewer= has no =package.json=). After bumping,
+  either run =nix run nixpkgs#prefetch-npm-deps -- <input-store>/package-lock.json=
+  and paste the printed =sha256-...= into the file, or run =nix build .#eaf=
+  and copy the expected hash out of the deterministic-output failure.
+- A few non-obvious bits live in the Nix side:
+  - =aria2= is passed in explicitly to =eaf-browser=. Inside the emacs
+    scope the name resolves to the *elisp* aria2 package; nixpkgs does
+    the same re-injection in =manual-packages.nix=.
+  - The framework's =postPatch= patches =eaf.el= with =--replace-fail= on
+    five exact strings. If upstream refactors =eaf.el=, the build aborts
+    with the missing string named — that is the intended loud failure;
+    re-read upstream and update the patterns.
+  - =../_eaf/overlay.nix= patches =plum-py= via =pythonPackagesExtensions=
+    (not a top-level =python3Packages= rebind — that one misses
+    =python3.pkgs=, which is what =withPackages= actually reads). It
+    lives in the *home-manager* scope because this host uses
+    =home-manager.useGlobalPkgs = false=, so a NixOS-level
+    =nixpkgs.overlays= would never be seen by doom's emacs.
+
+Fast iteration target for the above loop without paying for a full
+home-manager rebuild: =nix build .#eaf=. Same overlay, system emacs,
+plum-py patched — only good for settling npm hashes and catching
+upstream patch drift.
 * Languages
 Per-language tweaks. Doom's =:lang= modules already do the heavy
 lifting (LSP, tree-sitter, formatting) — these just adjust a few
 defaults, in the same spirit as tecosaur's language section but pared
 down to the languages you have enabled.
 
-** Polymode
+** COMMENT Polymode
 
 - Install Polymode
 #+begin_src emacs-lisp :tangle packages.el
@@ -720,7 +760,7 @@ structural motions.
       :n "g <right>" #'org-down-element)
 #+end_src
 
-*** Poly-org
+*** COMMENT Poly-org
 Vendored from upstream =poly-org.el= (Vitalie Spinu, MIT) under our
 own name so we can wire parinfer (and any future =emacs-lisp-mode-hook=
 consumer) into the emacs-lisp src-block inner buffer.  Polymode uses
