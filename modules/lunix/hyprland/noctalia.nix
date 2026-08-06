@@ -130,17 +130,17 @@
             };
           };
 
-          dock = {
-            active_monitor_only = true;
-            active_scale = 1.75;
-            auto_hide = true;
-            enabled = true;
-            icon_size = 27;
-            inactive_scale = 1.0;
-            launcher_position = "start";
-            main_axis_padding = 6;
-            reserve_space = false;
-          };
+          # dock = {
+          #   active_monitor_only = true;
+          #   active_scale = 1.75;
+          #   auto_hide = true;
+          #   enabled = true;
+          #   icon_size = 27;
+          #   inactive_scale = 1.0;
+          #   launcher_position = "start";
+          #   main_axis_padding = 6;
+          #   reserve_space = false;
+          # };
 
           location.auto_locate = true;
 
