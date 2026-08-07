@@ -206,21 +206,16 @@
             screen_corners.enabled = true;
           };
 
-          # Palette is derived from the stylix wallpaper (modules/lunix/themes/wallpaper.jpg).
-          # Noctalia uses its own wallpaper_scheme extractor on the file, so dropping the
-          # Catppuccin builtin/community palette here aligns the bar/panel colors with stylix.
-          theme = {
-            wallpaper_scheme = "m3-content";
-          };
+          # Palette is provided by stylix's noctalia target
+          # (theme.source = "custom" + customPalettes.stylix.dark). wallpaper_scheme is a
+          # no-op when source="custom", so the setting is dropped.
+          theme = { };
 
           wallpaper = {
             directory = "/home/${user.userName}/Pictures/wallpaper";
 
-            # The committed stylix source-of-truth image. Relative to this module:
-            #   modules/lunix/hyprland/noctalia.nix -> modules/lunix/themes/wallpaper.jpg
-            # default.path = toString ../themes/wallpaper.jpg;
-            # last.path    = toString ../themes/wallpaper.jpg;
-            # monitors."eDP-1".path = toString ../themes/wallpaper.jpg;
+            # Wallpaper path overrides are runtime — noctalia pulls from `favorite` and any
+            # user-selected image; default.path is left unset so noctalia picks from cache.
 
             favorite = [
               {

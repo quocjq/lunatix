@@ -1,0 +1,69 @@
+#+title: Secrets (lig)
+#+subtitle: modules/lig
+#+options: toc:t
+
+* agenix integration — modules/lig/agenix.nix
+
+~lig.agenix~ is the single consumer of the ~secrets~ den quirk. Any aspect can
+declare a secret by emitting a top-level ~secrets = [...]~ list; this module
+turns every entry into an ~age.secrets.<name>~ NixOS option.
+
+** Producer contract
+
+#+begin_src nix
+  secrets = [
+    { name = "github";                     # -> modules/lig/_secrets/github.age
+      path = "/home/lunixose/.ssh/github"; # decrypted symlink target
+      owner = "lunixose";                  # default "root"
+      group = "users";                     # default "root"
+      mode = "600"; }                      # default "400"
+  ];
+#+end_src
+
+** Declarations
+
+- ~den.quirks.secrets~ — registers the quirk
+- ~den.policies.expose-secrets~ — ~pipe.expose~ from ~secrets~, so any aspect
+  can emit secrets
+- Default include so all aspects pick up the policy
+- Imports the agenix NixOS module, installs the agenix CLI, and maps each
+  secret to ~age.secrets.<name>~ with ~file = ./_secrets/<name>.age~
+
+=agenix-rekey= is declared as an input but its NixOS module / config is
+commented out.
+
+* Encrypted files — modules/lig/_secrets
+
+Recipients are pinned in [[file:../modules/lig/_secrets/secrets.nix][secrets.nix]]:
+
+- ~lunixose~ — user public key
+- ~igloo~ — host public key (root@nixos)
+
+Both recipients are allowed for all five secrets:
+
+| file            | purpose                                        |
+|-----------------+------------------------------------------------|
+| =dns.age=       | DNS credentials → /run/agenix/dns              |
+| =env.age=       | environment secrets → ~/.config/secrets/env    |
+| =github.age=    | GitHub SSH key → ~/.ssh/github                 |
+| =github-token.age= | GitHub token, included into ~nix.extraOptions~ |
+| =oraclevps.age= | Oracle VPS key → ~/.ssh/ssh-key-2026-05-09.key |
+
+Add a new secret: create the ~.age~ file, add it to secrets.nix recipients,
+then declare a matching ~secrets~ entry.
+
+* Managing secrets
+
+All secret operations go through [[file:justfile.org][just]] recipes, e.g.
+
+#+begin_src shell
+  just secret github          # create/edit github.age
+  just secret-show github     # decrypt to stdout
+  just rekey                  # re-encrypt for recipients in secrets.nix
+#+end_src
+
+* Related
+
+- [[file:index.org][Overview]]
+- [[file:hosts-user.org][Hosts and users]]
+- [[file:justfile.org][just recipes]]

@@ -1,0 +1,61 @@
+#+title: just recipes
+#+subtitle: justfile
+#+options: toc:t
+
+Run ~just~ to list everything. Recipes cluster into bootstrap (fresh
+installer), daily build/switch, maintenance, and secrets.
+
+* Bootstrap
+
+| recipe          | action                                                        |
+|-----------------+---------------------------------------------------------------|
+| ~bootstrap~     | Enter the toolbox devshell (disko, cryptsetup, nixos-install…) |
+| ~bootstrap-dev~ | Same via devenv                                                 |
+| ~dev~           | Enter the daily devenv shell (mirrors ~.envrc~)                 |
+
+* Install / switch
+
+| recipe           | action                                                    |
+|------------------+-----------------------------------------------------------|
+| ~disko-format~   | Partition/format/mount Latitude disk at /mnt (DESTRUCTIVE) |
+| ~nixos-install~  | Install igloo onto /mnt                                    |
+| ~disko-install~  | disko + nixos-install in one shot (host + disk args)       |
+| ~build~          | Build igloo (no activation)                                |
+| ~switch~         | Build and activate igloo                                   |
+| ~vm~             | Test config in a throwaway VM (~nix run .#vm~)             |
+| ~write-flake~    | Regenerate flake.nix after input changes                   |
+
+~disko-format~ expects the LUKS passphrase stashed first:
+
+#+begin_src shell
+  echo -n 'your-passphrase' > /tmp/secret.key
+#+end_src
+
+* Maintenance
+
+| recipe       | action                                                       |
+|--------------+--------------------------------------------------------------|
+| ~update~     | ~nix flake update~ (refresh flake.lock)                      |
+| ~fmt~        | Format all Nix files                                          |
+| ~clean~      | nh clean (keep 5, since 5d) + store optimise                 |
+| ~clean-hard~ | Aggressive: keep 5 newest generations regardless of age       |
+| ~optimise~   | Dedupe the store, no removal                                 |
+
+* Secrets (agenix)
+
+| recipe             | action                                            |
+|--------------------+---------------------------------------------------|
+| ~secret <name>~    | Create/edit ~<name>.age~                           |
+| ~secret-import~    | Encrypt an existing file into a secret             |
+| ~secret-show~      | Decrypt to stdout (sanity check)                   |
+| ~rekey~            | Re-encrypt for current recipients in secrets.nix   |
+| ~new-ssh-key~      | Generate SSH key, wrap in ~.age~, print pubkey     |
+
+Identity: ~~/.ssh/ssh_user_lunixose_ed25519~~; secrets dir:
+~modules/lig/_secrets~. See [[file:lig.org][Secrets]].
+
+* Related
+
+- [[file:index.org][Overview]]
+- [[file:lig.org][Secrets]]
+- [[file:flake.org][Flake infrastructure]]

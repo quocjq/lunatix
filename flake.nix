@@ -45,6 +45,10 @@
       url = "github:emacs-eaf/eaf-pdf-viewer";
       flake = false;
     };
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-file.url = "github:denful/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -59,10 +63,6 @@
     import-tree.url = "github:vic/import-tree";
     lotus = {
       url = "github:lotusinputmethod/fcitx5-lotus";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-doom-emacs-unstraightened = {
-      url = "github:marienz/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixcord.url = "github:4evy/nixcord";
@@ -80,7 +80,14 @@
     };
     stylix = {
       url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        tinted-schemes.follows = "tinted-schemes";
+      };
+    };
+    tinted-schemes = {
+      url = "github:tinted-theming/schemes";
+      flake = false;
     };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";

@@ -1,4 +1,4 @@
-# enables `nix run .#doomacs` and `nix run .#nixcord`, launching these
+# enables `nix run .#emacs` and `nix run .#nixcord`, launching these
 # programs standalone using the packages already built by the igloo config's
 # home-manager, without switching the whole system.
 { inputs, ... }:
@@ -10,7 +10,8 @@
         pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
       in
       {
-        doomacs = hm.programs.doom-emacs.finalEmacsPackage;
+        emacs = hm.services.emacs.package;
+        doomacs = hm.services.emacs.package; # compat alias, drop later
         nixcord = hm.programs.nixcord.finalPackage.discord;
         # `nix run .#facter -- -o modules/hardware/latitude3250.json` regenerates
         # the hardware report consumed by modules/hardware/latitude3250.nix.

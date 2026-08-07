@@ -1,0 +1,56 @@
+#+title: Hosts and users
+#+subtitle: modules/hosts and modules/user
+#+options: toc:t
+
+* Host — modules/hosts/igloo.nix
+
+Declares the ~igloo~ host (hostname =nixos=, x86_64-linux) with one user
+~lunixose~. The ~igloo~ aspect includes:
+
+- ~<settings>~ — system-wide settings aspect
+- ~<latitude3250>~ — disk layout aspect
+- ~<lig/agenix>~ — secret provisioning
+
+Host NixOS config:
+
+- ~hardware.facter.reportPath~ → the latitude3250 report
+- systemd-boot + EFI variables
+- Latest kernel (~linuxPackages_latest~)
+
+* User — modules/user/lunixose.nix
+
+Primary user aspect. Declares per-user agenix secrets (collected by
+~lig.agenix~ via the ~secrets~ quirk and decrypted into the user's home):
+
+| name       | path                                            | owner | group | mode |
+|------------+-------------------------------------------------+-------+-------+------|
+| dns        | /run/agenix/dns                                 | root  | root  | 0400 |
+| github     | /home/lunixose/.ssh/github                      | user  | users | 600  |
+| oraclevps  | /home/lunixose/.ssh/ssh-key-2026-05-09.key      | user  | users | 600  |
+| env        | /home/lunixose/.config/secrets/env              | user  | users | 600  |
+
+Includes (user scope):
+
+- ~<den/define-user>~, ~<den/primary-user>~
+- ~<lix/tools>~, ~<lix/development>~, ~<lix/communication>~, ~<lix/system>~,
+  ~<lix/gaming>~, ~<lix/herdr>~
+
+User config:
+
+- Initial hashed password set
+- Packages: opencode, opencode-desktop, devenv, just, nh, ghostty, neovim,
+  wget, curl, obsidian
+- home-manager ~backupFileExtension = "backup"~ (old managed files kept as
+  ~.backup~ instead of being deleted on drift)
+
+* User classes / batteries
+
+- ~battery/os-user.nix~ routes user-class content into ~users.users.<name>~
+- ~battery/custom-class.nix~ merges user ~config~/~default~ into
+  ~homeManager~/~nixos~ classes with high-priority overrides
+
+* Related
+
+- [[file:index.org][Overview]]
+- [[file:lig.org][Secrets]]
+- [[file:lunix.org][User apps]]

@@ -1,6 +1,5 @@
-# enables `nix run .#vm`. it is very useful to have a VM
-# you can edit your config and launch the VM to test stuff
-# instead of having to reboot each time.
+# enables `nix run .#vm`. Tests the config in a throwaway VM before a real
+# switch, no reboot needed.
 { inputs, den, ... }:
 {
   den.aspects.igloo.includes = [ (den.batteries.vm-autologin "lunixose") ];

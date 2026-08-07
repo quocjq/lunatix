@@ -1,48 +1,22 @@
 { inputs, ... }:
 {
   flake-file.inputs = {
-    nix-doom-emacs-unstraightened = {
-      url = "github:marienz/nix-doom-emacs-unstraightened";
-      # Share our nixpkgs so the plum-py fix in ./_eaf/overlay.nix, applied to
-      # this module's home-manager `pkgs` below, flows into EAF's pythonEnv.
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # doom-config = {
-    #   url = "...";
-    #   flake = false;
-    # };
   };
   lix.doomacs = {
     provides.to-hosts.nixos = { pkgs, ... }: {
-      nix.settings = {
-        substituters = [ "https://doom-emacs-unstraightened.cachix.org" ];
-        trusted-substituters = [ "https://doom-emacs-unstraightened.cachix.org" ];
-        trusted-public-keys = [
-          "doom-emacs-unstraightened.cachix.org-1:O5oOlRPnmQEvVaFyuMTmthCEooHbrg54WgSLR07tmg4="
-        ];
-        trusted-users = [
-          "root"
-          "@wheel"
-        ];
-      };
       # make magit works
       environment.systemPackages = with pkgs; [
         git
       ];
     };
     homeManager = { pkgs, ... }: {
-      imports = [ inputs.nix-doom-emacs-unstraightened.homeModule ];
       services.emacs.enable = true;
-      # EAF's Python env needs a patched plum-py; see ./_eaf/overlay.nix for the
-      # what and the why.
-      #
-      # This has to live in the home-manager scope, not the NixOS one: the host
-      # sets `home-manager.useGlobalPkgs = false`, so home-manager instantiates
-      # its own nixpkgs and never sees `nixpkgs.overlays` from the system
-      # config. `programs.doom-emacs.emacs` below is built from *this* `pkgs`,
-      # which is the set doom's `emacsPackagesFor` scope — and therefore EAF's
-      # `python3.withPackages` — ends up using.
       nixpkgs.overlays = [
+        inputs.emacs-overlay.overlays.default
         (import ./_eaf/overlay.nix)
       ];
       # EAF spawns Qt6 processes; without this env the subprocess
@@ -51,24 +25,35 @@
       home.sessionVariables = {
         QT_QPA_PLATFORM_PLUGIN_PATH = "${pkgs.qt6.qtbase}/lib/qt-6/plugins";
       };
-      programs.doom-emacs = {
-        enable = true;
-        # Skip per-package .eln (native-comp) build step for faster rebuilds.
-        # See https://github.com/nix-community/emacs-overlay/issues/369#issuecomment-4427696458
-        # emacs = pkgs.emacs.overrideAttrs (old: {
-        #   passthru = old.passthru // {
-        #     withNativeCompilation = false;
-        #   };
-        # });
-        # doomDir = inputs.doom-config;
-        doomDir = ./_doomdir;
-        tangleArgs = "--all config.org";
-        extraPackages =
-          epkgs: with epkgs; [
-            eglot
-            treesit-grammars.with-all-grammars
+
+      services.emacs.package = pkgs.emacsWithPackagesFromUsePackage {
+        package = pkgs.emacs-gtk;
+        config =
+          let
+            initText = builtins.readFile ../../../emacs/init.el;
+            moduleFiles = pkgs.lib.filter (p: p != null) (
+              map (f: if pkgs.lib.hasSuffix ".el" f then f else null)
+                (pkgs.lib.filesystem.listFilesRecursive ../../../emacs/modules)
+            );
+          in
+          pkgs.writeText "lunatix-modules.el" (
+            builtins.concatStringsSep "\n" ([ initText ] ++ (map builtins.readFile moduleFiles))
+          );
+        defaultInitFile = false;
+        alwaysEnsure = true;
+        extraEmacsPackages =
+          epkgs:
+          let
+            apps = import ./_eaf/apps.nix;
+            eaf = import ./_eaf/scope.nix { inherit inputs pkgs epkgs; };
+          in
+          [
+            epkgs.eglot
+            epkgs.treesit-grammars.with-all-grammars
+            (eaf.withApplications (apps eaf))
           ];
       };
+
       home.packages = with pkgs; [
         (pkgs.aspellWithDicts (dicts: [
           dicts.en
@@ -76,12 +61,11 @@
         ]))
         languagetool
         nerd-fonts.symbols-only
+        nerd-fonts.jetbrains-mono
         fd
         ripgrep
         nodejs
-        wmctrl
         xdotool
-        aria2
         ddate
         shfmt
         shellcheck

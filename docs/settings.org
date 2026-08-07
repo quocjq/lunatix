@@ -1,0 +1,75 @@
+#+title: System settings
+#+subtitle: modules/settings
+#+options: toc:t
+
+The ~settings~ aspect is a pure aggregator ([[file:../modules/settings/allsettings.nix][allsettings.nix]]) that
+includes every aspect below. Hosts that want the whole system baseline just
+add ~<settings>~.
+
+* allsettings.nix
+
+Includes: audio, bluetooth, fonts, locale, network, nix-settings, printing,
+ssh, syncthing, x11.
+
+* audio
+
+PipeWire audio stack. Disables PulseAudio, enables rtkit (real-time
+scheduling), PipeWire with ALSA (incl. 32-bit) and Pulse compatibility.
+
+* bluetooth
+
+BlueZ enabled, powers on at boot. Experimental + FastConnectable,
+~Policy.AutoEnable~.
+
+* fonts
+
+Fonts for all users: JetBrains Mono, Fira Code, JetBrains Mono Nerd Font,
+Noto CJK Sans, Noto Color Emoji.
+
+* locale
+
+Timezone ~Asia/Ho_Chi_Minh~; default locale en_US.UTF-8 with Vietnamese
+(vi_VN) for all the LC_* extras.
+
+* network
+
+- NetworkManager (delegating DNS to systemd-resolved)
+- Nameservers 1.1.1.1 / 1.0.0.1 (with DoH pinning)
+- systemd-resolved: DNS over TLS + DNSSEC, ~Domains = "~."~
+
+* nix-settings
+
+- ~allowUnfree = true~ (both NixOS and home-manager scopes)
+- =nh= helper enabled, pointed at this repo's flake
+- Automatic store optimisation
+- nix-community Cachix substituter
+- Experimental features: ~nix-command~, ~flakes~, ~pipe-operators~
+- Trusted users: root, @wheel
+- Automatic GC, ~--delete-older-than 3d~
+
+* printing
+
+Cups printing server enabled.
+
+* ssh
+
+- OpenSSH server enabled; ssh agent starts at login
+- ~oraclevps~ host entry (217.142.232.103, ubuntu user, oracle key)
+- Global ~IdentityFile ~/.ssh/github~ with ~AddKeysToAgent yes~
+
+Per-user SSH secrets live on the user aspect ([[file:hosts-user.org][hosts-user.org]]), not here.
+
+* syncthing
+
+- Syncthing service as ~lunixose~, data dir ~/home/lunixose/Documents~
+- Firewall: TCP 22000, UDP 21027
+
+* x11
+
+X server enabled with US layout (needed for Plasma/legacy X apps even on the
+Wayland-first desktop).
+
+* Related
+
+- [[file:index.org][Overview]]
+- [[file:hosts-user.org][Hosts and users]]

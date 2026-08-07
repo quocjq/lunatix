@@ -1,12 +1,6 @@
 { inputs, ... }:
 let
-  apps =
-    s: with s; [
-      eaf-browser
-      eaf-pdf-viewer
-      eaf-file-manager
-      eaf-image-viewer
-    ];
+  apps = import ./_eaf/apps.nix;
 in
 {
   # EAF is vendored in ./_eaf rather than taken from nixpkgs, whose copies run
@@ -41,8 +35,8 @@ in
   };
 
   # Iteration target: `nix build .#eaf`. Built against the plain nixpkgs emacs,
-  # NOT doom's, so it is only good for settling npm hashes and catching upstream
-  # patch drift without paying for a home-manager rebuild.
+  # so it is only good for settling npm hashes and catching upstream patch drift
+  # without paying for a home-manager rebuild.
   #
   # nixpkgs is imported here rather than using the perSystem `pkgs`, because
   # that one is bound in modules/flake/devshell.nix with no overlays — and
@@ -63,21 +57,4 @@ in
         in
         s.withApplications (apps s);
     };
-
-  lix.doomacs = {
-    # `extraPackages` is evaluated by `nix-doom-emacs-unstraightened` with the
-    # epkgs built from `programs.doom-emacs.emacs` (the plum-py-overlaid
-    # `pkgs.emacs` set in ./emacs.nix), so the composite here is built against
-    # the same Python env the rest of the doom profile uses.
-    homeManager =
-      { pkgs, ... }:
-      {
-        programs.doom-emacs.extraPackages =
-          epkgs:
-          let
-            s = import ./_eaf/scope.nix { inherit inputs pkgs epkgs; };
-          in
-          [ (s.withApplications (apps s)) ];
-      };
-  };
 }

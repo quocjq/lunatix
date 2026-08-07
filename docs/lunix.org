@@ -1,0 +1,232 @@
+#+title: User applications (lunix)
+#+subtitle: modules/lunix
+#+options: toc:t
+
+The ~lunix~ namespace holds the per-user application aspects. Aggregator
+aspects: [[#tools][tools]], [[#development][development]], [[#communication][communication]],
+[[#system][system]], [[#gaming][gaming]].
+
+* tools
+
+Shells, prompt, file managers, browser. Includes: bash, bat, btop, nushell,
+eza, easyeffects, flameshot, fzf, starship, sioyek, yazi, zoxide, thunar,
+mpv, zenwser.
+
+** bash
+
+- Loads ~$HOME/.config/secrets/env~ (from ~env.age~) at startup
+- ~claudem3~ — Claude Code pointed at MiniMax M3 API
+- ~clauded~ — Claude Code pointed at agentrouter.org (claude-opus-4-8)
+
+Both functions require their API key env var from the secret env, clear
+~ANTHROPIC_API_KEY~, and set the Anthropic-compatible endpoint.
+
+** bat
+
+Modern pager with ~less -FR~; bat-extras: batman, batpipe, batgrep.
+
+** btop
+
+System monitor; override with ROCm + CUDA GPU support. vim keys, process
+tree, GPU info, IO mode, uptime/coretemp/disk displays.
+
+** nushell
+
+Default-friendly Nu shell:
+
+- Banner off; external completion (200 results); sqlite history with sync +
+  isolation; buffer editor = emacsclient
+- Aliases: lt/ll/la/tree (eza), g (git), e (nvim)
+- Loads the secret env via parse/transpose
+- ~claudem3~ / ~clauded~ equivalents of the bash functions
+- devenv auto-activation hooks (~env_change.PWD~ + ~pre_prompt~ retry for
+  untrusted dirs, auto-exit on leaving the project)
+- Provides Nu integration for zoxide, eza, yazi, starship
+
+** eza
+
+~ls~ replacement: icons, git-aware, header, hyperlinks. Aliases: ~lt~ (tree
+level 2), ~ll~, ~la~, ~tree~.
+
+** easyeffects
+
+Audio effects; auto-start with the default preset: RNNoise noise suppression
+on input (VAD off).
+
+** flameshot
+
+Screenshot tool. Disabled placeholder (config commented out).
+
+** fzf
+
+Fuzzy finder, transparent background (mkForce), reverse layout, bat preview,
+~enter~ opens in nvim. Zsh integration.
+
+** starship
+
+Cross-shell prompt; no trailing newline, colored ~➜~ prompt symbol.
+Statusline used by claude-code and nixcord.
+
+** sioyek
+
+PDF reader with Zathura-style keybindings (J/K pages, j/k scroll, h/l, gg/G,
+/, n, N, +/-, =, q). Startup command ~toggle_visual_scroll~. Stylix adds the
+palette + ~toggle_custom_color~ ([[#stylix][stylix]]).
+
+** yazi
+
+Terminal file manager (catppuccin-mocha flavour; colour slots overridden by
+stylix target).
+
+** zoxide
+
+Smart ~cd~; bash/zsh/fish integration.
+
+** thunar
+
+- NixOS scope: file manager + archive plugin + volman, GVFS daemon
+- User scope: thumbnails — tumbler, ffmpegthumbnailer, poppler-utils,
+  ffmpeg, gvfs
+
+** mpv
+
+Video player enabled (stylix target applies colors).
+
+** zenwser
+
+Zen Browser (twilight flake): installed, default browser.
+
+* development
+
+Editor, CLI assistants, VCS. Includes: doomacs ([[file:lunix-emacs.org][emacs]]), claude, git.
+
+** claude
+
+Claude Code enabled; theme dark; starship statusline; pinned caveman plugin
+from GitHub.
+
+** git
+
+- Signing: SSH (~signing.format = "ssh"~)
+- Identity Lunixose / quocjq@gmail.com; github/gitlab users = quocjq
+- Default branch main; difftastic as difftool + pager; delta as diff pager
+- Core editor emacs; LFS enabled
+- Aliases: dff, fap, rm-merged, recents
+- Global ignores: dotfiles (.env*, .direnv, .jj, CLAUDE.md, .claude, AGENT*),
+  build dirs (target, result, out), editor cruft
+- Declares ~github-token~ secret; token file included into
+  ~nix.extraOptions~ (for nixpkgs-review / GitHub API access)
+
+* communication
+
+Chat/messaging. Includes: nixcord.
+
+** nixcord
+
+Vencord/Equicord-powered Discord (stable branch):
+
+- Equicord (more plugins), Krisp noise suppression, openASAR, frameless +
+  transparent
+- Midnight theme (refact0r); system24 theme URL kept commented for A/B
+- ~40+~ plugins: betterActivities, clientSideBlock, fakeNitro, translate
+  (auto, target en, shavian/sitelen/toki), limitlessScreenshare (resolutions
+  + fps lists), showMeYourName, whoReacted, etc.
+- Extra config: CollapsibleUI, fontLoader, globalBadges, messageClickActions,
+  platformIndicators, showHiddenChannels, silentTyping, translate details
+
+* system
+
+Compositor, theming, login manager, input plumbing. Includes: hyprland
+(which pulls noctalia itself), stylix, greetd, kanata, lotus.
+
+Documented in [[file:lunix-hyprland.org][lunix-hyprland.org]].
+
+** stylix
+
+[[#stylix][See below]].
+
+** greetd
+
+Text greeter (tuigreet) replacing SDDM when Hyprland is the session:
+~--remember --sessions <hyprland sessions dir>~. SDDM disabled. (Plasma
+aspect re-enables SDDM for the KDE desktop.)
+
+** kanata
+
+Keyboard remapper:
+
+- ~process-unmapped-keys yes~, excludes Lotus uinput server
+- Home-row mods on a/s/d/f and j/k/l/; (tap-hold, 200ms): a→Meta, s→Alt,
+  d→Shift, f→Ctrl (left side), mirrored right side
+- ~caps~ → escape
+
+** lotus
+
+Fcitx5 + Lotus input method (Vietnamese etc.):
+
+- OS: fcitx5-lotus service for user ~lunixose~, fcitx5 as i18n input method
+- User: Wayland frontend, lotus addon
+- Hotkeys: Ctrl+\ toggle/enumerate; Shift+Super+\ backward group
+- Behavior: no preedit in password fields, preload enabled
+- Group "Default" with ~keyboard-us~ + ~lotus~ engines
+
+** plasma
+
+KDE Plasma 6 desktop, separate from the Hyprland setup (standalone aspect, not
+wired through an aggregator — both desktops are available on the host):
+
+- NixOS scope: SDDM display manager + Plasma 6 desktop; excludes
+  plasma-browser-integration, konsole, elisa from the default package set
+- Home scope via plasma-manager (~programs.plasma~):
+  - Top panel (26px): application title bar (window title, Dolphin→"File
+    manager" regexp rename), app menu, digital clock (24h, Monday first),
+    plasmusic toolbar, system tray (battery/bluetooth/volume shown,
+    networkmanager hidden)
+  - Window rule: Dolphin borderless + maximized
+  - powerdevil: AC power button locks, auto-suspend/display-off after 1000s;
+    battery button sleeps (standby→hibernate); lid closes → hibernate on
+    low battery
+  - kwin: edge/corner barriers off, polonium tiling script
+  - kscreenlocker: lock on resume, 10s timeout
+  - ~40+ shortcuts: Meta+Return→konsole, Meta+1..9 desktops, polonium
+    navigation (Meta+H/J/K/L + Shift/Ctrl variants), Meta+Space overview,
+    Meta+G grid view, Meta+T konsole launch, Meta+L lock, Meta+Q close
+  - configFile: 9 desktops in one row, translucency/hidecursor/blur/polonium
+    kwin effects, focus-follows-mouse, ~caps:escape~, screenshot folders
+
+Colors/fonts/cursor/icons for the kde target come from stylix.
+
+* gaming
+
+Placeholder; comment says add <lix/steam>, <lix/lutris> etc. when introduced.
+
+* herdr
+
+Hardware/driver manager from the ~herdr~ flake input, installed system-wide.
+
+* stylix
+
+Catppuccin Mocha (base16) theming across everything:
+
+- Fonts: JetBrainsMono Nerd Font (mono/sans), DejaVu Serif (serif), Noto
+  Color Emoji; sizes desktop 10 / apps 12 / terminal 12 / popups 10
+- Cursor: breeze, 24px; icons Papirus-Dark
+- Targets: hyprland, bat, btop, fzf, ghostty, kde (Plasma), gtk, qt,
+  nushell, noctalia, yazi, starship, mpv, sioyek, zen-browser (profile
+  lunixose)
+- hyprpaper target deliberately off: wallpaper is owned by the noctalia
+  runtime pool
+
+* Aggregator structure
+
+- ~system.nix~ — compositor/theming/login/input (hyprland brings noctalia)
+- ~development.nix~ — editor, CLI assistants, VCS
+- ~communication.nix~ — chat/messaging
+- ~tools.nix~ — shells, prompt, file managers, browser
+- ~gaming.nix~ — placeholder
+
+* Related
+
+- [[file:index.org][Overview]]
+- [[file:lunix-emacs.org][Emacs and EAF]]
+- [[file:lunix-hyprland.org][Hyprland and Noctalia]]

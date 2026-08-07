@@ -1,0 +1,157 @@
+#+title: Emacs and EAF
+#+subtitle: modules/lunix/emacs
+#+options: toc:t
+
+* Emacs — modules/lunix/emacs/emacs.nix
+
+~lix.doomacs~. Standalone ~.emacs.d~-style config in =emacs/=, built from
+=emacs-overlay= via ~emacsWithPackagesFromUsePackage~ — the nix package set is
+read straight out of the =use-package= declarations, single source of truth.
+
+** home-manager scope
+
+- ~services.emacs.enable = true~ (Emacs as a service)
+- ~nixpkgs.overlays~ loads the emacs-overlay overlay (provides
+  ~emacsWithPackagesFromUsePackage~) then [[#_eafoverlay_nix][the EAF plum-py overlay]] — must live
+  here because home-manager uses its own nixpkgs (~useGlobalPkgs = false~);
+  this is the ~pkgs~ set that builds the emacs package, so EAF's python env
+  gets the patch
+- ~QT_QPA_PLATFORM_PLUGIN_PATH~ session var — EAF spawns Qt6 subprocesses
+  that otherwise fail with "Could not find the Qt platform plugin 'xcb'"
+- ~services.emacs.package = pkgs.emacsWithPackagesFromUsePackage~:
+  - ~package = pkgs.emacs-gtk~
+  - ~config = ../../../emacs/init.el~ (the repo-root =emacs/= dir)
+  - ~defaultInitFile = false~, ~alwaysEnsure = true~
+  - ~extraEmacsPackages~: eglot, ~treesit-grammars.with-all-grammars~, plus the
+    EAF composite ([[#eaf][eaf]]) shared from ~_eaf/apps.nix~
+- Home packages: aspell (en + en-computers), languagetool, fd, ripgrep,
+  nodejs, xdotool, ddate, shfmt, shellcheck, sqlite, dirvish preview tools
+  (ffmpegthumbnailer, mediainfo, vips), editorconfig-core-c, compiler/LSP
+  toolchains (gcc, gnumake, ccls, zig+zls, graphviz, go-grip, marksman,
+  pandoc, multimarkdown, dockfmt, html-tidy, universal-ctags), TeX
+  (texliveFull for latex-preview), language servers (jdt, bash, yaml, nil,
+  nixd, nixfmt(-tree), rust-analyzer), Python (black, pyflakes, isort,
+  pytest, pyenv, pyright, pipenv, python3), sbcl, full Rust toolchain
+  (cargo + cargo-watch/expand/edit/audit/flamegraph, bacon, rustc, rustfmt,
+  clippy)
+
+** Config layout — emacs/
+
+| file/path                    | doom module | purpose                          |
+|------------------------------+-------------+----------------------------------|
+| =init.el=                    |             | entry; loads every =modules/=    |
+| =early-init.el=              |             | disables package.el startup      |
+| =modules/completion-config.el= | :completion | vertico/consult/corfu/orderless |
+| =modules/ui-config.el=       | :ui         | deft, hl-todo, ligatures, popup  |
+| =modules/editor-config.el=   | :editor     | yasnippet, format, undo, fold    |
+| =modules/emacs-config.el=    | :emacs      | dired, ibuffer, electric, eww    |
+| =modules/term-config.el=     | :term       | vterm, eshell                    |
+| =modules/checkers-config.el= | :checkers   | flycheck                         |
+| =modules/tools-config.el=    | :tools      | magit+forge, lsp, pdf, tree-sitter |
+| =modules/lang-config.el=     | :lang       | per-language majors + lsp        |
+| =modules/email-config.el=    | :email      | wanderlust                       |
+| =modules/app-config.el=      | :app        | circe (irc), elfeed (rss)        |
+| =modules/config-config.el=   | :config     | smartparens, defaults            |
+| =test.sh=                    |             | batch smoke test                 |
+
+No doom module system — flat loader. Enable a module by keeping its file,
+disable by deleting/commenting. =use-package-always-defer t= for lazy loading.
+nix scans ~init.el~ for =use-package= decls, so module files must stay
+side-effect-free at top level. Smoke test:
+
+#+begin_src bash
+  EMACS="$(nix build .#emacs --print-out-paths)/bin/emacs" ./test.sh
+#+end_src
+
+* EAF — modules/lunix/emacs/eaf.nix
+
+EAF is vendored in ~_eaf/~ rather than taken from nixpkgs (which runs months
+behind upstream). Sources come from the ~eaf~ / ~eaf-*~ flake inputs
+(~flake = false~), so bumping a version is just ~nix flake update eaf-browser~.
+
+~_eaf/~ is skipped by import-tree (its default filter drops paths containing
+~/_~), keeping the plain derivation files out of flake-parts evaluation.
+
+** Build targets
+
+- ~nix build .#eaf~ — iteration target built against plain nixpkgs emacs
+  (NOT the profile emacs); good for settling npm hashes and catching upstream
+  patch drift cheaply. Imports nixpkgs with the plum-py overlay here because
+  the perSystem ~pkgs~ carries no overlays.
+- home-manager: the composite package is added to
+  ~emacsWithPackagesFromUsePackage.extraEmacsPackages~, evaluated against the
+  overlaid epkgs — so EAF runs on the same Python env as the emacs profile.
+
+** Apps enabled
+
+~eaf-browser~, ~eaf-pdf-viewer~, ~eaf-image-viewer~. (~eaf-file-manager~
+disabled — see ~_eaf/apps.nix~.)
+
+* Vendored derivations — _eaf/
+
+Each is copied from nixpkgs' manual-packages, with ~src~/~version~ fed from
+the flake inputs and ~updateScript~ dropped.
+
+** scope.nix
+
+Wires everything: derives version strings via ~version.nix~, feeds npm
+hashes via ~npm-hashes.nix~, ~callPackage~s each app with the right extras
+(the elisp ~aria2~ shadow fix for the browser), and exposes
+~withApplications~ for the framework.
+
+** version.nix
+
+Builds melpaBuild-compatible versions: ~0-unstable-YYYY-MM-DD~ from the input
+~lastModifiedDate~. The shape must match melpaBuild's regex or the ~$LISPDIR~
+directory name drifts from what the framework's ~app/~ copy expects.
+
+** npm-hashes.nix
+
+~fetchNpmDeps~ content hashes per app. NOT refreshed by ~nix flake update~ —
+after bumping an input, rebuild and copy the new hash (or use
+~prefetch-npm-deps~). Framework + pdf-viewer ship no package.json and are
+absent by design.
+
+** overlay.nix
+
+~pythonPackagesExtensions~ patch: ~plum-py-0.8.7~ (transitive dep via ~exif~)
+fails 18 tests on Python 3.14; no newer version exists. Sets
+~dontUsePytestCheck = "1"~. Must go through ~pythonPackagesExtensions~ — a
+top-level ~python3Packages//{...}~ merge never reaches the interpreter built
+by ~python3.withPackages~ (verified). ~dontUsePytestCheck~ (not ~doCheck~)
+is required because pytest-check-hook only gates on that.
+
+** framework.nix
+
+MelpaBuild for the EAF core:
+
+- Python env: epc, lxml, pyqt6(+sip/webengine), sexpdata, tld merged with
+  each app's ~passthru.eafPythonDeps~ — apps must be the derivations
+  themselves (symlinkJoin would drop the deps silently)
+- Patches ~eaf.el~ with ~--replace-fail~: interpreter path, wmctrl/xdotool
+  exe paths (fails build if upstream refactors — intentional signal)
+- Copies the symlinked app elisp + native-lisp into the package
+
+** browser.nix
+
+~eaf-browser~: npm deps, ~aria2c~ binary patched into ~buffer.py~, node
+modules copied into the package. Python deps: pysocks, pycookiecheat (lazy
+Chrome cookie import).
+
+** file-manager.nix
+
+~eaf-file-manager~: ~fd~ exe patched in, ~npm run build~, dist + node_modules
+copied. Python deps: pypinyin, pygments, exif.
+
+** image-viewer.nix
+
+~eaf-image-viewer~: node_modules copied. No python deps.
+
+** pdf-viewer.nix
+
+~eaf-pdf-viewer~: no npm deps. Python deps: packaging, pymupdf.
+
+* Related
+
+- [[file:index.org][Overview]]
+- [[file:lunix.org][User applications]]

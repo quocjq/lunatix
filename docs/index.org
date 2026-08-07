@@ -1,0 +1,69 @@
+#+title: LunatixOS documentation
+#+subtitle: Org-mode docs for the lunatix NixOS configuration
+#+options: toc:t
+
+Personal NixOS configuration for the ~igloo~ host, built on a dendritic flake
+layout ([[https://github.com/denful/den][den]], [[https://github.com/hercules-ci/flake-parts][flake-parts]],
+[[https://github.com/vic/import-tree][import-tree]]). Every file under
+[[file:../modules/][modules/]] is imported automatically; this doc set explains each
+aspect.
+
+* Index
+
+- [[file:flake.org][Flake infrastructure]] — flake.nix, inputs, modules/flake (devshell, apps, vm, qemu, diagrams, batteries)
+- [[file:disko.org][Disk layout and hardware]] — partitions, LUKS, btrfs subvolumes, facter report
+- [[file:hosts-user.org][Hosts and users]] — igloo host, lunixose user, per-user secrets
+- [[file:settings.org][System settings]] — audio, bluetooth, fonts, locale, network, nix, printing, ssh, syncthing, x11
+- [[file:lig.org][Secrets (lig)]] — agenix integration and encrypted secrets
+- [[file:lunix.org][User applications (lunix)]] — tools, development, communication, system
+- [[file:lunix-emacs.org][Emacs and EAF]] — Doom Emacs + vendored EAF apps
+- [[file:lunix-hyprland.org][Hyprland and Noctalia]] — compositor config + shell
+- [[file:justfile.org][just recipes]] — every just command
+
+* System snapshot
+
+| Item            | Value                              |
+|-----------------+------------------------------------|
+| Host            | igloo (hostname nixos)             |
+| Arch            | x86_64-linux                       |
+| Hardware        | Dell Latitude 3250                 |
+| User            | lunixose                           |
+| Channel         | nixpkgs-unstable                   |
+| State version   | 26.05                              |
+| Filesystem      | Btrfs on LUKS (+ encrypted swap)   |
+| Boot            | systemd-boot, latest kernel        |
+| Desktops        | KDE Plasma 6 (SDDM) + Hyprland (Noctalia, Catppuccin Pink/Mocha) |
+
+* How the repo hangs together
+
+1. =import-tree= imports every ~modules/~ file into flake-parts.
+2. Modules declare ~den.aspects.<name>~ (often split across ~nixos~,
+   ~homeManager~, ~user~ scopes, plus ~provides~/~includes~ and den
+   ~batteries~/~policies~/~quirks~).
+3. Hosts (~den.hosts.<arch>.<name>~) include aspects by angle-bracket path
+   (e.g. ~<settings>~, ~<latitude3250>~).
+4. ~flake-file~ regenerates flake.nix from ~flake-file.inputs.X~ declarations
+   scattered across modules.
+5. The ~igloo~ NixOS configuration is built via ~nix build .#igloo~ /
+   ~just switch~; test with ~nix run .#vm~.
+
+* Workflows
+
+** Fresh reinstall
+
+See [[file:flake.org][devshell]] and [[file:justfile.org][justfile]]: ~nix develop~, then
+~just disko-format~ → ~just install~ → ~just switch~.
+
+** Add a new application aspect
+
+1. Create ~modules/lunix/<name>.nix~ with ~lix.<name>~.
+2. Wire it into an aggregator (~<lix/tools>~ etc.) via ~includes~.
+3. If it needs new inputs, declare ~flake-file.inputs.<name>~ in the module and
+   run ~just write-flake~.
+
+** Add a new secret
+
+1. ~just new-ssh-key ed25519 <name>~ (or ~just secret-import~).
+2. Add the recipient in ~modules/lig/_secrets/secrets.nix~.
+3. Declare a ~secrets = [...]~ entry on the owning aspect.
+4. ~just rekey~ then ~just switch~. See [[file:lig.org][Secrets]].

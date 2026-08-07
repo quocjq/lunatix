@@ -1,0 +1,57 @@
+#+title: Disk layout and hardware
+#+subtitle: modules/disko and modules/hardware
+#+options: toc:t
+
+* Disk layout — modules/disko/latitude3250.nix
+
+Defines the ~latitude3250~ aspect (NixOS scope). Sets
+~disko.enableConfig = true~ so the disko NixOS module manages the running
+system's mounts/LUKS/swap at boot — no hand-written ~fileSystems~ anywhere.
+The hardware report is wired via ~hardware.facter.reportPath~.
+
+** Partitions on =/dev/disk/by-id/nvme-eui...=
+
+| Partition | Size   | Format      | Mount      | Notes                          |
+|-----------+--------+-------------+------------+--------------------------------|
+| ESP       | 1G     | vfat (EF00) | /boot      | ~fmask/dmask 0077~             |
+| root      | 228G   | LUKS        | —          | ~luks-root~, ~allowDiscards~   |
+| swap      | 100%   | LUKS        | —          | ~luks-swap~, encrypted swap    |
+
+** root (LUKS ~luks-root~)
+
+Btrfs with named subvolumes; the btrfs top-level (subvolid=5) mounts at ~/~:
+
+- ~/home~ subvolume at ~/home~
+- ~/nix~ subvolume at ~/nix~
+
+** swap (LUKS ~luks-swap~)
+
+Swap on top of its own LUKS container.
+
+** Format-time passphrase
+
+Both LUKS containers use ~passwordFile = "/tmp/secret.key"~ — used ONLY while
+formatting (disko/disko-install). Boot prompts interactively:
+
+#+begin_src shell
+  echo -n 'your-passphrase' > /tmp/secret.key
+#+end_src
+
+* Hardware report — modules/hardware/latitude3250.json
+
+=hardware.facter= report (nixos-facter, ~version 1~) for the Dell Latitude
+3250: x86_64-linux, UEFI 64-bit, full inventory of CPU/GPU/Bluetooth/USB/etc.
+Generated from the ~facter~ flake app and consumed by the ~latitude3250~ and
+~igloo~ aspects via ~hardware.facter.reportPath~.
+
+Regenerate with:
+
+#+begin_src shell
+  nix run .#facter -- -o modules/hardware/latitude3250.json
+#+end_src
+
+* Related
+
+- [[file:index.org][Overview]]
+- [[file:flake.org][Flake infrastructure]]
+- [[file:justfile.org][just recipes]]

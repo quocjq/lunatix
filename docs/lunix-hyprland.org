@@ -1,0 +1,126 @@
+#+title: Hyprland and Noctalia
+#+subtitle: modules/lunix/hyprland
+#+options: toc:t
+
+* Hyprland — modules/lunix/hyprland/hyprland.nix
+
+~lix.hyprland~ (includes ~<lix/noctalia>~).
+
+** NixOS scope
+
+- Hyprland Cachix (trusted, trusted-users root + @wheel)
+- ~programs.hyprland~: enabled, no UWSM, xwayland on, compositor + portal
+  package built from the pinned ~hyprland~ input
+- Companion services: accounts-daemon, udisks2, libinput, geoclue2, fwupd,
+  polkit, dconf
+- pinentry-gnome3, ~xdg.icons~, GTK portal, librsvg for gdk-pixbuf
+
+** home-manager scope
+
+- ~wayland.windowManager.hyprland~ enabled with ~configType = "lua"~ —
+  config is emitted as Lua, driven by the ~hl~ / ~hl.dsp~ helpers
+
+* Config split — modules/lunix/hyprland/config
+
+Each file merges into ~wayland.windowManager.hyprland.settings~.
+
+** general.nix
+
+- gaps 4/10, 1px borders, dwindle layout, resize on border
+- misc: focus on activate, no logo, no splash
+
+** monitors.nix
+
+- eDP-1 at 1920x1080@60, auto position, scale 1.0
+- workspace 1 defaults to eDP-1
+
+** theme.nix
+
+Non-color decoration only (colors come from the stylix hyprland target):
+
+- Rounding 10; blur enabled (size 3, 1 pass); shadows (range 4,
+  render_power 3)
+- ~home.pointerCursor.enable = true~ (stylix deprecation silence)
+
+** bind.nix
+
+Main mod ~SUPER~. Helpers emit Lua via ~hl.dsp.*~ (move/resize/close/
+fullscreen, mouse drag/resize, scroll cycling).
+
+- Launchers: Return→ghostty, Shift+Return→ghostty -e nu, T→emacsclient,
+  E→thunar, Shift+E→emacs, B→zen-twilight, D→discord, O→obsidian
+- Close (Q), fullscreen (F), kill helpers
+- Noctalia shell: Space→launcher, X→session, L→lock, N/C/Shift+N→control
+  center, V→clipboard, W→wallpaper, Print→region shot, Super+Print→fullshot
+- Audio: XF86 volume raise/lower (wpctl, limit 1.4)/mute/mic-mute; brightness
+  via noctalia
+- Mouse: Super+drag move, Super+right resize, scroll cycles layout columns
+- Type-to-search letter binds are commented out (FIXME broken) — script
+  referenced: [[file:../modules/lunix/hyprland/scripts/type-search.sh][type-search.sh]]
+
+** workspaces.nix
+
+- Super+1..9 (0 = 10): focus workspace; Super+Shift+key: move window
+- Super+Prior/Next: relative focus r-1 / r+1
+
+** autostart.nix
+
+Hyprland start hook (~hyprland.start~): launch bluetooth, noctalia,
+emacsclient daemon (-c -a ""), and fcitx5 via the system wrapper (so the
+addons resolved by ~i18n.inputMethod.fcitx5.addons~ are visible).
+
+** environments.nix
+
+Env vars: XDG desktop/session/portal → Hyprland/Wayland; GTK (scale 1,
+wayland,x11 backend); MOZ_ENABLE_WAYLAND; APPIMAGELAUNCHER_DISABLE;
+OZONE_PLATFORM=wayland.
+
+** scripts.nix
+
+Currently commented out: wiring for ~type-submap-watcher.sh~ + wtype/jq
+(was used by the type-to-search feature).
+
+* Scripts
+
+** type-search.sh
+
+On empty workspace opens the noctalia launcher with typed letters pre-filled
+(3s TTL buffer per Hyprland instance in /tmp); on a focused window re-sends
+the key via wtype. Not currently bound.
+
+** type-submap-watcher.sh
+
+Toggles the ~type~ submap based on ~activeworkspace.windows~ (0 → submap on).
+Streams ~.socket2~ via socat; handles workspace + monitor events. Not
+currently deployed.
+
+* Noctalia — modules/lunix/hyprland/noctalia.nix
+
+Hyprland shell (bar, widgets, launcher, control center).
+
+** NixOS scope
+
+power-profiles-daemon + upower enabled.
+
+** home-manager scope (~programs.noctalia~)
+
+- Bar "Top" overlay: launcher/wallpaper/workspaces/cat at start;
+  media/tray/notifications/bluetooth/volume/brightness/battery at end;
+  radius 9, padding 39, thickness 25
+- Control center: calendar events card off
+- Desktop widgets on eDP-1: clock (digital, circle), sysmon (cpu usage/temp),
+  fancy audio visualizer, media player; visible grid (16px cells)
+- Lockscreen widgets disabled
+- Plugin: bongocat
+- Shell: corner radius 1.3, animation speed 2.55; launcher = app grid, no
+  icons, calculator prefix empty; panel = glass transparency, attached
+  clipboard/launcher/wallpaper/polkit; screen corners on
+- Theme palette comes from the stylix noctalia target (~theme = { }~)
+- Wallpaper directory ~/home/lunixose/Pictures/wallpaper~ with two dark-mode
+  favorites (A_Red_Face_Glowing…jpeg, 16.png)
+- Cat widget = noctalia/bongocat
+
+* Related
+
+- [[file:index.org][Overview]]
+- [[file:lunix.org][User applications]]

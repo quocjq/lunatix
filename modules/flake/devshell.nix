@@ -10,7 +10,7 @@
 # The runbook printed by shellHook mirrors modules/disko/latitude3250.nix:
 # disko formats AND manages the running system's mounts/LUKS/swap via the
 # NixOS module (`disko.enableConfig = true`). That module is the single
-# source of truth for disk layout — the host module has no hand-written
+# source of truth for disk layout. The host module has no hand-written
 # mounts.
 { inputs, ... }:
 {
@@ -62,17 +62,17 @@
           │        nixos-install-tools, agenix, git, just                     │
           └───────────────────────────────────────────────────────────────────┘
 
-          Reinstall on a fresh disk (Latitude 3250 layout) — driven by `just`:
+          Reinstall on a fresh disk (Latitude 3250 layout), driven by `just`:
 
             1. Confirm the target disk still matches modules/disko/latitude3250.nix
                (device = /dev/disk/by-id/nvme-eui...). Inspect first:
                  lsblk -o NAME,SIZE,TYPE,MODEL,SERIAL
 
             2. Stash the LUKS passphrase where disko expects it (format-time only,
-               NOT used at boot — boot prompts interactively):
+               NOT used at boot, boot prompts interactively):
                  echo -n 'your-passphrase' > /tmp/secret.key
 
-            3. Partition + format + mount at /mnt (DESTRUCTIVE — wipes the disk):
+            3. Partition + format + mount at /mnt (DESTRUCTIVE, wipes the disk):
                  just disko-format
 
             4. Install the system onto /mnt:
@@ -83,8 +83,8 @@
 
           Notes:
             * Disk layout lives in modules/disko/latitude3250.nix with
-              `disko.enableConfig = true` — that aspect is the single source of
-              truth and generates mounts, LUKS, and swap for any host including
+              `disko.enableConfig = true`; that aspect owns mounts, LUKS, and
+              swap for any host including
               <disko-latitude3250>. On an existing disk whose swap partition lacks
               a partlabel, run `sudo sgdisk -c 3:swap /dev/nvme0n1` once before
               the first rebuild.

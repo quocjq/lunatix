@@ -52,6 +52,8 @@
       initialHashedPassword = "$6$.u5xmD5jRI69qFuA$L/M.0dWMo4pS5tLIsgZboyEzZeVXI.v17sG0SDv7WekS.VNEwyEbswld8yV3FHXymhUCnc1phCxyHxpi66uLs.";
       packages = with pkgs; [
         # codecrafters-cli
+        opencode
+        opencode-desktop
         devenv
         just
         nh

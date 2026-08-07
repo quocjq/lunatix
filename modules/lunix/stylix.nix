@@ -2,9 +2,17 @@
 {
   # `flake-file` reads `flake-file.inputs.X` from across the repo and merges
   # them into the top-level `inputs` attr of flake.nix on regeneration.
+  flake-file.inputs.tinted-schemes = {
+    url = "github:tinted-theming/schemes";
+    flake = false;
+  };
+
   flake-file.inputs.stylix = {
     url = "github:nix-community/stylix";
-    inputs.nixpkgs.follows = "nixpkgs";
+    inputs = {
+      nixpkgs.follows = "nixpkgs";
+      tinted-schemes.follows = "tinted-schemes";
+    };
   };
 
   lix.stylix = {
@@ -12,13 +20,16 @@
       imports = [ inputs.stylix.nixosModules.stylix ];
     };
 
-    provides.to-hosts.homeManager = { lib, pkgs, ... }: {
+    provides.to-hosts.homeManager = { lib, pkgs, config, ... }: {
       imports = [ inputs.stylix.homeModules.stylix ];
 
       stylix = {
         enable = true;
-        image = ./themes/wallpaper.jpg;
-        polarity = "dark"; # everything currently uses a dark theme
+        # Catppuccin Mocha base16. YAML from tinted-theming/schemes (the upstream
+        # source stylix already consumes internally — pinned via our own input,
+        # forwarded through stylix.inputs.tinted-schemes).
+        base16Scheme = "${config.stylix.inputs.tinted-schemes}/base16/catppuccin-mocha.yaml";
+        polarity = "dark"; # mocha is dark; kept explicit for clarity
 
         fonts = {
           monospace = {
@@ -55,7 +66,9 @@
 
         targets = {
           hyprland.enable = true; # borders, shadows, groupbar, bg
-          hyprpaper.enable = true;
+          # hyprpaper disabled: stylix target writes `path = image`; null when no
+          # image is set. Wallpaper is owned by noctalia runtime pool.
+          # hyprpaper.enable = true;
           bat.enable = true;
           btop.enable = true;
           fzf.enable = true;
