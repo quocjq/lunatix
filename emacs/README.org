@@ -1,22 +1,26 @@
-#+title: lunatix emacs — complete configuration guide
+#+title: lunatix emacs 
 #+options: toc:t num:t
 
+
+Comprehensive literate reference (every file, every function): =DOCS.org=.
 * Overview
 
 Personal emacs config. Standalone `~/.emacs.d` replacement, built by nix
-(`emacsWithPackagesFromUsePackage` from =emacs-overlay=). Presents as doom
-emacs — same look, same `<leader>` keybindings, same module set — without doom's
-module system, straight.el, or doom core. Everything doom-specific is either
-ported into this repo or approximated with a vanilla equivalent.
+(`emacsWithPackagesFromUsePackage` from =emacs-overlay=). **Based on Doom
+Emacs**: presents as doom emacs — same look, same `<leader>` keybindings,
+same module set — without doom's module system, straight.el, or doom core.
+Everything doom-specific is either ported into this repo or approximated with a
+vanilla equivalent. Doom's module tree is kept at =doom-modules/= (gitignored)
+as the reference for ports.
 
 Four layers:
 
-| layer    | file                    | role                                       |
-|----------+-------------------------+--------------------------------------------|
-| boot     | =init.el=, =early-init.el= | entry, package.el off, autoloads, globals |
-| backend  | =lunaris.el=            | unified framework: `leaf` DSL + doom-compat + manifest + tree loader |
-| manifest | =manifest.el=           | `(lunaris! ...)` enabled modules, doom!-style |
-| modules  | =modules/<group>/…=     | per-group config tree, import-tree loaded  |
+| layer    | file                   | role                                                                 |
+|----------+------------------------+----------------------------------------------------------------------|
+| boot     | =init.el=, =early-init.el= | entry, package.el off, autoloads, globals                            |
+| backend  | =lunaris.el=             | unified framework: `leaf` DSL + luna-compat + manifest + tree loader |
+| manifest | =manifest.el=            | `(lunaris! ...)` enabled modules, doom!-style                        |
+| modules  | =config/ + =framework/=      | your config (always) + doom-ported modules (manifest toggle)                            |
 
 * Boot — init.el
 
@@ -24,7 +28,7 @@ Flow:
 
 1. =lunatix-emacs-dir= ← directory of =init.el= (works from any location).
 2. `evil-want-keybinding nil` set before anything loads evil.
-3. =modules/= added to =load-path=; =lunaris.el= loaded (the whole backend).
+3. =config/= added to =load-path=; =lunaris.el= loaded (the whole backend).
 4. =use-package= configured: `use-package-always-defer t` (doom-style lazy),
    `use-package-ensure-function` no-op (nix builds every package; never touch
    package.el / network).
@@ -33,9 +37,12 @@ Flow:
    autoload-only entry points (e.g. `doom-themes-org-config`) are void.
 6. =manifest.el= loaded — `(lunaris! ...)` records enabled modules for
    `modulep!`.
-7. `lunaris-load-tree` walks =modules/= recursively, loads every `.el`,
-   skipping `_`-prefixed paths (import-tree convention).
-8. Doom-style defaults: no tabs, truncate, line numbers, no menu/tool/scroll
+7. =config/= loads synchronously (stage 1: identity + keys + dashboard).
+8. =lunaris-stage-2= walks =framework/= in the background (4 files per idle
+   tick), loading each enabled group dir: the `<group>.el` file always, plus
+   every `<module>.el` whose `(modulep! :<group> <module>)` is t. Modules are
+   byte-compiled into =~/.cache/lunatix-emacs/lisp= on first run.
+9. Doom-style defaults: no tabs, truncate, line numbers, no menu/tool/scroll
    bars, frame title = current buffer name.
 
 =early-init.el=: `package-enable-at-startup nil`, `package-quickstart nil`.
@@ -46,8 +53,8 @@ The whole backend in one file, clean config-side API only. Four parts:
 
 ** leaf
 
-My own package-declaration macro (leaf.el-style, recreated — not importing
-=conao3/leaf=). Thin wrapper over =use-package=; same keyword names so decls
+Own leaf-style package-declaration macro, recreated rather than importing
+=conao3/leaf=. Thin wrapper over =use-package=; same keyword names so decls
 read like leaf:
 
 #+begin_src emacs-lisp
@@ -63,60 +70,73 @@ Supported keywords (pass through to =use-package=): =:ensure=, =:defer=,
 
 ** Doom compat
 
-Macros:
+The doom-compat layer uses the =luna-= prefix (unified naming); the old
+=doom-= names remain as aliases for ported code. Macros:
 
 | macro           | port of             | notes                                    |
 |-----------------+---------------------+------------------------------------------|
-| =after!=        | =after!=            | =with-eval-after-load=                   |
+| =after!=        | =after!=            | runtime =eval-after-load= (compiler-safe against self-feature cycles) |
 | =map!=          | =map!=              | → =general-def=, per-state, error-swallowing |
 | =cmd! / cmds! / cmd!!= | same        | interactive lambdas                       |
 | =defadvice! =   | =defadvice! =       | → =defun= + =advice-add=                 |
-| =modulep!=      | =modulep! =         | consults lunatix registries              |
+| =modulep!=      | =modulep! =         | consults the =lunaris!= manifest         |
 | =setq-hook! / add-hook! / remove-hook! = | same | hooks                          |
 | =leaf=          | (own)               | declaration DSL                          |
 
-Registries for =modulep! =: =lunatix-enabled-modules= (groups), 
-=lunatix-enabled-submodules= (ported submodules), =lunatix-enabled-flags=
-(e.g. =+icons= =+orderless= =+childframe=). Add here when porting a module.
+Manifest =manifest.el= = `(lunaris! ...)` is the single source of truth for
+`modulep!`.
 
-Helpers (own implementations): =doom-leader-key=, =doom-localleader-key=,
-=doom-project-root=, =doom-call-process=, =doom-region-active-p=,
-=doom-point-in-comment-p=, =doom-temp-buffer-p=, =doom-fallback-buffer=,
-profile dir functions, no-op hook variables (doom-escape-hook, etc).
+Helpers (own implementations, =luna-= prefix): =luna-leader-key=,
+=luna-localleader-key=, =luna-project-root=, =luna-call-process=,
+=luna-region-active-p=, =luna-point-in-comment-p=, =luna-temp-buffer-p=,
+=luna-fallback-buffer=, profile-dir functions, no-op hook variables
+(=luna-escape-hook=, etc).
 
-* Modules — modules/<group>/…
+* Modules — framework/<group>/<module>.el
 
-Import-tree: `lunaris-load-tree` walks =modules/= recursively (skipping
-`_`-prefixed paths), loads every `.el` alphabetically. Group dirs mirror doom
-groups; top-level files (evil, general, keybindings, theme, which-key) load
-always. Enable = keep the file; disable = delete or comment it. Enabled
-submodules are declared in =manifest.el= (drives `modulep!`).
+Layout mirrors doom's =modules/<group>/<module>/= as one file per module:
+=framework/<group>/<module>.el=, plus a =framework/<group>/<group>.el= group
+file with shared helpers. `lunaris-stage-2` loads each enabled group's group
+file first, then every module file gated by `(modulep! :<group> <module>)`
+(i.e. declared in =manifest.el=). Deleting a file or removing it from
+=manifest.el= disables the module. Your personal config (always loaded, stage
+1) lives in =config/=.
 
-| path                     | doom group  | submodules / notes                            |
-|--------------------------+-------------+----------------------------------------------|
-| =completion/=            | :completion | corfu+orderless, vertico+icons+childframe (posframe), consult, marginalia, cape, nerd-icons |
-| =ui/=                    | :ui         | deft, doom(themes), dashboard (own widget code), hl-todo, indent-bars, ligature, unicode-fonts, modeline, evil-goggles, popper (popup approx), ultra-scroll, diff-hl, ace-window+winum, persp-mode (workspaces) |
-| =editor/=                | :editor     | apheleia (+onsave), whitespace/ws-butler/dtrt-indent, yasnippet+auto-yasnippet, vimish-fold+evil-vimish-fold, parinfer-rust-mode, autoinsert templates, undo-fu+session |
-| =emacs/=                 | :emacs      | electric, dired (+dirvish), ibuffer+icons, eww, tramp, vc |
-| =term/=                  | :term       | eshell (+syntax-highlighting, up, z, did-you-mean, pcmpl-args), vterm |
-| =checkers/=              | :checkers   | flycheck + popup-tip                         |
-| =tools/=                 | :tools      | biblio/citar+embark, docker, editorconfig, eval(eros), lookup (xref/dumb-jump), lsp-mode+lsp-ui, magit+forge, pass+otp, pdf-tools, tree-sitter+langs, ssh-deploy |
-| =lang/=                  | :lang       | emacs-lisp, org (full port), python, rust, go, cc, nix, sh, markdown, json, yaml, javascript, web + agda(+local), slime, data, java, latex+cdlatex, lua, php, qt, ruby |
-| =email/=                 | :email      | wanderlust (+gmail)                         |
-| =app/=                   | :app        | calendar (calfw), circe (irc), elfeed+elfeed-org (rss) |
-| =config/=                | :config     | smartparens, avy, link-hint, default behaviors |
-| =evil-config.el=         | :editor     | evil, evil-collection, delete-selection      |
-| =general-config.el=      | (core)      | general + leader definer (=lunatix-leader=) |
-| =keybindings-config.el=  | :config     | full doom `<leader>` tree + localleader     |
-| =theme-config.el=        | :ui doom    | doom-monokai-octagon, JetBrainsMono 18 medium, doom-modeline |
-| =which-key-config.el=    | (core)      | which-key                                   |
+| dir        | doom group  | module files                                              |
+|------------+-------------+-----------------------------------------------------------|
+| =completion/| :completion | corfu, vertico                                            |
+| =ui/       | :ui         | deft, doom, dashboard, hl-todo, indent-guides, ligatures, modeline, ophints, popup, smooth-scroll, unicode, vc-gutter, window-select, workspaces |
+| =editor/   | :editor     | format, whitespace, snippets, fold, parinfer, file-templates |
+| =emacs/    | :emacs      | electric, dired, ibuffer, eww, tramp, vc                  |
+| =term/     | :term       | eshell, vterm                                             |
+| =checkers/ | :checkers   | (off — no :checkers group in manifest)                   |
+| =tools/    | :tools      | biblio, docker, editorconfig, eval, lookup, lsp, magit, pass, pdf, tree-sitter, upload |
+| =lang/     | :lang       | agda, cc, common-lisp, data, emacs-lisp, go, java, javascript, latex, lean, lua, markdown, nix, org, php, python, qt, ruby, rust, sh, web |
+| =email/    | :email      | wanderlust                                              |
+| =app/      | :app        | calendar, irc, rss                                       |
+| =config/   | :config     | default                                                  |
+
+Stage-1 (always, in =config/=): =evil-config.el=, =general-config.el= (leader
+definer =lunatix-leader=), =keybindings-config.el= (full doom `<leader>` tree +
+localleader), =theme-config.el= (doom-monokai-octagon, JetBrainsMono 18 medium,
+doom-modeline), =which-key-config.el=, =personal.el=, =org-extra.el=,
+=denote-config.el=, =lang-extra.el=, =mistty-config.el=, =dirvish-config.el=,
+=editor-extra.el=, =splash-config.el=.
 
 ** Manifest — manifest.el
 
-`(lunaris! :completion (vertico +icons +childframe) (corfu +orderless) ...)` —
-your doom! block, single source of truth. Feeds `modulep!`; submodules listed
-are the enabled set. Add/remove here to change what `modulep!` reports (file
-presence still governs what loads).
+`(lunaris! :completion (vertico +icons) (corfu +orderless) ...)` — your doom!
+block, single source of truth. Feeds `modulep!` and the stage-2 loader;
+submodules listed are the enabled set.
+
+** Health check — `lunaris-doctor`
+
+Doom-doctor-style per-module health check (`M-x lunaris-doctor` or batch).
+Each group dir may ship a `doctor.el` (loaded only by the doctor, never by
+stage-2) whose forms gate on `(modulep! ...)` and report via `ok!` / `warn!` /
+`error!` — e.g. missing executables (lsp servers, compilers), unavailable
+libs. Reports group by module; `lunaris-doctor-count` returns tallies for
+tests. `test.sh` requires ≥1 `ok!`.
 
 ** Keybindings — keybindings-config.el
 
@@ -146,9 +166,10 @@ Minibuffer: =ESC= aborts in one press, =C-s= consult-history, smart =C-a/C-e=.
 
 =modules/lunix/emacs/emacs.nix=:
 - =emacs-overlay= input; overlay provides =emacsWithPackagesFromUsePackage=.
-- Package single-source: nix reads =init.el= + all =modules/**/*.el= (recursive
-  glob via `lib.filesystem.listFilesRecursive`, concatenated via =writeText=),
-  parses `:ensure` decls, builds the package set. No second package list.
+- Package single-source: nix reads =init.el= + all =config/**/*.el= and
+  =framework/**/*.el= (recursive glob via `lib.filesystem.listFilesRecursive`,
+  concatenated via =writeText=), parses `:ensure` decls, builds the package
+  set. No second package list.
 - =extraEmacsPackages=: eglot, treesit grammars, EAF composite (shared from
   =_eaf/apps.nix=).
 - =services.emacs.package= is the result; =nix run .#emacs= / =.#doomacs=.
@@ -164,10 +185,11 @@ zero network at runtime.
   EMACS="$(nix build .#emacs --print-out-paths)/bin/emacs" ./test.sh
 #+end_src
 
-=test.sh= =emacs --batch= loads =init.el= with =debug-on-error t= and asserts 33
+=test.sh= =emacs --batch= loads =init.el= with =debug-on-error t= and asserts 34
 invariants: evil, leader tree, theme, modeline, which-key, dashboard,
 completion stack, magit, lsp, smartparens, editorconfig, vterm, wanderlust,
-elfeed, circe, persp, ultra-scroll, embark, menu/tool/scroll bars off.
+elfeed, circe, persp, ultra-scroll, embark, menu/tool/scroll bars off, and
+`lunaris-doctor` reporting ≥1 ok.
 
 * Deviations from doom
 

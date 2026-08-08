@@ -5,7 +5,7 @@
 (lunaris!
  :completion
  (corfu +orderless)
- (vertico +icons +childframe)
+ (vertico +icons)
 
  :ui
  deft
@@ -44,6 +44,7 @@
 
  :term
  eshell
+ vterm
  mistty
 
  :tools

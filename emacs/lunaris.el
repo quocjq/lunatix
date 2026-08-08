@@ -28,15 +28,22 @@ Defaults: `:ensure t` unless given; auto-`:defer t` when `:hook`/`:bind`/
 ;;; 2. doom-compat — macros/helpers ported from doom-emacs, absorbed here
 ;;; =========================================================================
 
-(defconst doom-leader-key "SPC")
-(defconst doom-localleader-key "SPC m")
+(defconst luna-leader-key "SPC")
+(defconst luna-localleader-key "SPC m")
 
-(defalias 'doom-user-dir (lambda () (file-name-directory (or load-file-name ""))))
+(defvar lunaris--dir (file-name-directory (or load-file-name buffer-file-name "")))
+(defalias 'luna-user-dir (lambda () lunaris--dir))
 
 (defmacro after! (feature &rest body)
-  "Run BODY after FEATURE loads."
+  "Run BODY after FEATURE loads. FEATURE is bound to a runtime variable so the
+byte-compiler can't resolve it to a file and eager-load it mid-compile (which
+would cycle when a module file shares its feature name with a package, e.g.
+lang/latex.el vs auctex's `latex')."
   (declare (indent defun))
-  `(with-eval-after-load ',feature ,@body))
+  `(let ((feat ',feature))
+     (if (featurep feat)
+         (funcall (lambda () ,@body))
+       (eval-after-load feat (lambda () ,@body)))))
 
 (defmacro cmd! (&rest body)
   "Interactive lambda wrapping BODY."
@@ -54,16 +61,25 @@ Defaults: `:ensure t` unless given; auto-`:defer t` when `:hook`/`:bind`/
   `(lambda (&rest _) (interactive) (funcall-interactively #',command ,@args)))
 
 (defmacro defadvice! (symbol arglist &rest body)
-  "Define advice SYMBOL on a target: (defadvice! name (args) :where 'fn ...)."
+  "Define advice SYMBOL on one or more targets:
+  (defadvice! name (args) :before 'fn ...)          ; single
+  (defadvice! name (args) :before '(fn1 fn2) ...)   ; multiple"
   (declare (indent defun))
   (let ((where (car body))
-        (target (cadr body))
+        (targets (cadr body))
         (body (cddr body)))
     (unless (keywordp where)
       (error "defadvice! expects (name (args) :where 'target ...)"))
-    `(progn
-       (defun ,symbol ,arglist ,@body)
-       (advice-add ,target ,where #',symbol))))
+    (let ((targets
+           (cond ((and (listp targets) (eq (car targets) 'quote))
+                  (cadr targets))
+                 ((and (listp targets) (eq (car targets) 'function))
+                  (list (cadr targets)))
+                 (t (list targets)))))
+      `(progn
+         (defun ,symbol ,arglist ,@body)
+         ,@(mapcar (lambda (tgt) `(advice-add ',tgt ,where #',symbol))
+                   targets)))))
 
 (defmacro setq-hook! (hooks &rest rest)
   "setq-local vars via hooks: (setq-hook! '(hook) var val ...)."
@@ -86,9 +102,27 @@ Defaults: `:ensure t` unless given; auto-`:defer t` when `:hook`/`:bind`/
   `(dolist (hook ,hooks)
      (remove-hook hook (lambda () ,@body))))
 
-;;; map! → general, per-state, error-swallowing
-(defun lunaris--map!-handle (args)
-  (let ((states nil) (keymaps nil) (prefix nil) (defs nil))
+;;; map! → general, per-state, error-swallowing. Supports doom syntax incl.
+;;; nested groups: (:when cond ...), (:prefix (label . key) key cmd ...).
+(defun lunaris--map!-emit (states keymaps prefix defs)
+  (unless (or states keymaps)
+    (setq states '(normal visual motion insert emacs)))
+  (if keymaps
+      `(condition-case nil
+           (general-def :keymaps ',keymaps
+             ,@(cl-mapcan (lambda (p) (list (car p) (cdr p))) defs))
+         (error nil))
+    `(dolist (state ',states)
+       (condition-case nil
+           (general-def :states (list state)
+             ,@(when prefix `(:prefix ,prefix))
+             ,@(cl-mapcan (lambda (p) (list (car p) (cdr p))) defs))
+         (error nil)))))
+
+(defun lunaris--map!-collect (args &optional prefix states keymaps)
+  "Parse map! ARGS into specs (list of (prefix keymaps states defs)).
+Nested (:prefix (label . key) body...) augments PREFIX (leader + key)."
+  (let ((specs nil) (defs nil))
     (while args
       (let ((tok (car args)))
         (cond
@@ -96,6 +130,31 @@ Defaults: `:ensure t` unless given; auto-`:defer t` when `:hook`/`:bind`/
           (if (eval (cadr tok))
               (setq args (append (cddr tok) (cdr args)))
             (setq args (cdr args))))
+         ((and (listp tok) (memq (car tok) '(:prefix :map :keymaps :leader)))
+          (when defs
+            (push (list prefix keymaps states (nreverse defs)) specs)
+            (setq defs nil))
+          (let ((kind (car tok)))
+            (pcase kind
+              (:prefix
+               (let* ((p (cadr tok))
+                      (k (if (and (consp p) (cdr p)) (cdr p) p))
+                      (inner (cddr tok)))
+                 (setq specs
+                       (append specs
+                               (lunaris--map!-collect inner
+                                 (if prefix (concat prefix " " k) k)
+                                 states keymaps))))
+               (setq args (cdr args)))
+              (:leader
+               (setq prefix luna-leader-key)
+               (setq args (cdr args)))
+              (:map
+               (setq keymaps (list (cadr tok)))
+               (setq args (cddr args)))
+              (:keymaps
+               (setq keymaps (cadr tok))
+               (setq args (cddr args))))))
          ((keywordp tok)
           (pcase tok
             ((or :n :normal) (setq states '(normal)))
@@ -105,7 +164,7 @@ Defaults: `:ensure t` unless given; auto-`:defer t` when `:hook`/`:bind`/
             (:gi (setq states '(normal insert visual emacs)))
             (:g  (setq states '(normal visual motion)))
             (:nv (setq states '(normal visual)))
-            (:leader (setq prefix doom-leader-key))
+            (:leader (setq prefix luna-leader-key))
             (:prefix (setq prefix (cadr args)))
             (:map (setq keymaps (list (cadr args))))
             (:keymaps (setq keymaps (cadr args)))
@@ -114,20 +173,17 @@ Defaults: `:ensure t` unless given; auto-`:defer t` when `:hook`/`:bind`/
          (t
           (push (cons tok (cadr args)) defs)
           (setq args (cddr args))))))
-    (unless (or states keymaps)
-      (setq states '(normal visual motion insert emacs)))
-    (let ((defs (nreverse defs)))
-      (if keymaps
-          `(condition-case nil
-               (general-def :keymaps ',keymaps
-                 ,@(cl-mapcan (lambda (p) (list (car p) (cdr p))) defs))
-             (error nil))
-        `(dolist (state ',states)
-           (condition-case nil
-               (general-def :states (list state)
-                 ,@(when prefix `(:prefix ,prefix))
-                 ,@(cl-mapcan (lambda (p) (list (car p) (cdr p))) defs))
-             (error nil)))))))
+    (when defs
+      (push (list prefix keymaps states (nreverse defs)) specs))
+    (nreverse specs)))
+
+(defun lunaris--map!-handle (args)
+  (let ((specs (lunaris--map!-collect args)))
+    `(progn
+       ,@(mapcar (lambda (spec)
+                   (lunaris--map!-emit (nth 2 spec) (nth 1 spec)
+                                       (nth 0 spec) (nth 3 spec)))
+                 specs))))
 
 (defmacro map! (&rest args)
   "Doom-style keybinding macro built on general."
@@ -219,33 +275,79 @@ Bare-flag form `(modulep! +lsp)` is t when any enabled submodule carries it."
 ;;; 4. tree loader — import-tree over modules/, `_`-prefixed skipped
 ;;; =========================================================================
 
-(defun lunaris-load-tree (dir)
-  "Load every .el under DIR (recursive), skipping `_`-prefixed paths.
-Files load alphabetically by path; deps must sort correctly (e.g.
-general-config before keybindings-config)."
-  (dolist (file (directory-files-recursively dir "\\.el$"))
-    (unless (string-match-p "/_" file)
-      (condition-case err
-          (load file nil :nomessage)
-        (error (lunaris-log "Failed loading %s: %s" file (error-message-string err)))))))
-
 ;;; Stage-2 background load — after the dashboard/frame is up, warm the
 ;;; commonly used deferred packages in the background so first use is instant.
 (defvar lunaris-stage-2-packages
-  '(vertico orderless consult marginalia nerd-icons nerd-icons-completion
-    corfu cape magit forge lsp-mode lsp-ui
+  '(vertico orderless consult marginalia nerd-icons
+    corfu cape
+    emacsql-sqlite magit lsp-mode lsp-ui
     denote denote-sequence denote-journal consult-denote
     org-modern org-appear org-super-agenda
     smartparens editorconfig popper ultra-scroll evil-goggles
-    ligature unicode-fonts flycheck dirvish mistty eww)
+    ligature unicode-fonts flycheck dirvish mistty eww
+    hl-todo indent-bars diff-hl winum persp-mode)
   "Features required by `lunaris-stage-2' in the background.")
 
+(defvar lunaris--tree-queue nil
+  "Remaining module files for chunked stage-2 loading.")
+
 (defun lunaris-stage-2 ()
-  "Load stage-2 packages in the background. Errors are logged, never fatal."
-  (dolist (feature lunaris-stage-2-packages)
-    (condition-case err
-        (require feature nil t)
-      (error (lunaris-log "stage-2 failed loading %S: %s" feature (error-message-string err))))))
+  "Stage 2: load the framework modules (doom ports) in the background, a few
+files per idle tick so typing is never blocked. Layout: one directory per
+manifest group (e.g. framework/lang/); `<group>.el` inside is the group-level
+file (always loaded when the group is enabled), any other `<submodule>.el` is
+loaded only when `(modulep! :<group> <submodule>)` is t."
+  (let ((dir (expand-file-name "framework" (luna-user-dir)))
+        (q nil) (group-files nil))
+    (lunaris--cache-check-build-id (expand-file-name "lisp" lunaris-cache-dir))
+    (lunaris--cache-read-blacklist (expand-file-name "lisp" lunaris-cache-dir))
+    (dolist (file (directory-files-recursively dir "\\.el$"))
+      (let* ((base (file-name-nondirectory file))
+             (group (intern (concat ":"
+                                    (file-name-nondirectory
+                                     (directory-file-name
+                                      (file-name-directory file))))))
+             (sub (file-name-base base)))
+        (when (and (not (string-prefix-p "_" base))
+                   (not (string-prefix-p "." base))
+                   (not (string-prefix-p "#" base))
+                   (not (string-suffix-p "~" base))
+                   (assq group lunaris--manifest)
+                   (or (string= sub (substring (symbol-name group) 1))
+                       (assq (intern sub) (cdr (assq group lunaris--manifest)))))
+          (if (string= sub (substring (symbol-name group) 1))
+              (push file group-files)
+            (push file q)))))
+    (setq lunaris--tree-queue
+          (append (sort group-files #'string<)
+                  (sort q #'string<))))
+  (lunaris-stage-2-chunk))
+
+(defun lunaris-stage-2-now ()
+  "Load the whole module tree synchronously (tests / eager use)."
+  (lunaris-stage-2)
+  (while lunaris--tree-queue
+    (lunaris-stage-2-chunk)))
+
+(defun lunaris-stage-2-chunk ()
+  "Load up to 4 module files per idle tick; finish with evil-collection."
+  (let ((n 0)
+        (cache (expand-file-name "lisp" lunaris-cache-dir)))
+    (while (and lunaris--tree-queue (< n 4))
+      (let ((file (car lunaris--tree-queue)))
+        (setq lunaris--tree-queue (cdr lunaris--tree-queue))
+        (when file
+          (condition-case err
+              (lunaris--load-cached file cache)
+            (error (lunaris-log "stage-2 %s: %s" file (error-message-string err))))))
+      (setq n (1+ n)))
+    (if lunaris--tree-queue
+        (run-with-idle-timer 0.1 nil #'lunaris-stage-2-chunk)
+      ;; all loaded; wire evil-collection once
+      (when (and (require 'evil-collection nil t) (featurep 'evil))
+        (condition-case err
+            (evil-collection-init)
+          (error (lunaris-log "evil-collection-init: %s" (error-message-string err))))))))
 
 ;;; =========================================================================
 ;;; 5. helpers (doom-core ports)
@@ -255,74 +357,387 @@ general-config before keybindings-config)."
   (when (bound-and-true-p lunaris-debug)
     (apply #'message args)))
 
-(defalias 'doom-log #'lunaris-log
+(defalias 'luna-log #'lunaris-log
   "Doom-compat alias for `lunaris-log'.")
 
 (defvar lunaris-debug nil)
 
-(defun doom-region-active-p ()
+(defvar lunaris-cache-dir
+  (expand-file-name "lunatix-emacs"
+                    (or (getenv "XDG_CACHE_HOME")
+                        (expand-file-name ".cache"
+                                          (or (getenv "HOME") "/tmp"))))
+  "Cache dir for byte-compiled modules and runtime state (XDG, not the
+config tree).")
+
+;;; Import-tree loader with byte-compile cache — interpreted 18k lines of
+;;; modules is the startup killer; load .elc from the cache instead. First run
+;;; compiles (slow), subsequent runs load compiled (fast).
+(defvar lunaris-core-files
+  '("evil-config.el" "general-config.el" "which-key-config.el"
+    "theme-config.el" "keybindings-config.el" "config/personal.el")
+  "Files loaded at startup (stage 1). Everything else loads in stage 2.")
+
+(defvar lunaris--loaded-files nil
+  "Absolute paths of config/module files already loaded (dedup registry).")
+
+(defun lunaris--cache-build-id ()
+  "Identity of the current package set, for cache invalidation.
+`just switch' can change the package store while leaving source files
+untouched; mtime alone would keep stale .elc around. Key on the
+emacsWithPackages site-lisp env var (a per-build store hash, stable across
+runs) — hashing the runtime load-path is unstable (its elpa enumeration
+varies run to run), which wiped + recompiled the cache every startup."
+  (md5 (or (getenv "emacsWithPackages_siteLisp")
+           (getenv "EMACSLOADPATH")
+           (mapconcat #'identity
+                      (sort (delete-dups
+                             (seq-filter (lambda (d)
+                                           (or (string-match-p "elpa" d)
+                                               (string-match-p "emacs-packages-deps" d)))
+                                         load-path))
+                            #'string<)
+                      ","))))
+
+(defun lunaris--cache-check-build-id (cache)
+  "Wipe CACHE's .elc when the package store changed (stamp mismatch)."
+  (make-directory cache t)
+  (let ((stamp (expand-file-name "BUILD-ID" cache))
+        (id (lunaris--cache-build-id)))
+    (unless (and (file-exists-p stamp)
+                 (string= id (string-trim
+                              (with-temp-buffer
+                                (insert-file-contents stamp)
+                                (buffer-string)))))
+      (dolist (f (directory-files cache t "\\.elc$"))
+        (ignore-errors (delete-file f)))
+      (with-temp-file stamp (insert id)))))
+
+(defvar lunaris--no-compile-files nil
+  "Base names of files to load from source (byte-compile is slow/unreliable
+for them: native-comp on this laptop hangs). Auto-populated when a compile
+fails; persisted in CACHE/NOT-COMPILED.")
+
+(defun lunaris--no-byte-compile-p (file)
+  "Non-nil when FILE carries a `no-byte-compile' header or is blacklisted."
+  (or (member (file-name-nondirectory file) lunaris--no-compile-files)
+      (with-temp-buffer
+        (insert-file-contents file nil 0 300)
+        (goto-char (point-min))
+        (search-forward "no-byte-compile" nil t))))
+
+(defun lunaris--cache-read-blacklist (cache)
+  "Load the NOT-COMPILED blacklist from CACHE."
+  (let ((f (expand-file-name "NOT-COMPILED" cache)))
+    (when (file-exists-p f)
+      (setq lunaris--no-compile-files
+            (split-string (string-trim
+                           (with-temp-buffer
+                             (insert-file-contents f)
+                             (buffer-string))))))))
+
+(defun lunaris--cache-add-blacklist (cache base)
+  "Persist BASE in CACHE/NOT-COMPILED (skip byte-compile next runs)."
+  (let ((f (expand-file-name "NOT-COMPILED" cache)))
+    (with-temp-file f
+      (dolist (b (sort (delete-dups (cons base lunaris--no-compile-files))
+                       #'string<))
+        (insert b "\n")))))
+
+(defun lunaris--load-cached (file cache)
+  "Compile FILE into CACHE (if stale) and load the .elc.
+Dedups by file path (doom-style: module files never provide their own
+feature, so `featurep' can't be used and must not be pre-claimed)."
+  (let ((file (expand-file-name file)))
+    (unless (member file lunaris--loaded-files)
+      (push file lunaris--loaded-files)
+      (if (lunaris--no-byte-compile-p file)
+          ;; source-load: byte/native-compilation of this file is slow or
+          ;; unreliable (native-comp hangs on this laptop for some modules)
+          (condition-case err
+              (load file nil :nomessage)
+            (error (lunaris-log "Failed loading %s: %s" file (error-message-string err))))
+        (let* ((base (file-name-nondirectory file))
+               (cache-elc (expand-file-name (concat base "c") cache))
+               (stale (or (not (file-exists-p cache-elc))
+                          (time-less-p
+                           (file-attribute-modification-time (file-attributes cache-elc))
+                           (file-attribute-modification-time (file-attributes file))))))
+          (when stale
+            ;; Compile via a unique temp then atomically rename into place: the
+            ;; daemon, client frames and test runs share the cache, so compiling
+            ;; the shared cache-src in place lets a concurrent reader see a
+            ;; half-written file ("End of file during parsing").
+            (let ((tmp (expand-file-name
+                        (format ".tmp-%s-%d.el" base (emacs-pid)) cache))
+                  (tmp-elc (expand-file-name
+                            (format ".tmp-%s-%d.elc" base (emacs-pid)) cache)))
+              (condition-case err
+                  (progn
+                    (copy-file file tmp t)
+                    (let ((debug-on-error nil))
+                      ;; compiler signals (e.g. eager macro-expansion cycle) must
+                      ;; hit our handler, not the user's debugger
+                      (byte-compile-file tmp))
+                    (when (file-exists-p tmp-elc)
+                      (rename-file tmp-elc cache-elc t))
+                    (delete-file tmp))
+                (error
+                 ;; a module whose feature collides with a package's eager-load
+                 ;; (e.g. php/latex) can still trip the compiler; fall back to
+                 ;; loading the source so the module works.
+                 (lunaris-log "compile failed %s (%s); loading source" file
+                              (error-message-string err))
+                 (lunaris--cache-add-blacklist cache base)
+                 (dolist (f (list tmp tmp-elc)) (ignore-errors (delete-file f)))
+                 (load file nil :nomessage)
+                 (setq cache-elc nil)))))
+          (when cache-elc
+            (condition-case err
+                (load cache-elc nil :nomessage)
+              (error (lunaris-log "Failed loading %s: %s" file (error-message-string err))))))))))
+
+(defun lunaris-load-core (dir)
+  "Load every .el under DIR (user config), skipping `_`/lock files.
+general-config loads first: it defines the `lunatix-leader' macro that
+keybindings-config (and friends) expand at compile time."
+  (let ((cache (expand-file-name "lisp" lunaris-cache-dir)))
+    (lunaris--cache-check-build-id cache)
+    (lunaris--cache-read-blacklist cache)
+    (let ((files (directory-files-recursively dir "\\.el$")))
+      (dolist (file (cons (expand-file-name "general-config.el" dir) files))
+        (when (file-exists-p file)
+          (let ((base (file-name-nondirectory file)))
+            (unless (or (string-prefix-p "_" base)
+                        (string-prefix-p "." base)
+                        (string-prefix-p "#" base)
+                        (string-suffix-p "~" base))
+              (lunaris--load-cached file cache))))))))
+
+(defun lunaris-load-tree (dir)
+  "Load every .el under DIR (recursive), skipping `_`-prefixed paths and
+already-loaded (stage-1) features. Byte-compiles into the cache on first run."
+  (let ((cache (expand-file-name "lisp" lunaris-cache-dir)))
+    (make-directory cache t)
+    (dolist (file (directory-files-recursively dir "\\.el$"))
+      (let ((base (file-name-nondirectory file)))
+        (unless (or (string-prefix-p "_" base)
+                    (string-prefix-p "." base)   ; lock files .#foo.el
+                    (string-prefix-p "#" base)
+                    (string-suffix-p "~" base))
+          (lunaris--load-cached file cache))))))
+
+(defun luna-region-active-p ()
   (and (region-active-p) (> (region-end) (region-beginning))))
 
-(defun doom-point-in-comment-p (&optional pos)
+(defun luna-point-in-comment-p (&optional pos)
   (let* ((pos (or pos (point)))
          (beg (save-excursion (goto-char pos) (nth 8 (syntax-ppss)))))
     (and beg (< beg pos))))
 
-(defun doom-project-root (&optional path)
-  (let ((default-directory (if path (file-name-directory path) default-directory)))
-    (project-root (project-current t))))
+(defun luna-project-root (&optional path)
+  "Project root via projectile (falls back to nil outside a project)."
+  (condition-case nil
+      (projectile-project-root
+       (if path (file-name-directory path) default-directory))
+    (error nil)))
 
-(defun doom-call-process (&rest args)
+(defun luna-call-process (&rest args)
   (with-temp-buffer
     (cons (apply #'call-process (car args) nil t nil (cdr args))
           (buffer-string))))
 
-(defun doom-call-process-in (destdir &rest args)
+(defun luna-call-process-in (destdir &rest args)
   (let ((default-directory destdir))
-    (apply #'doom-call-process args)))
+    (apply #'luna-call-process args)))
 
-(defun doom-temp-buffer-p (buffer)
+(defun luna-temp-buffer-p (buffer)
   (string-prefix-p "*" (buffer-name buffer)))
 
-(defun doom-real-buffer-p (buffer)
-  (not (doom-temp-buffer-p buffer)))
+(defun luna-real-buffer-p (buffer)
+  (not (luna-temp-buffer-p buffer)))
 
-(defun doom-fallback-buffer ()
+(defun luna-fallback-buffer ()
   (get-buffer-create "*scratch*"))
 
-(defun doom-disable-line-numbers-h ()
+;;; Font zoom (doom): frame-wide font size, buffer-independent, resettable
+(defvar luna--initial-font-height nil
+  "Default frame font height, captured at startup.")
+
+(defun doom/increase-font-size (&optional inc)
+  "Increase the frame font size by INC*10 (default 10)."
+  (interactive "p")
+  (unless luna--initial-font-height
+    (setq luna--initial-font-height (face-attribute 'default :height)))
+  (let ((cur (face-attribute 'default :height)))
+    (set-face-attribute 'default nil :height (+ cur (* 10 (or inc 1))))))
+
+(defun doom/decrease-font-size (&optional inc)
+  "Decrease the frame font size by INC*10 (default 10)."
+  (interactive "p")
+  (doom/increase-font-size (- (or inc 1))))
+
+(defun doom/reset-font-size ()
+  "Reset the frame font size to the configured default."
+  (interactive)
+  (when luna--initial-font-height
+    (set-face-attribute 'default nil :height luna--initial-font-height)))
+
+(run-with-idle-timer 1 nil
+  (lambda ()
+    (setq luna--initial-font-height (face-attribute 'default :height))))
+
+(defun luna-disable-line-numbers-h ()
   (display-line-numbers-mode -1))
 
-(defun doom-mark-buffer-as-real-h (&optional buffer)
+(defun luna-mark-buffer-as-real-h (&optional buffer)
   (with-current-buffer (or buffer (current-buffer)) nil))
 
-(defun doom-profile-state-dir (&rest _) user-emacs-directory)
-(defun doom-profile-cache-dir (&rest _) (expand-file-name ".cache" user-emacs-directory))
-(defun doom-profile-data-dir (&rest _) (expand-file-name ".local" user-emacs-directory))
-(defun doom-context-p (&rest _) nil)
-(defun doom-system-cpus (&rest _) (num-processors))
-(defun doom-require (feature &optional _file _noerror) (require feature))
+(defun luna-profile-state-dir (&rest _) lunaris-cache-dir)
+(defun luna-profile-cache-dir (&rest _) lunaris-cache-dir)
+(defun luna-profile-data-dir (&rest _) lunaris-cache-dir)
+(defun luna-context-p (&rest _) nil)
+(defun luna-system-cpus (&rest _) (num-processors))
+(defun luna-require (feature &optional _file _noerror) (require feature))
 
-(defvar doom-escape-hook nil)
-(defvar doom-first-input-hook nil)
-(defvar doom-first-buffer-hook nil)
-(defvar doom-first-file-hook nil)
-(defvar doom-first-buffer nil)
-(defvar doom-first-file nil)
-(defvar doom-first-input nil)
-(defvar doom-switch-buffer-hook nil)
-(defvar doom-switch-window-hook nil)
-(defvar doom-load-theme-hook nil)
-(defvar doom-init-ui-hook nil)
-(defvar doom-after-modules-config-hook nil)
-(defvar doom-modeline-spc nil)
-(defvar doom-use-helpful-a t)
-(defvar doom-quit-messages nil)
-(defvar doom-profile-state-dir nil)
-(defvar doom-profile-cache-dir nil)
-(defvar doom-profile-data-dir nil)
-(defvar doom-cache-dir nil)
-(defvar doom-inhibit-local-var-hooks nil)
+(defvar luna-escape-hook nil)
+(defvar luna-first-input-hook nil)
+(defvar luna-first-buffer-hook nil)
+(defvar luna-first-file-hook nil)
+(defvar luna-first-buffer nil)
+(defvar luna-first-file nil)
+(defvar luna-first-input nil)
+(defvar luna-switch-buffer-hook nil)
+(defvar luna-switch-window-hook nil)
+(defvar luna-load-theme-hook nil)
+(defvar luna-init-ui-hook nil)
+(defvar luna-after-modules-config-hook nil)
+(defvar luna-modeline-spc nil)
+(defvar luna-use-helpful-a t)
+(defvar luna-quit-messages nil)
+(defvar luna-profile-state-dir nil)
+(defvar luna-profile-cache-dir nil)
+(defvar luna-profile-data-dir nil)
+(defvar luna-cache-dir nil)
+(defvar luna-inhibit-local-var-hooks nil)
+
+;;; =========================================================================
+;;; 6. module health check — doom doctor-style
+;;; =========================================================================
+;;; Each group dir may ship a `doctor.el' (doom's per-module doctor.el,
+;;; collapsed to one file per group) whose top-level forms gate on
+;;; `(modulep! :<group> <module>)' and report via `ok!'/`warn!'/`error!'.
+;;; `lunaris-doctor' loads every enabled group's doctor.el standalone (no
+;;; modules loaded, like `bin/doom doctor') and prints a grouped report.
+;;; doctor.el is never loaded by stage-2 (its feature `doctor' matches no
+;;; manifest submodule).
+
+(defvar lunaris--doctor-current nil
+  "Group (keyword) whose doctor.el is being evaluated; report context.")
+
+(defvar lunaris--doctor-reports nil
+  "Accumulated reports: (GROUP SEVERITY . MESSAGE).")
+
+(defmacro ok! (&rest args)
+  "Record a passing check (message from ARGS)."
+  `(lunaris--doctor-report 'ok (format ,@args)))
+
+(defmacro warn! (&rest args)
+  "Record a non-fatal problem (message from ARGS)."
+  `(lunaris--doctor-report 'warn (format ,@args)))
+
+(defmacro error! (&rest args)
+  "Record a fatal problem (message from ARGS)."
+  `(lunaris--doctor-report 'error (format ,@args)))
+
+(defun lunaris--doctor-report (severity message)
+  (push (list lunaris--doctor-current severity message) lunaris--doctor-reports))
+
+(defun lunaris--doctor-face (severity)
+  (pcase severity
+    ('ok    'success)
+    ('warn  'warning)
+    ('error 'error)))
+
+(defun lunaris--doctor-render ()
+  "Print accumulated doctor reports to *Messages*, doom-doctor-style."
+  (let ((by-module (seq-group-by #'car lunaris--doctor-reports)))
+    (dolist (group-reports by-module)
+      (let ((group (car group-reports)))
+        (princ (format "\n== %s ==\n" (symbol-name group))))
+      (dolist (rep (cdr group-reports))
+        (let ((severity (nth 1 rep))
+              (message (nth 2 rep)))
+          (princ (format "  %s %s\n"
+                         (propertize (upcase (symbol-name severity))
+                                     'face (lunaris--doctor-face severity))
+                         message)))))))
+
+(defun lunaris-doctor ()
+  "Health-check every enabled module group, doom-doctor-style.
+Loads each enabled group's framework/<group>/doctor.el standalone and prints a
+per-module report of `ok!'/`warn!'/`error!' findings."
+  (interactive)
+  (setq lunaris--doctor-reports nil)
+  (let ((dir (expand-file-name "framework" (luna-user-dir))))
+    (dolist (group (mapcar #'car lunaris--manifest))
+      (let ((doctor (expand-file-name "doctor.el" (expand-file-name (substring (symbol-name group) 1) dir))))
+        (when (file-exists-p doctor)
+          (let ((lunaris--doctor-current group))
+            (condition-case err
+                (load doctor nil :nomessage)
+              (error
+               (lunaris--doctor-report group 'error
+                                       (format "doctor.el failed: %s" (error-message-string err))))))))))
+  (lunaris--doctor-render))
+
+(defun lunaris-doctor-count (&optional severity)
+  "Count doctor reports (all, or of SEVERITY)."
+  (if severity
+      (cl-count-if (lambda (r) (eq (nth 1 r) severity)) lunaris--doctor-reports)
+    (length lunaris--doctor-reports)))
+
+
+;;; Legacy doom-* aliases (renamed to luna-* for a unified prefix; kept
+;;; so ported code that still references the old names keeps working).
+(defalias 'doom-user-dir #'luna-user-dir)
+(defalias 'doom-log #'luna-log)
+(defalias 'doom-region-active-p #'luna-region-active-p)
+(defalias 'doom-point-in-comment-p #'luna-point-in-comment-p)
+(defalias 'doom-project-root #'luna-project-root)
+(defalias 'doom-call-process #'luna-call-process)
+(defalias 'doom-call-process-in #'luna-call-process-in)
+(defalias 'doom-temp-buffer-p #'luna-temp-buffer-p)
+(defalias 'doom-real-buffer-p #'luna-real-buffer-p)
+(defalias 'doom-fallback-buffer #'luna-fallback-buffer)
+(defalias 'doom-disable-line-numbers-h #'luna-disable-line-numbers-h)
+(defalias 'doom-mark-buffer-as-real-h #'luna-mark-buffer-as-real-h)
+(defalias 'doom-profile-state-dir #'luna-profile-state-dir)
+(defalias 'doom-profile-cache-dir #'luna-profile-cache-dir)
+(defalias 'doom-profile-data-dir #'luna-profile-data-dir)
+(defalias 'doom-context-p #'luna-context-p)
+(defalias 'doom-system-cpus #'luna-system-cpus)
+(defalias 'doom-require #'luna-require)
+(defvaralias 'doom-leader-key 'luna-leader-key)
+(defvaralias 'doom-localleader-key 'luna-localleader-key)
+(defvaralias 'doom--initial-font-height 'luna--initial-font-height)
+(defvaralias 'doom-escape-hook 'luna-escape-hook)
+(defvaralias 'doom-first-input-hook 'luna-first-input-hook)
+(defvaralias 'doom-first-buffer-hook 'luna-first-buffer-hook)
+(defvaralias 'doom-first-file-hook 'luna-first-file-hook)
+(defvaralias 'doom-first-buffer 'luna-first-buffer)
+(defvaralias 'doom-first-file 'luna-first-file)
+(defvaralias 'doom-first-input 'luna-first-input)
+(defvaralias 'doom-switch-buffer-hook 'luna-switch-buffer-hook)
+(defvaralias 'doom-switch-window-hook 'luna-switch-window-hook)
+(defvaralias 'doom-load-theme-hook 'luna-load-theme-hook)
+(defvaralias 'doom-init-ui-hook 'luna-init-ui-hook)
+(defvaralias 'doom-after-modules-config-hook 'luna-after-modules-config-hook)
+(defvaralias 'doom-modeline-spc 'luna-modeline-spc)
+(defvaralias 'doom-use-helpful-a 'luna-use-helpful-a)
+(defvaralias 'doom-quit-messages 'luna-quit-messages)
+(defvaralias 'doom-cache-dir 'luna-cache-dir)
+(defvaralias 'doom-inhibit-local-var-hooks 'luna-inhibit-local-var-hooks)
 
 (provide 'lunaris)
 ;;; lunaris.el ends here

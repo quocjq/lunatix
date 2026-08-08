@@ -6,16 +6,22 @@
 (setq lunatix-emacs-dir
       (file-name-directory (or load-file-name buffer-file-name)))
 
-;; must be set before evil.el is ever loaded (any :after evil forces it early)
-(setq evil-want-keybinding nil)
+;; big GC threshold during init (doom-style), resets to normal after startup
+(setq gc-cons-threshold (* 100 1024 1024))
 
-(add-to-list 'load-path (expand-file-name "modules" lunatix-emacs-dir))
+;; must be set before evil.el is ever loaded (any :after evil forces it early)
+(setq evil-want-keybinding nil
+      evil-want-C-i-jump nil
+      evil-want-C-u-scroll t
+      evil-want-Y-yank-to-eol t)
+
+(add-to-list 'load-path (expand-file-name "config" lunatix-emacs-dir))
 
 ;; unified backend: leaf DSL + doom-compat + manifest + tree loader
 (load (expand-file-name "lunaris.el" lunatix-emacs-dir))
 
 (require 'use-package)
-(setq use-package-verbose t
+(setq use-package-verbose nil
       ;; doom-style: declare everything, load on demand
       use-package-always-defer t
       ;; nix builds every :ensure package; never let use-package touch
@@ -34,8 +40,20 @@
 ;; enabled-modules declaration (drives `modulep!', documents the set)
 (load (expand-file-name "manifest.el" lunatix-emacs-dir))
 
-;; load the module tree (modules/**/*.el, `_`-prefixed skipped)
-(lunaris-load-tree (expand-file-name "modules" lunatix-emacs-dir))
+;; stage 1: load only the dashboard-ready core (identity + keys); the rest of
+;; the module tree loads in stage 2 (idle timer below).
+(lunaris-load-core (expand-file-name "config" lunatix-emacs-dir))
+
+;; stage-2 commands usable before their module loads (e.g. SPC o d right after
+;; startup). ui-config is byte-compiled into the cache. APPEND so the cache's
+;; source copies of modules (present while compiling) can't shadow same-named
+;; package files on load-path (e.g. php.el, latex.el) — that caused eager
+;; macro-expansion to reload our own module -> "skipped due to cycle".
+(add-to-list 'load-path (expand-file-name "lisp" lunaris-cache-dir) 'append)
+;; absolute path: feature "dashboard" is also the dashboard package's feature,
+;; so a bare autoload would resolve to the package instead of our module
+(autoload '+dashboard/open
+  (expand-file-name "framework/ui/dashboard" lunatix-emacs-dir) nil t)
 
 ;; doom :config default-like globals
 (setq-default indent-tabs-mode nil
@@ -49,9 +67,19 @@
 (tab-bar-mode -1)
 (setq frame-title-format '("%b" . "emacs"))
 
+;; Dashboard first (stage 1): the frame opens on the *doom* buffer; ui-config
+;; (stage 2) renders its widgets into it.
+(setq initial-buffer-choice (lambda () (get-buffer-create "*doom*")))
+
 ;; Stage 2: load common packages in the background once the frame is idle
 ;; (dashboard/frame render = stage 1, packages = stage 2).
 (run-with-idle-timer 2 nil #'lunaris-stage-2)
+
+;; settle GC back to a sane threshold after startup
+(run-with-idle-timer 5 nil
+  (lambda ()
+    (setq gc-cons-threshold (* 20 1024 1024)
+          gc-cons-percentage 0.6)))
 
 (provide 'init)
 ;;; init.el ends here

@@ -13,7 +13,7 @@
         git
       ];
     };
-    homeManager = { pkgs, ... }: {
+    homeManager = { pkgs, config, ... }: {
       services.emacs.enable = true;
       nixpkgs.overlays = [
         inputs.emacs-overlay.overlays.default
@@ -26,6 +26,11 @@
         QT_QPA_PLATFORM_PLUGIN_PATH = "${pkgs.qt6.qtbase}/lib/qt-6/plugins";
       };
 
+      # declaratively link the repo config as ~/.emacs.d (out-of-store: edits
+      # in the repo apply immediately, no rebuild).
+      home.file.".emacs.d".source =
+        config.lib.file.mkOutOfStoreSymlink "/home/lunixose/Proj/lunatix/emacs";
+
       services.emacs.package = pkgs.emacsWithPackagesFromUsePackage {
         package = pkgs.emacs-gtk;
         config =
@@ -33,7 +38,8 @@
             initText = builtins.readFile ../../../emacs/init.el;
             moduleFiles = pkgs.lib.filter (p: p != null) (
               map (f: if pkgs.lib.hasSuffix ".el" f then f else null)
-                (pkgs.lib.filesystem.listFilesRecursive ../../../emacs/modules)
+                ((pkgs.lib.filesystem.listFilesRecursive ../../../emacs/config)
+                 ++ (pkgs.lib.filesystem.listFilesRecursive ../../../emacs/framework))
             );
           in
           pkgs.writeText "lunatix-modules.el" (
@@ -54,7 +60,12 @@
           ];
       };
 
-      home.packages = with pkgs; [
+      home.packages = [
+        # `services.emacs.package` runs the daemon; also expose the binary on
+        # PATH so `emacs` works in the shell.
+        config.services.emacs.package
+      ]
+      ++ (with pkgs; [
         (pkgs.aspellWithDicts (dicts: [
           dicts.en
           dicts.en-computers
@@ -88,6 +99,8 @@
         marksman # markdown language server
         pandoc
         multimarkdown
+        gopls # go language server
+        mupdf # mutool for pdf-tools rendering
         dockfmt
         html-tidy
         universal-ctags
@@ -128,7 +141,7 @@
         rustfmt
         clippy
         rust-analyzer
-      ];
+      ]);
     };
   };
 }

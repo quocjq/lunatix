@@ -31,11 +31,19 @@ devenv.local.yaml
 emacs/doom-modules/
 
 # Emacs runtime state (never committed)
-emacs/recentf
-emacs/var/
-emacs/parinfer-rust/
-emacs/projects
-emacs/.lsp-session-v1
-emacs/transient/
 emacs/#*#
 emacs/.#*
+
+# Emacs runtime state (all under emacs/.cache — never committed)
+emacs/.cache/
+
+# Emacs runtime state leftovers (older runs; never re-commit)
+emacs/.local/
+emacs/projectile-*.eld
+emacs/undo-fu-session/
+emacs/workspaces*
+emacs/auto-save-list/
+emacs/url/
+
+# session memory (not project code)
+session-emacs-config.md*

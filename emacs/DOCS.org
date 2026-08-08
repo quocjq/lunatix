@@ -1,0 +1,1219 @@
+#+title: lunatix emacs — literate reference
+#+options: toc:t num:t
+
+Standalone `~/.emacs.d` (linked to this repo). Built by nix
+(`emacsWithPackagesFromUsePackage` from =emacs-overlay=). Doom-emacs look and
+keys without doom's module system — the backend is `lunaris.el`, the doom ports
+live in =framework/= (toggle via =manifest.el=), your config in =config/=.
+
+One section per file. Every top-level function/macro/custom/var with its
+docstring. Generated — the docstring is the source of truth; the purpose line
+is editorial.
+
+
+* lunaris.el
+
+Backend framework: leaf DSL, lbind/map!/after!/defadvice! macros, manifest, stage-2 tree loader (cache + doctor), luna-compat helpers, font zoom.
+
+| function | purpose |
+|----------+---------|
+| =leaf= |  |
+| =lunaris--dir= |  |
+| =after!= |  |
+| =cmd!= | Interactive lambda wrapping BODY. |
+| =cmds!= | Interactive lambda running BODY if PRED. |
+| =cmd!!= | Interactive lambda calling COMMAND with ARGS. |
+| =defadvice!= | Define advice SYMBOL on one or more targets:   (defadvice! name (args) :before 'fn ...)          ; single   (defadvice! name (args) :before '(fn1 fn2) ...)   ; multiple |
+| =setq-hook!= | setq-local vars via hooks: (setq-hook! '(hook) var val ...). |
+| =add-hook!= | Add BODY as a function to each HOOK. |
+| =remove-hook!= | Remove BODY function from each HOOK. |
+| =lunaris--map!-emit= |  |
+| =lunaris--map!-collect= | Parse map! ARGS into specs (list of (prefix keymaps states defs)). Nested (:prefix (label . key) body...) augments PREFIX (leader + key). |
+| =lunaris--map!-handle= |  |
+| =map!= | Doom-style keybinding macro built on general. |
+| =lunaris--lbind->map!= | Translate lbind ARGS into map!-style tokens. |
+| =lbind= | Declare keybindings with a flat, keyword-first DSL. |
+| =lunaris--manifest= |  |
+| =lunaris!= | Declare enabled modules, doom!-style. Usage: (lunaris! :completion (corfu +orderless) (vertico +icons)                  :ui deft dashboard ...) |
+| =modulep!= | t when MODULE (and SUBMODULE/FLAGS, if given) is enabled. Flag `-foo` means \"enabled unless foo\"; plain `foo` means \"enabled with foo\ |
+| =lunaris-stage-2-packages= | Features required by `lunaris-stage-2' in the background. |
+| =lunaris--tree-queue= |  |
+| =lunaris-stage-2= |  |
+| =lunaris-stage-2-now= | Load the whole module tree synchronously (tests / eager use). |
+| =lunaris-stage-2-chunk= | Load up to 4 module files per idle tick; finish with evil-collection. |
+| =lunaris-log= |  |
+| =lunaris-debug= |  |
+| =lunaris-cache-dir= | Cache dir for byte-compiled modules and runtime state (XDG, not the config tree). |
+| =lunaris-core-files= | Files loaded at startup (stage 1). Everything else loads in stage 2. |
+| =lunaris--loaded-files= |  |
+| =lunaris--cache-build-id= |  |
+| =lunaris--cache-check-build-id= | Wipe CACHE's .elc when the package store changed (stamp mismatch). |
+| =lunaris--load-cached= |  |
+| =lunaris-load-core= |  |
+| =lunaris-load-tree= | Load every .el under DIR (recursive), skipping `_`-prefixed paths and already-loaded (stage-1) features. Byte-compiles into the cache on first run. |
+| =luna-region-active-p= |  |
+| =luna-point-in-comment-p= |  |
+| =luna-project-root= |  |
+| =luna-call-process= |  |
+| =luna-call-process-in= |  |
+| =luna-temp-buffer-p= |  |
+| =luna-real-buffer-p= |  |
+| =luna-fallback-buffer= | *scratch* |
+| =luna--initial-font-height= |  |
+| =doom/increase-font-size= | Increase the frame font size by INC*10 (default 10). |
+| =doom/decrease-font-size= | Decrease the frame font size by INC*10 (default 10). |
+| =doom/reset-font-size= | Reset the frame font size to the configured default. |
+| =luna-disable-line-numbers-h= |  |
+| =luna-mark-buffer-as-real-h= |  |
+| =luna-profile-state-dir= |  |
+| =luna-profile-cache-dir= |  |
+| =luna-profile-data-dir= |  |
+| =luna-context-p= |  |
+| =luna-system-cpus= |  |
+| =luna-require= |  |
+| =luna-escape-hook= |  |
+| =luna-first-input-hook= |  |
+| =luna-first-buffer-hook= |  |
+| =luna-first-file-hook= |  |
+| =luna-first-buffer= |  |
+| =luna-first-file= |  |
+| =luna-first-input= |  |
+| =luna-switch-buffer-hook= |  |
+| =luna-switch-window-hook= |  |
+| =luna-load-theme-hook= |  |
+| =luna-init-ui-hook= |  |
+| =luna-after-modules-config-hook= |  |
+| =luna-modeline-spc= |  |
+| =luna-use-helpful-a= |  |
+| =luna-quit-messages= |  |
+| =luna-profile-state-dir= |  |
+| =luna-profile-cache-dir= |  |
+| =luna-profile-data-dir= |  |
+| =luna-cache-dir= |  |
+| =luna-inhibit-local-var-hooks= |  |
+| =lunaris--doctor-current= |  |
+| =lunaris--doctor-reports= |  |
+| =ok!= | Record a passing check (message from ARGS). |
+| =warn!= | Record a non-fatal problem (message from ARGS). |
+| =error!= | Record a fatal problem (message from ARGS). |
+| =lunaris--doctor-report= |  |
+| =lunaris--doctor-face= |  |
+| =lunaris--doctor-render= | Print accumulated doctor reports to *Messages*, doom-doctor-style. |
+| =lunaris-doctor= |  |
+| =lunaris-doctor-count= | Count doctor reports (all, or of SEVERITY). |
+
+* manifest.el
+
+Enabled framework modules, doom!-style. Remove a group here to turn that framework module off.
+
+(no top-level defuns)
+
+
+* config/personal.el
+
+Identity, runtime-state redirects (to ~/.cache/lunatix-emacs), editing defaults, evil emacs-mode, quit-no-prompt.
+
+(no top-level defuns)
+
+
+* config/general-config.el
+
+general setup + the `lunatix-leader` (SPC) and localleader definers.
+
+(no top-level defuns)
+
+
+* config/evil-config.el
+
+evil + evil-collection (dired vim keys), delete-selection.
+
+(no top-level defuns)
+
+
+* config/theme-config.el
+
+doom-monokai-octagon theme, JetBrainsMono font, doom-modeline.
+
+(no top-level defuns)
+
+
+* config/which-key-config.el
+
+which-key popup settings.
+
+(no top-level defuns)
+
+
+* config/keybindings-config.el
+
+Full doom <leader> tree, bracket navigation, minibuffer ESC/C-s, font zoom keys, +doom/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+doom/switch-to-scratch-buffer= | *scratch* |
+| =+doom/toggle-scratch-buffer= | *scratch* |
+| =+doom/kill-all-buffers= | *scratch* |
+| =+doom/kill-other-buffers= |  |
+| =+doom/kill-buried-buffers= |  |
+| =+doom/yank-buffer-path= | Copied %s |
+| =+doom/delete-this-file= | Delete %s? |
+| =+doom/copy-this-file= | Copy to: |
+| =+doom/move-this-file= | Move to: |
+| =+doom/sudo-find-file= | Fsudo find file: |
+| =+doom/sudo-this-file= | /sudo:root@localhost: |
+| =+doom/insert-file-path= |  |
+| =+doom/newline-below= |  |
+| =+doom/newline-above= |  |
+| =+doom/backward-to-bol-or-indent= |  |
+| =+doom/forward-to-last-non-comment-or-eol= |  |
+| =+doom/search-project-for-symbol-at-point= |  |
+| =+doom/previous-file= | Cycle to the previous file (buffer + recentf list). |
+| =+doom/next-file= | Cycle to the next file (buffer + recentf list). |
+| =+doom/org-localleader= | '(org-agenda :wk |
+| =+doom/elisp-localleader= | '(eval-buffer :wk |
+| =+doom/python-localleader= | '(python-shell-send-buffer :wk |
+
+* config/splash.el
+
+Dashboard banner + welcome widget.
+
+| function | purpose |
+|----------+---------|
+| =my-custom-ascii-banner-fn= |  |
+| =my-dashboard-widget-welcome= | Inserts a welcome message into the dashboard. |
+
+* config/denote-config.el
+
+Denote note-taking (sequence/journal/consult) + SPC e keys.
+
+(no top-level defuns)
+
+
+* config/org-extra.el
+
+org-modern, org-appear, org behaviour/faces, super-agenda, table auto-align.
+
+| function | purpose |
+|----------+---------|
+| =+org/align-current-table-h= |  |
+| =+org-delete-backward-and-realign-table-h= |  |
+
+* config/lang-extra.el
+
+LSP tuning, web/python tweaks, markdown faces, builtin treesit remap + level 4.
+
+(no top-level defuns)
+
+
+* config/mistty-config.el
+
+mistty terminal (nu shell) + SPC v keys.
+
+(no top-level defuns)
+
+
+* config/dirvish-config.el
+
+dired + dirvish: hjkl nav, date/size columns, rsync/wdired.
+
+(no top-level defuns)
+
+
+* config/eaf-config.el
+
+EAF browser config (adblocker, continue-where-left-off).
+
+(no top-level defuns)
+
+
+* config/editor-extra.el
+
+yasnippet nested expansion + personal snippet dir.
+
+(no top-level defuns)
+
+
+* config/projectile-config.el
+
+projectile + consult-projectile (project management).
+
+(no top-level defuns)
+
+
+* framework/completion/completion.el
+
+:completion group file — shared dlet shim + +corfu/* defcustoms.
+
+| function | purpose |
+|----------+---------|
+| =dlet= |  |
+| =+corfu-want-ret-to-confirm= |  |
+| =+corfu-buffer-scanning-size-limit= | Size limit for buffers scanned by `cape-dabbrev'. |
+| =+corfu-want-minibuffer-completion= |  |
+| =+corfu-inhibit-auto-functions= | Predicates that inhibit `corfu-auto'. |
+| =+corfu-dabbrev-friend-buffer-p= |  |
+| =+corfu/move-to-minibuffer= | Move list of candidates to your choice of minibuffer completion UI. |
+| =+corfu/smart-sep-toggle-escape= | Insert `corfu-separator' or toggle escape if it's already there. |
+| =+corfu/dabbrev-this-buffer= | Like `cape-dabbrev', but only scans current buffer. |
+| =+corfu/toggle-auto-complete= | Toggle as-you-type completion in Corfu. |
+| =+corfu/dabbrev-or-next= | Invoke `cape-dabbrev' but respect `evil-complete-all-buffers'. |
+| =+corfu/dabbrev-or-last= | Invoke `cape-dabbrev' but respect `evil-complete-all-buffers'. |
+| =+vertico-orderless-dispatch= | Like `orderless-affix-dispatch', but allows affixes to be escaped. |
+| =+vertico-orderless-disambiguation-dispatch= | Disambiguation dispatch for orderless. |
+| =+vertico-crm-indicator= | CRM indicator wrapper for `completing-read-multiple'. |
+| =+vertico/enter-or-preview= | Enter directory or embark preview on current candidate. |
+| =+vertico/embark-preview= | Previews candidate in vertico buffer, unless it's a consult command. |
+| =+vertico/jump-list= | Go to an entry in evil's (or better-jumper's) jumplist. |
+
+* framework/completion/vertico.el
+
+doom :completion vertico port: vertico, orderless, consult, marginalia.
+
+(no top-level defuns)
+
+
+* framework/completion/corfu.el
+
+doom :completion corfu port: corfu, corfu-auto, cape, corfu-history.
+
+(no top-level defuns)
+
+
+* framework/ui/ui.el
+
+:ui group file.
+
+(no top-level defuns)
+
+
+* framework/ui/deft.el
+
+doom :ui deft port.
+
+(no top-level defuns)
+
+
+* framework/ui/doom.el
+
+doom :ui doom port (doom-themes bits).
+
+(no top-level defuns)
+
+
+* framework/ui/dashboard.el
+
+doom :ui dashboard port (own widget code) + +dashboard/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+dashboard-name= |  |
+| =+dashboard-functions= | List of widget functions to run to construct the dashboard buffer. |
+| =+dashboard-banner-file= |  |
+| =+dashboard-ascii-banner-fn= |  |
+| =+dashboard-banner-vertical-padding= | Number of newlines to pad the banner with, above and below, respectively. |
+| =+dashboard-anchor= | How to vertically and horizontally align dashboard widgets. |
+| =+dashboard-pwd-policy= |  |
+| =+dashboard-menu-sections= |  |
+| =+dashboard-inhibit-refresh= |  |
+| =+dashboard-inhibit-functions= | A list of functions which take no arguments. If any return non-nil, dashboard reloading is inhibited. |
+| =+dashboard--last-cwd= |  |
+| =+dashboard--reload-timer= |  |
+| =+dashboard--fallback-buffer= | Return the dashboard buffer, creating it if necessary. |
+| =+dashboard-init-h= | Initialize the dashboard. |
+| =+dashboard-revert-buffer-fn= | `revert-buffer-function' for `+dashboard-mode'. |
+| =+dashboard-reposition-point-h= | Trap the point in the buttons. |
+| =+dashboard--last-current-buffer= |  |
+| =+dashboard-reload-maybe-h= |  |
+| =+dashboard-reload-frame-h= | Reload the dashboard after a brief pause. This is necessary for new frames, whose dimensions may not be fully initialized by the time this is run. |
+| =+dashboard-resize-h= | Recenter the dashboard, and reset its margins and fringes. |
+| =+dashboard--persp-detect-project-h= | Set dashboard's PWD to current persp's `last-project-root', if it exists. |
+| =+dashboard--persp-record-project-h= | Record the last `luna-project-root' for the current persp. |
+| =+dashboard-buffer-p= | Returns t if BUFFER is the dashboard buffer. |
+| =+dashboard-update-pwd-h= | Update `default-directory' in the dashboard buffer. |
+| =+dashboard-reload-on-theme-change-h= | Forcibly reload the dashboard when theme changes post-startup. |
+| =+dashboard-reload= | Update the dashboard buffer (or create it, if it doesn't exist). |
+| =+dashboard-strlen= | Return the unicode-aware string width of S. |
+| =+dashboard-maxlen= | Return the length of the longest line in multiline STR. |
+| =+dashboard-insert= | Insert LINES into the dashboard buffer.  Applies line-prefix and indent-prefix text properties to respect `+dashboard-anchor'. |
+| =+dashboard--pwd= |  |
+| =+dashboard-draw-ascii-banner-fn= | Return Doom's default ASCII logo banner. |
+| =+dashboard-widget-banner= | Draw text and image banner widget in the dashboard buffer. |
+| =+dashboard-widget-loaded= | Draw the session's startup time. |
+| =+dashboard-widget-shortmenu= | Draw dashboard menu items and keybindings.  See `+dashboard-menu-sections' to change the contents of the menu. |
+| =+dashboard-widget-footer= | Draw the footer. |
+| =+dashboard-widget-spacer= | \n |
+| =+dashboard/reload-session= | Reload the last autosaved persp-mode session. |
+| =+dashboard/open-private-config= | Open this config's init.el. |
+| =+dashboard/help= | Open the help menu. |
+| =+dashboard--help-echo= | %s |
+| =+dashboard/open= | Switch to the dashboard in the current window, of the current FRAME. |
+| =+dashboard/push-button= | Push a button, but record window state before doing so. |
+| =+dashboard/forward-button= | Like `forward-button', but don't wrap. |
+| =+dashboard/backward-button= | Like `backward-button', but don't wrap. |
+
+* framework/ui/hl-todo.el
+
+doom :ui hl-todo port.
+
+| function | purpose |
+|----------+---------|
+| =+hl-todo--use-face-detection-h= | Use a different, more primitive method of locating todo keywords. |
+
+* framework/ui/indent-guides.el
+
+doom :ui indent-guides port (indent-bars).
+
+| function | purpose |
+|----------+---------|
+| =+indent-guides-inhibit-functions= |  |
+| =+indent-guides-in-special-buffers-p= |  |
+| =+indent-guides-in-org-indent-mode-p= |  |
+
+* framework/ui/ligatures.el
+
+doom :ui ligatures port (ligature +extra).
+
+| function | purpose |
+|----------+---------|
+| =+ligatures-extra-symbols= | Maps identifiers to symbols, recognized by `set-ligatures'. |
+
+* framework/ui/unicode.el
+
+doom :ui unicode port (unicode-fonts).
+
+(no top-level defuns)
+
+
+* framework/ui/modeline.el
+
+doom :ui modeline port (doom-modeline).
+
+(no top-level defuns)
+
+
+* framework/ui/ophints.el
+
+doom :ui ophints port (evil-goggles).
+
+(no top-level defuns)
+
+
+* framework/ui/popup.el
+
+doom :ui popup port (popper, side windows).
+
+| function | purpose |
+|----------+---------|
+| =set-popup-rule!= |  |
+| =+popup-buffer-p= | Return non-nil if BUFFER (default the current one) is shown as a popup. |
+| =+popup/toggle= | Toggle open/closed popups (doom's `+popup/toggle' -> `popper-toggle'). |
+| =+popup/cycle= | Cycle through open popups (doom's `+popup/other' -> `popper-cycle'). |
+| =+popup/close= | Close and kill the latest popup (doom's `+popup/close' -> `popper-kill-latest-popup'). |
+| =+popup/raise= | Raise a popup into a regular window (popper `popper-toggle-type'). |
+| =+popup/buffer= | Pop the current buffer into a popup window (doom's `+popup/buffer'). |
+
+* framework/ui/smooth-scroll.el
+
+doom :ui smooth-scroll port (ultra-scroll).
+
+(no top-level defuns)
+
+
+* framework/ui/vc-gutter.el
+
+doom :ui vc-gutter port (diff-hl).
+
+| function | purpose |
+|----------+---------|
+| =+vc-gutter/revert-hunk= | Invoke `diff-hl-revert-hunk'. |
+| =+vc-gutter/save-and-revert-hunk= | Invoke `diff-hl-revert-hunk' with `vc-suppress-confirm' set. |
+
+* framework/ui/window-select.el
+
+doom :ui window-select port (ace-window + winum).
+
+(no top-level defuns)
+
+
+* framework/ui/workspaces.el
+
+doom :ui workspaces port (persp-mode) + +workspace/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+workspaces-main= |  |
+| =+workspaces-switch-project-function= |  |
+| =+workspaces-on-switch-project-behavior= |  |
+| =+workspaces-data-file= |  |
+| =+workspace--old-uniquify-style= |  |
+| =+workspace--last= |  |
+| =+workspace--index= |  |
+| =+workspace--protected-p= |  |
+| =+workspace--generate-id= | ^#[0-9]+$ |
+| =+workspace-exists-p= | Returns t if NAME is the name of an existing workspace. |
+| =+workspace-get= | Return a workspace named NAME. Unless NOERROR is non-nil, this throws an error if NAME doesn't exist. |
+| =+workspace-current-name= | Get the name of the current workspace. |
+| =+workspace-list-names= | Return the list of names of open workspaces. |
+| =+workspace-list= | Return a list of workspace structs (satisfies `+workspace-p'). |
+| =+workspace-buffer-list= | Return a list of buffers in PERSP.  PERSP can be a string (name of a workspace) or a workspace (satisfies `+workspace-p'). If nil or omitted, it defaults to the current workspace. |
+| =+workspace-orphaned-buffer-list= | Return a list of buffers that aren't associated with any perspective. |
+| =+workspace-load= |  |
+| =+workspace-save= |  |
+| =+workspace-delete= |  |
+| =+workspace-new= | Create a new workspace named NAME. If one already exists, return nil. Otherwise return t on success, nil otherwise. |
+| =+workspace-rename= | Rename the current workspace named NAME to NEW-NAME. Returns old name on success, nil otherwise. |
+| =+workspace-kill= | Kill the workspace denoted by WORKSPACE, which can be the name of a perspective or its hash table. If INHIBIT-KILL-P is non-nil, don't kill this workspace's buffers. |
+| =+workspace-switch= | Switch to another workspace named NAME (a string).  If AUTO-CREATE-P is non-nil, create the workspace if it doesn't exist, otherwise throws an error. |
+| =+workspace/load= | Load a workspace and switch to it. If called with C-u, try to reload the current workspace (by name) from session files. |
+| =+workspace/save= | Save the current workspace. If called with C-u, autosave the current workspace. |
+| =+workspace/rename= | Rename the current workspace. |
+| =+workspace/kill= | Delete this workspace. If called with C-u, prompts you for the name of the workspace to delete. |
+| =+workspace/delete= | Delete a saved workspace in `persp-save-dir'.  Can only delete workspaces saved with `+workspace/save' or `+workspace-save'. |
+| =+workspace/kill-session= | Delete the current session, all workspaces, windows and their buffers. |
+| =+workspace/kill-session-and-quit= | Kill emacs without saving anything. |
+| =+workspace/new= | Create a new workspace named NAME. If CLONE-P is non-nil, clone the current workspace, otherwise the new workspace is blank. |
+| =+workspace/new-named= | Create a new workspace with a given NAME. |
+| =+workspace/switch-to= | Switch to a workspace at a given INDEX. A negative number will start from the end of the workspace list. |
+| =+workspace/switch-to-final= | Switch to the final workspace in open workspaces. |
+| =+workspace/other= | Switch to the last activated workspace. |
+| =+workspace/cycle= | Cycle n workspaces to the right (default) or left. |
+| =+workspace/switch-left= |  |
+| =+workspace/switch-right= |  |
+| =+workspace/close-window-or-workspace= | Close the selected window. If it's the last window in the workspace, either close the workspace (as well as its associated frame, if one exists) and move to the next. |
+| =+workspace/swap-left= | Swap the current workspace with the COUNTth workspace on its left. |
+| =+workspace/swap-right= | Swap the current workspace with the COUNTth workspace on its right. |
+| =+workspace--tabline= |  |
+| =+workspace--message-body= | \| |
+| =+workspace-message= | Show an 'elegant' message in the echo area next to a listing of workspaces. |
+| =+workspace-error= | Show an 'elegant' error in the echo area next to a listing of workspaces. |
+| =+workspace/display= | Display a list of workspaces (like tabs) in the echo area. |
+| =+workspaces-ensure-no-nil-workspaces-h= |  |
+| =+workspaces-init-first-workspace-h= | Ensure a main workspace exists. |
+| =+workspaces-init-persp-mode-h= |  |
+| =+workspaces-save-winner-data-h= |  |
+| =+workspaces-load-winner-data-h= |  |
+| =+workspaces-add-current-buffer-h= | Add current buffer to focused perspective. |
+| =+workspaces-unreal-buffer-p= | APROX: doom's `doom-unreal-buffer-p' (doom-core); temp buffers only. |
+| =+workspaces-dead-buffer-p= | Ignore dead buffers in PERSP's buffer list. |
+| =+workspaces-remote-buffer-p= | And don't save TRAMP buffers; they're super slow to restore. |
+| =+workspaces-delete-associated-workspace-h= | Delete workspace associated with current frame. A workspace gets associated with a frame when a new frame is interactively created. |
+| =+workspaces-associate-frame-fn= | Create a blank, new perspective and associate it with FRAME. |
+| =+workspaces--project-name= |  |
+| =+workspaces-switch-to-project-h= |  |
+| =+workspaces-save-tab-bar-data-h= | Save the current workspace's tab bar data. |
+| =+workspaces-save-tab-bar-data-to-file-h= | Save the current workspace's tab bar data to file. |
+| =+workspaces-load-tab-bar-data-h= | Restores the tab bar data of the workspace we have just switched to. |
+| =+workspaces-load-tab-bar-data-from-file-h= | Restores the tab bar data from file. |
+| =+workspaces-set-up-tab-bar-integration-h= |  |
+| =+workspaces-autosave-real-buffers-a= | Don't autosave if no real buffers are open. |
+| =+workspaces-kill-buffers= | Kill BUFFERS (a list), returning the count killed. |
+| =+workspaces-kill-childframes-h= |  |
+
+* framework/editor/editor.el
+
+:editor group file.
+
+(no top-level defuns)
+
+
+* framework/editor/format.el
+
+doom :editor format port (apheleia +onsave).
+
+| function | purpose |
+|----------+---------|
+| =+format-on-save-disabled-modes= | Modes in which not to reformat on save. |
+| =+format/save-buffer= | Format buffer then save. |
+
+* framework/editor/whitespace.el
+
+doom :editor whitespace port (+guess +trim).
+
+| function | purpose |
+|----------+---------|
+| =+whitespace-guess-excluded-modes= | Modes where indentation shouldn't be auto-detected. |
+| =+whitespace-guess-in-projects= |  |
+| =+whitespace-guess-indentation-h= |  |
+
+* framework/editor/snippets.el
+
+doom :editor snippets port (yasnippet + auto-yasnippet).
+
+(no top-level defuns)
+
+
+* framework/editor/fold.el
+
+doom :editor fold port (vimish-fold).
+
+(no top-level defuns)
+
+
+* framework/editor/parinfer.el
+
+doom :editor parinfer port (parinfer-rust-mode).
+
+(no top-level defuns)
+
+
+* framework/editor/file-templates.el
+
+doom :editor file-templates port (autoinsert).
+
+(no top-level defuns)
+
+
+* framework/emacs/emacs.el
+
+:emacs group file.
+
+(no top-level defuns)
+
+
+* framework/emacs/electric.el
+
+doom :emacs electric port.
+
+(no top-level defuns)
+
+
+* framework/emacs/dired.el
+
+doom :emacs dired port (nerd-icons).
+
+(no top-level defuns)
+
+
+* framework/emacs/ibuffer.el
+
+doom :emacs ibuffer port (+icons).
+
+(no top-level defuns)
+
+
+* framework/emacs/eww.el
+
+doom :emacs eww port.
+
+(no top-level defuns)
+
+
+* framework/emacs/tramp.el
+
+doom :emacs tramp port.
+
+(no top-level defuns)
+
+
+* framework/emacs/vc.el
+
+doom :emacs vc port.
+
+(no top-level defuns)
+
+
+* framework/term/term.el
+
+:term group file.
+
+(no top-level defuns)
+
+
+* framework/term/eshell.el
+
+doom :term eshell port (+syntax-highlighting, up, z, etc).
+
+(no top-level defuns)
+
+
+* framework/term/vterm.el
+
+doom :term vterm port.
+
+(no top-level defuns)
+
+
+* framework/tools/tools.el
+
+:tools group file — shared popup/formatter shims + set-docsets! macro.
+
+| function | purpose |
+|----------+---------|
+| =set-popup-rule!= | Doom-compat: no-op.  Doom's popup framework isn't ported. |
+| =set-popup-rules!= | Doom-compat: no-op.  Doom's popup framework isn't ported. |
+| =set-debug-var!= | Doom-compat: no-op.  Doom's debug-var hooks aren't ported. |
+| =set-formatter!= | Doom-compat: no-op.  Formatting is handled by apheleia. |
+| =dlet= | Doom-compat: dynamically bind each var in BINDINGS in BODY. A bare symbol binds that variable to nil. |
+| =letf!= | Doom-compat: buffer-local `cl-letf'. |
+| =defer-until!= | Doom-compat: run BODY once CONDITION returns non-nil. |
+| =doom-switch-frame-hook= |  |
+| =luna-real-buffer-functions= |  |
+| =doom-region-beginning= |  |
+| =doom-region-end= |  |
+| =doom-region= | Doom-compat: return the active region's text, or nil. |
+| =doom-thing-at-point-or-region= | Doom-compat: return the active region or THING at point. |
+| =doom-pcre-quote= | Doom-compat: quote STRING as a PCRE literal. |
+| =doom-project-p= | Doom-compat: non-nil if PATH is inside a project. |
+| =doom-visible-buffers= | Doom-compat: buffers currently visible in FRAME's windows. |
+| =doom-buffers-in-mode= | Doom-compat: live buffers whose major-mode derives from MODES. |
+| =doom-lookup-key= | Doom-compat: command bound to KEY, evil-state aware. |
+| =treesit-auto-install-grammar= | 31.1 |
+| =treesit-ensure-installed= | Ensure that the grammar library for LANG is installed. |
+| =treesit-enabled-modes= |  |
+| =+tree-sitter--commit-field?= |  |
+| =tree-sitter!= | Old tree-sitter.el support is deprecated. |
+| =set-tree-sitter!= |  |
+| =+tree-sitter-ts-mode-inhibit-side-effects-a= | Suppress changes to `auto-mode-alist' and `interpreter-mode-alist'. |
+| =+tree-sitter/doctor= | Test if the current buffer is correctly tree-sitter-enabled. |
+| =set-docsets!= |  |
+
+* framework/tools/biblio.el
+
+doom :tools biblio port (biblio + citar + embark).
+
+(no top-level defuns)
+
+
+* framework/tools/docker.el
+
+doom :tools docker port (+tree-sitter).
+
+(no top-level defuns)
+
+
+* framework/tools/editorconfig.el
+
+doom :tools editorconfig port.
+
+(no top-level defuns)
+
+
+* framework/tools/eval.el
+
+doom :tools eval port (+overlay, eros, quickrun) + +eval/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+eval-handler-functions= | A list of functions to execute when evaluating a region/buffer. Stops at the first function to return non-nil. |
+| =+eval-popup-min-lines= |  |
+| =+eval-repl-handler-alist= |  |
+| =set-repl-handler!= | Defines a REPL for MODES. |
+| =+eval-handler-alist= |  |
+| =set-eval-handler!= | Define a code evaluator for major mode MODES with `quickrun'. |
+| =+eval-repl-buffers= | The buffer of the last open repl. |
+| =+eval-repl-plist= |  |
+| =+eval-current-repl-buffer= | Return the last active REPL buffer associated with this major mode. |
+| =+eval-repl-select= | Prompt the user to select a REPL. |
+| =+eval--repl-open= | Open a repl via the given DISPLAYFN. |
+| =+eval--repl-sender-for= |  |
+| =+eval-with-repl-fn= | Evaluate the region between BEG and END (inclusive) in an open REPL. |
+| =+eval-with-mode-handler-fn= | Evaluate the selection/buffer using a mode appropriate handler. |
+| =+eval-with-quickrun-fn= | Evaluate the region or buffer with `quickrun'. |
+| =+eval/buffer= | Evaluate the whole buffer and display the output. |
+| =+eval/region= | Evaluate a region between BEG and END and display the output. |
+| =+eval/line-or-region= | Evaluate the current line or selected region. |
+| =+eval/buffer-or-region= | Execute `+eval/region' if a selection is active, otherwise `+eval/buffer'. |
+| =+eval/region-and-replace= | Evaluate a region between BEG and END, and replace it with the result. |
+| =+eval-display-results-in-popup= | Display OUTPUT in a popup buffer at the bottom of the screen. |
+| =+eval-display-results-in-overlay= | Display OUTPUT in a floating overlay next to or below the cursor. |
+| =+eval-display-results= | Display OUTPUT in an overlay or a popup buffer. |
+| =+eval/open-repl-same-window= | Open (or reopen) the REPL for the current major-mode in this window. |
+| =+eval/open-repl-other-window= | Open (or reopen) the REPL for the current major-mode in another window. |
+| =+eval/buffer-or-region-in-repl= | Execute the selected region or whole buffer in the REPL. |
+
+* framework/tools/lookup.el
+
+doom :tools lookup port (xref/dumb-jump/request) + +lookup/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+lookup-provider-url-alist= | An alist that maps online resources to search urls or commands. |
+| =+lookup-open-url-fn= |  |
+| =+lookup-definition-functions= | Functions for `+lookup/definition' to try. |
+| =+lookup-implementations-functions= | Functions for `+lookup/implementations' to try. |
+| =+lookup-type-definition-functions= | Functions for `+lookup/type-definition' to try. |
+| =+lookup-references-functions= | Functions for `+lookup/references' to try. |
+| =+lookup-documentation-functions= | Functions for `+lookup/documentation' to try. |
+| =+lookup-file-functions= | Functions for `+lookup/file' to try. |
+| =+lookup-dictionary-prefer-offline= | If non-nil, look up dictionaries online. |
+| =set-lookup-handlers!= |  |
+| =+lookup--set-handler= |  |
+| =+lookup--run-handler= |  |
+| =+lookup--run-handlers= | Looking up '%s' with '%s' |
+| =+lookup--jump-to= |  |
+| =+lookup--xref-show= |  |
+| =+lookup-dictionary-definition-backend-fn= | Look up dictionary definition for IDENTIFIER. |
+| =+lookup-thesaurus-definition-backend-fn= | Look up synonyms for IDENTIFIER. |
+| =+lookup-xref-definitions-backend-fn= | Non-interactive wrapper for `xref-find-definitions'. |
+| =+lookup-xref-references-backend-fn= | Non-interactive wrapper for `xref-find-references'. |
+| =+lookup-dumb-jump-backend-fn= | Look up the symbol at point (or selection) with `dumb-jump'. |
+| =+lookup-project-search-backend-fn= | Conducts a simple project text search for IDENTIFIER. |
+| =+lookup-evil-goto-definition-backend-fn= | Use `evil-goto-definition' to conduct a text search in the current buffer. |
+| =+lookup-ffap-backend-fn= | Tries to locate the file or URL at point (or in active selection). |
+| =+lookup-bug-reference-backend-fn= | Searches for a bug reference in user/repo#123 or #123 format and opens it. |
+| =+lookup/definition= | Jump to the definition of IDENTIFIER (defaults to the symbol at point). |
+| =+lookup/implementations= | Jump to the implementations of IDENTIFIER (defaults to the symbol at point). |
+| =+lookup/type-definition= | Jump to the type definition of IDENTIFIER (defaults to the symbol at point). |
+| =+lookup/references= | Show a list of usages of IDENTIFIER (defaults to the symbol at point). |
+| =+lookup/documentation= | Show documentation for IDENTIFIER (defaults to symbol at point or selection). |
+| =+lookup/file= | Figure out PATH from whatever is at point and open it. |
+| =+lookup/dictionary-definition= | Look up the definition of the word at point (or selection). |
+| =+lookup/synonyms= | Look up and insert a synonym for the word at point (or selection). |
+| =+lookup--last-provider= |  |
+| =+lookup--online-provider= |  |
+| =+lookup-online-backend-fn= | Open the browser and search for IDENTIFIER online. |
+| =+lookup/online= | Look up QUERY in the browser using PROVIDER. |
+| =+lookup/online-select= | Run `+lookup/online', but always prompt for the provider to use. |
+| =+lookup--online-backend-google= | Search Google, starting with QUERY, with live autocompletion. |
+| =+lookup--online-backend-duckduckgo= | Search DuckDuckGo, starting with QUERY, with live autocompletion. |
+| =+lsp-defer-shutdown= |  |
+| =+lsp--default-read-process-output-max= |  |
+| =+lsp--default-gcmh-high-cons-threshold= |  |
+| =+lsp--optimization-init-p= |  |
+| =+lsp-optimization-mode= |  |
+| =+lsp-company-backends= | The backends to prepend to `company-backends' in `lsp-mode' buffers. |
+| =lsp!= | Dispatch to call the currently used lsp client entrypoint. |
+| =+lsp/uninstall-server= | Delete a LSP server from `lsp-server-install-dir'. |
+| =+lsp/switch-client= | Switch to another LSP server. |
+| =+lsp-lookup-definition-handler= | Find definition of the symbol at point using LSP. |
+| =+lsp-lookup-references-handler= | Find project-wide references of the symbol at point using LSP. |
+
+* framework/tools/lsp.el
+
+doom :tools lsp port (lsp-mode, lsp-ui, consult-lsp) + +lsp/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+magit-open-windows-in-direction= |  |
+| =+magit-fringe-size= | Size of the fringe in magit-mode buffers. |
+| =+magit-auto-revert= |  |
+| =+magit-display-buffer-fn= | Display magit buffers sensibly: reuse windows, split below, etc. |
+| =+magit--display-buffer-in-direction= | `display-buffer-alist' handler that opens BUFFER in a direction. |
+| =+magit--stale-p= |  |
+| =+magit--revertable-buffer-p= |  |
+| =+magit--revert-buffer= |  |
+| =+magit-mark-stale-buffers-h= | Revert all visible buffers and mark buried buffers as stale. |
+| =+magit-revert-buffer-maybe-h= | Update `vc' and `diff-hl' if out of date. |
+| =+magit/quit= |  |
+| =+magit/quit-all= | Kill all magit buffers for the current repository. |
+| =+magit--kill-buffer= | Kill BUF, waiting for its process to finish if it has one. |
+| =+magit/start-code-review= |  |
+
+* framework/tools/magit.el
+
+doom :tools magit port (+forge) + +magit/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+pass-user-fields= | A list of fields for `+pass/ivy' to search for the username. |
+| =+pass-url-fields= | A list of fields for `+pass/ivy' to search for the username. |
+| =+pass--copy-username= | Copied username to the kill ring. |
+| =+pass-get-field= | Fetches the value of a field.  FIELDS can be a list of string field names or a single one.  If a list, the first field found will be returned. |
+| =+pass-get-user= | Fetches the user field from ENTRY. |
+| =+pass-get-secret= | Fetches your secret from ENTRY. |
+| =+pass/copy-user= | Interactively search for an entry and copy the login to your clipboard. |
+| =+pass/consult= | Complete and act on password store entries with consult. |
+
+* framework/tools/pass.el
+
+doom :tools pass port (password-store + otp).
+
+(no top-level defuns)
+
+
+* framework/tools/pdf.el
+
+doom :tools pdf port (pdf-tools).
+
+(no top-level defuns)
+
+
+* framework/tools/tree-sitter.el
+
+doom :tools tree-sitter port (builtin treesit + set-tree-sitter! helpers).
+
+(no top-level defuns)
+
+
+* framework/tools/upload.el
+
+doom :tools upload port (ssh-deploy).
+
+(no top-level defuns)
+
+
+* framework/lang/lang.el
+
+:lang group file — shared dlet/quiet! shims.
+
+| function | purpose |
+|----------+---------|
+| =dlet= | Vanilla stand-in for doom's `dlet' (dynamic let). |
+| =quiet!= | Vanilla stand-in for doom's `quiet!'. |
+
+* framework/lang/emacs-lisp.el
+
+doom :lang emacs-lisp port.
+
+| function | purpose |
+|----------+---------|
+| =+emacs-lisp-enable-extra-fontification= |  |
+| =+emacs-lisp-outline-regexp= |  |
+| =+emacs-lisp-linter-warnings= | The value for `byte-compile-warnings' in non-packages. |
+| =+emacs-lisp-working-buffer= |  |
+| =+emacs-lisp-outline-level= | Return outline level for comment at point. |
+
+* framework/lang/org.el
+
+doom :lang org port (full) + +org/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+org-init-org-directory-h= | ~/org |
+| =+org-init-agenda-h= |  |
+| =+org-init-appearance-h= | Configures the UI for `org-mode'. |
+| =+org-init-babel-h= |  |
+| =+org-init-babel-lazy-loader-h= | Load babel libraries lazily when babel blocks are executed. |
+| =+org-init-capture-defaults-h= | Sets up Doom's default `org-capture' templates. |
+| =+org-init-capture-frame-h= |  |
+| =+org-init-attachments-h= | Sets up org's attachment system. |
+| =+org-init-custom-links-h= | file |
+| =+org-init-export-h= |  |
+| =+org-init-habit-h= | Right align and resize the consistency graphs based on `+org-habit-graph-window-ratio' |
+| =+org-init-hacks-h= | Getting org to behave. |
+| =+org-init-keybinds-h= | Sets up org-mode keybindings. |
+| =+org-init-popup-rules-h= |  |
+| =+org-init-smartparens-h= |  |
+| =org-eldoc-get-src-lang= | Shim: org-eldoc was removed from modern org; get src block lang via org-babel. |
+| =+org--toggle-inline-images-in-subtree= | Refresh inline image previews in the current heading/tree. |
+| =+org--insert-item= |  |
+
+* framework/lang/python.el
+
+doom :lang python port (+lsp +tree-sitter) + +python/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+python-executable-find= | Resolve the path to the EXE executable. Tries to be aware of your active conda/pipenv/virtualenv environment, before falling back on searching your PATH. |
+| =+python/open-repl= | Open the Python REPL. |
+| =+python/open-ipython-repl= | Open an IPython REPL. |
+
+* framework/lang/rust.el
+
+doom :lang rust port (+lsp) + +rust/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+rust-cargo-project-p= | Return t if this is a cargo project. |
+| =+rust/cargo-audit= | Run 'cargo audit' for the current project. |
+| =+go-common-config= | %s-hook |
+
+* framework/lang/go.el
+
+doom :lang go port (+lsp) + +go/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+go--spawn= |  |
+| =+go--assert-buffer-visiting= | Not in a file-visiting buffer |
+| =+go-test-last= |  |
+| =+go--run-tests= | go test -test.v |
+| =+go/test-rerun= | Rerun last run test. |
+| =+go/test-all= | Run all tests for this project. |
+| =+go/test-nested= | Run all tests in current directory and below, recursively. |
+| =+go/test-single= | Run single test at point. |
+| =+go/test-file= | Run all tests in current file. |
+| =+go/bench-all= | Run all benchmarks in project. |
+| =+go/bench-single= | Run benchmark at point. |
+| =+go--generate= | Directory does not exist: %s |
+| =+go/generate-file= | Run 'go generate' for the current file. |
+| =+go/generate-dir= | Run 'go generate' for the current directory, recursively. |
+| =+go/generate-all= | Run 'go generate' for the entire project. Will prompt for the project if you're not in one or if the prefix ARG is non-nil. |
+| =+go/play-buffer-or-region= | Evaluate active selection or buffer in the Go playground. |
+| =+cc-default-include-paths= | A list of default relative paths which will be searched for up from the current file. Paths can be absolute. This is ignored if your project has a compilation database. |
+| =+cc-default-header-file-mode= |  |
+
+* framework/lang/cc.el
+
+doom :lang cc port (+lsp) + +cc/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+cc--re-search-for= |  |
+| =+cc-c-c++-objc-mode= |  |
+| =+cc-resolve-include-paths= |  |
+| =+cc--project-includes-alist= |  |
+| =+cc-init-ffap-integration-h= | Takes the local project include paths and registers them with ffap. This way, `find-file-at-point' will know where to find most header files. |
+| =+cc-c++-lineup-inclass= | Indent inclass lines one level further than access modifier keywords. |
+
+* framework/lang/nix.el
+
+doom :lang nix port (+lsp +tree-sitter) + +nix/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+nix--options-action= |  |
+| =+nix/open-repl= | Open a nix repl. |
+| =+nix/lookup-option= | Look up documentation on a nix option. |
+| =+nix-shell-init-mode= | Resolve a (cached-)?nix-shell shebang to the correct major mode. |
+| =+sh-builtin-keywords= | A list of common shell commands to be fontified especially in `sh-mode'. |
+
+* framework/lang/sh.el
+
+doom :lang sh port (+lsp) + +sh/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+sh--match-variables-in-quotes= | Search for variables in double-quoted strings bounded by LIMIT. |
+| =+sh--match-command-subst-in-quotes= | Search for variables in double-quoted strings bounded by LIMIT. |
+| =+sh/open-repl= | Open a shell REPL. |
+| =+sh-lookup-documentation-handler= | Look up documentation in `man' or `woman'. |
+| =+markdown-compile-functions= |  |
+| =+markdown-common-config= |  |
+
+* framework/lang/markdown.el
+
+doom :lang markdown port (+grip) + +markdown/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+markdown-compile= | Compile markdown into html.  Runs `+markdown-compile-functions' until the first function to return non-nil, otherwise throws an error. |
+| =+markdown-compile-marked= | Compiles markdown with the marked program, if available. Returns its exit code. |
+| =+markdown-compile-pandoc= | Compiles markdown with the pandoc program, if available. Returns its exit code. |
+| =+markdown-compile-multimarkdown= | Compiles markdown with the multimarkdown program, if available. Returns its exit code. |
+| =+markdown-compile-markdown= | Compiles markdown using the Markdown.pl script (or markdown executable), if available. Returns its exit code. |
+| =+markdown/insert-del= | Surround region in github strike-through delimiters. |
+| =+javascript-common-config= | %s-hook |
+
+* framework/lang/javascript.el
+
+doom :lang javascript port (+lsp) + +javascript/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+javascript-add-npm-path-h= | Add node_modules/.bin to `exec-path'. |
+| =+javascript--add-npm-path-maybe-h= |  |
+| =+javascript/open-repl= | Open a Javascript REPL via `nodejs-repl'. |
+
+* framework/lang/web.el
+
+doom :lang web port (+css) + +web/+css helpers.
+
+| function | purpose |
+|----------+---------|
+| =+web-continue-block-comments= |  |
+| =+web/indent-or-yas-or-emmet-expand= |  |
+| =+css--toggle-inline-or-block= | \t |
+| =+css/toggle-inline-or-block= | Toggles between a bracketed block and inline block. |
+| =+css/comment-indent-new-line= | Continues the comment in an indented new line.  Meant for `comment-line-break-function' in `css-mode' and `scss-mode'. |
+| =+css-adaptive-fill-fn= | An `adaptive-fill-function' that conjoins SCSS line comments correctly. |
+
+* framework/lang/agda.el
+
+doom :lang agda port (+local).
+
+(no top-level defuns)
+
+
+* framework/lang/common-lisp.el
+
+doom :lang common-lisp port (sly).
+
+| function | purpose |
+|----------+---------|
+| =+lisp-quicklisp-paths= | A list of directories to search for Quicklisp's site files. |
+| =inferior-lisp-program= |  |
+| =sly-contribs= |  |
+| =+lisp/open-repl= | Open the Sly REPL. |
+| =+lisp/reload-project= | Restart the Sly session and reload a chosen system. |
+| =+lisp/find-file-in-quicklisp= | Find a file belonging to a library downloaded by Quicklisp. |
+| =+common-lisp-init-sly-h= | Attempt to auto-start sly when opening a lisp buffer. |
+
+* framework/lang/data.el
+
+doom :lang data port (nxml, csv).
+
+(no top-level defuns)
+
+
+* framework/lang/java.el
+
+doom :lang java port (+lsp, lsp-java).
+
+| function | purpose |
+|----------+---------|
+| =+java-project-package-roots= |  |
+| =+java-android-mode-maybe-h= | Enable `android-mode' if this looks like an android project.  It determines this by the existence of AndroidManifest.xml or src/main/AndroidManifest.xml. |
+
+* framework/lang/latex.el
+
+doom :lang latex port (+lsp +fold +cdlatex) + +latex/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+latex-indent-item-continuation-offset= |  |
+| =+latex-viewers= | A list of enabled LaTeX viewers to use, in this order.  If they don't exist, they will be ignored. Recognized viewers are skim, evince, sumatrapdf, zathura, okular and pdf-tools. |
+
+* framework/lang/lua.el
+
+doom :lang lua port (+lsp).
+
+| function | purpose |
+|----------+---------|
+| =+lua-common-config= |  |
+
+* framework/lang/php.el
+
+doom :lang php port (+lsp) + +php/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+php-default-docker-container= |  |
+| =+php-default-docker-compose= |  |
+| =+php-run-tests-in-docker= |  |
+| =+php-common-config= | %s-hook |
+
+* framework/lang/qt.el
+
+doom :lang qt port (+lsp +tree-sitter).
+
+| function | purpose |
+|----------+---------|
+| =+qt-common-config= | %s-hook |
+
+* framework/lang/ruby.el
+
+doom :lang ruby port (+rails).
+
+(no top-level defuns)
+
+
+* framework/lang/lean.el
+
+doom :lang lean port (off in manifest).
+
+(no top-level defuns)
+
+
+* framework/email/email.el
+
+:email group file.
+
+(no top-level defuns)
+
+
+* framework/email/wanderlust.el
+
+doom :email wanderlust port (+gmail).
+
+(no top-level defuns)
+
+
+* framework/app/app.el
+
+:app group file.
+
+(no top-level defuns)
+
+
+* framework/app/calendar.el
+
+doom :app calendar port (calfw).
+
+| function | purpose |
+|----------+---------|
+| =+calendar-open-function= |  |
+| =+calendar--wconf= |  |
+| =+calendar--init= |  |
+| ==calendar= | Activate (or switch to) the calfw calendar. |
+| =+calendar/quit= | Close the calfw calendar buffers. |
+| =+calendar/open-calendar= | Open the calendar in an org-agenda view. |
+| =+calendar-calfw-render-button-a= | render-button  TITLE  COMMAND  STATE |
+
+* framework/app/irc.el
+
+doom :app irc port (circe) + +irc/* helpers.
+
+| function | purpose |
+|----------+---------|
+| =+irc-left-padding= |  |
+| =+irc-truncate-nick-char= |  |
+| =+irc-scroll-to-bottom-on-commands= | Commands which will trigger scrolling to the bottom of the IRC buffer. |
+| =+irc-disconnect-hook= |  |
+| =+irc-bot-list= | Nicks listed have `circe-fool-face' applied and will not be tracked. |
+| =+irc-defer-notifications= |  |
+| =+irc--defer-timer= |  |
+| =+irc--workspace-name= |  |
+| =+irc--circe-all-buffers= |  |
+| =+irc--consult-circe-source= |  |
+| =+irc/vertico-jump-to-channel= | Jump to an open channel or server buffer with vertico. |
+| =+irc/jump-to-channel= | Jump to an open channel or server buffer. If THIS-SERVER (universal argument) is non-nil only show channels in current server. |
+| =+irc/send-message= | Send WHO a message containing WHAT. |
+| =+irc/quit= | Kill current circe session and workgroup. |
+| =+irc/tracking-next-buffer= | Disables switching to an unread buffer unless in the irc workspace. |
+| =+irc--add-circe-buffer-to-persp-h= |  |
+| =+irc-circe-message-option-bot-h= | Fontify known bots and mark them to not be tracked. |
+| =+irc-init-circe-notifications-h= |  |
+| =+irc-truncate-nicks-h= | Truncate long nicknames in chat output non-destructively. |
+| =+irc-evil-insert-h= | Ensure entering insert mode will put us at the prompt, unless editing after prompt marker. |
+| =+irc-preinput-scroll-to-bottom-h= | Go to the end of the buffer in all windows showing it. Courtesy of esh-mode.el |
+| =+irc-init-lui-margins-h= |  |
+| =+irc-init-lui-wrapping-a= |  |
+
+* framework/app/rss.el
+
+doom :app rss port (elfeed + elfeed-org).
+
+| function | purpose |
+|----------+---------|
+| =+rss-enable-sliced-images= |  |
+| =+rss-workspace-name= |  |
+| =+rss--wconf= |  |
+| =+rss/delete-pane= | Delete the *elfeed-entry* split pane. |
+| =+rss/open= | Display the currently selected item in a buffer. |
+| =+rss/next= | Show the next item in the elfeed-search buffer. |
+| =+rss/previous= | Show the previous item in the elfeed-search buffer. |
+| =+rss/copy-link= | Copy current link to clipboard. |
+| =+rss-elfeed-wrap-h= | Enhances an elfeed entry's readability by wrapping it to a width of `fill-column'. |
+| =+rss--cleanup-on-kill-h= | Run `elfeed-db-compact'. See `+rss-cleanup-h'. |
+| =+rss-cleanup-h= | Clean up after an elfeed session. Kills all elfeed and elfeed-org files. |
+| =+rss-dead-feeds= | Return a list of feeds that haven't posted anything in YEARS. |
+| =+rss-put-sliced-image-fn= | Insert images sliced so they scroll smoothly. |
+| =+rss-render-image-tag-without-underline-fn= | Render an image tag and strip any underline face. |
+| ==rss= | Activate (or switch to) the elfeed RSS reader. |
+
+* framework/config/config.el
+
+:config group file.
+
+(no top-level defuns)
+
+
+* framework/config/default.el
+
+doom :config default port (smartparens, avy, link-hint, keybinding fixes).
+
+| function | purpose |
+|----------+---------|
+| =+default-want-RET-continue-comments= |  |
+| =+default-minibuffer-maps= | A list of all the keymaps used for the minibuffer. |
+| =doom-point-in-string-p= | Doom-compat: non-nil if point is inside a string literal. |
+| =doom-delete-backward-functions= |  |
+| =doom-surrounded-p= | Doom-compat: non-nil if point is surrounded by the delimiter PAIR. |
+| =doom/backward-delete-whitespace-to-column= | Delete back to the previous column of whitespace, or as much whitespace as possible, or just one char if that's not possible. |
+| =+default--delete-backward-char-a= |  |
+
+* framework/lang/doctor.el
+
+doom doctor-style health checks for :lang (ok!/warn!/error!).
+
+(no top-level defuns)
+
+
+* framework/tools/doctor.el
+
+doom doctor-style health checks for :tools (ok!/warn!/error!).
+
+(no top-level defuns)
+
+

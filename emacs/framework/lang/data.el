@@ -1,0 +1,35 @@
+;;; lang/data.el --- doom lang/data port  -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Ported from doom-modules/modules/lang/data.
+;;; Code:
+
+;;; lang/data
+;; yaml/json/nix live in lang-config.el (other submodules); lang/data only
+;; contributes nxml-mode (xml/xsd/plist/rss) + csv-mode.
+
+(leaf nxml-mode
+  :ensure nil
+  :defer t
+  :mode ("\\.p\\(?:list\\|om\\)\\'"   ; plist, pom
+         "\\.xs\\(?:d\\|lt\\)\\'"     ; xslt, xsd
+         "\\.rss\\'")
+  :config
+  (setq nxml-slash-auto-complete-flag t
+        nxml-auto-insert-xml-declaration-flag t)
+  ;; https://github.com/Fuco1/smartparens/issues/397#issuecomment-501059014
+  (after! smartparens
+    (sp-local-pair 'nxml-mode "<" ">" :post-handlers '(("[d1]" "/")))))
+
+(leaf csv-mode
+  :ensure t
+  :defer t
+  :config
+  (general-def :keymaps 'csv-mode-map :prefix luna-localleader-key
+    "a" #'csv-align-fields
+    "u" #'csv-unalign-fields
+    "s" #'csv-sort-fields
+    "S" #'csv-sort-numeric-fields
+    "k" #'csv-kill-fields
+    "t" #'csv-transpose))
+
+;;; lang/data.el ends here

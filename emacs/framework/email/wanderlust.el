@@ -1,0 +1,125 @@
+;;; email/wanderlust.el --- doom email/wanderlust port  -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Ported from doom-modules/modules/email/wanderlust.
+;;; Code:
+
+(leaf wl
+  :ensure wanderlust
+  :commands wl
+  :config
+  (setq mail-user-agent 'wl-user-agent
+        pgg-scheme 'gpg
+        mime-edit-split-message nil)
+
+  (when (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent
+      'wl-user-agent
+      'wl-user-agent-compose
+      'wl-draft-send
+      'wl-draft-kill
+      'mail-send-hook))
+
+  (setq wl-demo nil
+        wl-stay-folder-window t
+        wl-init-file (expand-file-name "wl.el" (luna-user-dir))
+        wl-folders-file (expand-file-name "folders.wl" (luna-user-dir))
+        wl-summary-command-prefix-key "C-c w"
+        ;; gmail SMTP defaults (from the previous thin config; kept flat so
+        ;; gmail works even when the +gmail flag below resolves to nil).
+        wl-default-folder "INBOX"
+        wl-smtp-posting-server "smtp.gmail.com"
+        wl-smtp-posting-port 587
+        wl-smtp-posting-user user-mail-address
+        wl-local-domain "gmail.com")
+
+  ;; macOS allows file names up to 255 characters,
+  ;; use half of that size as threshold to switch to hashing
+  (setq elmo-msgdb-path-encode-threshold 128)
+
+  (setq wl-message-truncate-lines nil
+        wl-summary-width nil
+        wl-forward-subject-prefix "Fwd: "
+        wl-message-ignored-field-list
+        '(".*Received:"
+          ".*Path:"
+          ".*Id:"
+          "^References:"
+          "^Replied:"
+          "^Errors-To:"
+          "^Mail-.*-To:"
+          "^Lines:"
+          "^Sender:"
+          ".*Host:"
+          "^Xref:"
+          "^Content-Type:"
+          "^Precedence:"
+          "^Status:"
+          "^X.*:"
+          "^MIME.*:"
+          "^In-Reply-To:"
+          "^Content-Transfer-Encoding:"
+          "^Content-Disposition:"
+          "^List-.*:"
+          "^Received-SPF:"
+          "^DKIM-.*:"
+          "^DomainKey-.*:"
+          "^SPF-.*:"
+          "^SMX-.*:"
+          "^Autocrypt:"
+          "^ARC-.*:"
+          "^Authentication-Results:"
+          "^UI-.*:"
+          "^IronPort.*:")
+        wl-message-visible-field-list
+        '("^Message-Id:"
+          "^User-Agent:"
+          "^X-Mailer:"
+          "^X-Face:"))
+
+  (when (modulep! +gmail)
+    (setq elmo-imap4-default-server "imap.gmail.com"
+          elmo-imap4-default-port 993
+          elmo-imap4-default-authenticate-type 'clear ; CRAM-MD5
+          elmo-imap4-default-user user-mail-address
+          elmo-imap4-default-stream-type 'ssl
+          elmo-imap4-set-seen-flag-explicitly t)
+
+    (setq wl-smtp-connection-type 'starttls
+          wl-smtp-posting-port 587
+          wl-smtp-authenticate-type "plain"
+          wl-smtp-posting-user user-mail-address
+          wl-smtp-posting-server "smtp.gmail.com"
+          wl-local-domain "gmail.com")
+
+    (setq wl-default-folder "%inbox"
+          wl-draft-folder "%[Gmail]/Drafts"
+          wl-trash-folder "%[Gmail]/Trash"
+          wl-fcc-force-as-read t
+          wl-default-spec "%")
+
+    (setq wl-message-id-domain wl-local-domain))
+
+  ;; We're living in the world where UTF-8 is de facto default charset.
+  (setq-default mime-charset-for-write 'utf-8)
+  (setq-default mime-transfer-level 8)
+  (setq charsets-mime-charset-alist
+        '(((ascii) . us-ascii)
+          ((unicode) . utf-8)))
+
+  ;; +xface: x-face-e21 is not packaged in nixpkgs; skipped.
+
+  ;; Use alert for alerting
+  (when (fboundp 'alert)
+    (setq wl-biff-notify-hook '((lambda () (alert "You have new mail!" :title "Wanderlust")))))
+
+  (when (modulep! :editor evil)
+    ;; Neither `wl-folder-mode' nor `wl-summary-mode' are correctly defined as
+    ;; major modes, so we cannot use `evil-set-initial-state' here.
+    (add-hook 'wl-folder-mode-hook #'evil-emacs-state)
+    (add-to-list 'evil-emacs-state-modes 'wl-summary-mode))
+
+  (add-hook 'mime-edit-mode-hook #'auto-fill-mode))
+
+(defalias '=wanderlust #'wl)
+
+;;; email/wanderlust.el ends here
