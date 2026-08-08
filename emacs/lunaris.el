@@ -143,8 +143,8 @@ Nested (:prefix (label . key) body...) augments PREFIX (leader + key)."
                  (setq specs
                        (append specs
                                (lunaris--map!-collect inner
-                                 (if prefix (concat prefix " " k) k)
-                                 states keymaps))))
+                                                      (if prefix (concat prefix " " k) k)
+                                                      states keymaps))))
                (setq args (cdr args)))
               (:leader
                (setq prefix luna-leader-key)
@@ -158,7 +158,7 @@ Nested (:prefix (label . key) body...) augments PREFIX (leader + key)."
          ((keywordp tok)
           (pcase tok
             ((or :n :normal) (setq states '(normal)))
-            (:i (setq states '(insert)))
+            (:i (setq states '(insert emacs)))
             (:v (setq states '(visual)))
             (:m (setq states '(motion)))
             (:gi (setq states '(normal insert visual emacs)))
@@ -584,8 +584,8 @@ already-loaded (stage-1) features. Byte-compiles into the cache on first run."
     (set-face-attribute 'default nil :height luna--initial-font-height)))
 
 (run-with-idle-timer 1 nil
-  (lambda ()
-    (setq luna--initial-font-height (face-attribute 'default :height))))
+                     (lambda ()
+                       (setq luna--initial-font-height (face-attribute 'default :height))))
 
 (defun luna-disable-line-numbers-h ()
   (display-line-numbers-mode -1))
@@ -593,9 +593,18 @@ already-loaded (stage-1) features. Byte-compiles into the cache on first run."
 (defun luna-mark-buffer-as-real-h (&optional buffer)
   (with-current-buffer (or buffer (current-buffer)) nil))
 
-(defun luna-profile-state-dir (&rest _) lunaris-cache-dir)
-(defun luna-profile-cache-dir (&rest _) lunaris-cache-dir)
-(defun luna-profile-data-dir (&rest _) lunaris-cache-dir)
+(defun luna-profile-state-dir (&rest dirs)
+  "Base state dir, optionally joined with DIRS (doom-compat: `doom-state-dir').
+All profile dirs collapse to the single XDG cache dir. Leading `t' (port
+artifact) is dropped."
+  (apply #'file-name-concat lunaris-cache-dir
+         (seq-remove (lambda (d) (or (eq d t) (null d))) dirs)))
+(defun luna-profile-cache-dir (&rest dirs)
+  (apply #'file-name-concat lunaris-cache-dir
+         (seq-remove (lambda (d) (or (eq d t) (null d))) dirs)))
+(defun luna-profile-data-dir (&rest dirs)
+  (apply #'file-name-concat lunaris-cache-dir
+         (seq-remove (lambda (d) (or (eq d t) (null d))) dirs)))
 (defun luna-context-p (&rest _) nil)
 (defun luna-system-cpus (&rest _) (num-processors))
 (defun luna-require (feature &optional _file _noerror) (require feature))

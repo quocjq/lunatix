@@ -266,6 +266,32 @@
   "oT"  '(vterm :wk "vterm here")
   "o-"  '(dired-jump :wk "dired")
   "oD"  '(docker :wk "docker")
+  "ol"  '("lnav")
+  "olj" '(lnav-jump-before-open :wk "before open")
+  "ola" '(lnav-jump-after-open :wk "after open")
+  "olc" '(lnav-jump-before-close :wk "before close")
+  "old" '(lnav-jump-after-close :wk "after close")
+  "oln" '(lnav-next-chunk :wk "next chunk")
+  "olp" '(lnav-previous-chunk :wk "prev chunk")
+  "oli" '(lnav-chunk-in :wk "chunk in")
+  "olo" '(lnav-chunk-out :wk "chunk out")
+  "ols" '(lnav-select-chunk :wk "select chunk")
+  "olS" '(lnav-select-chunk-around :wk "select chunk around")
+  "olw" '(lnav-surround :wk "surround")
+  "olx" '(lnav-delete-enclosing-pair :wk "delete pair")
+  "olr" '(lnav-change-enclosing-pair :wk "change pair")
+  "ol>" '(lnav-slurp-forward :wk "slurp forward")
+  "ol<" '(lnav-slurp-backward :wk "slurp backward")
+  "ol]" '(lnav-barf-forward :wk "barf forward")
+  "ol[" '(lnav-barf-backward :wk "barf backward")
+  "olk" '(lnav-kill-sexp :wk "kill sexp")
+  "olt" '(lnav-transpose-sexp :wk "transpose")
+  "olR" '(lnav-raise-sexp :wk "raise")
+  "olf" '(lnav-forward-sexp :wk "forward sexp")
+  "olF" '(lnav-backward-sexp :wk "backward sexp")
+  "olz" '(lnav-flash-chunk :wk "flash chunks")
+  "olZ" '(lnav-flash-char :wk "flash char")
+  "ol/" '(lnav-flash-search :wk "flash search")
 
   ;; SPC p --- project
   "p"   '("project")
@@ -470,6 +496,93 @@
   "C-+"   #'doom/reset-font-size
   "M-C-=" #'doom/increase-font-size
   "M-C--" #'doom/decrease-font-size)
+
+;; =====================================================================
+;; Unified global + mode keybindings — the single home for every key.
+;; =====================================================================
+;; Global / evil-state
+(general-define-key :states '(normal visual) "q" #'delete-window)
+(global-set-key [remap other-window] #'ace-window)
+(global-set-key (kbd "C-.") #'embark-act)
+(global-set-key [remap eval-region] #'+eval/region)
+(global-set-key [remap eval-buffer] #'+eval/buffer)
+(global-set-key [remap xref-find-definitions] #'+lookup/definition)
+(global-set-key [remap xref-find-references]  #'+lookup/references)
+
+;; emacs-state: ESC/C-g back to normal; backspace deletes, never joins lines
+(after! evil
+  (define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state)
+  (define-key evil-emacs-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-emacs-state-map (kbd "DEL") #'delete-backward-char)
+  (define-key evil-emacs-state-map (kbd "C-h") #'delete-backward-char))
+
+;; Package commands (previously leaf `:bind')
+(general-def "C-c d"   #'deft)
+(general-def "C-'"    #'popper-toggle)
+(general-def "M-`"    #'popper-cycle)
+(general-def "C-x g"  #'magit-status)
+(general-def "M-g j"  #'dumb-jump-go)
+
+;; Mode maps (bound once the mode loads)
+(after! dired
+  (define-key dired-mode-map (kbd "C-c C-e") #'wdired-change-to-wdired-mode)
+  (general-define-key :keymaps 'dired-mode-map :states '(normal visual)
+    "h" #'dired-up-directory
+    "l" #'dired-find-file))
+(after! dirvish
+  (define-key dired-mode-map (kbd "C-c C-r") #'dirvish-rsync)
+  (general-define-key :keymaps 'dired-mode-map :states '(normal visual)
+    "h" #'dired-up-directory
+    "l" #'dired-find-file))
+(after! apheleia
+  (when (boundp 'apheleia-mode-map)
+    (define-key apheleia-mode-map [remap basic-save-buffer] #'+format/save-buffer)))
+(after! vertico
+  (general-define-key :keymaps 'vertico-map
+    "M-RET" #'vertico-exit-input
+    "C-j"   #'vertico-next
+    "C-k"   #'vertico-previous
+    "C-h"   (lambda () (interactive)
+              (when (eq 'file (vertico--metadata-get 'category))
+                (vertico-directory-up)))
+    "C-l"   #'+vertico/enter-or-preview
+    "DEL"   #'vertico-directory-delete-char))
+(after! lsp-ui-peek
+  (define-key lsp-ui-peek-mode-map "j"   #'lsp-ui-peek--select-next)
+  (define-key lsp-ui-peek-mode-map "k"   #'lsp-ui-peek--select-prev)
+  (define-key lsp-ui-peek-mode-map (kbd "C-k") #'lsp-ui-peek--select-prev-file)
+  (define-key lsp-ui-peek-mode-map (kbd "C-j") #'lsp-ui-peek--select-next-file))
+(after! magit
+  (define-key magit-mode-map "q" #'+magit/quit)
+  (define-key magit-mode-map "Q" #'+magit/quit-all))
+(after! deft
+  (map! :map deft-mode-map
+        :n "gr"  #'deft-refresh
+        :n "C-s" #'deft-filter
+        :i "C-n" #'deft-new-file
+        :i "C-m" #'deft-new-file-named
+        :i "C-d" #'deft-delete-file
+        :i "C-r" #'deft-rename-file
+        :n "r"   #'deft-rename-file
+        :n "a"   #'deft-new-file
+        :n "A"   #'deft-new-file-named
+        :n "d"   #'deft-delete-file
+        :n "D"   #'deft-archive-file
+        :n "q"   #'kill-current-buffer)
+  (condition-case nil
+      (general-def :keymaps 'deft-mode-map :prefix luna-localleader-key
+        "RET" #'deft-new-file-named
+        "a"   #'deft-archive-file
+        "c"   #'deft-filter-clear
+        "d"   #'deft-delete-file
+        "f"   #'deft-find-file
+        "g"   #'deft-refresh
+        "l"   #'deft-filter
+        "n"   #'deft-new-file
+        "r"   #'deft-rename-file
+        "s"   #'deft-toggle-sort-method
+        "t"   #'deft-toggle-incremental-search)
+    (error nil)))
 
 ;;; keybindings-config.el ends here
 (provide 'keybindings-config)

@@ -220,7 +220,6 @@ Courtesy of esh-mode.el"
   ;; doom adds `circe-mode' to `doom-real-buffer-modes'; no equivalent here.
   (add-hook 'circe-channel-mode-hook #'turn-on-visual-line-mode)
   (add-hook 'circe-mode-hook #'+irc--add-circe-buffer-to-persp-h)
-  (add-hook 'circe-mode-hook #'turn-off-smartparens-mode)
   (defadvice! +irc--circe-run-disconnect-hook-a (&rest _)
     :after #'circe--irc-conn-disconnected
     (run-hooks '+irc-disconnect-hook))

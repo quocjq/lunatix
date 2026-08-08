@@ -64,8 +64,6 @@ rest of the doom rule plist is ignored (popper has no slot/ttl/quit model)."
 (leaf popper
   :ensure t
   :defer t
-  :bind (("C-'" . popper-toggle)
-         ("M-`" . popper-cycle))
   :config
   (setq popper-group-by-direction t
         popper-reference-buffers

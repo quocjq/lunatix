@@ -113,11 +113,7 @@
         ;; flycheck error display).
         lsp-ui-sideline-show-hover nil
         lsp-ui-sideline-actions-icon lsp-ui-sideline-actions-icon-default)
-
-  (define-key lsp-ui-peek-mode-map "j"   #'lsp-ui-peek--select-next)
-  (define-key lsp-ui-peek-mode-map "k"   #'lsp-ui-peek--select-prev)
-  (define-key lsp-ui-peek-mode-map (kbd "C-k") #'lsp-ui-peek--select-prev-file)
-  (define-key lsp-ui-peek-mode-map (kbd "C-j") #'lsp-ui-peek--select-next-file))
+)
 
 (leaf consult-lsp
   :ensure t

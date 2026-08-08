@@ -6,7 +6,6 @@
 (leaf magit
   :ensure t
   :commands magit-file-delete
-  :bind ("C-x g" . magit-status)
   :init
   (setq magit-auto-revert-mode nil)  ; we do this ourselves further down
   :config
@@ -81,10 +80,6 @@
            (not (eq mode 'magit-process-mode)))))
   (add-hook 'luna-real-buffer-functions #'+magit-buffer-p)
 
-  ;; Clean up after magit by killing leftover magit buffers.
-  (define-key magit-mode-map "q" #'+magit/quit)
-  (define-key magit-mode-map "Q" #'+magit/quit-all)
-
   (defun +magit-enlargen-fringe-h ()
     "Make fringe larger in magit."
     (and (display-graphic-p)
@@ -118,6 +113,7 @@
   :commands forge-create-pullreq forge-create-issue
   :preface
   (setq forge-database-file (luna-profile-data-dir t "forge" "forge-database.sqlite"))
+  (make-directory (file-name-directory forge-database-file) t)
   (setq forge-add-default-bindings (not (modulep! :editor evil +everywhere)))
   :init
   (after! ghub-graphql

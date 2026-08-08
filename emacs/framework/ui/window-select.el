@@ -9,8 +9,6 @@
 (leaf ace-window
   :ensure t
   :defer t
-  :init
-  (global-set-key [remap other-window] #'ace-window)
   :config
   ;; +numbers is on, so winum provides number-jumping; leave `aw-keys' default.
   (unless (modulep! +numbers)

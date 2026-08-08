@@ -22,6 +22,19 @@
   (global-corfu-mode 1)
   (corfu-popupinfo-mode 1))
 
+;; Emacs 30.2 puts a bare `t' in lisp-mode capf lists meaning "also run the
+;; default (tags) completion". corfu's completion-in-region chokes on it
+;; (`listp, t') and elisp completion stops working. Drop the marker — tags
+;; completion is vestigial.
+(dolist (hook '(emacs-lisp-mode-hook lisp-mode-hook lisp-interaction-mode-hook
+                scheme-mode-hook))
+  (add-hook hook
+            (lambda ()
+              (setq-local completion-at-point-functions
+                          (delq t (buffer-local-value
+                                   'completion-at-point-functions
+                                   (current-buffer)))))))
+
 (leaf corfu-auto
   :ensure nil
   :after corfu
@@ -75,17 +88,5 @@
   :demand t
   :custom
   (nerd-icons-font-family "Symbols Nerd Font Mono"))
-
-;; vertico-map binds (doom completion/vertico)
-(general-define-key
-  :keymaps 'vertico-map
-  "M-RET" #'vertico-exit-input
-  "C-j"   #'vertico-next
-  "C-k"   #'vertico-previous
-  "C-h"   (lambda () (interactive)
-            (when (eq 'file (vertico--metadata-get 'category))
-              (vertico-directory-up)))
-  "C-l"   #'+vertico/enter-or-preview
-  "DEL"   #'vertico-directory-delete-char)
 
 ;;; completion/corfu.el ends here

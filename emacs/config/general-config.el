@@ -14,8 +14,6 @@
   ;; The full leader tree lives in keybindings-config.el (loads after this).
 
   (recentf-mode 1)
-
-  ;; doom: q in normal state closes the current window
-  (general-define-key :states '(normal visual) "q" #'delete-window))
+)
 ;;; general-config.el ends here
 (provide 'general-config)

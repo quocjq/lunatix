@@ -81,8 +81,7 @@
   :ensure t
   :defer t
   :config
-  (setq prefix-help-command #'embark-prefix-help-command)
-  (global-set-key (kbd "C-.") #'embark-act))
+  (setq prefix-help-command #'embark-prefix-help-command))
 
 (leaf embark-consult
   :ensure t

@@ -25,19 +25,10 @@
                              (not ls-lisp-use-insert-directory-program)))
                 (setq-local dired-actual-switches "-alh"))))
   (put 'dired-find-alternate-file 'disabled nil)
-  (define-key dired-mode-map (kbd "C-c C-e") #'wdired-change-to-wdired-mode)
   ;; force details ON (dirvish enables hide-details; size/date must show)
   (add-hook 'dired-mode-hook (lambda () (dired-hide-details-mode -1)))
-  ;; hjkl navigation in dired (doom-style): h up, l open; j/k are evil motions
-  (after! dired
-    (general-define-key :keymaps 'dired-mode-map :states '(normal visual)
-      "h" #'dired-up-directory
-      "l" #'dired-find-file))
+  ;; dirvish-override resets the listing; re-apply date + size columns
   (after! dirvish
-    (general-define-key :keymaps 'dired-mode-map :states '(normal visual)
-      "h" #'dired-up-directory
-      "l" #'dired-find-file)
-    ;; dirvish-override resets the listing; re-apply date + size columns
     (setq dired-listing-switches "-ahl -v --time-style=long-iso --group-directories-first")))
 
 (leaf dirvish
@@ -55,7 +46,7 @@
   ;; dirvish replaces the dired keymap; re-apply evil-collection's dired binds
   (after! evil-collection-dired
     (evil-collection-dired-setup))
-  (define-key dired-mode-map (kbd "C-c C-r") #'dirvish-rsync))
+)
 
 ;;; dirvish.el ends here
 (provide 'dirvish-config)

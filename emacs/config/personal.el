@@ -8,8 +8,6 @@
       pcache-directory (expand-file-name "pcache" lunaris-cache-dir)
       lsp-session-file (expand-file-name "lsp-session-v1" lunaris-cache-dir)
       parinfer-rust-library-dir (expand-file-name "parinfer-rust" lunaris-cache-dir)
-      projectile-known-projects-file (expand-file-name "projectile-bookmarks.eld" lunaris-cache-dir)
-      projectile-frecency-file (expand-file-name "projectile-frecency.eld" lunaris-cache-dir)
       undo-fu-session-directory (expand-file-name "undo-fu-session" lunaris-cache-dir)
       transient-history-file (expand-file-name "transient/history.el" lunaris-cache-dir)
       transient-level-file (expand-file-name "transient/levels.el" lunaris-cache-dir)
@@ -30,9 +28,17 @@
 (after! transient
   (setq transient-history-file (expand-file-name "transient/history.el" lunaris-cache-dir)
         transient-level-file (expand-file-name "transient/levels.el" lunaris-cache-dir)))
+;; projectile cache lives in the emacs dir under project/<username>/, so each
+;; user gets their own cache next to the config. Dir is created on demand.
+(defvar lunatix-projectile-cache-dir
+  (expand-file-name
+   (format "project/%s/" (or (user-login-name) (getenv "USER") "user"))
+   lunatix-emacs-dir))
+(make-directory lunatix-projectile-cache-dir t)
 (after! projectile
-  (setq projectile-known-projects-file (expand-file-name "projectile-bookmarks.eld" lunaris-cache-dir)
-        projectile-frecency-file (expand-file-name "projectile-frecency.eld" lunaris-cache-dir)))
+  (setq projectile-bookmarks-file (expand-file-name "projectile-bookmarks.eld" lunatix-projectile-cache-dir)
+        projectile-known-projects-file (expand-file-name "projectile-known-projects" lunatix-projectile-cache-dir)
+        projectile-frecency-file (expand-file-name "projectile-frecency.eld" lunatix-projectile-cache-dir)))
 (setq url-configuration-directory (expand-file-name "url" lunaris-cache-dir))
 
 (setq user-full-name "Lunixose"
@@ -73,9 +79,7 @@
 ;; Evil: emacs mode as the editing mode (live config)
 (setq evil-disable-insert-state-bindings t)
 (after! evil
-  (defalias 'evil-insert-state 'evil-emacs-state)
-  (define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state)
-  (define-key evil-emacs-state-map (kbd "C-g") 'evil-normal-state))
+  (defalias 'evil-insert-state 'evil-emacs-state))
 
 ;;; personal.el ends here
 (provide 'personal)

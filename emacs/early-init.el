@@ -5,7 +5,7 @@
 ;;; no-op at startup; this just keeps package.el quiet before that runs.
 
 (setq package-enable-at-startup nil)
-(setq package-quickstart nil)
+(setq package-quickstart t)
 
 ;; nix precompiles every package to .eln; our own cache .elc don't need it.
 ;; Background native-comp of them grinds this laptop's compiler to a near-hang

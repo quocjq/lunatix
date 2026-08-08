@@ -464,7 +464,6 @@ the doom :tools lookup docs for the full PLIST format."
 
 (leaf dumb-jump
   :ensure t
-  :bind ("M-g j" . dumb-jump-go)
   :commands dumb-jump-result-follow
   :config
   (setq dumb-jump-default-project (luna-user-dir)
@@ -480,9 +479,6 @@ the doom :tools lookup docs for the full PLIST format."
 
 ;; The lookup commands are superior, and will consult xref if there are no
 ;; better backends available.
-(global-set-key [remap xref-find-definitions] #'+lookup/definition)
-(global-set-key [remap xref-find-references]  #'+lookup/references)
-
 (after! xref
   (leaf consult-xref
     :ensure nil

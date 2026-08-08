@@ -27,9 +27,6 @@ popup buffer rather than an overlay on the line at point."
 (setq eval-expression-print-length nil
       eval-expression-print-level  nil)
 
-(global-set-key [remap eval-region] #'+eval/region)
-(global-set-key [remap eval-buffer] #'+eval/buffer)
-
 (defvar +eval-repl-handler-alist nil
   "An alist mapping major modes to plists that describe REPLs.")
 

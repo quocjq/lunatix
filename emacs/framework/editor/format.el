@@ -20,8 +20,6 @@
                     (eq +format-on-save-disabled-modes t)
                     (memq major-mode +format-on-save-disabled-modes)))))
   (add-hook 'prog-mode-hook #'apheleia-mode)
-  (when (boundp 'apheleia-mode-map)
-    (define-key apheleia-mode-map [remap basic-save-buffer] #'+format/save-buffer))
   (add-to-list 'apheleia-mode-alist '(sh-mode . shfmt)))
 
 (defun +format/save-buffer ()
