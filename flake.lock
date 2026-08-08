@@ -1151,11 +1151,11 @@
     "lnav": {
       "flake": false,
       "locked": {
-        "lastModified": 1786172230,
-        "narHash": "sha256-hEOuA6ZSpQ9+O4f9mYx8/4Ox759LP8mPVYdy0z5J5dA=",
+        "lastModified": 1786186124,
+        "narHash": "sha256-ODltF59dvnxsitkjKhYxvegj0ofO8qN2118THCmichM=",
         "owner": "quocjq",
         "repo": "lnav",
-        "rev": "1f84e4d0486a771e471c80f0f95121c0b78ac401",
+        "rev": "4ead62174115cc0512fda59e283d7ac6e389b420",
         "type": "github"
       },
       "original": {
