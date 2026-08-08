@@ -376,10 +376,7 @@
                              (let ((unaliased (indirect-function symbol)))
                                (unless (or (macrop unaliased)
                                            (special-form-p unaliased))
-                                 (let (unadvised)
-                                   (while (not (eq (setq unadvised (ad-get-orig-definition unaliased))
-                                                   (setq unaliased (indirect-function unadvised)))))
-                                   unaliased)
+                                 (setq unaliased (advice--cd*r unaliased))
                                  (setq +emacs-lisp--face
                                        (if (subrp unaliased)
                                            'font-lock-constant-face

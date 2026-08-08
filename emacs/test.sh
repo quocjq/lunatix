@@ -39,6 +39,8 @@ EMACS="${EMACS:-emacs}"
             (unless (fboundp (quote lnav-show-pair-mode)) (error "lnav extras missing"))
             (unless (fboundp (quote lnav-typing-mode)) (error "lnav typing missing"))
             (unless (fboundp (quote lnav-evil-inside-chunk)) (error "lnav-evil missing"))
+            (unless (characterp (plist-get (car (lnav--flash-assign-labels (quote ((:beg 1 :end 2))))) :l1))
+              (error "lnav flash labels missing"))
             (unless (eq (lookup-key evil-emacs-state-map (kbd "DEL")) (quote delete-backward-char))
               (error "emacs-state DEL not delete-backward-char"))
             (unless (eq (cadr evil-emacs-state-cursor) (quote +evil-emacs-cursor-fn))
