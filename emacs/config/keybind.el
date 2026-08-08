@@ -776,11 +776,22 @@
    "d" '(org-priority-down :wk "priority down")
    "p" '(org-priority :wk "priority")
    "u" '(org-priority-up :wk "priority up")))
-(after! org-agenda
+ (after! org-agenda
   (general-define-key
    :keymaps 'org-agenda-mode-map
    :states '(motion normal)
    "C-SPC" #'org-agenda-show-and-scroll-up)
+  ;; org-agenda-mode-map (and its evil state maps, via evil-collection) binds
+  ;; SPC to scroll (org-agenda.el), which blocks the SPC m localleader prefix
+  ;; below. Scroll already lives on C-SPC. Clear both the base map and the
+  ;; evil state maps so general can install the SPC m prefix.
+  (keymap-set org-agenda-mode-map "SPC" nil)
+  (when (fboundp 'evil-define-key*)
+    (dolist (state '(normal visual motion))
+      (when (boundp 'org-agenda-mode-map)
+        (condition-case nil
+            (evil-define-key* state org-agenda-mode-map (kbd "SPC") nil)
+          (error nil)))))
   (general-define-key
    :keymaps 'org-agenda-mode-map
    :states '(normal visual motion)
