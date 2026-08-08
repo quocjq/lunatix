@@ -13,8 +13,8 @@
         emacs = hm.services.emacs.package;
         doomacs = hm.services.emacs.package; # compat alias, drop later
         nixcord = hm.programs.nixcord.finalPackage.discord;
-        # `nix run .#facter -- -o modules/hardware/latitude3250.json` regenerates
-        # the hardware report consumed by modules/hardware/latitude3250.nix.
+        # `nix run .#facter -- -o modules/community/lix/hardware/latitude3250.json`
+        # regenerates the hardware report consumed by modules/community/lix/disko/latitude3250.nix.
         facter = pkgs.nixos-facter;
       };
   };

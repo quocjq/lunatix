@@ -39,11 +39,11 @@
         package = pkgs.emacs-gtk;
         config =
           let
-            initText = builtins.readFile ../../../emacs/init.el;
+            initText = builtins.readFile "${inputs.self}/emacs/init.el";
             moduleFiles = pkgs.lib.filter (p: p != null) (
               map (f: if pkgs.lib.hasSuffix ".el" f then f else null)
-                ((pkgs.lib.filesystem.listFilesRecursive ../../../emacs/config)
-                 ++ (pkgs.lib.filesystem.listFilesRecursive ../../../emacs/framework))
+                ((pkgs.lib.filesystem.listFilesRecursive "${inputs.self}/emacs/config")
+                 ++ (pkgs.lib.filesystem.listFilesRecursive "${inputs.self}/emacs/framework"))
             );
           in
           pkgs.writeText "lunatix-modules.el" (

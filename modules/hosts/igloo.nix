@@ -4,9 +4,15 @@
   den.aspects.igloo = {
     includes = [
       <settings>
-      <latitude3250>
+      <disko-layout>
       <lig/agenix>
     ];
+
+    disk = {
+      name = "main";
+      device = "/dev/disk/by-id/nvme-eui.01000000000000008ce38e0402c27c5c";
+    };
+
     nixos =
       {
         config,
@@ -16,7 +22,7 @@
         ...
       }:
       {
-        hardware.facter.reportPath = ../hardware/latitude3250.json;
+        hardware.facter.reportPath = ../community/lix/hardware/latitude3250.json;
         boot.loader.systemd-boot.enable = true;
         boot.loader.efi.canTouchEfiVariables = true;
         boot.kernelPackages = pkgs.linuxPackages_latest;

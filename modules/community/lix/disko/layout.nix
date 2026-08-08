@@ -1,15 +1,22 @@
 { inputs, ... }:
 {
-  den.aspects.latitude3250 = {
-    nixos = {
-      imports = [ inputs.disko.nixosModules.disko ];
-      disko.enableConfig = true;
-      hardware.facter.reportPath = ../hardware/latitude3250.json;
+  den.quirks.disk = {
+    description = "Per-host disk declaration: name + device";
+  };
 
-      disko.devices = {
-        disk.main = {
+  den.aspects.disko-layout = {
+    nixos =
+      { disk, ... }:
+      let
+        disk0 = builtins.head disk;
+      in
+      {
+        imports = [ inputs.disko.nixosModules.disko ];
+        disko.enableConfig = true;
+
+        disko.devices.disk.${disk0.name} = {
           type = "disk";
-          device = "/dev/disk/by-id/nvme-eui.01000000000000008ce38e0402c27c5c";
+          device = disk0.device;
           content = {
             type = "gpt";
             partitions = {
@@ -35,15 +42,11 @@
                 content = {
                   type = "luks";
                   name = "luks-root";
-                  # Passphrase source used ONLY while formatting (disko/disko-install).
-                  # Create it first:  echo -n 'your-passphrase' > /tmp/secret.key
                   passwordFile = "/tmp/secret.key";
                   settings.allowDiscards = true;
                   content = {
                     type = "btrfs";
                     extraArgs = [ "-f" ];
-                    # Named subvolumes. The btrfs top-level (subvolid=5) is
-                    # mounted at "/" via the `mountpoint` below.
                     subvolumes = {
                       "/home" = {
                         mountpoint = "/home";
@@ -74,6 +77,5 @@
           };
         };
       };
-    };
   };
 }

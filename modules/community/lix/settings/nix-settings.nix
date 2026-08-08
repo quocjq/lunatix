@@ -7,7 +7,7 @@
 
         programs.nh = {
           enable = true;
-          flake = toString ./../..;
+          flake = toString ./../../../..;
         };
 
         nix = {
