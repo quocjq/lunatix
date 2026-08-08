@@ -44,9 +44,21 @@ A bare symbol binds that variable to nil."
        ,@body)))
 
 (defmacro letf! (bindings &rest body)
-  "Doom-compat: buffer-local `cl-letf'."
+  "Doom-compat: buffer-local `cl-letf'. `(#'FN ...)' bindings act on FN's
+function cell — raw `cl-letf' treats `(function FN)' as a variable place and
+calls `(setf function)' (void) / sets FN as a variable."
   (declare (indent 1))
-  `(cl-letf ,bindings ,@body))
+  `(cl-letf ,(mapcar (lambda (b)
+                       (let ((place (car b))
+                             (val (cdr b)))
+                         (if (and (listp place) (eq (car place) 'function)
+                                  (symbolp (cadr place)))
+                             (cons (list 'symbol-function
+                                         (list 'quote (cadr place)))
+                                   val)
+                           b)))
+                     bindings)
+     ,@body))
 
 (defmacro defer-until! (condition &rest body)
   "Doom-compat: run BODY once CONDITION returns non-nil."

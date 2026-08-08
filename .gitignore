@@ -47,3 +47,4 @@ emacs/url/
 
 # session memory (not project code)
 session-emacs-config.md*
+emacs/tramp

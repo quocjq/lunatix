@@ -84,6 +84,13 @@
   (when (modulep! +lsp)
     (add-hook 'sh-mode-hook #'lsp-deferred))
 
+  ;; nil LSP: auto-run `nix flake archive` when flake inputs are missing
+  ;; (silences "Some flake inputs are not available..." without the
+  ;; client-confirmation prompt)
+  (when (modulep! +lsp)
+    (after! lsp-mode
+      (lsp-register-custom-settings '(("nil.nix.flake.autoArchive" t)))))
+
   (setq sh-indent-after-continuation 'always)
 
   (add-hook 'sh-mode-hook (lambda () (setq-local mode-name "Sh")))

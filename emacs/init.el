@@ -6,6 +6,17 @@
 (setq lunatix-emacs-dir
       (file-name-directory (or load-file-name buffer-file-name)))
 
+;; nix profile bins (rg, fd, lsp servers...) — the daemon/frame PATH can be
+;; stale (started before `just switch'), which breaks projectile's
+;; executable-find-based backend detection. Always add them.
+(dolist (dir (list (expand-file-name ".nix-profile/bin" (or (getenv "HOME") ""))
+                   (expand-file-name ".local/state/nix/profile/bin" (or (getenv "HOME") ""))
+                   (format "/etc/profiles/per-user/%s/bin" (or (getenv "USER") "root"))
+                   "/run/current-system/sw/bin"
+                   "/nix/var/nix/profiles/default/bin"))
+  (when (file-directory-p dir)
+    (add-to-list 'exec-path dir)))
+
 ;; big GC threshold during init (doom-style), resets to normal after startup
 (setq gc-cons-threshold (* 100 1024 1024))
 
