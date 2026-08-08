@@ -4,8 +4,6 @@
 ;;; Code:
 
 ;;; lang/lua
-;; sp's default rules are obnoxious, so disable them
-(provide 'smartparens-lua)
 
 (defun +lua-common-config (mode)
   ;; doom also sets lookup/repl/company handlers here (set-*-handler!); those

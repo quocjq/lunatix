@@ -74,8 +74,7 @@ output buffer."
   :group '+markdown)
 
 (defun +markdown-common-config (mode &rest extra-modes)
-  (sp-local-pair (cons mode extra-modes) "`" "`"
-                 :unless '(:add sp-point-before-word-p sp-point-before-same-p))
+  (lnav-local-pair (cons mode extra-modes) "`" "`")
 
   (when (modulep! +lsp)
     (dolist (m (cons mode extra-modes))

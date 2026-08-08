@@ -120,9 +120,8 @@
             (0 'font-lock-type-face append)))))
   (add-hook 'sh-mode-hook #'+sh-init-extra-fontification-h)
 
-  ;; autoclose backticks
-  (when (boundp 'sp-local-pair)
-    (sp-local-pair 'sh-mode "`" "`" :unless '(sp-point-before-word-p sp-point-before-same-p))))
+  ;; backtick pair (TAB-jumpable)
+  (lnav-local-pair '(sh-mode) "`" "`"))
 ;;; ===================================================================
 ;;; :lang nix
 ;;; ===================================================================

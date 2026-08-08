@@ -1148,6 +1148,22 @@
         "type": "github"
       }
     },
+    "lnav": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786172230,
+        "narHash": "sha256-hEOuA6ZSpQ9+O4f9mYx8/4Ox759LP8mPVYdy0z5J5dA=",
+        "owner": "quocjq",
+        "repo": "lnav",
+        "rev": "1f84e4d0486a771e471c80f0f95121c0b78ac401",
+        "type": "github"
+      },
+      "original": {
+        "owner": "quocjq",
+        "repo": "lnav",
+        "type": "github"
+      }
+    },
     "lotus": {
       "inputs": {
         "nixpkgs": [
@@ -1549,6 +1565,7 @@
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "import-tree": "import-tree",
+        "lnav": "lnav",
         "lotus": "lotus",
         "nixcord": "nixcord",
         "nixpkgs": "nixpkgs_6",

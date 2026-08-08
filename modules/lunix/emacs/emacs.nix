@@ -5,6 +5,10 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lnav = {
+      url = "github:quocjq/lnav";
+      flake = false;
+    };
   };
   lix.doomacs = {
     provides.to-hosts.nixos = { pkgs, ... }: {
@@ -52,11 +56,13 @@
           let
             apps = import ./_eaf/apps.nix;
             eaf = import ./_eaf/scope.nix { inherit inputs pkgs epkgs; };
+            lnav = (import ./_lnav/scope.nix { inherit inputs pkgs epkgs; }).lnav;
           in
           [
             epkgs.eglot
             epkgs.treesit-grammars.with-all-grammars
             (eaf.withApplications (apps eaf))
+            lnav
           ];
       };
 

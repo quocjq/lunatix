@@ -198,26 +198,6 @@ sumatrapdf, zathura, okular and pdf-tools."
                 (setq-local ispell-parser 'tex))))
   ;; Enable word wrapping.
   (add-hook 'TeX-mode-hook #'visual-line-mode)
-  (after! smartparens-latex
-    ;; We have to use lower case modes here, because `smartparens-mode' uses
-    ;; the same during configuration.
-    (let ((modes '(tex-mode plain-tex-mode latex-mode LaTeX-mode)))
-      (dolist (open '(
-                      ;; All these pairs dramatically slow down typing in LaTeX
-                      ;; buffers, so remove them. Let snippets do their job.
-                      "\\left(" "\\left[" "\\left\\{" "\\left|"
-                      "\\bigl("   "\\biggl("   "\\Bigl("   "\\Biggl("
-                      "\\bigl["   "\\biggl["   "\\Bigl["   "\\Biggl["
-                      "\\bigl\\{" "\\biggl\\{" "\\Bigl\\{" "\\Biggl\\{"
-                      "\\lfloor" "\\lceil" "\\langle"
-                      "\\lVert" "\\lvert"
-                      ;; Disable pairs that interfere with AucTeX,
-                      ;; see https://github.com/Fuco1/smartparens/pull/1151.
-                      "`" "``" "\""))
-        ;; Some of the above pairs are in smartparens' global list, which
-        ;; applies to all modes, so we need a local ':actions nil' override
-        ;; (instead of ':actions :rem', which removes from the local list).
-        (sp-local-pair modes open nil :actions nil))))
   ;; Define a function to compile the project.
   (defun +latex/compile ()
     (interactive)

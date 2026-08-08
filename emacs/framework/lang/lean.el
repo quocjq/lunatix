@@ -14,13 +14,12 @@
   (with-eval-after-load 'markdown-mode
     (add-to-list 'markdown-code-lang-modes '("lean" . nael-mode)))
   :config
-  (sp-with-modes 'nael-mode
-    (sp-local-pair "/-" "-/")
-    (sp-local-pair "`" "`")
-    (sp-local-pair "{" "}")
-    (sp-local-pair "«" "»")
-    (sp-local-pair "⟨" "⟩")
-    (sp-local-pair "⟪" "⟫"))
+  (lnav-local-pair '(nael-mode) "/-" "-/")
+  (lnav-local-pair '(nael-mode) "`" "`")
+  (lnav-local-pair '(nael-mode) "{" "}")
+  (lnav-local-pair '(nael-mode) "«" "»")
+  (lnav-local-pair '(nael-mode) "⟨" "⟩")
+  (lnav-local-pair '(nael-mode) "⟪" "⟫")
   (general-def :keymaps 'nael-mode-map :prefix luna-localleader-key
     "a" #'nael-abbrev-help
     "b" #'project-build

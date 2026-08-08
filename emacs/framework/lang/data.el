@@ -16,9 +16,7 @@
   :config
   (setq nxml-slash-auto-complete-flag t
         nxml-auto-insert-xml-declaration-flag t)
-  ;; https://github.com/Fuco1/smartparens/issues/397#issuecomment-501059014
-  (after! smartparens
-    (sp-local-pair 'nxml-mode "<" ">" :post-handlers '(("[d1]" "/")))))
+  (lnav-local-pair '(nxml-mode) "<" ">"))
 
 (leaf csv-mode
   :ensure t

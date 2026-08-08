@@ -61,6 +61,10 @@
     };
     hyprland.url = "github:hyprwm/Hyprland";
     import-tree.url = "github:vic/import-tree";
+    lnav = {
+      url = "github:quocjq/lnav";
+      flake = false;
+    };
     lotus = {
       url = "github:lotusinputmethod/fcitx5-lotus";
       inputs.nixpkgs.follows = "nixpkgs";

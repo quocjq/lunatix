@@ -751,9 +751,6 @@ file targets relative to `org-directory', unless they are absolute paths."
   ;; are left to the window manager); dropped.
   nil)
 
-(defun +org-init-smartparens-h ()
-  ;; Disable the slow defaults
-  (provide 'smartparens-org))
 
 ;;; -- org packages -----------------------------------------------------------
 
@@ -960,7 +957,6 @@ file targets relative to `org-directory', unless they are absolute paths."
   (add-hook 'org-load-hook #'+org-init-hacks-h)
   (add-hook 'org-load-hook #'+org-init-keybinds-h)
   (add-hook 'org-load-hook #'+org-init-popup-rules-h)
-  (add-hook 'org-load-hook #'+org-init-smartparens-h)
 
   ;; HACK: Since 9.8, org-agenda fails to properly initialize on first
   ;;   invocation for some reason. Until this is sorted out, auto-reload it.

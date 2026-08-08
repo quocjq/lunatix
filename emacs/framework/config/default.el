@@ -16,14 +16,6 @@
             read-expression-map))
   "A list of all the keymaps used for the minibuffer.")
 
-(leaf smartparens
-  :ensure t
-  :demand t
-  :config
-  (require 'smartparens-config)
-  (smartparens-global-mode 1)
-  (show-smartparens-global-mode 1))
-
 (leaf avy
   :ensure t
   :defer t
@@ -64,35 +56,20 @@
   "Delete back to the previous column of whitespace, or as much whitespace as
 possible, or just one char if that's not possible."
   (interactive)
-  (let* ((context
-          (if (bound-and-true-p smartparens-mode)
-              (ignore-errors (sp-get-thing))))
-         (op (plist-get context :op))
-         (cl (plist-get context :cl))
-         open-len close-len current-column)
-    (cond ;; When in strings (sp acts weird with quotes; this is the fix)
-          ;; Also, skip closing delimiters
-          ((and op cl
-                (string= op cl)
-                (and (string= (char-to-string (or (char-before) 0)) op)
-                     (setq open-len (length op)))
-                (and (string= (char-to-string (or (char-after) 0)) cl)
-                     (setq close-len (length cl))))
-           (delete-char (- open-len))
-           (delete-char close-len))
+  (let ((current-column nil))
+    (cond
+     ;; Delete up to the nearest tab column IF only whitespace between
+     ;; point and bol.
+     ((and (not indent-tabs-mode)
+           (> tab-width 1)
+           (not (bolp))
+           (not (doom-point-in-string-p))
+           (>= (abs (save-excursion (skip-chars-backward " \t")))
+               (setq current-column (current-column))))
+      (delete-char (- (1+ (% (1- current-column) tab-width)))))
 
-          ;; Delete up to the nearest tab column IF only whitespace between
-          ;; point and bol.
-          ((and (not indent-tabs-mode)
-                (> tab-width 1)
-                (not (bolp))
-                (not (doom-point-in-string-p))
-                (>= (abs (save-excursion (skip-chars-backward " \t")))
-                    (setq current-column (current-column))))
-           (delete-char (- (1+ (% (1- current-column) tab-width)))))
-
-          ;; Otherwise do a regular delete
-          ((delete-char -1)))))
+     ;; Otherwise do a regular delete
+     ((delete-char -1)))))
 
 (defun +default--delete-backward-char-a (n &optional killflag)
   "Same as `delete-backward-char', but performs these additional checks:
@@ -125,32 +102,13 @@ possible, or just one char if that's not possible."
              (insert-char ?\s (- ocol (current-column)) nil))))
         ;;
         ((= n 1)
-         (cond ((or (modulep! -smartparens)
-                    (not (bound-and-true-p smartparens-mode))
-                    (and (memq (char-before) (list ?\  ?\t))
-                         (save-excursion
-                           (and (/= (skip-chars-backward " \t" (line-beginning-position)) 0)
-                                (bolp)))))
+         (cond ((and (memq (char-before) (list ?\  ?\t))
+                     (save-excursion
+                       (and (/= (skip-chars-backward " \t" (line-beginning-position)) 0)
+                            (bolp))))
                 (doom/backward-delete-whitespace-to-column))
-               ((let* ((pair (ignore-errors (sp-get-thing)))
-                       (op   (plist-get pair :op))
-                       (cl   (plist-get pair :cl))
-                       (beg  (plist-get pair :beg))
-                       (end  (plist-get pair :end)))
-                  (cond ((and end beg (= end (+ beg (length op) (length cl))))
-                         (delete-char (- (length op))))
-                        ((doom-surrounded-p pair 'inline 'balanced)
-                         (delete-char -1 killflag)
-                         (delete-char 1)
-                         (when (= (point) (+ (length cl) beg))
-                           (sp-backward-delete-char 1)
-                           (sp-insert-pair op)))
-                        ((and (bolp) (doom-surrounded-p pair nil 'balanced))
-                         (delete-region beg end)
-                         (sp-insert-pair op)
-                         t)
-                        ((run-hook-with-args-until-success 'doom-delete-backward-functions))
-                        ((doom/backward-delete-whitespace-to-column)))))))
+               ((run-hook-with-args-until-success 'doom-delete-backward-functions))
+               ((doom/backward-delete-whitespace-to-column))))
         ;; Otherwise, do simple deletion.
         ((delete-char (- n) killflag))))
 
