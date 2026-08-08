@@ -4,21 +4,14 @@
 ;;; Code:
 
 (leaf password-store
-  :ensure t
-  :bind ("C-c p" . password-store-copy))
+  :ensure t)
 
 (leaf pass
   :ensure t
   :defer t
   :config
   (when (fboundp 'set-evil-initial-state!)
-    (set-evil-initial-state! 'pass-mode 'normal))
-  (evil-define-key 'normal pass-mode-map
-    "j"   #'pass-next-entry
-    "k"   #'pass-prev-entry
-    "d"   #'pass-kill
-    (kbd "C-j") #'pass-next-directory
-    (kbd "C-k") #'pass-prev-directory))
+    (set-evil-initial-state! 'pass-mode 'normal)))
 
 (leaf password-store-otp
   :ensure t

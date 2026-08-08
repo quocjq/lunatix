@@ -25,12 +25,7 @@
     (when (modulep! +lsp)
       (when (executable-find "php-language-server.php")
         (setq lsp-clients-php-server-command "php-language-server.php"))
-      (add-hook mode-hook #'lsp))
-    (general-def :keymaps mode-map
-      :prefix (concat luna-localleader-key " t")
-      "r" #'phpunit-current-project
-      "a" #'phpunit-current-class
-      "s" #'phpunit-current-test)))
+      (add-hook mode-hook #'lsp))))
 
 (leaf php-mode
   :ensure t
@@ -44,14 +39,7 @@
 
 (leaf php-refactor-mode
   :ensure t
-  :hook (php-mode . php-refactor-mode)
-  :config
-  (general-def :keymaps 'php-refactor-mode-map
-    :prefix (concat luna-localleader-key " r")
-    "cv" #'php-refactor--convert-local-to-instance-variable
-    "u"  #'php-refactor--optimize-use
-    "xm" #'php-refactor--extract-method
-    "rv" #'php-refactor--rename-local-variable))
+  :hook (php-mode . php-refactor-mode))
 
 ;; hack-mode: gated on `+hack` (nil in compat); dropped.
 
@@ -59,24 +47,8 @@
   :ensure t
   :init
   (defvar +php-common-mode-map (make-sparse-keymap))
-  (map! :map +php-common-mode-map
-        "c" #'composer
-        "i" #'composer-install
-        "r" #'composer-require
-        "u" #'composer-update
-        "d" #'composer-dump-autoload
-        "s" #'composer-run-script
-        "v" #'composer-run-vendor-bin-command
-        "o" #'composer-find-json-file
-        "l" #'composer-view-lock-file)
   :config
-  (setq composer-directory-to-managed-file (expand-file-name "composer/" lunaris-cache-dir))
-  (with-eval-after-load 'php-mode
-    (general-def :keymaps 'php-mode-map :prefix luna-localleader-key
-      "c" +php-common-mode-map))
-  (with-eval-after-load 'php-ts-mode
-    (general-def :keymaps 'php-ts-mode-map :prefix luna-localleader-key
-      "c" +php-common-mode-map)))
+  (setq composer-directory-to-managed-file (expand-file-name "composer/" lunaris-cache-dir)))
 
 (leaf phpunit
   :ensure t

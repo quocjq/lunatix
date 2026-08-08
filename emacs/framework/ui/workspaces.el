@@ -819,11 +819,6 @@ the user to open a file in the new project."
   (add-hook 'persp-add-buffer-on-after-change-major-mode-filter-functions
             #'+workspaces-unreal-buffer-p)
 
-  ;; Delete the current workspace if closing the last open window
-  (map! :map persp-mode-map
-        [remap delete-window] #'+workspace/close-window-or-workspace
-        [remap evil-window-delete] #'+workspace/close-window-or-workspace)
-
   ;; Per-frame workspaces
   (setq persp-init-frame-behaviour t
         persp-init-new-frame-behaviour-override nil

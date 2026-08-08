@@ -82,36 +82,7 @@
                             (if (< (length str) limit) "" truncated))))
         ret)))
   (advice-add #'elisp-get-var-docstring :around #'+emacs-lisp-append-value-to-eldoc-a)
-
-  ;; SPC m localleader in elisp buffers
-  (general-define-key
-   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
-   :states '(normal visual motion)
-   :prefix luna-localleader-key
-   "b" '(#'+emacs-lisp/change-working-buffer :wk "Set working buffer")
-   "m" '(macrostep-expand :wk "Expand macro"))
-  (general-define-key
-   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " d")
-   "f" '(#'+emacs-lisp/edebug-instrument-defun-on :wk "debug defun on")
-   "F" '(#'+emacs-lisp/edebug-instrument-defun-off :wk "debug defun off"))
-  (general-define-key
-   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " e")
-   "b" '(eval-buffer :wk "eval buffer")
-   "d" '(eval-defun :wk "eval defun")
-   "e" '(eval-last-sexp :wk "eval last sexp")
-   "r" '(eval-region :wk "eval region")
-   "l" '(load-library :wk "load library"))
-  (general-define-key
-   :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " g")
-   "f" '(find-function :wk "find function")
-   "v" '(find-variable :wk "find variable")
-   "l" '(find-library :wk "find library")))
+)
 
 (leaf highlight-quoted
   :ensure t
@@ -189,13 +160,7 @@
   :config
   (when (featurep 'evil)
     (add-hook 'buttercup-minor-mode-hook #'evil-normalize-keymaps))
-  (general-define-key
-   :keymaps 'buttercup-minor-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " t")
-   "t" '(#'+emacs-lisp/buttercup-run-file :wk "run file")
-   "a" '(#'+emacs-lisp/buttercup-run-project :wk "run project")
-   "s" '(buttercup-run-at-point :wk "run at point")))
+)
 
 (leaf helpful
   :ensure t
@@ -203,10 +168,6 @@
   :hook (helpful-mode . visual-line-mode)
   :init
   (setq apropos-do-all t)
-  (global-set-key [remap describe-function] #'helpful-callable)
-  (global-set-key [remap describe-command]  #'helpful-command)
-  (global-set-key [remap describe-variable] #'helpful-variable)
-  (global-set-key [remap describe-key]      #'helpful-key)
   (defun luna-use-helpful-a (fn &rest args)
     "Force FN to use helpful instead of the old describe-* commands."
     (cl-letf (((symbol-function 'describe-function) #'helpful-function)
@@ -236,21 +197,7 @@
   (advice-add #'org-link--open-help :around #'luna-use-helpful-a)
   ;; Keep a record of buffers so our next/previous commands work.
   (advice-add #'helpful--buffer :filter-return #'+emacs-lisp-record-new-buffers-a)
-  (general-define-key
-   :keymaps 'helpful-mode-map
-   :states '(normal motion)
-   "o" '(link-hint-open-link :wk "open link")
-   "gr" '(helpful-update :wk "refresh")
-   "C-o" '(#'+emacs-lisp/helpful-previous :wk "previous")
-   "l" '(#'+emacs-lisp/helpful-previous :wk "previous")
-   "r" '(#'+emacs-lisp/helpful-next :wk "next")
-   [C-i] '(#'+emacs-lisp/helpful-next :wk "next")
-   "<" '(#'+emacs-lisp/helpful-previous :wk "previous")
-   ">" '(#'+emacs-lisp/helpful-next :wk "next"))
-  (general-define-key
-   :keymaps 'helpful-mode-map
-   "C-c C-b" #'+emacs-lisp/helpful-previous
-   "C-c C-f" #'+emacs-lisp/helpful-next))
+)
 
 (leaf let-completion
   :ensure t

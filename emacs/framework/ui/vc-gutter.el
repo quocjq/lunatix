@@ -102,19 +102,6 @@
     (let ((tramp-allow-unsafe-temporary-files t))
       (apply fn args)))
 
-  ;; UX: Update diffs when it makes sense too, without being too slow
-  (when (modulep! :editor evil)
-    (map! :map diff-hl-show-hunk-map
-          :n "p" #'diff-hl-show-hunk-previous
-          :n "n" #'diff-hl-show-hunk-next
-          :n "c" #'diff-hl-show-hunk-copy-original-text
-          :n "r" #'diff-hl-show-hunk-revert-hunk
-          :n "[" #'diff-hl-show-hunk-previous
-          :n "]" #'diff-hl-show-hunk-next
-          :n "{" #'diff-hl-show-hunk-previous
-          :n "}" #'diff-hl-show-hunk-next
-          :n "S" #'diff-hl-show-hunk-stage-hunk))
-
   ;; UX: Refresh gutter in the selected buffer on ESC, switching windows, or
   ;;   refocusing the frame. APROX: doom's `luna-escape-hook'/`luna-switch-window-hook'
   ;;   are no-op in the compat layer; hook the real `window-buffer-change-functions'.

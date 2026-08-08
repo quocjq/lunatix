@@ -38,8 +38,6 @@
   ;; output).  The advice above degrades gracefully if it's missing.
   (pdf-tools-install-noverify)
 
-  (map! :map pdf-view-mode-map :gn "q" #'kill-current-buffer)
-
   (setq-default pdf-view-display-size 'fit-page)
   ;; Enable hiDPI support, but at the cost of memory! See politza/pdf-tools#51.
   (setq pdf-view-use-scaling t

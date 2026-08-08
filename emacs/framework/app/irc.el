@@ -224,23 +224,9 @@ Courtesy of esh-mode.el"
     :after #'circe--irc-conn-disconnected
     (run-hooks '+irc-disconnect-hook))
   (add-hook 'circe-message-option-functions #'+irc-circe-message-option-bot-h)
-  ;; Let `+irc/quit' and `circe' handle buffer cleanup
-  (define-key circe-mode-map [remap kill-buffer] #'bury-buffer)
-  ;; Fail gracefully if not in a circe buffer
-  (global-set-key [remap tracking-next-buffer] #'+irc/tracking-next-buffer)
   (when (modulep! :completion vertico)
     (with-eval-after-load 'consult
-      (add-to-list 'consult-buffer-sources '+irc--consult-circe-source 'append)))
-  (general-def :keymaps 'circe-mode-map :prefix luna-localleader-key
-    "a" #'tracking-next-buffer
-    "j" #'circe-command-JOIN
-    "m" #'+irc/send-message
-    "p" #'circe-command-PART
-    "Q" #'+irc/quit
-    "R" #'circe-reconnect
-    "c" #'+irc/jump-to-channel)
-  (general-def :keymaps 'circe-channel-mode-map :prefix luna-localleader-key
-    "n" #'circe-command-NAMES))
+      (add-to-list 'consult-buffer-sources '+irc--consult-circe-source 'append))))
 
 ;; circe-color-nicks / circe-new-day-notifier / lui / lui-logging all ship in
 ;; the circe distribution, so they have no separate nixpkgs emacs package.
@@ -276,7 +262,6 @@ Courtesy of esh-mode.el"
   :ensure nil
   :commands lui-mode
   :config
-  (define-key lui-mode-map "\C-u" #'lui-kill-to-beginning-of-line)
   (setq lui-fill-type nil
         lui-flyspell-p (modulep! :checkers spell +flyspell))
   (setq lui-time-stamp-format "%H:%M"

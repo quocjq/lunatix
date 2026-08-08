@@ -19,11 +19,7 @@
   (lnav-local-pair '(nael-mode) "{" "}")
   (lnav-local-pair '(nael-mode) "«" "»")
   (lnav-local-pair '(nael-mode) "⟨" "⟩")
-  (lnav-local-pair '(nael-mode) "⟪" "⟫")
-  (general-def :keymaps 'nael-mode-map :prefix luna-localleader-key
-    "a" #'nael-abbrev-help
-    "b" #'project-build
-    "e" #'eldoc-doc-buffer))
+  (lnav-local-pair '(nael-mode) "⟪" "⟫"))
 ;; nael lsp wiring (`nael-prepare-lsp'/`lsp!') is gated on `+lsp` (nil in
 ;; compat); dropped.
 

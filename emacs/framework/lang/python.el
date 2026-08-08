@@ -54,17 +54,7 @@
   :ensure t
   :commands python-pytest-dispatch
   :config
-  (general-define-key
-   :keymaps 'python-base-mode-map
-   :states '(normal visual motion)
-   :prefix luna-localleader-key
-   "ta" '(python-pytest :wk "pytest")
-   "tf" '(python-pytest-file-dwim :wk "pytest file dwim")
-   "tF" '(python-pytest-file :wk "pytest file")
-   "tt" '(python-pytest-run-def-or-class-at-point-dwim :wk "run def/class dwim")
-   "tT" '(python-pytest-run-def-or-class-at-point :wk "run def/class")
-   "tr" '(python-pytest-repeat :wk "pytest repeat")
-   "tp" '(python-pytest-dispatch :wk "pytest dispatch")))
+)
 
 (leaf pip-requirements
   :ensure t
@@ -99,19 +89,7 @@
   :hook (python-mode . pipenv-mode)
   :init (setq pipenv-with-projectile nil)
   :config
-  (general-define-key
-   :keymaps 'python-base-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " e")
-   "a" '(pipenv-activate :wk "activate")
-   "d" '(pipenv-deactivate :wk "deactivate")
-   "i" '(pipenv-install :wk "install")
-   "l" '(pipenv-lock :wk "lock")
-   "o" '(pipenv-open :wk "open module")
-   "r" '(pipenv-run :wk "run")
-   "s" '(pipenv-shell :wk "shell")
-   "u" '(pipenv-uninstall :wk "uninstall")))
-
+)
 ;;; -- python helpers (autoload/python.el) -----------------------------------
 
 (defun +python-executable-find (exe)
@@ -232,24 +210,7 @@ falling back on searching your PATH."
   ;;   via package.el. Disable this behavior to avoid errors.
   (defun +rust--dont-install-packages-a (&rest _)
     (message "No LSP server running"))
-  (advice-add #'rustic-install-lsp-client-p :override #'+rust--dont-install-packages-a)
+  (advice-add #'rustic-install-lsp-client-p :override #'+rust--dont-install-packages-a))
 
-  (general-define-key
-   :keymaps 'rustic-mode-map
-   :states '(normal visual motion)
-   :prefix luna-localleader-key
-   "ba" '(#'+rust/cargo-audit :wk "cargo audit")
-   "bb" '(rustic-cargo-build :wk "cargo build")
-   "bB" '(rustic-cargo-bench :wk "cargo bench")
-   "bc" '(rustic-cargo-check :wk "cargo check")
-   "bC" '(rustic-cargo-clippy :wk "cargo clippy")
-   "bd" '(rustic-cargo-build-doc :wk "cargo doc")
-   "bD" '(rustic-cargo-doc :wk "cargo doc --open")
-   "bf" '(rustic-cargo-fmt :wk "cargo fmt")
-   "bn" '(rustic-cargo-new :wk "cargo new")
-   "bo" '(rustic-cargo-outdated :wk "cargo outdated")
-   "br" '(rustic-cargo-run :wk "cargo run")
-   "ta" '(rustic-cargo-test :wk "cargo test all")
-   "tt" '(rustic-cargo-current-test :wk "cargo test current")))
 
 ;;; lang/python.el ends here

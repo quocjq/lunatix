@@ -118,10 +118,8 @@
 (leaf consult-lsp
   :ensure t
   :defer t
-  :after lsp-mode
-  :init
-  (after! lsp-mode
-    (map! :map lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols)))
+  :after lsp-mode)
+
 
 ;;
 ;;; tools/magit (+forge, evil-collection integration)

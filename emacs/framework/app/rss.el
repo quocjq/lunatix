@@ -167,18 +167,7 @@ easier to scroll through."
               (lambda ()
                 (setq-local shr-put-image-function #'+rss-put-sliced-image-fn)
                 (setq-local shr-external-rendering-functions
-                            '((img . +rss-render-image-tag-without-underline-fn))))))
-  (with-eval-after-load 'elfeed-show
-    (define-key elfeed-show-mode-map [remap next-buffer] #'+rss/next)
-    (define-key elfeed-show-mode-map [remap previous-buffer] #'+rss/previous))
-  (when (modulep! :editor evil +everywhere)
-    (evil-define-key 'normal elfeed-search-mode-map
-      "q" #'kill-current-buffer
-      "r" #'revert-buffer
-      (kbd "M-RET") #'elfeed-search-browse-url)
-    (map! :map elfeed-show-mode-map
-          :n "gc" nil
-          :n "gc" #'+rss/copy-link)))
+                            '((img . +rss-render-image-tag-without-underline-fn)))))))
 ;; `+rss--fix-elfeed-search-selected-off-by-one-a' (an evil visual-line fix)
 ;; needs doom's `letf!'; dropped.
 

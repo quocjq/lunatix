@@ -9,7 +9,6 @@
   ;; lnav's C-c prefix collides with C-c d (deft) / C-c p (projectile);
   ;; its commands are bound under SPC o l in keybindings-config. Keep the
   ;; TAB/backtab chunk jumps.
-  (define-key lnav-mode-map (kbd "C-c") nil)
   ;; pair highlight + auto-pair in every buffer; lnav-typing defers to
   ;; parinfer-rust in the lisp modes it owns (see lnav-typing--skip-p), so
   ;; enabling it globally matches smartparens' old auto-pair coverage while

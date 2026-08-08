@@ -33,12 +33,7 @@
   :hook (ruby-mode . yard-mode))
 
 (leaf ruby-json-to-hash
-  :ensure t
-  :init
-  (with-eval-after-load 'ruby-mode
-    (general-def :keymaps 'ruby-mode-map :prefix luna-localleader-key
-      "J" #'ruby-json-to-hash-parse-json
-      "j" #'ruby-json-to-hash-toggle-let)))
+  :ensure t)
 
 ;;; Package & Ruby version management
 (leaf inf-ruby
@@ -50,14 +45,7 @@
   :init
   (with-eval-after-load 'rake
     (setq rake-cache-file (luna-profile-cache-dir t "rake.cache")
-          rake-completion-system 'default))
-  (with-eval-after-load 'ruby-mode
-    (general-def :keymaps 'ruby-mode-map
-      :prefix (concat luna-localleader-key " k")
-      "k" #'rake
-      "r" #'rake-rerun
-      "R" #'rake-regenerate-cache
-      "f" #'rake-find-task)))
+          rake-completion-system 'default)))
 
 ;; bundler: no nixpkgs emacs package; dropped.
 ;; chruby/rbenv/rvm: gated on +chruby/+rbenv (nil in compat); dropped.
@@ -72,42 +60,13 @@
     (add-hook 'rspec-mode-hook #'evil-normalize-keymaps))
   :config
   (setq rspec-use-rvm (executable-find "rvm"))
-  (general-def :keymaps '(rspec-verifiable-mode-map rspec-dired-mode-map rspec-mode-map)
-    :prefix (concat luna-localleader-key " t")
-    "a" #'rspec-verify-all
-    "r" #'rspec-rerun)
-  (general-def :keymaps '(rspec-verifiable-mode-map rspec-mode-map)
-    :prefix (concat luna-localleader-key " t")
-    "v" #'rspec-verify
-    "c" #'rspec-verify-continue
-    "l" #'rspec-run-last-failed
-    "T" #'rspec-toggle-spec-and-target
-    "t" #'rspec-toggle-spec-and-target-find-example)
-  (general-def :keymaps 'rspec-verifiable-mode-map
-    :prefix (concat luna-localleader-key " t")
-    "f" #'rspec-verify-method
-    "m" #'rspec-verify-matching)
-  (general-def :keymaps 'rspec-mode-map
-    :prefix (concat luna-localleader-key " t")
-    "s" #'rspec-verify-single
-    "e" #'rspec-toggle-example-pendingness)
-  (general-def :keymaps 'rspec-dired-mode-map
-    :prefix (concat luna-localleader-key " t")
-    "v" #'rspec-dired-verify
-    "s" #'rspec-dired-verify-single))
-
+)
 (leaf minitest
   :ensure t
   :config
   (when (modulep! :editor evil)
     (add-hook 'minitest-mode-hook #'evil-normalize-keymaps))
-  (general-def :keymaps 'minitest-mode-map
-    :prefix (concat luna-localleader-key " t")
-    "r" #'minitest-rerun
-    "a" #'minitest-verify-all
-    "s" #'minitest-verify-single
-    "v" #'minitest-verify))
-
+)
 ;;; Rails integration
 ;; projectile-rails / rails-routes / rails-i18n / inflections: skipped per task
 ;; (+rails off).

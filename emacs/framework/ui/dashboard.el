@@ -164,37 +164,6 @@ dashboard reloading is inhibited.")
   ;; prompts about unsafe/risky variables.
   (setq-local enable-local-variables nil))
 
-(map! :map +dashboard-mode-map
-      [left-margin mouse-1]   #'ignore
-      [remap forward-button]  #'+dashboard/forward-button
-      [remap backward-button] #'+dashboard/backward-button
-      [remap push-button]     #'+dashboard/push-button
-      "n"       #'forward-button
-      "p"       #'backward-button
-      "C-n"     #'forward-button
-      "C-p"     #'backward-button
-      [down]    #'forward-button
-      [up]      #'backward-button
-      [tab]     #'forward-button
-      [backtab] #'backward-button
-      ;; Evil remaps
-      [remap evil-next-line]     #'forward-button
-      [remap evil-previous-line] #'backward-button
-      [remap evil-next-visual-line]     #'forward-button
-      [remap evil-previous-visual-line] #'backward-button
-      [remap evil-paste-pop-next] #'forward-button
-      [remap evil-paste-pop]      #'backward-button
-      [remap evil-delete]         #'ignore
-      [remap evil-delete-line]    #'ignore
-      [remap evil-insert]         #'ignore
-      [remap evil-append]         #'ignore
-      [remap evil-replace]        #'ignore
-      [remap evil-enter-replace-state] #'ignore
-      [remap evil-change]         #'ignore
-      [remap evil-change-line]    #'ignore
-      [remap evil-visual-char]    #'ignore
-      [remap evil-visual-line]    #'ignore)
-
 ;;; Bootstrap
 ;; APROX: compat's `luna-fallback-buffer' returns *scratch*; the dashboard
 ;; keeps its own dedicated buffer instead.

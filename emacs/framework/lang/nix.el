@@ -137,18 +137,7 @@
 
 (defun +nix-common-config (mode)
   (when (modulep! +lsp)
-    (add-hook (intern (format "%s-hook" mode)) #'lsp-deferred))
-  (let ((map (intern (format "%s-map" mode))))
-    (general-define-key
-     :keymaps map :states '(normal visual motion)
-     :prefix luna-localleader-key
-     "f" '(nix-update-fetch :wk "update fetch")
-     "p" '(nix-format-buffer :wk "format buffer")
-     "r" '(nix-repl-show :wk "repl")
-     "s" '(nix-shell :wk "shell")
-     "b" '(nix-build :wk "build")
-     "u" '(nix-unpack :wk "unpack")
-     "o" '(#'+nix/lookup-option :wk "lookup option"))))
+    (add-hook (intern (format "%s-hook" mode)) #'lsp-deferred)))
 
 (leaf nix-mode
   :ensure t

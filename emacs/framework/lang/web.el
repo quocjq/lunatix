@@ -27,13 +27,6 @@ If set to `nil', disable all the above behaviors.")
 (add-hook 'sass-mode-hook #'rainbow-mode)
 (add-hook 'stylus-mode-hook #'rainbow-mode)
 
-(with-eval-after-load 'css-mode
-  (general-define-key
-   :keymaps '(css-mode-map scss-mode-map less-css-mode-map)
-   :states '(normal visual motion)
-   :prefix luna-localleader-key
-   "rb" '(#'+css/toggle-inline-or-block :wk "toggle inline/block")))
-
 (when (modulep! +lsp)
   (add-hook 'css-mode-hook #'lsp-deferred)
   (add-hook 'css-ts-mode-hook #'lsp-deferred)

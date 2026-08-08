@@ -134,9 +134,6 @@ possible, or just one char if that's not possible."
     t))
 
 ;; Consistently use q to quit windows
-(after! tabulated-list
-  (define-key tabulated-list-mode-map "q" #'quit-window))
-
 ;;; gnupg (doom config/default; inert while the +gnupg flag resolves nil)
 (when (modulep! +gnupg)
   ;; By default, Emacs stores `authinfo' in $HOME and in plain-text. Let's not
@@ -187,11 +184,7 @@ possible, or just one char if that's not possible."
   (defun +default-disable-delete-selection-mode-h ()
     (delete-selection-mode -1))
   (add-hook 'evil-insert-state-entry-hook #'delete-selection-mode)
-  (add-hook 'evil-insert-state-exit-hook #'+default-disable-delete-selection-mode-h)
-
-  ;; Make SPC u SPC u [...] possible (doomemacs/core#747)
-  (general-def :keymaps 'universal-argument-map :prefix luna-leader-key
-    "u" #'universal-argument-more))
+  (add-hook 'evil-insert-state-exit-hook #'+default-disable-delete-selection-mode-h))
 
 ;; The +bindings branches and the non-evil bootstrap branch (drag-stuff,
 ;; expand-region) are keybinding-specific or dead (evil is enabled); skipped.

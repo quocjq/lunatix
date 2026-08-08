@@ -117,13 +117,8 @@
   (setq forge-add-default-bindings (not (modulep! :editor evil +everywhere)))
   :init
   (after! ghub-graphql
-    (setq ghub-graphql-message-progress t))
-  :config
-  (evil-define-key 'normal forge-topic-list-mode-map "q" #'kill-current-buffer)
-  (when (not forge-add-default-bindings)
-    (define-key magit-mode-map [remap magit-browse-thing] #'forge-browse)
-    (define-key magit-remote-section-map [remap magit-browse-thing] #'forge-browse-remote)
-     (define-key magit-branch-section-map [remap magit-browse-thing] #'forge-browse-branch)))
+    (setq ghub-graphql-message-progress t)))
+
 
 ;; code-review dropped: its use-package compile-time load breaks on the
 ;; emacsql↔forge class mismatch in nixpkgs; +magit/start-code-review kept

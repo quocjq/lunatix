@@ -71,18 +71,8 @@ available. Returns its exit code."
   :mode "\\.js\\(?:on\\|[hl]int\\(?:rc\\)?\\)\\'"
   :config
   (when (modulep! +lsp)
-    (add-hook 'json-mode-hook #'lsp-deferred))
-  (general-define-key
-   :keymaps 'json-mode-map
-   :states '(normal visual motion)
-   :prefix luna-localleader-key
-   "p" '(json-mode-show-path :wk "show path")
-   "t" '(json-toggle-boolean :wk "toggle boolean")
-   "d" '(json-mode-kill-path :wk "kill path")
-   "x" '(json-nullify-sexp :wk "nullify sexp")
-   "+" '(json-increment-number-at-point :wk "increment number")
-   "-" '(json-decrement-number-at-point :wk "decrement number")
-   "f" '(json-mode-beautify :wk "beautify")))
+    (add-hook 'json-mode-hook #'lsp-deferred)))
+
 
 ;;; ===================================================================
 ;;; :lang yaml

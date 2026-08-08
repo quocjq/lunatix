@@ -35,4 +35,10 @@
   (undo-fu-session-global-mode 1)
   (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG$" "/git-rebase-todo$")))
 
+;; vundo: visual undo tree on top of the standard undo list (works with
+;; undo-fu, which keeps history in `buffer-undo-list').  Open with `SPC u'.
+(leaf vundo
+  :ensure t
+  :commands vundo)
+
 ;;; editor/file-templates.el ends here

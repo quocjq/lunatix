@@ -80,52 +80,6 @@ output buffer."
     (dolist (m (cons mode extra-modes))
       (add-hook (intern (format "%s-hook" m)) #'lsp-deferred)))
 
-  (let ((map (intern (format "%s-map" mode))))
-    (general-define-key
-     :keymaps map :states '(normal visual motion)
-     :prefix luna-localleader-key
-     "'" '(markdown-edit-code-block :wk "edit code block")
-     "o" '(markdown-open :wk "open")
-     "p" '(markdown-preview :wk "preview")
-     "e" '(markdown-export :wk "export")
-     "iT" '(markdown-toc-generate-toc :wk "table of contents")
-     "ii" '(markdown-insert-image :wk "image")
-     "il" '(markdown-insert-link :wk "link")
-     "i-" '(markdown-insert-hr :wk "hr")
-     "i1" '(markdown-insert-header-atx-1 :wk "heading 1")
-     "i2" '(markdown-insert-header-atx-2 :wk "heading 2")
-     "i3" '(markdown-insert-header-atx-3 :wk "heading 3")
-     "i4" '(markdown-insert-header-atx-4 :wk "heading 4")
-     "i5" '(markdown-insert-header-atx-5 :wk "heading 5")
-     "i6" '(markdown-insert-header-atx-6 :wk "heading 6")
-     "iC" '(markdown-insert-gfm-code-block :wk "code block")
-     "iP" '(markdown-pre-region :wk "pre region")
-     "iQ" '(markdown-blockquote-region :wk "blockquote region")
-     "i[" '(markdown-insert-gfm-checkbox :wk "checkbox")
-     "ib" '(markdown-insert-bold :wk "bold")
-     "ic" '(markdown-insert-code :wk "inline code")
-     "ie" '(markdown-insert-italic :wk "italic")
-     "if" '(markdown-insert-footnote :wk "footnote")
-     "ih" '(markdown-insert-header-dwim :wk "header dwim")
-     "ik" '(markdown-insert-kbd :wk "kbd")
-     "ip" '(markdown-insert-pre :wk "pre")
-     "iq" '(markdown-insert-blockquote :wk "blockquote")
-     "is" '(markdown-insert-strike-through :wk "strike through")
-     "it" '(markdown-insert-table :wk "table")
-     "iw" '(markdown-insert-wiki-link :wk "wiki link")
-     "te" '(markdown-toggle-math :wk "inline latex")
-     "tf" '(markdown-toggle-fontify-code-blocks-natively :wk "code highlights")
-     "ti" '(markdown-toggle-inline-images :wk "inline images")
-     "tl" '(markdown-toggle-url-hiding :wk "url hiding")
-     "tm" '(markdown-toggle-markup-hiding :wk "markup hiding")
-     "tw" '(markdown-toggle-wiki-links :wk "wiki links")
-     "tx" '(markdown-toggle-gfm-checkbox :wk "gfm checkbox")))
-  (when (modulep! +grip)
-    (let ((map (intern (format "%s-map" mode))))
-      (general-define-key
-       :keymaps map :states '(normal visual motion)
-       :prefix luna-localleader-key
-       "p" '(grip-mode :wk "grip preview")))))
 
 (leaf markdown-mode
   :ensure t
@@ -197,29 +151,6 @@ output buffer."
   :hook (markdown-mode . evil-markdown-mode)
   :config
   (add-hook 'evil-markdown-mode-hook #'evil-normalize-keymaps)
-  (general-define-key
-   :keymaps 'evil-markdown-mode-map
-   :states '(normal)
-   "TAB" #'markdown-cycle
-   [backtab] #'markdown-shifttab
-   "M-r" #'browse-url-of-file)
-  (unless evil-disable-insert-state-bindings
-    (general-define-key
-     :keymaps 'evil-markdown-mode-map
-     :states '(insert)
-     "M-*" #'markdown-insert-list-item
-     "M-b" #'markdown-insert-bold
-     "M-i" #'markdown-insert-italic
-     "M-`" #'+markdown/insert-del
-     "M--" #'markdown-insert-hr))
-  (general-define-key
-   :keymaps 'evil-markdown-mode-map
-   :states '(motion)
-   "]h"  #'markdown-next-visible-heading
-   "[h"  #'markdown-previous-visible-heading
-   "[p"  #'markdown-promote
-   "]p"  #'markdown-demote
-   "[l"  #'markdown-previous-link
-   "]l"  #'markdown-next-link))
+))
 
 ;;; lang/sh.el ends here

@@ -112,8 +112,6 @@
   ;; A shorter alias for markdown code blocks.
   (add-to-list 'org-src-lang-modes '("md" . markdown))
 
-  ;; I prefer C-c C-c over C-c ' (more consistent)
-  (define-key org-src-mode-map (kbd "C-c C-c") #'org-edit-src-exit)
 
   ;; Don't process babel results asynchronously when exporting org, as they
   ;; won't likely complete in time.
@@ -513,238 +511,12 @@ file targets relative to `org-directory', unless they are absolute paths."
         org-insert-heading-respect-content t)
 
   (add-hook 'org-tab-first-hook #'+org-yas-expand-maybe-h)
-  (add-hook 'org-tab-first-hook #'+org-indent-maybe-h)
+  (add-hook 'org-tab-first-hook #'+org-indent-maybe-h))
 
   ;; Doom's `doom-delete-backward-functions' hook has no vanilla equivalent;
   ;; the +org-delete-backward-char-and-realign-table-maybe-h helper is defined
   ;; below for reference.
 
-  (general-define-key
-   :keymaps 'org-mode-map
-   "C-c C-S-l"  #'+org/remove-link
-   "C-c <C-i>"  #'org-link-preview-refresh
-   ;; textmate-esque newline insertion
-   "S-RET"      #'+org/shift-return
-   "C-RET"      #'+org/insert-item-below
-   "C-S-RET"    #'+org/insert-item-above
-   "C-M-RET"    #'org-insert-subheading
-   [C-return]   #'+org/insert-item-below
-   [C-S-return] #'+org/insert-item-above
-   [C-M-return] #'org-insert-subheading
-   ;; Org-aware C-a/C-e (doom equivalents ported in keybindings-config.el)
-   [remap +doom/backward-to-bol-or-indent]          #'org-beginning-of-line
-   [remap +doom/forward-to-last-non-comment-or-eol] #'org-end-of-line)
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix luna-localleader-key
-   "#" '(org-update-statistics-cookies :wk "update statistics cookies")
-   "'" '(org-edit-special :wk "edit source")
-   "*" '(org-ctrl-c-star :wk "toggle section")
-   "-" '(org-ctrl-c-minus :wk "toggle item")
-   "," '(org-switchb :wk "switch buffer")
-   "." '(consult-org-heading :wk "jump to heading")
-   "/" '(consult-org-agenda :wk "jump to heading in agenda files")
-   "@" '(org-cite-insert :wk "insert citation")
-   "A" '(org-archive-subtree-default :wk "archive subtree")
-   "e" '(org-export-dispatch :wk "export")
-   "f" '(org-footnote-action :wk "footnote")
-   "h" '(org-toggle-heading :wk "toggle heading")
-   "i" '(org-toggle-item :wk "toggle item")
-   "I" '(org-id-get-create :wk "create id")
-   "k" '(org-babel-remove-result :wk "remove babel result")
-   "K" '(#'+org/remove-result-blocks :wk "remove result blocks")
-   "n" '(org-store-link :wk "store link")
-   "o" '(org-set-property :wk "set property")
-   "q" '(org-set-tags-command :wk "set tags")
-   "t" '(org-todo :wk "todo")
-   "T" '(org-todo-list :wk "todo list")
-   "x" '(org-toggle-checkbox :wk "toggle checkbox"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " a")
-   "a" '(org-attach :wk "attach")
-   "d" '(org-attach-delete-one :wk "delete one")
-   "D" '(org-attach-delete-all :wk "delete all")
-   "f" '(#'+org/find-file-in-attachments :wk "find file in attachments")
-   "l" '(#'+org/attach-file-and-insert-link :wk "attach and insert link")
-   "n" '(org-attach-new :wk "new attachment")
-   "o" '(org-attach-open :wk "open")
-   "O" '(org-attach-open-in-emacs :wk "open in emacs")
-   "r" '(org-attach-reveal :wk "reveal")
-   "R" '(org-attach-reveal-in-emacs :wk "reveal in emacs")
-   "u" '(org-attach-url :wk "attach url")
-   "s" '(org-attach-set-directory :wk "set directory")
-   "S" '(org-attach-sync :wk "sync"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " b")
-   "-" '(org-table-insert-hline :wk "insert hline")
-   "a" '(org-table-align :wk "align table")
-   "b" '(org-table-blank-field :wk "blank field")
-   "c" '(org-table-create-or-convert-from-region :wk "create table")
-   "e" '(org-table-edit-field :wk "edit field")
-   "f" '(org-table-edit-formulas :wk "edit formulas")
-   "h" '(org-table-field-info :wk "field info")
-   "s" '(org-table-sort-lines :wk "sort lines")
-   "r" '(org-table-recalculate :wk "recalculate")
-   "R" '(org-table-recalculate-buffer-tables :wk "recalculate buffer")
-   "dc" '(org-table-delete-column :wk "delete column")
-   "dr" '(org-table-kill-row :wk "kill row")
-   "ic" '(org-table-insert-column :wk "insert column")
-   "ih" '(org-table-insert-hline :wk "insert hline")
-   "ir" '(org-table-insert-row :wk "insert row")
-   "iH" '(org-table-hline-and-move :wk "insert hline and move")
-   "tf" '(org-table-toggle-formula-debugger :wk "toggle formula debugger")
-   "to" '(org-table-toggle-coordinate-overlays :wk "toggle coordinate overlays"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " c")
-   "c" '(org-clock-cancel :wk "cancel clock")
-   "d" '(org-clock-mark-default-task :wk "mark default task")
-   "e" '(org-clock-modify-effort-estimate :wk "modify effort")
-   "E" '(org-set-effort :wk "set effort")
-   "g" '(org-clock-goto :wk "goto clock")
-   "G" '(cmd! (org-clock-goto 'select) :wk "goto clock (select)")
-   "l" '(#'+org/toggle-last-clock :wk "toggle last clock")
-   "i" '(org-clock-in :wk "clock in")
-   "I" '(org-clock-in-last :wk "clock in last")
-   "o" '(org-clock-out :wk "clock out")
-   "r" '(org-resolve-clocks :wk "resolve clocks")
-   "R" '(org-clock-report :wk "clock report")
-   "t" '(org-evaluate-time-range :wk "evaluate time range")
-   "=" '(org-clock-timestamps-up :wk "timestamps up")
-   "-" '(org-clock-timestamps-down :wk "timestamps down"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " d")
-   "d" '(org-deadline :wk "deadline")
-   "s" '(org-schedule :wk "schedule")
-   "t" '(org-time-stamp :wk "time stamp")
-   "T" '(org-time-stamp-inactive :wk "inactive time stamp"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " g")
-   "g" '(consult-org-heading :wk "jump to heading")
-   "G" '(consult-org-agenda :wk "jump in agenda files")
-   "c" '(org-clock-goto :wk "goto clock")
-   "C" '(cmd! (org-clock-goto 'select) :wk "goto clock (select)")
-   "i" '(org-id-goto :wk "goto id")
-   "r" '(org-refile-goto-last-stored :wk "goto last refile")
-   "v" '(#'+org/goto-visible :wk "goto visible heading")
-   "x" '(org-capture-goto-last-stored :wk "goto last capture"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " l")
-   "c" '(org-cliplink :wk "cliplink")
-   "d" '(#'+org/remove-link :wk "remove link")
-   "i" '(org-id-store-link :wk "store id link")
-   "l" '(org-insert-link :wk "insert link")
-   "L" '(org-insert-all-links :wk "insert all links")
-   "s" '(org-store-link :wk "store link")
-   "S" '(org-insert-last-stored-link :wk "insert last stored link")
-   "t" '(org-toggle-link-display :wk "toggle link display")
-   "y" '(#'+org/yank-link :wk "yank link"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " P")
-   "a" '(org-publish-all :wk "publish all")
-   "f" '(org-publish-current-file :wk "publish current file")
-   "p" '(org-publish :wk "publish")
-   "P" '(org-publish-current-project :wk "publish current project")
-   "s" '(org-publish-sitemap :wk "publish sitemap"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " r")
-   "." '(#'+org/refile-to-current-file :wk "refile to current file")
-   "c" '(#'+org/refile-to-running-clock :wk "refile to running clock")
-   "l" '(#'+org/refile-to-last-location :wk "refile to last location")
-   "f" '(#'+org/refile-to-file :wk "refile to file")
-   "o" '(#'+org/refile-to-other-window :wk "refile to other window")
-   "O" '(#'+org/refile-to-other-buffer :wk "refile to other buffer")
-   "v" '(#'+org/refile-to-visible :wk "refile to visible")
-   "r" '(org-refile :wk "refile")
-   "R" '(org-refile-reverse :wk "refile reverse"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " s")
-   "a" '(org-toggle-archive-tag :wk "toggle archive tag")
-   "b" '(org-tree-to-indirect-buffer :wk "tree to indirect buffer")
-   "c" '(org-clone-subtree-with-time-shift :wk "clone subtree")
-   "d" '(org-cut-subtree :wk "cut subtree")
-   "h" '(org-promote-subtree :wk "promote subtree")
-   "j" '(org-move-subtree-down :wk "move subtree down")
-   "k" '(org-move-subtree-up :wk "move subtree up")
-   "l" '(org-demote-subtree :wk "demote subtree")
-   "n" '(org-narrow-to-subtree :wk "narrow to subtree")
-   "r" '(org-refile :wk "refile")
-   "s" '(org-sparse-tree :wk "sparse tree")
-   "A" '(org-archive-subtree-default :wk "archive subtree")
-   "N" '(widen :wk "widen")
-   "S" '(org-sort :wk "sort"))
-
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " p")
-   "d" '(org-priority-down :wk "priority down")
-   "p" '(org-priority :wk "priority")
-   "u" '(org-priority-up :wk "priority up"))
-
-  (after! org-agenda
-    (general-define-key
-     :keymaps 'org-agenda-mode-map
-     :states '(motion normal)
-     "C-SPC" #'org-agenda-show-and-scroll-up)
-    (general-define-key
-     :keymaps 'org-agenda-mode-map
-     :states '(normal visual motion)
-     :prefix luna-localleader-key
-     "q" '(org-agenda-set-tags :wk "set tags")
-     "r" '(org-agenda-refile :wk "refile")
-     "t" '(org-agenda-todo :wk "todo"))
-    (general-define-key
-     :keymaps 'org-agenda-mode-map
-     :states '(normal visual motion)
-     :prefix (concat luna-localleader-key " d")
-     "d" '(org-agenda-deadline :wk "deadline")
-     "s" '(org-agenda-schedule :wk "schedule"))
-    (general-define-key
-     :keymaps 'org-agenda-mode-map
-     :states '(normal visual motion)
-     :prefix (concat luna-localleader-key " c")
-     "c" '(org-agenda-clock-cancel :wk "clock cancel")
-     "g" '(org-agenda-clock-goto :wk "clock goto")
-     "i" '(org-agenda-clock-in :wk "clock in")
-     "o" '(org-agenda-clock-out :wk "clock out")
-     "r" '(org-agenda-clockreport-mode :wk "clock report mode")
-     "s" '(org-agenda-show-clocking-issues :wk "clocking issues"))
-    (general-define-key
-     :keymaps 'org-agenda-mode-map
-     :states '(normal visual motion)
-     :prefix (concat luna-localleader-key " p")
-     "d" '(org-agenda-priority-down :wk "priority down")
-     "p" '(org-agenda-priority :wk "priority")
-     "u" '(org-agenda-priority-up :wk "priority up"))))
 
 (defun +org-init-popup-rules-h ()
   ;; Doom's `set-popup-rules!' has no port here (window rules for org buffers
@@ -812,86 +584,14 @@ file targets relative to `org-directory', unless they are absolute paths."
   ;; Only fold the current tree, rather than recursively; clear babel results
   ;; if point is inside a src block.
   (add-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h 'append)
-  (add-hook 'org-tab-first-hook #'+org-clear-babel-results-h 'append)
-  (let-alist evil-org-movement-bindings
-    (let ((Cright  (concat "C-" .right))
-          (Cleft   (concat "C-" .left))
-          (Cup     (concat "C-" .up))
-          (Cdown   (concat "C-" .down))
-          (CSright (concat "C-S-" .right))
-          (CSleft  (concat "C-S-" .left))
-          (CSup    (concat "C-S-" .up))
-          (CSdown  (concat "C-S-" .down)))
-      (general-define-key
-       :keymaps 'evil-org-mode-map
-       :states '(normal insert)
-       [C-return]   #'+org/insert-item-below
-       [C-S-return] #'+org/insert-item-above)
-      (unless evil-disable-insert-state-bindings
-        (general-define-key
-         :keymaps 'evil-org-mode-map
-         :states '(insert)
-         Cright (lambda () (interactive) (if (org-at-table-p) (org-table-next-field) (org-end-of-line)))
-         Cleft  (lambda () (interactive) (if (org-at-table-p) (org-table-previous-field) (org-beginning-of-line)))
-         Cup    (lambda () (interactive) (if (org-at-table-p) (+org/table-previous-row) (org-up-element)))
-         Cdown  (lambda () (interactive) (if (org-at-table-p) (org-table-next-row) (org-down-element)))
-         CSright   #'org-shiftright
-         CSleft    #'org-shiftleft
-         CSup      #'org-shiftup
-         CSdown    #'org-shiftdown
-         "RET"     #'+org/return
-         [S-return] #'+org/shift-return
-         "S-RET"   #'+org/shift-return))
-      (general-define-key
-       :keymaps 'evil-org-mode-map
-       :states '(normal)
-       CSright   #'org-shiftright
-       CSleft    #'org-shiftleft
-       CSup      #'org-shiftup
-       CSdown    #'org-shiftdown
-       "gQ"  #'+org/reformat-at-point
-       "za"  #'+org/toggle-fold
-       "zA"  #'org-shifttab
-       "zc"  #'+org/close-fold
-       "zC"  #'outline-hide-subtree
-       "zm"  #'+org/hide-next-fold-level
-       "zM"  #'+org/close-all-folds
-       "zn"  #'org-tree-to-indirect-buffer
-       "zo"  #'+org/open-fold
-       "zO"  #'outline-show-subtree
-       "zr"  #'+org/show-next-fold-level
-       "zR"  #'+org/open-all-folds
-       "zi"  #'org-toggle-inline-images)
-      (general-define-key
-       :keymaps 'evil-org-mode-map
-       :states '(motion)
-       "RET"  #'+org/dwim-at-point
-       "]h"  #'org-forward-heading-same-level
-       "[h"  #'org-backward-heading-same-level
-       "]l"  #'org-next-link
-       "[l"  #'org-previous-link
-       "]c"  #'org-babel-next-src-block
-       "[c"  #'org-babel-previous-src-block)
-      (general-define-key
-       :keymaps 'org-read-date-minibuffer-local-map
-       Cleft    (cmd! (org-eval-in-calendar '(calendar-backward-day 1)))
-       Cright   (cmd! (org-eval-in-calendar '(calendar-forward-day 1)))
-       Cup      (cmd! (org-eval-in-calendar '(calendar-backward-week 1)))
-       Cdown    (cmd! (org-eval-in-calendar '(calendar-forward-week 1)))
-       CSleft   (cmd! (org-eval-in-calendar '(calendar-backward-month 1)))
-       CSright  (cmd! (org-eval-in-calendar '(calendar-forward-month 1)))
-       CSup     (cmd! (org-eval-in-calendar '(calendar-backward-year 1)))
-       CSdown   (cmd! (org-eval-in-calendar '(calendar-forward-year 1)))))))
+  (add-hook 'org-tab-first-hook #'+org-clear-babel-results-h 'append))
 
 (leaf evil-org-agenda
   :ensure nil
   :when (modulep! :editor evil +everywhere)
   :hook (org-agenda-mode . evil-org-agenda-mode)
   :config
-  (evil-org-agenda-set-keys)
-  (when (boundp 'evil-org-agenda-mode-map)
-    (evil-define-key* 'motion evil-org-agenda-mode-map
-      (kbd luna-leader-key) nil)))
+  (evil-org-agenda-set-keys))
 
 ;;; -- org bootstrap ----------------------------------------------------------
 

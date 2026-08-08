@@ -20,14 +20,6 @@
 
 (leaf csv-mode
   :ensure t
-  :defer t
-  :config
-  (general-def :keymaps 'csv-mode-map :prefix luna-localleader-key
-    "a" #'csv-align-fields
-    "u" #'csv-unalign-fields
-    "s" #'csv-sort-fields
-    "S" #'csv-sort-numeric-fields
-    "k" #'csv-kill-fields
-    "t" #'csv-transpose))
+  :defer t)
 
 ;;; lang/data.el ends here

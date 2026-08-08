@@ -203,17 +203,7 @@ sumatrapdf, zathura, okular and pdf-tools."
     (interactive)
     (TeX-save-document (TeX-master-file))
     (TeX-command TeX-command-default 'TeX-master-file -1))
-  (general-def :keymaps 'latex-mode-map :prefix luna-localleader-key
-    "v" #'TeX-view
-    "c" #'+latex/compile
-    "a" #'TeX-command-run-all
-    "m" #'TeX-command-master)
-  (after! latex
-    (general-def :keymaps 'LaTeX-mode-map :prefix luna-localleader-key
-      "v" #'TeX-view
-      "c" #'+latex/compile
-      "a" #'TeX-command-run-all
-      "m" #'TeX-command-master)))
+)
 
 (after! latex
   ;; Add the TOC entry to the sectioning hooks.
@@ -302,9 +292,7 @@ function uses."
   ;; Don't cache preamble, it creates issues with SyncTeX. Let users enable
   ;; caching if they have compilation times that long.
   (setq preview-auto-cache-preamble nil)
-  (general-def :keymaps 'LaTeX-mode-map :prefix luna-localleader-key
-    "p" #'preview-at-point
-    "P" #'preview-clearout-at-point))
+)
 
 (leaf cdlatex
   :ensure t
@@ -315,25 +303,9 @@ function uses."
   :config
   ;; Use \( ... \) instead of $ ... $.
   (setq cdlatex-use-dollar-to-ensure-math nil)
+)
   ;; Disable keys that have overlapping functionality with other parts of the
   ;; config.
-  (map! :map cdlatex-mode-map
-        ;; Smartparens takes care of inserting closing delimiters.
-        "$" nil
-        "(" nil
-        "{" nil
-        "[" nil
-        "|" nil
-        "<" nil
-        ;; TAB is used for CDLaTeX's snippets and navigation, but we have
-        ;; Yasnippet for that.
-        "TAB" nil
-        ;; AUCTeX takes care of auto-inserting {} on _^ if you want, with
-        ;; `TeX-electric-sub-and-superscript'.
-        "^" nil
-        "_" nil
-        ;; AUCTeX already provides this with `LaTeX-insert-item'.
-        [control return] nil))
 
 ;; Nicely indent lines that have wrapped when visual line mode is activated.
 (leaf adaptive-wrap
@@ -372,21 +344,14 @@ function uses."
         LaTeX-reftex-cite-format-auto-activate nil)
   (when (modulep! :editor evil)
     (add-hook 'reftex-mode-hook #'evil-normalize-keymaps))
-  (general-def :keymaps 'reftex-mode-map :prefix luna-localleader-key
-    ";" 'reftex-toc)
   (add-hook 'reftex-toc-mode-hook
             (lambda ()
-              (reftex-toc-rescan)
-              (define-key (current-local-map) "j" #'next-line)
-              (define-key (current-local-map) "k" #'previous-line)
-              (define-key (current-local-map) "q" #'kill-buffer-and-window)
-              (define-key (current-local-map) (kbd "ESC") #'kill-buffer-and-window))))
+              (reftex-toc-rescan))))
 
 ;; Set up mode for bib files.
 (after! bibtex
   (setq bibtex-dialect 'biblatex
         bibtex-align-at-equal-sign t
-        bibtex-text-indentation 20)
-  (define-key bibtex-mode-map (kbd "C-c \\") #'bibtex-fill-entry))
+        bibtex-text-indentation 20))
 
 ;;; lang/latex.el ends here
