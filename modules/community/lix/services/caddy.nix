@@ -1,13 +1,21 @@
 {
   den.aspects.caddy = {
     nixos =
-      { pkgs, ... }:
+      { ... }:
       {
         services.caddy = {
           enable = true;
-          virtualHosts."http://localhost" = {
+          virtualHosts."lunixose.duckdns.org" = {
             extraConfig = ''
-              respond "lunatix oracle online"
+              handle {
+                respond "lunatix oracle online"
+              }
+              handle_path /forgejo/* {
+                reverse_proxy 127.0.0.1:3000
+              }
+              handle_path /pihole/* {
+                reverse_proxy 127.0.0.1:8080
+              }
             '';
           };
         };

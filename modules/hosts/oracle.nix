@@ -12,6 +12,7 @@
       <pihole>
       <forgejo>
       <caddy>
+      <duckdns>
     ];
 
     disk = {
