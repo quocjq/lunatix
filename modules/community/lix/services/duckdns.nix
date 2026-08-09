@@ -15,7 +15,10 @@
       {
         services.duckdns = {
           enable = true;
-          domains = [ "lunixose" "dns" "git" ];
+          # Only the primary domain is registered in the DuckDNS account;
+          # subdomains (dns., git.) resolve via DuckDNS wildcard to the same
+          # static IP, so no per-subdomain update is needed.
+          domains = [ "lunixose" ];
           tokenFile = "/run/duckdns/token";
         };
       };
