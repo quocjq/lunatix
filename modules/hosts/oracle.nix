@@ -29,7 +29,6 @@
       }:
       {
         system.stateVersion = "26.05";
-        nixpkgs.hostPlatform = lib.mkForce "aarch64-linux";
 
         boot.loader.systemd-boot.enable = true;
         boot.loader.efi.canTouchEfiVariables = true;
