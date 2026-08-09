@@ -18,7 +18,6 @@
           description = "lunatix Nuxt dashboard";
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
-          path = [ pkg ];
           environment = {
             NODE_ENV = "production";
             PORT = "3100";
@@ -27,12 +26,12 @@
           };
           serviceConfig = {
             Type = "exec";
-            ExecStart = "${pkg}/share/lunatix-website/.output/server/index.mjs";
+            ExecStart = "${pkgs.nodejs}/bin/node ${pkg}/share/lunatix-website/.output/server/index.mjs";
+            WorkingDirectory = "${pkg}/share/lunatix-website/.output/server";
             Restart = "on-failure";
             RestartSec = 3;
             DynamicUser = true;
-            # data dir writable by the dynamic user
-            StateDirectory = [ "www" "www/data" ];
+            StateDirectory = [ "www/data" ];
           };
         };
       };
