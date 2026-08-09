@@ -11,16 +11,12 @@
     ];
 
     nixos =
-      { pkgs, ... }:
+      { ... }:
       {
         services.duckdns = {
           enable = true;
           domains = [ "lunixose" ];
           tokenFile = "/run/duckdns/token";
-        };
-        # DuckDNS updater needs curl at runtime.
-        systemd.services.duckdns = {
-          path = [ pkgs.curl ];
         };
       };
   };
