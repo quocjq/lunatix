@@ -23,7 +23,7 @@ rest of the doom rule plist is ignored (popper has no slot/ttl/quit model)."
           (popper--set-reference-vars)))
     (with-eval-after-load 'popper
       (add-to-list 'popper-reference-buffers predicate)))
-  popper-reference-buffers)
+  (and (boundp 'popper-reference-buffers) popper-reference-buffers))
 
 (defun +popup-buffer-p (&optional buffer)
   "Return non-nil if BUFFER (default the current one) is shown as a popup."
@@ -54,9 +54,12 @@ rest of the doom rule plist is ignored (popper has no slot/ttl/quit model)."
 (defun +popup/buffer ()
   "Pop the current buffer into a popup window (doom's `+popup/buffer')."
   (interactive)
-  (let ((buf (current-buffer)))
-    (add-to-list 'popper-reference-buffers
-                 (lambda (b) (eq b buf)))
+  (let ((buf (current-buffer))
+        (pred (lambda (b) (eq b buf))))
+    (if (boundp 'popper-reference-buffers)
+        (add-to-list 'popper-reference-buffers pred)
+      (with-eval-after-load 'popper
+        (add-to-list 'popper-reference-buffers pred)))
     (when (and popper-mode (fboundp 'popper--set-reference-vars))
       (popper--set-reference-vars))
     (popper-toggle)))

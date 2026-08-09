@@ -15,7 +15,7 @@
       {
         services.duckdns = {
           enable = true;
-          domains = [ "lunixose" ];
+          domains = [ "lunixose" "dns" "git" ];
           tokenFile = "/run/duckdns/token";
         };
       };

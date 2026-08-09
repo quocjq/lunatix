@@ -5,7 +5,7 @@
   :demand t
   :config
   ;; structural + TAB navigation everywhere
-  (global-lnav-mode 1)
+  ;; (global-lnav-mode 1)
   ;; lnav's C-c prefix collides with C-c d (deft) / C-c p (projectile);
   ;; its commands are bound under SPC o l in keybindings-config. Keep the
   ;; TAB/backtab chunk jumps.
