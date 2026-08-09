@@ -35,21 +35,23 @@
           ports = [ 8080 ];
         };
 
-        # Apply the web admin password at boot from the agenix secret. Pi-hole
-        # stores a hash in /etc/pihole/pihole.toml; `setpassword` recomputes it
-        # from the plaintext each boot.
+        # Allow FTL to accept the web password at runtime (module defaults
+        # misc.readOnly = true, which rejects `--config` writes).
+        services.pihole-ftl.settings.misc.readOnly = pkgs.lib.mkForce false;
+
+        # Apply the web admin password at boot from the agenix secret. Uses the
+        # FTL binary directly (`pihole` re-execs via sudo and fails to write).
         systemd.services.pihole-setpassword = {
           description = "Apply Pi-hole web password from agenix secret";
           after = [ "pihole-ftl.service" "pihole-web.service" ];
           wants = [ "pihole-ftl.service" ];
           wantedBy = [ "multi-user.target" ];
-          path = [ pkgs.pihole ];
           serviceConfig = {
             Type = "oneshot";
             ExecStart = pkgs.writeShellScript "pihole-setpassword" ''
               set -euo pipefail
               if [ -f /run/pihole/password ]; then
-                pihole setpassword "$(cat /run/pihole/password)"
+                ${pkgs.pihole-ftl}/bin/pihole-FTL --config webserver.api.password "$(cat /run/pihole/password)"
               fi
             '';
             RemainAfterExit = true;
