@@ -17,6 +17,13 @@
               HTTP_PORT = 3000;
               DOMAIN = "127.0.0.1";
             };
+            database = {
+              DB_TYPE = "postgres";
+              NAME = "forgejo";
+              USER = "forgejo";
+              HOST = "/run/postgresql";
+              SSL_MODE = "disable";
+            };
             service = {
               DISABLE_REGISTRATION = true;
             };
