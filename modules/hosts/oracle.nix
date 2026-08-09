@@ -31,6 +31,20 @@
         boot.loader.efi.canTouchEfiVariables = true;
         boot.kernelPackages = pkgs.linuxPackages_latest;
 
+        # Oracle Cloud instances attach the boot volume over virtio. Ensure the
+        # initrd carries the block + net drivers so the root device appears at
+        # boot (without them: "start job running for /dev/disk/by-partlabel/root").
+        boot.initrd.availableKernelModules = [
+          "virtio_pci"
+          "virtio_blk"
+          "virtio_scsi"
+          "virtio_net"
+          "sd_mod"
+          "btrfs"
+        ];
+        boot.initrd.kernelModules = [ "virtio_blk" ];
+        boot.kernelParams = [ "console=tty0" "console=ttyAMA0,115200" "console=ttyS0,115200" ];
+
         # Headless server: networkd + DHCP instead of NetworkManager.
         networking.networkmanager.enable = lib.mkForce false;
         networking.useDHCP = lib.mkForce true;
