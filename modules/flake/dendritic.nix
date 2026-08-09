@@ -3,6 +3,7 @@
   imports = [
     (inputs.flake-file.flakeModules.dendritic or { })
     (inputs.den.flakeModules.dendritic or { })
+    (inputs.agenix-rekey.flakeModules.default or { })
   ];
   _module.args.__findFile = den.lib.__findFile;
 

@@ -61,7 +61,7 @@ in
           map (s: {
             inherit (s) name;
             value = {
-              file = secretsDir + "/${s.name}.age";
+              rekeyFile = secretsDir + "/${s.name}.age";
               path = s.path or "/run/agenix/${s.name}";
               owner = s.owner or "root";
               group = s.group or "root";
@@ -74,7 +74,7 @@ in
           # host rekeys them to its own host key at build time.
           masterIdentities = [ "/home/lunixose/.ssh/ssh_user_lunixose_ed25519" ];
           storageMode = "local";
-          localStorageDir = ../../lig/_secrets/rekey;
+          localStorageDir = ./_secrets/rekey;
         };
       };
   };
