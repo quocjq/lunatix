@@ -24,7 +24,7 @@
       }
       {
         name = "oraclevps";
-        path = "/home/lunixose/.ssh/ssh-key-2026-05-09.key";
+        path = "/home/lunixose/.ssh/ssh-key-2026-08-09.key";
         owner = user.userName;
         group = "users";
         mode = "600";

@@ -50,11 +50,12 @@ switch:
     {{nix}} run .#igloo -- switch
 
 # Deploy the oracle host (currently Ubuntu) — nixos-anywhere + kexec, builds on remote.
+# Oracle instances log in as `ubuntu` (passwordless sudo), not root.
 # First deploy: --copy-host-keys preserves Ubuntu's host key so agenix secrets
 # (rekeyed to that key) decrypt on first boot.
-# Usage: just deploy-oracle [root@ip]
+# Usage: just deploy-oracle [ubuntu@ip]
 deploy-oracle target:
-    {{nix}} run .#deploy-oracle -- --build-on remote --copy-host-keys --flake .#oracle {{target}}
+    {{nix}} run .#deploy-oracle -- --build-on remote --copy-host-keys -i ~/.ssh/ssh-key-2026-08-09.key --flake .#oracle {{target}}
 
 # Test the configuration in a throwaway VM
 vm:

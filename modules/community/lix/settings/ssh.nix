@@ -12,7 +12,7 @@
           Host oraclevps
               HostName 217.142.232.103
               User ubuntu
-              IdentityFile ~/.ssh/ssh-key-2026-05-09.key
+              IdentityFile ~/.ssh/ssh-key-2026-08-09.key
           Host *
               AddKeysToAgent yes
               IdentityFile ~/.ssh/github
