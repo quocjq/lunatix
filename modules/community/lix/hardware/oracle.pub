@@ -1,7 +1,1 @@
-# Oracle host SSH ed25519 public key (age recipient for rekey).
-#
-# Capture from the running Ubuntu instance BEFORE first NixOS deploy:
-#   ssh-keyscan <oracle-ip> | grep ed25519
-# and paste the resulting line here. First deploy must use --copy-host-keys
-# so this same host key persists into the NixOS install, letting agenix
-# decrypt on first boot.
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC8ncwCMxq7Fx6qqyPgNkoDqpVjmjCbmZQBxYsvAS2to
