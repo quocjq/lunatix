@@ -26,6 +26,7 @@
         boot.loader.systemd-boot.enable = true;
         boot.loader.efi.canTouchEfiVariables = true;
         boot.kernelPackages = pkgs.linuxPackages_latest;
+        age.rekey.hostPubkey = "/etc/ssh/ssh_host_ed25519_key.pub";
       };
   };
 }

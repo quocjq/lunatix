@@ -62,6 +62,28 @@ Both a Wayland and an X11 desktop are configured:
 - KDE Plasma 6 with the SDDM display manager
 - Hyprland, configured in Lua, with the Noctalia shell (Catppuccin Pink)
 
+## Oracle VPS
+
+`oracle` (`aarch64-linux`) is a headless server deployed onto an Oracle Cloud
+free-tier instance. It ships SSH + firewall only; services (PiHole, Forgejo,
+Syncthing, Caddy) are added as aspects later.
+
+Bootstrapping from the stock Ubuntu image (one time):
+
+```console
+# 1. Capture the instance host key — this becomes the agenix rekey recipient.
+ssh-keyscan <oracle-ip> | grep ed25519 > modules/community/lix/hardware/oracle.pub
+
+# 2. Deploy NixOS over SSH. nixos-anywhere downloads the aarch64 kexec image,
+#    builds the closure on the instance (--build-on remote), and
+#    --copy-host-keys keeps the host key so secrets decrypt on first boot.
+just deploy-oracle root@<oracle-ip>
+```
+
+Secrets use [agenix-rekey](https://github.com/oddlama/agenix-rekey): edit with
+the master identity, rekey to each host's key at build time. See `justfile`
+(`secret`, `rekey`).
+
 ## Diagrams
 
 The den framework exposes an aspect-resolution graph for every host. This
