@@ -49,6 +49,11 @@ build:
 switch:
     {{nix}} run .#igloo -- switch
 
+# Deploy the oracle host (currently Ubuntu) — nixos-anywhere + kexec, builds on remote.
+# Usage: just deploy-oracle [root@ip]
+deploy-oracle target:
+    {{nix}} run .#deploy-oracle -- --build-on remote --flake .#oracle {{target}}
+
 # Test the configuration in a throwaway VM
 vm:
     {{nix}} run .#vm

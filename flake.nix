@@ -70,6 +70,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixcord.url = "github:4evy/nixcord";
+    nixos-anywhere.url = "github:nix-community/nixos-anywhere";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     noctalia = {
       url = "github:noctalia-dev/noctalia";
