@@ -31,6 +31,11 @@
         # igloo builds on itself: derivation mode keeps rekeyed secrets out of
         # the repo (avoids the localStorageDir store-path write issue).
         age.rekey.storageMode = "derivation";
+
+        nix.settings = {
+          max-jobs = 2;
+          cores = 4;
+        };
       };
   };
 }

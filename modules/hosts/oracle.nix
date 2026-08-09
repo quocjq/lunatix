@@ -56,6 +56,10 @@
             builtins.readFile ../community/lix/hardware/oracle.pub
           else
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI-placeholder-oracle";
+
+        nix.settings = {
+          max-jobs = 4;
+        };
       };
   };
 }
