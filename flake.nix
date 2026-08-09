@@ -71,7 +71,7 @@
     };
     nixcord.url = "github:4evy/nixcord";
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
-    nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     noctalia = {
       url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
