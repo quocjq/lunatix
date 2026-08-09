@@ -94,6 +94,7 @@
       url = "github:tinted-theming/schemes";
       flake = false;
     };
+    website.url = "github:quocjq/website";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";

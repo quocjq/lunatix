@@ -8,10 +8,10 @@
       <locale>
       <nix-settings>
       <ssh>
-      <syncthing-server>
       <pihole>
       <forgejo>
       <caddy>
+      <website>
       <duckdns>
     ];
 
@@ -35,18 +35,12 @@
         boot.loader.efi.canTouchEfiVariables = true;
         boot.kernelPackages = pkgs.linuxPackages_latest;
 
-        # Oracle Cloud instances attach the boot volume over virtio. Ensure the
-        # initrd carries the block + net drivers so the root device appears at
-        # boot (without them: "start job running for /dev/disk/by-partlabel/root").
-        boot.initrd.availableKernelModules = [
-          "virtio_pci"
-          "virtio_blk"
-          "virtio_scsi"
-          "virtio_net"
-          "sd_mod"
-          "btrfs"
-        ];
-        boot.initrd.kernelModules = [ "virtio_blk" ];
+        # Hardware report from nixos-facter (regenerate on the box with
+        # `nix run nixpkgs#nixos-facter -- -o modules/community/lix/hardware/oracle-facter.json`).
+        # Facter auto-configures boot.initrd modules (incl. virtio for the
+        # Oracle block volume) from this report.
+        hardware.facter.reportPath = ../community/lix/hardware/oracle-facter.json;
+
         boot.kernelParams = [ "console=tty0" "console=ttyAMA0,115200" "console=ttyS0,115200" ];
 
         # Headless server: networkd + DHCP instead of NetworkManager.

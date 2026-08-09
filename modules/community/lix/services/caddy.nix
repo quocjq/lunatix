@@ -1,24 +1,16 @@
 {
   den.aspects.caddy = {
     nixos =
-      { pkgs, ... }:
-      let
-        www = pkgs.runCommand "lunatix-www" { } ''
-          mkdir -p $out
-          cp ${./dashboard/index.html} $out/index.html
-        '';
-      in
+      { ... }:
       {
         services.caddy = {
           enable = true;
           virtualHosts = {
             "lunixose.duckdns.org" = {
               extraConfig = ''
-                # Dashboard — server overview, notes, finance.
+                # Nuxt dashboard (SSR)
                 handle {
-                  root * ${www}
-                  try_files {path} /index.html
-                  file_server
+                  reverse_proxy 127.0.0.1:3100
                 }
                 # Forgejo
                 handle_path /forgejo/* {
