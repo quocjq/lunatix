@@ -74,10 +74,11 @@ Bootstrapping from the stock Ubuntu image (one time):
 # 1. Capture the instance host key — this becomes the agenix rekey recipient.
 ssh-keyscan <oracle-ip> | grep ed25519 > modules/community/lix/hardware/oracle.pub
 
-# 2. Deploy NixOS over SSH. nixos-anywhere downloads the aarch64 kexec image,
-#    builds the closure on the instance (--build-on remote), and
-#    --copy-host-keys keeps the host key so secrets decrypt on first boot.
-just deploy-oracle root@<oracle-ip>
+# 2. Deploy NixOS over SSH. Oracle logs in as `ubuntu` (passwordless sudo).
+#    nixos-anywhere downloads the aarch64 kexec image, builds the closure on
+#    the instance (--build-on remote), and --copy-host-keys keeps the host key
+#    so secrets decrypt on first boot.
+just deploy-oracle ubuntu@<oracle-ip>
 ```
 
 Secrets use [agenix-rekey](https://github.com/oddlama/agenix-rekey): edit with
