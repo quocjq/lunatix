@@ -6,6 +6,7 @@
       <settings>
       <disko-layout>
       <lig/agenix>
+      <obs>
     ];
 
     disk = {
@@ -27,6 +28,9 @@
         boot.loader.efi.canTouchEfiVariables = true;
         boot.kernelPackages = pkgs.linuxPackages_latest;
         age.rekey.hostPubkey = "/etc/ssh/ssh_host_ed25519_key.pub";
+        # igloo builds on itself: derivation mode keeps rekeyed secrets out of
+        # the repo (avoids the localStorageDir store-path write issue).
+        age.rekey.storageMode = "derivation";
       };
   };
 }

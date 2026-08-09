@@ -12,11 +12,11 @@
                 handle {
                   reverse_proxy 127.0.0.1:3100
                 }
-                # Forgejo (ROOT_URL includes /forgejo for generated URLs; strip
-                # the prefix here so forgejo's router sees /lunixose/...)
-                handle_path /forgejo/* {
-                  reverse_proxy 127.0.0.1:3000
-                }
+              '';
+            };
+            "git.lunixose.duckdns.org" = {
+              extraConfig = ''
+                reverse_proxy 127.0.0.1:3000
               '';
             };
             "dns.lunixose.duckdns.org" = {

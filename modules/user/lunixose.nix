@@ -62,6 +62,7 @@
         wget
         curl
         obsidian
+        onlyoffice-desktopeditors
       ];
     };
     os = {

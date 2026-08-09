@@ -13,10 +13,9 @@
           };
           settings = {
             server = {
-              ROOT_URL = "https://lunixose.duckdns.org/forgejo/";
-              SUBPATH = "/forgejo";
+              ROOT_URL = "https://git.lunixose.duckdns.org/";
               HTTP_PORT = 3000;
-              DOMAIN = "lunixose.duckdns.org";
+              DOMAIN = "git.lunixose.duckdns.org";
               HTTP_ADDR = "127.0.0.1";
             };
             database = {

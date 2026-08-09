@@ -73,7 +73,7 @@ in
           # Master identity used to encrypt the committed `.age` files; each
           # host rekeys them to its own host key at build time.
           masterIdentities = [ "/home/lunixose/.ssh/ssh_user_lunixose_ed25519" ];
-          storageMode = "local";
+          storageMode = lib.mkDefault "local";
           localStorageDir = ./_secrets/rekey;
         };
       };
