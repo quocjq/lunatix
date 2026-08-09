@@ -8,7 +8,10 @@
       <locale>
       <nix-settings>
       <ssh>
-      <syncthing>
+      <syncthing-server>
+      <pihole>
+      <forgejo>
+      <caddy>
     ];
 
     disk = {
