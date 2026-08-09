@@ -17,6 +17,12 @@
           enable = true;
           openFirewallDNS = true;
           settings = {
+            webserver = {
+              api = {
+                # ephemeral CLI password so `pihole` can talk to FTL's socket
+                cli_pw = true;
+              };
+            };
             dns = {
               "domain-needed" = true;
               "bogus-priv" = true;
