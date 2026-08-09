@@ -13,9 +13,10 @@
           };
           settings = {
             server = {
-              ROOT_URL = "http://127.0.0.1:3000/";
+              ROOT_URL = "https://lunixose.duckdns.org/forgejo/";
               HTTP_PORT = 3000;
-              DOMAIN = "127.0.0.1";
+              DOMAIN = "lunixose.duckdns.org";
+              HTTP_ADDR = "127.0.0.1";
             };
             database = {
               DB_TYPE = "postgres";
