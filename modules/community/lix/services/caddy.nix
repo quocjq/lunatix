@@ -12,8 +12,8 @@
                 handle {
                   reverse_proxy 127.0.0.1:3100
                 }
-                # Forgejo
-                handle_path /forgejo/* {
+                # Forgejo (ROOT_URL includes /forgejo — do not strip the prefix)
+                handle /forgejo/* {
                   reverse_proxy 127.0.0.1:3000
                 }
               '';
