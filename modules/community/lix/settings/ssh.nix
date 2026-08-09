@@ -10,9 +10,9 @@
         startAgent = true;
         extraConfig = ''
           Host oraclevps
-              HostName 217.142.232.103
-              User ubuntu
-              IdentityFile ~/.ssh/ssh-key-2026-08-09.key
+              HostName 217.142.240.255
+              User root
+              IdentityFile ~/.ssh/ssh_user_lunixose_ed25519
           Host *
               AddKeysToAgent yes
               IdentityFile ~/.ssh/github
