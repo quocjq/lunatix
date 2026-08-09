@@ -43,10 +43,10 @@
 
 ;; hack-mode: gated on `+hack` (nil in compat); dropped.
 
+(defvar +php-common-mode-map (make-sparse-keymap))
+
 (leaf composer
   :ensure t
-  :init
-  (defvar +php-common-mode-map (make-sparse-keymap))
   :config
   (setq composer-directory-to-managed-file (expand-file-name "composer/" lunaris-cache-dir)))
 
