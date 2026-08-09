@@ -12,7 +12,7 @@ default:
 # experimental features on from the command line. The only tool you need to
 # reach them is `just` itself:  nix-shell -p just git
 
-nix := "nix --extra-experimental-features 'nix-command flakes' --max-jobs 8"
+nix := "nix --extra-experimental-features 'nix-command flakes' --max-jobs 4"
 agenix_cmd := if `bash -c 'command -v agenix 2>/dev/null || true'` != "" { "agenix" } else { nix + " run github:ryantm/agenix --" }
 devenv_cmd := if `bash -c 'command -v devenv 2>/dev/null || true'` != "" { "devenv" } else { nix + " run github:cachix/devenv --" }
 
