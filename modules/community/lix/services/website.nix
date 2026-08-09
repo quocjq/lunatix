@@ -8,6 +8,16 @@
   };
 
   den.aspects.website = {
+    secrets = [
+      {
+        name = "website-admin-password";
+        path = "/run/website/admin-password";
+        owner = "www-data";
+        group = "www-data";
+        mode = "0400";
+      }
+    ];
+
     nixos =
       { pkgs, ... }:
       let
@@ -25,18 +35,18 @@
         ];
 
         systemd.services.lunatix-website = {
-          description = "lunatix Nuxt dashboard";
+          description = "lunatix website (editor)";
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           environment = {
             NODE_ENV = "production";
             PORT = "3100";
-            NOTES_FILE = "/srv/www/data/notes.txt";
-            FINANCE_FILE = "/srv/www/data/finance.json";
+            DOCS_DIR = "/srv/www/data/docs";
+            ADMIN_PASSWORD_FILE = "/run/website/admin-password";
           };
           serviceConfig = {
             Type = "exec";
-            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /srv/www/data";
+            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /srv/www/data/docs";
             ExecStart = "${pkgs.nodejs}/bin/node ${pkg}/share/lunatix-website/.output/server/index.mjs";
             WorkingDirectory = "${pkg}/share/lunatix-website/.output/server";
             Restart = "on-failure";
