@@ -147,6 +147,10 @@
         rustfmt
         clippy
         rust-analyzer
+
+        # JS/TS/Vue (web-mode + lsp-mode; tsserver covers vue in web-mode)
+        typescript-language-server # LSP: js/ts/tsx, and vue via web-mode
+        eslint
       ]);
     };
   };
