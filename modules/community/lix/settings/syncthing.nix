@@ -9,7 +9,7 @@
         settings = {
           devices = {
             oracle = {
-              id = "ORACLE-DEVICE-ID";
+              id = "JEDRDKP-ZNUZ45L-GQTTCVL-LJ23AYA-UV43N5A-AROU7J5-4B45GB2-LDJSEAE";
             };
           };
           folders = {
