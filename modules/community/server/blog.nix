@@ -30,6 +30,7 @@
           environment = {
             NODE_ENV = "production";
             PORT = "3100";
+            HOST = "127.0.0.1";
             NOTES_DIR = "/root/Notes";
           };
           serviceConfig = {
