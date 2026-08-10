@@ -8,16 +8,6 @@
   };
 
   server.website = {
-    secrets = [
-      {
-        name = "syncthing-apikey";
-        path = "/run/website/syncthing-apikey";
-        owner = "www-data";
-        group = "www-data";
-        mode = "0400";
-      }
-    ];
-
     nixos =
       { pkgs, ... }:
       let
@@ -38,7 +28,6 @@
             NODE_ENV = "production";
             PORT = "3100";
             NOTES_DIR = "/root/Notes";
-            SYNCTHING_API_KEY_FILE = "/run/website/syncthing-apikey";
           };
           serviceConfig = {
             Type = "exec";

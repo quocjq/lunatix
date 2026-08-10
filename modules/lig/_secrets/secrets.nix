@@ -19,7 +19,6 @@ in
   "duckdns-token.age".publicKeys = all;
   "pihole-password.age".publicKeys = all;
   "website-admin-password.age".publicKeys = all;
-  "syncthing-apikey.age".publicKeys = all;
 
   # Add a line here for every new secret, then declare a matching entry in the
   # `secrets` quirk (see modules/settings/ssh.nix or modules/lunix/bash.nix) so
