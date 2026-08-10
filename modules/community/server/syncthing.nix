@@ -25,6 +25,13 @@
       # Management UI only on localhost; devices reach the sync ports.
       networking.firewall.allowedTCPPorts = [ 22000 ];
       networking.firewall.allowedUDPPorts = [ 21027 ];
+
+      # www-data (webapp) needs rw on the synced notes dir. setgid + ACL so
+      # files syncthing (root) drops in stay accessible/writable by www-data.
+      systemd.tmpfiles.rules = [
+        "d /root/Notes 2775 root www-data - -"
+        "A /root/Notes - - - - u:www-data:rwx d:u:www-data:rwx"
+      ];
     };
   };
 }
