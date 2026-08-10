@@ -67,33 +67,20 @@
 (remove-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'auto-fill-mode)
 
-;;; Auto-align tables — org-modern/org-appear change display widths (autohide,
-;;; emphasis markers) and native org realign misses those. Align when the
-;;; buffer changed or the cursor entered a different table row.
-(defvar-local +org--align-tick 0)
+;;; Auto-align tables — only when moving between rows (up/down), not on every
+;;; keystroke. org-modern/org-appear change display widths (autohide, emphasis
+;;; markers) and native org realign misses those, so align on row change.
 (defvar-local +org--align-row -1)
 
 (defun +org/align-current-table-h ()
   (when-let* ((row (and (org-at-table-p) (org-table-current-line))))
-    (when (or (/= (buffer-chars-modified-tick) +org--align-tick)
-              (/= row +org--align-row))
-      (setq +org--align-tick (buffer-chars-modified-tick)
-            +org--align-row row)
+    (when (/= row +org--align-row)
+      (setq +org--align-row row)
       (org-table-align))))
 
 (add-hook 'org-mode-hook
           (lambda ()
             (add-hook 'post-command-hook #'+org/align-current-table-h nil t)))
-
-;; also realign after backspace inside a table
-(defun +org-delete-backward-and-realign-table-h ()
-  (when (org-at-table-p)
-    (org-table-align)))
-
-(add-hook 'org-mode-hook
-          (lambda ()
-            (add-hook 'delete-backward-char-functions
-                      #'+org-delete-backward-and-realign-table-h nil t)))
 
 ;;; Agenda — org-super-agenda + custom "o" Overview command (tecosaur)
 (leaf org-super-agenda
