@@ -11,7 +11,7 @@
       <server/pihole>
       <server/forgejo>
       <server/caddy>
-      <server/website>
+      <server/blog>
       <server/duckdns>
       <server/syncthing-server>
     ];

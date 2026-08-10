@@ -3,15 +3,16 @@
   ...
 }:
 {
-  flake-file.inputs.website = {
-    url = "github:quocjq/website";
+  flake-file.inputs.blog = {
+    url = "https://git.lunixose.duckdns.org/lunixose/blog";
+    type = "git";
   };
 
-  server.website = {
+  server.blog = {
     nixos =
       { pkgs, ... }:
       let
-        pkg = inputs.website.packages.${pkgs.stdenv.hostPlatform.system}.default;
+        pkg = inputs.blog.packages.${pkgs.stdenv.hostPlatform.system}.default;
       in
       {
         users.users.www-data = {
@@ -20,8 +21,8 @@
         };
         users.groups.www-data = { };
 
-        systemd.services.lunatix-website = {
-          description = "lunatix website (dashboard + blog)";
+        systemd.services.lunatix-blog = {
+          description = "lunatix blog (astro SSR)";
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           environment = {
@@ -36,11 +37,11 @@
               "+${pkgs.coreutils}/bin/mkdir -p /root/Notes"
               # self-healing ACLs: www-data needs traverse on /root and rw on Notes
               "+${pkgs.acl}/bin/setfacl -m u:www-data:--x /root"
-              "+${pkgs.acl}/bin/setfacl -Rm u:www-data:rwx,d:u:www-data:rwx /root/Notes"
+              "+${pkgs.acl}/bin/setfacl -Rm u:www-data:rx,d:u:www-data:rx /root/Notes"
               "+${pkgs.coreutils}/bin/chmod -R 2775 /root/Notes"
               "+${pkgs.coreutils}/bin/chown -R root:www-data /root/Notes"
             ];
-            ExecStart = "${pkgs.nodejs}/bin/node ${pkg}/share/lunatix-website/index.mjs";
+            ExecStart = "${pkgs.nodejs}/bin/node ${pkg}/share/lunatix-blog/server/entry.mjs";
             Restart = "on-failure";
             RestartSec = 3;
             User = "www-data";

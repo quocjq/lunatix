@@ -15,6 +15,10 @@
       url = "github:oddlama/agenix-rekey";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    blog = {
+      type = "git";
+      url = "https://git.lunixose.duckdns.org/lunixose/blog";
+    };
     den.url = "github:denful/den";
     den-diagram = {
       url = "github:denful/den-diagram";
@@ -71,7 +75,7 @@
     };
     nixcord.url = "github:4evy/nixcord";
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     noctalia = {
       url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -94,7 +98,6 @@
       url = "github:tinted-theming/schemes";
       flake = false;
     };
-    website.url = "github:quocjq/website";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
