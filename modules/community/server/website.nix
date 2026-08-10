@@ -7,7 +7,7 @@
     url = "github:quocjq/website";
   };
 
-  den.aspects.website = {
+  server.website = {
     secrets = [
       {
         name = "website-admin-password";

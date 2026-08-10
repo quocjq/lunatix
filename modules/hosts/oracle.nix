@@ -8,11 +8,12 @@
       <locale>
       <nix-settings>
       <ssh>
-      <pihole>
-      <forgejo>
-      <caddy>
-      <website>
-      <duckdns>
+      <server/pihole>
+      <server/forgejo>
+      <server/caddy>
+      <server/website>
+      <server/duckdns>
+      <server/syncthing-server>
     ];
 
     disk = {

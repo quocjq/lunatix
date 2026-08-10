@@ -1,5 +1,5 @@
 {
-  den.aspects.duckdns = {
+  server.duckdns = {
     secrets = [
       {
         name = "duckdns-token";

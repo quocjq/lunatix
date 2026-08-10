@@ -6,6 +6,19 @@
         openDefaultPorts = true;
         user = user.userName;
         dataDir = "/home/${user.userName}/Documents";
+        settings = {
+          devices = {
+            oracle = {
+              id = "ORACLE-DEVICE-ID";
+            };
+          };
+          folders = {
+            notes = {
+              path = "/home/${user.userName}/Documents/notes";
+              devices = [ "oracle" ];
+            };
+          };
+        };
       };
 
       # Allow syncthing through the firewall.

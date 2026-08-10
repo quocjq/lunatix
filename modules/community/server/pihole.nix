@@ -1,5 +1,5 @@
 {
-  den.aspects.pihole = {
+  server.pihole = {
     secrets = [
       {
         name = "pihole-password";

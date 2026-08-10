@@ -1,5 +1,5 @@
 {
-  den.aspects.forgejo = {
+  server.forgejo = {
     nixos =
       { ... }:
       {

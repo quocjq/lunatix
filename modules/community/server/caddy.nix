@@ -1,5 +1,5 @@
 {
-  den.aspects.caddy = {
+  server.caddy = {
     nixos =
       { ... }:
       {
