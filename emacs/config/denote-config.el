@@ -58,7 +58,6 @@
     "eqc" #'denote-query-contents-link
     "eqf" #'denote-query-filenames-link
     "edd" #'denote-dired
-    "edi" #'denote-dired-link-marked-notes
     "edr" #'denote-dired-rename-files
     "edk" #'denote-dired-rename-marked-files-with-keywords
     "edR" #'denote-dired-rename-marked-files-using-front-matter
