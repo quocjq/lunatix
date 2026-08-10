@@ -10,8 +10,8 @@
   server.website = {
     secrets = [
       {
-        name = "website-admin-password";
-        path = "/run/website/admin-password";
+        name = "syncthing-apikey";
+        path = "/run/website/syncthing-apikey";
         owner = "www-data";
         group = "www-data";
         mode = "0400";
@@ -29,20 +29,16 @@
           group = "www-data";
         };
         users.groups.www-data = { };
-        systemd.tmpfiles.rules = [
-          "d /srv/www 0755 root root - -"
-          "d /srv/www/data 0755 www-data www-data - -"
-        ];
 
         systemd.services.lunatix-website = {
-          description = "lunatix website (editor)";
+          description = "lunatix website (dashboard + blog)";
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           environment = {
             NODE_ENV = "production";
             PORT = "3100";
             NOTES_DIR = "/root/Notes";
-            ADMIN_PASSWORD_FILE = "/run/website/admin-password";
+            SYNCTHING_API_KEY_FILE = "/run/website/syncthing-apikey";
           };
           serviceConfig = {
             Type = "exec";
