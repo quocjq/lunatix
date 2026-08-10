@@ -2035,11 +2035,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1786376816,
-        "narHash": "sha256-gJXXq+DO8qZNKxGp29OzYdDaKsdHOZsgeECMhOOIZkI=",
+        "lastModified": 1786377004,
+        "narHash": "sha256-95T6IG2eDbKsN5cSrEW3Q4DlHDBEHl2Fbd71PIkpGEE=",
         "owner": "quocjq",
         "repo": "website",
-        "rev": "ae722b711649cd7cafa86834228841e1cac6a87f",
+        "rev": "1999b0b90c35b6b0fb2e6ee888f6268f640d73cc",
         "type": "github"
       },
       "original": {
