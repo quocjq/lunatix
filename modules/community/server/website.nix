@@ -56,8 +56,7 @@
               "+${pkgs.coreutils}/bin/chmod -R 2775 /root/Notes"
               "+${pkgs.coreutils}/bin/chown -R root:www-data /root/Notes"
             ];
-            ExecStart = "${pkgs.nodejs}/bin/node ${pkg}/share/lunatix-website/.output/server/index.mjs";
-            WorkingDirectory = "${pkg}/share/lunatix-website/.output/server";
+            ExecStart = "${pkgs.nodejs}/bin/node ${pkg}/share/lunatix-website/index.mjs";
             Restart = "on-failure";
             RestartSec = 3;
             User = "www-data";
