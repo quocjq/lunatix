@@ -48,9 +48,9 @@
           serviceConfig = {
             Type = "exec";
             ExecStartPre = [
-              "${pkgs.coreutils}/bin/mkdir -p /srv/www/data/docs /root/Notes"
-              # self-healing ACLs: www-data needs traverse on /root and rw on Notes.
-              # `+` runs these as root (ExecStartPre defaults to the service user).
+              # `+` runs these as root (ExecStartPre defaults to the service user)
+              "+${pkgs.coreutils}/bin/mkdir -p /srv/www/data/docs /root/Notes"
+              # self-healing ACLs: www-data needs traverse on /root and rw on Notes
               "+${pkgs.acl}/bin/setfacl -m u:www-data:--x /root"
               "+${pkgs.acl}/bin/setfacl -m u:www-data:rwx,d:u:www-data:rwx /root/Notes"
               "+${pkgs.coreutils}/bin/chmod 2775 /root/Notes"
