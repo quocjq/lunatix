@@ -28,10 +28,12 @@
 
       # www-data (webapp) needs rw on the synced notes dir. setgid + ACL so
       # files syncthing (root) drops in stay accessible/writable by www-data.
-      # /root is 0700 by default — give traverse (x) so www-data reaches Notes.
+      # /root is 0700 by default — ACLs for www-data traverse; website service
+      # ExecStartPre re-applies them on every start (self-healing, survives
+      # tmpfiles one-shot boot mode resets).
       systemd.tmpfiles.rules = [
-        "d /root 0751 root root - -"
         "d /root/Notes 2775 root www-data - -"
+        "A /root - - - - u:www-data:--x"
         "A /root/Notes - - - - u:www-data:rwx d:u:www-data:rwx"
       ];
     };
