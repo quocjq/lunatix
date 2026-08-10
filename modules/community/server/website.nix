@@ -42,6 +42,7 @@
             NODE_ENV = "production";
             PORT = "3100";
             DOCS_DIR = "/srv/www/data/docs";
+            NOTES_DIR = "/root/Notes";
             ADMIN_PASSWORD_FILE = "/run/website/admin-password";
           };
           serviceConfig = {
