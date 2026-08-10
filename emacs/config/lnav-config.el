@@ -5,12 +5,9 @@
   :demand t
   :config
   ;; structural + TAB navigation everywhere
-  (global-lnav-mode 1)
+  ;; FIXME: Minibuffer will be annoy
+  ;; (global-lnav-mode 1)
   ;; lnav is disruptive in the minibuffer / echo area — keep those clean.
-  (defun +lnav-disable-in-minibuffer ()
-    (lnav-mode -1))
-  (add-hook 'minibuffer-setup-hook #'+lnav-disable-in-minibuffer)
-  (add-hook 'echo-area-clear-hook #'+lnav-disable-in-minibuffer)
   ;; lnav's C-c prefix collides with C-c d (deft) / C-c p (projectile);
   ;; its commands are bound under SPC o l in keybindings-config. Keep the
   ;; TAB/backtab chunk jumps.
