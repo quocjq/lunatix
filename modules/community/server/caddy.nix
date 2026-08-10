@@ -8,7 +8,7 @@
           virtualHosts = {
             "lunixose.duckdns.org" = {
               extraConfig = ''
-                # Nuxt dashboard (SSR)
+                # notes reader (login) + public blog
                 handle {
                   reverse_proxy 127.0.0.1:3100
                 }
@@ -22,12 +22,6 @@
             "dns.lunixose.duckdns.org" = {
               extraConfig = ''
                 reverse_proxy 127.0.0.1:8080
-              '';
-            };
-            # Private notes editor (login). Same Nuxt app, host-based routing.
-            "note.lunixose.duckdns.org" = {
-              extraConfig = ''
-                reverse_proxy 127.0.0.1:3100
               '';
             };
           };
