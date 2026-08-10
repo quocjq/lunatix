@@ -157,15 +157,13 @@
       "locked": {
         "lastModified": 1786380309,
         "narHash": "sha256-9Hd9ex8o14fXc15sB1mq+KgnTIXeHiTH7svtZa3vhcU=",
-        "ref": "refs/heads/main",
         "rev": "5fb799d0bdc9e31561cf2ad4c23b9d79f3a57995",
-        "revCount": 6,
-        "type": "git",
-        "url": "https://git.lunixose.duckdns.org/lunixose/blog"
+        "type": "tarball",
+        "url": "https://git.lunixose.duckdns.org/api/v1/repos/lunixose/blog/archive/5fb799d0bdc9e31561cf2ad4c23b9d79f3a57995.tar.gz"
       },
       "original": {
-        "type": "git",
-        "url": "https://git.lunixose.duckdns.org/lunixose/blog"
+        "type": "tarball",
+        "url": "https://git.lunixose.duckdns.org/lunixose/blog/archive/main.tar.gz"
       }
     },
     "cachix": {

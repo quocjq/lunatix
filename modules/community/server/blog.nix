@@ -4,8 +4,10 @@
 }:
 {
   flake-file.inputs.blog = {
-    url = "https://git.lunixose.duckdns.org/lunixose/blog";
-    type = "git";
+    # tarball input: fetched over https without the `git` binary (oracle has
+    # none; git+https inputs require it). Forgejo serves the archive URL.
+    url = "https://git.lunixose.duckdns.org/lunixose/blog/archive/main.tar.gz";
+    type = "tarball";
   };
 
   server.blog = {
