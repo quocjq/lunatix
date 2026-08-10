@@ -52,8 +52,9 @@
               "+${pkgs.coreutils}/bin/mkdir -p /srv/www/data/docs /root/Notes"
               # self-healing ACLs: www-data needs traverse on /root and rw on Notes
               "+${pkgs.acl}/bin/setfacl -m u:www-data:--x /root"
-              "+${pkgs.acl}/bin/setfacl -m u:www-data:rwx,d:u:www-data:rwx /root/Notes"
-              "+${pkgs.coreutils}/bin/chmod 2775 /root/Notes"
+              "+${pkgs.acl}/bin/setfacl -Rm u:www-data:rwx,d:u:www-data:rwx /root/Notes"
+              "+${pkgs.coreutils}/bin/chmod -R 2775 /root/Notes"
+              "+${pkgs.coreutils}/bin/chown -R root:www-data /root/Notes"
             ];
             ExecStart = "${pkgs.nodejs}/bin/node ${pkg}/share/lunatix-website/.output/server/index.mjs";
             WorkingDirectory = "${pkg}/share/lunatix-website/.output/server";
