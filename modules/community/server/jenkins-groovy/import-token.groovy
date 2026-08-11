@@ -24,10 +24,9 @@ def credUser = "lunixose"
 
 // Wait up to ~60s for the credentials plugin to load (it boots after core;
 // a fresh Jenkins needs it installed first).
-def cls = null
 for (int i = 0; i < 60; i++) {
     try {
-        cls = Class.forName("com.cloudbees.plugins.credentials.CredentialsStore")
+        Class.forName("com.cloudbees.plugins.credentials.SystemCredentialsProvider")
         break
     } catch (ClassNotFoundException e) {
         if (i == 59) {
@@ -38,15 +37,18 @@ for (int i = 0; i < 60; i++) {
     }
 }
 
-def jenkins = jenkins.model.Jenkins.instance
 def scope = Class.forName("com.cloudbees.plugins.credentials.CredentialsScope")
 def domain = Class.forName("com.cloudbees.plugins.credentials.domains.Domain")
 def impl = Class.forName("com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl")
-def storeCls = Class.forName("com.cloudbees.plugins.credentials.CredentialsStore")
+def providerCls = Class.forName("com.cloudbees.plugins.credentials.SystemCredentialsProvider")
 
-// Domain.global() and store retrieval via getExtensionList.
 def dom = domain.getMethod("global").invoke(null)
-def store = jenkins.getExtensionList(storeCls)[0]
+def provider = providerCls.getMethod("getInstance").invoke(null)
+def store = provider.getStore()
+if (store == null) {
+    println "import-token.groovy: SystemCredentialsProvider store is null, skipping"
+    return
+}
 
 // Remove existing credential with the same id (fresh each boot).
 def existing = store.getCredentials(dom).find { it.getId() == credId }
@@ -57,5 +59,6 @@ if (existing != null) {
 def cred = impl.getConstructor(scope, String.class, String.class, String.class, String.class)
     .newInstance(scope.getField("GLOBAL").get(null), credId, "Forgejo deploy token (agenix)", credUser, token)
 store.addCredentials(dom, cred)
+providerCls.getMethod("save").invoke(provider)
 
 println "import-token.groovy: upserted credential '$credId' ($credUser) from $tokenPath"
