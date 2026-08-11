@@ -53,6 +53,19 @@
           #   pipeline (workflow-aggregator), git, credentials, plain-credentials
           plugins = null;
         };
+
+        # The default NixOS hardening (PrivateUsers+PrivateMounts+
+        # RestrictNamespaces) blocks Jenkins' durable-task launcher: it unshares
+        # into a new mount/user namespace to spawn the job's `sh`, which
+        # RestrictNamespaces forbids -> "process apparently never started",
+        # exit code -2. Relax only the namespace restrictions; keep the rest.
+        systemd.services.jenkins.serviceConfig = {
+          RestrictNamespaces = false;
+          PrivateUsers = false;
+          PrivateMounts = false;
+          MountAPIVFS = false;
+          NoNewPrivileges = false;
+        };
       };
   };
 }
