@@ -50,7 +50,6 @@ switch:
     {{nix}} run .#igloo -- switch
 
 # Switch the ORACLE host remotely (root@oracle, ed25519 key). Run from igloo.
-# Do NOT run `just switch` on the oracle box — that builds igloo (x86_64).
 switch-oracle:
     ssh oraclevps nixos-rebuild switch --flake github:quocjq/lunatix#oracle
 
@@ -74,19 +73,10 @@ write-flake:
 update:
     {{nix}} flake update
 
-# Format all Nix files
-fmt:
-    {{nix}} fmt
-
 # Garbage-collect old generations, keeping at least the 5 most recent
 # (and anything newer than 5 days), then hard-link identical store paths.
 # `nh clean all` covers profiles + boot entries; the final optimise dedupes.
 clean:
-    nh clean all --keep 5 --keep-since 5d
-    {{nix}} store optimise
-
-# Aggressive variant: keep the 5 newest generations regardless of age.
-clean-hard:
     nh clean all --keep 5 --keep-since 0
     {{nix}} store optimise
 
@@ -103,10 +93,6 @@ secret name:
 secret-import name file:
     cd {{secrets_dir}} && EDITOR="cp {{file}}" {{agenix_cmd}} -e {{name}}.age
 
-# Decrypt a secret to stdout (sanity check), e.g. `just secret-show github`
-secret-show name:
-    cd {{secrets_dir}} && {{agenix_cmd}} -d {{name}}.age -i {{identity}}
-
 # Re-encrypt every secret for the current recipients in secrets.nix.
 # Run this after adding/removing a key in secrets.nix.
 rekey:
@@ -114,14 +100,3 @@ rekey:
 
 # Create new ssh key and add it to age & provide public key
 # Type of key: dsa, ecdsa, ecdsa-sk, ed25519, ed25519-sk, rsa
-new-ssh-key type name:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    tmp="$(mktemp -d)"
-    trap 'rm -rf "$tmp"' EXIT
-    ssh-keygen -t {{type}} -f "$tmp/{{name}}" -N "" -C "lunixose@{{name}}"
-    ( cd {{secrets_dir}} && EDITOR="cp $tmp/{{name}}" {{agenix_cmd}} -e {{name}}.age )
-    echo
-    cat "$tmp/{{name}}.pub"
-    echo
-    echo "Then: git add {{secrets_dir}}/{{name}}.age && just switch"

@@ -4,8 +4,10 @@
 }:
 {
   flake-file.inputs.homepage = {
-    # tarball input: fetched over https without the `git` binary (oracle has
-    # none; git+https inputs require it). Forgejo serves the archive URL.
+    # git input (needs the `git` binary on the build host — oracle gets it
+    # via environment.systemPackages below). Updating is `nix flake update
+    # homepage` instead of hand-editing a tarball narHash.
+    # TEMP: tarball while git boots — flip to git+https below after deploy 1.
     url = "https://git.lunixose.duckdns.org/lunixose/homepage/archive/main.tar.gz";
     type = "tarball";
   };
@@ -17,6 +19,9 @@
         pkg = inputs.homepage.packages.${pkgs.stdenv.hostPlatform.system}.default;
       in
       {
+        # `git` binary so nix can fetch the git+https input at build time.
+        environment.systemPackages = [ pkgs.git ];
+
         users.users.www-data = {
           isSystemUser = true;
           group = "www-data";
