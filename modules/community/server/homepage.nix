@@ -7,9 +7,8 @@
     # git input (needs the `git` binary on the build host — oracle gets it
     # via environment.systemPackages below). Updating is `nix flake update
     # homepage` instead of hand-editing a tarball narHash.
-    # TEMP: tarball while git boots — flip to git+https below after deploy 1.
-    url = "https://git.lunixose.duckdns.org/lunixose/homepage/archive/main.tar.gz";
-    type = "tarball";
+    url = "git+https://git.lunixose.duckdns.org/lunixose/homepage";
+    type = "git";
   };
 
   server.homepage = {

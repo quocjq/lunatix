@@ -64,8 +64,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     homepage = {
-      type = "tarball";
-      url = "https://git.lunixose.duckdns.org/lunixose/homepage/archive/main.tar.gz";
+      type = "git";
+      url = "git+https://git.lunixose.duckdns.org/lunixose/homepage";
     };
     hyprland.url = "github:hyprwm/Hyprland";
     import-tree.url = "github:vic/import-tree";
