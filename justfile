@@ -52,7 +52,7 @@ switch:
 # Switch the ORACLE host remotely (root@oracle, ed25519 key). Run from igloo.
 # Do NOT run `just switch` on the oracle box — that builds igloo (x86_64).
 switch-oracle:
-    ssh oraclevps nixos-rebuild switch --flake github:lunixose/lunatix#oracle
+    ssh oraclevps nixos-rebuild switch --flake github:quocjq/lunatix#oracle
 
 # Deploy the oracle host (currently Ubuntu) — nixos-anywhere + kexec, builds on remote.
 # Oracle instances log in as `ubuntu` (passwordless sudo), not root.
