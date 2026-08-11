@@ -857,11 +857,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1786432704,
-        "narHash": "sha256-jQNcAm6NuZpbouRQ5fcLIZrIZjXwAw9LbHNy83O2ddw=",
-        "rev": "a985a4f2b50551bd567f13f4862c348ea2d1421c",
+        "lastModified": 1786435302,
+        "narHash": "sha256-IWdAWNYZB1g9KHFvFHG4ll1fDarQDHs5uY0+7o409Ak=",
+        "rev": "6009af927fe66342799889d7d9cc66392822002c",
         "type": "tarball",
-        "url": "https://git.lunixose.duckdns.org/api/v1/repos/lunixose/homepage/archive/a985a4f2b50551bd567f13f4862c348ea2d1421c.tar.gz"
+        "url": "https://git.lunixose.duckdns.org/api/v1/repos/lunixose/homepage/archive/6009af927fe66342799889d7d9cc66392822002c.tar.gz"
       },
       "original": {
         "type": "tarball",
