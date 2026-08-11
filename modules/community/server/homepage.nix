@@ -15,7 +15,6 @@
       { pkgs, ... }:
       let
         pkg = inputs.homepage.packages.${pkgs.stdenv.hostPlatform.system}.default;
-        configDir = "/root/homepage";
       in
       {
         users.users.www-data = {
@@ -32,20 +31,9 @@
             NODE_ENV = "production";
             PORT = "3200";
             HOST = "127.0.0.1";
-            HOMEPAGE_CONFIG = "${configDir}/services.yaml";
           };
           serviceConfig = {
             Type = "exec";
-            ExecStartPre = [
-              # `+` runs these as root (ExecStartPre defaults to the service user)
-              "+${pkgs.coreutils}/bin/mkdir -p ${configDir}"
-              # self-healing ACLs: www-data needs traverse on /root and rw on the
-              # config dir so it can live-read services.yaml (mirrors blog/Notes).
-              "+${pkgs.acl}/bin/setfacl -m u:www-data:--x /root"
-              "+${pkgs.acl}/bin/setfacl -Rm u:www-data:rx,d:u:www-data:rx ${configDir}"
-              "+${pkgs.coreutils}/bin/chmod -R 2755 ${configDir}"
-              "+${pkgs.coreutils}/bin/chown -R root:www-data ${configDir}"
-            ];
             ExecStart = "${pkgs.nodejs}/bin/node ${pkg}/share/lunatix-homepage/server/entry.mjs";
             Restart = "on-failure";
             RestartSec = 3;
