@@ -564,7 +564,7 @@ already-loaded (stage-1) features. Byte-compiles into the cache on first run."
 (defvar luna--initial-font-height nil
   "Default frame font height, captured at startup.")
 
-(defun doom/increase-font-size (&optional inc)
+(defun luna/increase-font-size (&optional inc)
   "Increase the frame font size by INC*10 (default 10)."
   (interactive "p")
   (unless luna--initial-font-height
@@ -572,12 +572,12 @@ already-loaded (stage-1) features. Byte-compiles into the cache on first run."
   (let ((cur (face-attribute 'default :height)))
     (set-face-attribute 'default nil :height (+ cur (* 10 (or inc 1))))))
 
-(defun doom/decrease-font-size (&optional inc)
+(defun luna/decrease-font-size (&optional inc)
   "Decrease the frame font size by INC*10 (default 10)."
   (interactive "p")
-  (doom/increase-font-size (- (or inc 1))))
+  (luna/increase-font-size (- (or inc 1))))
 
-(defun doom/reset-font-size ()
+(defun luna/reset-font-size ()
   "Reset the frame font size to the configured default."
   (interactive)
   (when luna--initial-font-height
@@ -586,6 +586,156 @@ already-loaded (stage-1) features. Byte-compiles into the cache on first run."
 (run-with-idle-timer 1 nil
                      (lambda ()
                        (setq luna--initial-font-height (face-attribute 'default :height))))
+
+;;; Buffer/path/file helpers (moved from config/keybind.el; luna/* prefix)
+(defun luna/switch-to-scratch-buffer ()
+  (interactive)
+  (switch-to-buffer "*scratch*"))
+
+(defun luna/toggle-scratch-buffer ()
+  (interactive)
+  (if (equal (buffer-name) "*scratch*")
+      (kill-buffer)
+    (switch-to-buffer "*scratch*")))
+
+(defun luna/kill-all-buffers ()
+  (interactive)
+  (mapc #'kill-buffer
+        (cl-remove-if #'buffer-modified-p
+                      (buffer-list)))
+  (switch-to-buffer "*scratch*"))
+
+(defun luna/kill-other-buffers ()
+  (interactive)
+  (mapc (lambda (buf)
+          (unless (eq buf (current-buffer))
+            (kill-buffer buf)))
+        (buffer-list)))
+
+(defun luna/kill-buried-buffers ()
+  (interactive)
+  (mapc (lambda (buf)
+          (when (and (not (eq buf (current-buffer)))
+                     (eq (car (buffer-list)) buf))
+            (kill-buffer buf)))
+        (buffer-list)))
+
+(defun luna/yank-buffer-path ()
+  (interactive)
+  (when-let* ((path (buffer-file-name)))
+    (kill-new path)
+    (message "Copied %s" path)))
+
+(defun luna/delete-this-file ()
+  (interactive)
+  (when-let* ((path (buffer-file-name)))
+    (when (yes-or-no-p (format "Delete %s?" path))
+      (delete-file path)
+      (kill-buffer))))
+
+(defun luna/copy-this-file ()
+  (interactive)
+  (when-let* ((path (buffer-file-name)))
+    (let ((new (read-file-name "Copy to: ")))
+      (copy-file path new)
+      (message "Copied %s to %s" path new))))
+
+(defun luna/move-this-file ()
+  (interactive)
+  (when-let* ((path (buffer-file-name)))
+    (let ((new (read-file-name "Move to: ")))
+      (rename-file path new)
+      (set-visited-file-name new t t)
+      (message "Moved %s to %s" path new))))
+
+(defun luna/sudo-find-file (file)
+  (interactive "Fsudo find file: ")
+  (find-file (concat "/sudo:root@localhost:" file)))
+
+(defun luna/sudo-this-file ()
+  (interactive)
+  (when-let* ((path (buffer-file-name)))
+    (find-alternate-file (concat "/sudo:root@localhost:" path))))
+
+(defun luna/insert-file-path ()
+  (interactive)
+  (when-let* ((path (buffer-file-name)))
+    (insert path)))
+
+(defun luna/newline-below ()
+  (interactive)
+  (end-of-line)
+  (newline-and-indent))
+
+(defun luna/newline-above ()
+  (interactive)
+  (beginning-of-line)
+  (newline-and-indent)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(defun luna/backward-to-bol-or-indent ()
+  (interactive)
+  (if (or (bolp) (> (current-column) (current-indentation)))
+      (back-to-indentation)
+    (beginning-of-line)))
+
+(defun luna/forward-to-last-non-comment-or-eol ()
+  (interactive)
+  (if (eolp)
+      (back-to-indentation)
+    (end-of-line)))
+
+(defun luna/search-project-for-symbol-at-point ()
+  (interactive)
+  (let ((sym (thing-at-point 'symbol t)))
+    (if sym
+        (projectile-ripgrep sym)
+      (projectile-ripgrep))))
+
+(defun luna/previous-file ()
+  "Cycle to the previous file (buffer + recentf list)."
+  (interactive)
+  (when-let* ((files (delete-dups
+                      (delq nil (cons (buffer-file-name)
+                                      (mapcar #'expand-file-name recentf-list)))))
+              (cur (or (buffer-file-name) (car files)))
+              (idx (cl-position cur files :test #'equal)))
+    (find-file (nth (mod (1- idx) (length files)) files))))
+
+(defun luna/next-file ()
+  "Cycle to the next file (buffer + recentf list)."
+  (interactive)
+  (when-let* ((files (delete-dups
+                      (delq nil (cons (buffer-file-name)
+                                      (mapcar #'expand-file-name recentf-list)))))
+              (cur (or (buffer-file-name) (car files)))
+              (idx (cl-position cur files :test #'equal)))
+    (find-file (nth (mod (1+ idx) (length files)) files))))
+
+(defun luna/org-localleader ()
+  (lunatix-localleader
+    "a"   '(org-agenda :wk "agenda")
+    "l"   '(org-store-link :wk "store link")
+    "n"   '(org-capture :wk "capture")
+    "t"   '(org-todo-list :wk "todo")
+    "T"   '(org-todo :wk "set todo")
+    "-"   '(org-insert-structure-template :wk "template")
+    "d"   '(org-deadline :wk "deadline")
+    "s"   '(org-schedule :wk "schedule")
+    "e"   '(org-export-dispatch :wk "export")))
+
+(defun luna/elisp-localleader ()
+  (lunatix-localleader
+    "e"   '(eval-buffer :wk "eval buffer")
+    "d"   '(eval-defun :wk "eval defun")
+    "r"   '(eval-region :wk "eval region")))
+
+(defun luna/python-localleader ()
+  (lunatix-localleader
+    "e"   '(python-shell-send-buffer :wk "send buffer")
+    "r"   '(python-shell-send-region :wk "send region")
+    "f"   '(python-shell-send-defun :wk "send defun")))
 
 (defun luna-disable-line-numbers-h ()
   (display-line-numbers-mode -1))

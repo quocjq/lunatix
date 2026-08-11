@@ -232,7 +232,7 @@ gotcha that caused 3-press ESC). =C-s= consult-history. Smart =C-a/C-e=.
 | prefix            | n  | location / notes                        |
 |-------------------+----+-----------------------------------------|
 | =+org/*=          | 26 | lang-config: org commands               |
-| =+doom/*=         | 22 | keybindings: buffer/path/file helpers   |
+| =luna/*=            | 22 | lunaris.el: buffer/path/file helpers       |
 | =+workspace/*=    | 19 | ui-config: persp-mode wrapper           |
 | =+go/*=           | 11 | lang-config: go test/gen/bench          |
 | =+lookup/*=       | 10 | tools-config: xref/dumb-jump handlers   |

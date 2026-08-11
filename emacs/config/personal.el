@@ -69,7 +69,7 @@
 ;; Quit instantly — no "modified buffers" / autosave prompt when closing.
 ;; Unsaved buffer changes are discarded.
 (setq confirm-kill-emacs nil)
-(defadvice! +doom/kill-emacs-no-prompt-a (&rest _)
+(defadvice! luna/kill-emacs-no-prompt-a (&rest _)
   :override #'save-buffers-kill-terminal
   (kill-emacs))
 

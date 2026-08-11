@@ -13,7 +13,7 @@ is editorial.
 
 * lunaris.el
 
-Backend framework: leaf DSL, lbind/map!/after!/defadvice! macros, manifest, stage-2 tree loader (cache + doctor), luna-compat helpers, font zoom.
+Backend framework: leaf DSL, lbind/map!/after!/defadvice! macros, manifest, stage-2 tree loader (cache + doctor), luna-compat helpers, font zoom, buffer/path/file helpers.
 
 | function | purpose |
 |----------+---------|
@@ -60,9 +60,31 @@ Backend framework: leaf DSL, lbind/map!/after!/defadvice! macros, manifest, stag
 | =luna-real-buffer-p= |  |
 | =luna-fallback-buffer= | *scratch* |
 | =luna--initial-font-height= |  |
-| =doom/increase-font-size= | Increase the frame font size by INC*10 (default 10). |
-| =doom/decrease-font-size= | Decrease the frame font size by INC*10 (default 10). |
-| =doom/reset-font-size= | Reset the frame font size to the configured default. |
+| =luna/increase-font-size= | Increase the frame font size by INC*10 (default 10). |
+| =luna/decrease-font-size= | Decrease the frame font size by INC*10 (default 10). |
+| =luna/reset-font-size= | Reset the frame font size to the configured default. |
+| =luna/switch-to-scratch-buffer= | *scratch* |
+| =luna/toggle-scratch-buffer= | *scratch* |
+| =luna/kill-all-buffers= | *scratch* |
+| =luna/kill-other-buffers= |  |
+| =luna/kill-buried-buffers= |  |
+| =luna/yank-buffer-path= | Copied %s |
+| =luna/delete-this-file= | Delete %s? |
+| =luna/copy-this-file= | Copy to: |
+| =luna/move-this-file= | Move to: |
+| =luna/sudo-find-file= | Fsudo find file: |
+| =luna/sudo-this-file= | /sudo:root@localhost: |
+| =luna/insert-file-path= |  |
+| =luna/newline-below= |  |
+| =luna/newline-above= |  |
+| =luna/backward-to-bol-or-indent= |  |
+| =luna/forward-to-last-non-comment-or-eol= |  |
+| =luna/search-project-for-symbol-at-point= |  |
+| =luna/previous-file= | Cycle to the previous file (buffer + recentf list). |
+| =luna/next-file= | Cycle to the next file (buffer + recentf list). |
+| =luna/org-localleader= | '(org-agenda :wk |
+| =luna/elisp-localleader= | '(eval-buffer :wk |
+| =luna/python-localleader= | '(python-shell-send-buffer :wk |
 | =luna-disable-line-numbers-h= |  |
 | =luna-mark-buffer-as-real-h= |  |
 | =luna-profile-state-dir= |  |
@@ -146,32 +168,9 @@ which-key popup settings.
 
 * config/keybindings-config.el
 
-Full doom <leader> tree, bracket navigation, minibuffer ESC/C-s, font zoom keys, +doom/* helpers.
+Full doom <leader> tree, bracket navigation, minibuffer ESC/C-s, font zoom keys.
 
-| function | purpose |
-|----------+---------|
-| =+doom/switch-to-scratch-buffer= | *scratch* |
-| =+doom/toggle-scratch-buffer= | *scratch* |
-| =+doom/kill-all-buffers= | *scratch* |
-| =+doom/kill-other-buffers= |  |
-| =+doom/kill-buried-buffers= |  |
-| =+doom/yank-buffer-path= | Copied %s |
-| =+doom/delete-this-file= | Delete %s? |
-| =+doom/copy-this-file= | Copy to: |
-| =+doom/move-this-file= | Move to: |
-| =+doom/sudo-find-file= | Fsudo find file: |
-| =+doom/sudo-this-file= | /sudo:root@localhost: |
-| =+doom/insert-file-path= |  |
-| =+doom/newline-below= |  |
-| =+doom/newline-above= |  |
-| =+doom/backward-to-bol-or-indent= |  |
-| =+doom/forward-to-last-non-comment-or-eol= |  |
-| =+doom/search-project-for-symbol-at-point= |  |
-| =+doom/previous-file= | Cycle to the previous file (buffer + recentf list). |
-| =+doom/next-file= | Cycle to the next file (buffer + recentf list). |
-| =+doom/org-localleader= | '(org-agenda :wk |
-| =+doom/elisp-localleader= | '(eval-buffer :wk |
-| =+doom/python-localleader= | '(python-shell-send-buffer :wk |
+(no top-level defuns; luna/* buffer/path/file helpers live in lunaris.el)
 
 * config/splash.el
 
