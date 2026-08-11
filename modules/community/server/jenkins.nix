@@ -32,9 +32,10 @@
         services.jenkins = {
           enable = true;
           listenAddress = "127.0.0.1";
-          port = 8080;
+          port = 8081;
           # CI is internal-only: no caddy vhost, reach it via
-          #   ssh -L 8080:127.0.0.1:8080 oraclevps
+          #   ssh -L 8081:127.0.0.1:8081 oraclevps
+          # (8080 is pihole-FTL's web interface; keep clear of it)
           extraJavaOptions = [
             "-Xms256m"
             "-Xmx1g"
