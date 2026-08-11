@@ -6,7 +6,6 @@
 ;;; Source files never bind keys; they may only define the commands they bind.
 ;;; Defer every mode-map bind with `after!' so the keymap exists when it runs.
 ;;;
-;;; Ported from doomemacs/modules/config/default/+evil-bindings.el
 
 ;; Buffer/path/file helpers live in lunaris.el (luna/* prefix).
 
@@ -628,52 +627,52 @@
    "d" '(org-priority-down :wk "priority down")
    "p" '(org-priority :wk "priority")
    "u" '(org-priority-up :wk "priority up")))
- (after! org-agenda
-  (general-define-key
-   :keymaps 'org-agenda-mode-map
-   :states '(motion normal)
-   "C-SPC" #'org-agenda-show-and-scroll-up)
-  ;; org-agenda-mode-map (and its evil state maps, via evil-collection) binds
-  ;; SPC to scroll (org-agenda.el), which blocks the SPC m localleader prefix
-  ;; below. Scroll already lives on C-SPC. Clear both the base map and the
-  ;; evil state maps so general can install the SPC m prefix.
-  (keymap-set org-agenda-mode-map "SPC" nil)
-  (when (fboundp 'evil-define-key*)
-    (dolist (state '(normal visual motion))
-      (when (boundp 'org-agenda-mode-map)
-        (condition-case nil
-            (evil-define-key* state org-agenda-mode-map (kbd "SPC") nil)
-          (error nil)))))
-  (general-define-key
-   :keymaps 'org-agenda-mode-map
-   :states '(normal visual motion)
-   :prefix luna-localleader-key
-   "q" '(org-agenda-set-tags :wk "set tags")
-   "r" '(org-agenda-refile :wk "refile")
-   "t" '(org-agenda-todo :wk "todo"))
-  (general-define-key
-   :keymaps 'org-agenda-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " d")
-   "d" '(org-agenda-deadline :wk "deadline")
-   "s" '(org-agenda-schedule :wk "schedule"))
-  (general-define-key
-   :keymaps 'org-agenda-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " c")
-   "c" '(org-agenda-clock-cancel :wk "clock cancel")
-   "g" '(org-agenda-clock-goto :wk "clock goto")
-   "i" '(org-agenda-clock-in :wk "clock in")
-   "o" '(org-agenda-clock-out :wk "clock out")
-   "r" '(org-agenda-clockreport-mode :wk "clock report mode")
-   "s" '(org-agenda-show-clocking-issues :wk "clocking issues"))
-  (general-define-key
-   :keymaps 'org-agenda-mode-map
-   :states '(normal visual motion)
-   :prefix (concat luna-localleader-key " p")
-   "d" '(org-agenda-priority-down :wk "priority down")
-   "p" '(org-agenda-priority :wk "priority")
-   "u" '(org-agenda-priority-up :wk "priority up")))
+(after! org-agenda
+ (general-define-key
+  :keymaps 'org-agenda-mode-map
+  :states '(motion normal)
+  "C-SPC" #'org-agenda-show-and-scroll-up)
+ ;; org-agenda-mode-map (and its evil state maps, via evil-collection) binds
+ ;; SPC to scroll (org-agenda.el), which blocks the SPC m localleader prefix
+ ;; below. Scroll already lives on C-SPC. Clear both the base map and the
+ ;; evil state maps so general can install the SPC m prefix.
+ (keymap-set org-agenda-mode-map "SPC" nil)
+ (when (fboundp 'evil-define-key*)
+   (dolist (state '(normal visual motion))
+     (when (boundp 'org-agenda-mode-map)
+       (condition-case nil
+           (evil-define-key* state org-agenda-mode-map (kbd "SPC") nil)
+         (error nil)))))
+ (general-define-key
+  :keymaps 'org-agenda-mode-map
+  :states '(normal visual motion)
+  :prefix luna-localleader-key
+  "q" '(org-agenda-set-tags :wk "set tags")
+  "r" '(org-agenda-refile :wk "refile")
+  "t" '(org-agenda-todo :wk "todo"))
+ (general-define-key
+  :keymaps 'org-agenda-mode-map
+  :states '(normal visual motion)
+  :prefix (concat luna-localleader-key " d")
+  "d" '(org-agenda-deadline :wk "deadline")
+  "s" '(org-agenda-schedule :wk "schedule"))
+ (general-define-key
+  :keymaps 'org-agenda-mode-map
+  :states '(normal visual motion)
+  :prefix (concat luna-localleader-key " c")
+  "c" '(org-agenda-clock-cancel :wk "clock cancel")
+  "g" '(org-agenda-clock-goto :wk "clock goto")
+  "i" '(org-agenda-clock-in :wk "clock in")
+  "o" '(org-agenda-clock-out :wk "clock out")
+  "r" '(org-agenda-clockreport-mode :wk "clock report mode")
+  "s" '(org-agenda-show-clocking-issues :wk "clocking issues"))
+ (general-define-key
+  :keymaps 'org-agenda-mode-map
+  :states '(normal visual motion)
+  :prefix (concat luna-localleader-key " p")
+  "d" '(org-agenda-priority-down :wk "priority down")
+  "p" '(org-agenda-priority :wk "priority")
+  "u" '(org-agenda-priority-up :wk "priority up")))
 (after! evil-org
   (let-alist evil-org-movement-bindings
     (let ((Cright  (concat "C-" .right))

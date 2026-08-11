@@ -53,16 +53,13 @@ switch:
 switch-oracle:
     ssh oraclevps nixos-rebuild switch --flake github:quocjq/lunatix#oracle
 
-# Bump the homepage flake input to the latest main and deploy oracle.
-# Run AFTER pushing changes to the homepage repo (forgejo). Steps:
-#   1. nix flake lock --update-input homepage   (computes rev + narHash)
-#   2. commit flake.lock, push to origin
-#   3. nixos-rebuild with the EXPLICIT commit sha (github flake cache on
-#      oracle goes stale and silently builds an old rev otherwise)
-deploy-homepage:
-    {{nix}} flake lock --update-input homepage
+# Bump a flake input to the latest main and deploy oracle. Run after pushing
+# changes to that repo. The explicit commit sha is required: oracle's github
+# flake cache goes stale and silently builds an old rev otherwise.
+update input:
+    {{nix}} flake update {{input}}
     git add flake.lock flake.nix
-    git commit -m "chore(flake): bump homepage input"
+    git commit -m "chore(flake): bump {{input}} input"
     git push origin main
     ssh oraclevps nixos-rebuild switch --flake github:quocjq/lunatix/$(git rev-parse HEAD)#oracle
 
@@ -71,8 +68,8 @@ deploy-homepage:
 # First deploy: --copy-host-keys preserves Ubuntu's host key so agenix secrets
 # (rekeyed to that key) decrypt on first boot.
 # Usage: just deploy-oracle [ubuntu@ip]
-deploy-oracle target:
-    {{nix}} run .#deploy-oracle -- --build-on remote --copy-host-keys -i ~/.ssh/ssh-key-2026-08-09.key --flake .#oracle {{target}}
+deploy target:
+    {{nix}} run .#deploy -- --build-on remote --copy-host-keys -i ~/.ssh/ssh-key-2026-08-09.key --flake .#oracle {{target}}
 
 # Test the configuration in a throwaway VM
 vm:

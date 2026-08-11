@@ -10,7 +10,13 @@
   :defer t
   :after evil
   :init
-  (setq evil-undo-system 'undo-fu)
+  ;; set the dispatch vars immediately (not in :config): undo-fu stays
+  ;; deferred, so :config/`evil-set-undo-system' would never run and evil
+  ;; would keep falling back to the stock `undo'. The functions autoload
+  ;; on first `u' / `C-r' press.
+  (setq evil-undo-system 'undo-fu
+        evil-undo-function 'undo-fu-only-undo
+        evil-redo-function 'undo-fu-only-redo)
   :config
   (evil-set-undo-system 'undo-fu))
 
