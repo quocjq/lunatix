@@ -44,6 +44,12 @@
         web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2))
 
+;;; Astro (.astro) — astro-ts-mode (treesit) + astro-ls via lsp-mode.
+;;; auto-mode-alist wiring comes from astro-ts-mode's autoloads (active once
+;;; the tree-sitter-astro grammar is installed via with-all-grammars).
+(after! lsp-mode
+  (add-hook 'astro-ts-mode-hook #'lsp-deferred))
+
 ;;; Python: no native-completion warning
 (after! python
   (setq python-shell-completion-native-enable nil))

@@ -42,6 +42,9 @@
 ;; nix puts every package dir on =load-path= but does not run the autoloads.
 ;; Register them so autoload-only entry points (e.g. doom-themes-org-config)
 ;; resolve. Loading = registering; cheap.
+;; treesit must be loaded first: ts-mode packages' autoloads (astro-ts-mode)
+;; call `treesit-ready-p' at load time, which is void otherwise.
+(require 'treesit)
 (dolist (dir load-path)
   (when (file-directory-p dir)
     (dolist (autoload-file (directory-files dir t "-autoloads\\.el$"))

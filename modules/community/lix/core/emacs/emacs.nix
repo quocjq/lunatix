@@ -60,6 +60,7 @@
           in
           [
             epkgs.eglot
+            epkgs.astro-ts-mode
             epkgs.treesit-grammars.with-all-grammars
             (eaf.withApplications (apps eaf))
             lnav
@@ -151,6 +152,7 @@
         # JS/TS/Vue (web-mode + lsp-mode; tsserver covers vue in web-mode)
         typescript-language-server # LSP: js/ts/tsx, and vue via web-mode
         eslint
+        astro-language-server # LSP: astro-ls for .astro (astro-ts-mode + lsp-astro)
       ]);
     };
   };
