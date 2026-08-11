@@ -24,6 +24,11 @@
                 reverse_proxy 127.0.0.1:8080
               '';
             };
+            "homepage.lunixose.duckdns.org" = {
+              extraConfig = ''
+                reverse_proxy 127.0.0.1:3200
+              '';
+            };
           };
         };
       };

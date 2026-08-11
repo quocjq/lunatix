@@ -12,6 +12,7 @@
       <server/forgejo>
       <server/caddy>
       <server/blog>
+      <server/homepage>
       <server/duckdns>
       <server/syncthing-server>
     ];
