@@ -15,6 +15,8 @@
       <server/homepage>
       <server/duckdns>
       <server/syncthing-server>
+      <server/jenkins>
+      <server/lunatix-deploy>
     ];
 
     disk = {
