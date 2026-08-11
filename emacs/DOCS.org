@@ -611,6 +611,13 @@ doom :emacs vc port.
 (no top-level defuns)
 
 
+* framework/emacs/undo.el
+
+doom :emacs undo port — evil undo system: undo-fu (vim u/C-r, branchless), undo-fu-session (persistent per-file undo), vundo (visual undo tree).
+
+(no top-level defuns)
+
+
 * framework/term/term.el
 
 :term group file.

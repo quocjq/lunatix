@@ -19,26 +19,6 @@
             ";;; " (file-name-nondirectory buffer-file-name) " ends here" "\n"))
          auto-insert-alist)))
 
-;;; Undo (doom emacs/undo, kept here)
-(leaf undo-fu
-  :ensure t
-  :defer t
-  :after evil
-  :config
-  (evil-set-undo-system 'undo-fu))
-
-(leaf undo-fu-session
-  :ensure t
-  :defer t
-  :after undo-fu
-  :config
-  (undo-fu-session-global-mode 1)
-  (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG$" "/git-rebase-todo$")))
-
-;; vundo: visual undo tree on top of the standard undo list (works with
-;; undo-fu, which keeps history in `buffer-undo-list').  Open with `SPC u'.
-(leaf vundo
-  :ensure t
-  :commands vundo)
+;;; Undo (doom emacs/undo) moved to framework/emacs/undo.el
 
 ;;; editor/file-templates.el ends here
