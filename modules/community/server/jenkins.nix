@@ -10,7 +10,7 @@
     ];
 
     nixos =
-      { pkgs, ... }:
+      { pkgs, lib, ... }:
       let
         groovyImport = ./jenkins-groovy/import-token.groovy;
       in
@@ -60,11 +60,11 @@
         # RestrictNamespaces forbids -> "process apparently never started",
         # exit code -2. Relax only the namespace restrictions; keep the rest.
         systemd.services.jenkins.serviceConfig = {
-          RestrictNamespaces = false;
-          PrivateUsers = false;
-          PrivateMounts = false;
-          MountAPIVFS = false;
-          NoNewPrivileges = false;
+          RestrictNamespaces = lib.mkForce false;
+          PrivateUsers = lib.mkForce false;
+          PrivateMounts = lib.mkForce false;
+          MountAPIVFS = lib.mkForce false;
+          NoNewPrivileges = lib.mkForce false;
         };
       };
   };
