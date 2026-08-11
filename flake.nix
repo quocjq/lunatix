@@ -16,8 +16,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     blog = {
-      type = "tarball";
-      url = "https://git.lunixose.duckdns.org/lunixose/blog/archive/main.tar.gz";
+      type = "git";
+      url = "git+https://git.lunixose.duckdns.org/lunixose/blog";
     };
     den.url = "github:denful/den";
     den-diagram = {

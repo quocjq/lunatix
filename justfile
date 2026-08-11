@@ -53,6 +53,19 @@ switch:
 switch-oracle:
     ssh oraclevps nixos-rebuild switch --flake github:quocjq/lunatix#oracle
 
+# Bump the homepage flake input to the latest main and deploy oracle.
+# Run AFTER pushing changes to the homepage repo (forgejo). Steps:
+#   1. nix flake lock --update-input homepage   (computes rev + narHash)
+#   2. commit flake.lock, push to origin
+#   3. nixos-rebuild with the EXPLICIT commit sha (github flake cache on
+#      oracle goes stale and silently builds an old rev otherwise)
+deploy-homepage:
+    {{nix}} flake lock --update-input homepage
+    git add flake.lock flake.nix
+    git commit -m "chore(flake): bump homepage input"
+    git push origin main
+    ssh oraclevps nixos-rebuild switch --flake github:quocjq/lunatix/$(git rev-parse HEAD)#oracle
+
 # Deploy the oracle host (currently Ubuntu) — nixos-anywhere + kexec, builds on remote.
 # Oracle instances log in as `ubuntu` (passwordless sudo), not root.
 # First deploy: --copy-host-keys preserves Ubuntu's host key so agenix secrets
