@@ -145,6 +145,8 @@
   "or"  '(ielm :wk "ielm")
   "ot"  '(vterm :wk "vterm")
   "oT"  '(vterm :wk "vterm here")
+  "on"  '(lwf-note :wk "note workflow")
+  "ow"  '(lwf-open :wk "open workflow")
   "o-"  '(dired-jump :wk "dired")
   "oD"  '(docker :wk "docker")
   "ol"  '("lnav")

@@ -81,5 +81,13 @@
 (after! evil
   (defalias 'evil-insert-state 'evil-emacs-state))
 
+;; lwf — declarative window layouts (development checkout, load-path)
+(let ((lwf-dir (expand-file-name "lwf" (expand-file-name "Proj" (getenv "HOME")))))
+  (when (file-directory-p lwf-dir)
+    (add-to-list 'load-path lwf-dir)
+    (require 'lwf)
+    (require 'lwf-pane)
+    (require 'lwf-note)))
+
 ;;; personal.el ends here
 (provide 'personal)
