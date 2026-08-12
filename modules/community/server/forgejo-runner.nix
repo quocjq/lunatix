@@ -50,6 +50,7 @@
           package = pkgs.forgejo-runner;
           instances.default = {
             enable = true;
+            name = "default";
             url = "http://127.0.0.1:3000";
             tokenFile = "/run/agenix/forgejo-runner-token";
             # Native execution on the oracle host — no docker/podman involved.
