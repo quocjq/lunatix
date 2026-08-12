@@ -14,17 +14,22 @@
         # as a DynamicUser, so the key lives at a stable path under StateDirectory.
         name = "github";
         path = "/var/lib/gitea-runner/default/.ssh/github";
-        owner = "gitea-runner";
-        group = "gitea-runner";
-        mode = "0600";
+        owner = "root";
+        group = "keys";
+        mode = "0640";
       }
     ];
 
     nixos =
-      { pkgs, ... }:
+      { pkgs, lib, ... }:
       {
         # The runner's jobs call `nix build` — allow it through the daemon.
         nix.settings.allowed-users = [ "gitea-runner" ];
+
+        # gitea-runner is a DynamicUser (not in users.users), so grant the keys
+        # group (which owns the shared github ssh key) via SupplementaryGroups.
+        systemd.services.gitea-runner-default.serviceConfig.SupplementaryGroups =
+          lib.mkForce [ "keys" ];
 
         # Pre-create the runner StateDirectory layout so the agenix secrets
         # (mounted at activation, before the service starts) land in a dir
