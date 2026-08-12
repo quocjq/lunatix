@@ -11,6 +11,7 @@
           hydraURL = "http://oracle:3001";
           port = 3001; # 3000 = forgejo, 3100 = blog, 3200 = homepage
           listenHost = "127.0.0.1"; # private; tailscale serve exposes it
+          notificationSender = "hydra@lunixose.duckdns.org";
           # oracle has 26G free; pause the queue near-full so builds don't
           # starve the store alongside nixos-rebuild switches.
           minimumDiskFree = 20;
