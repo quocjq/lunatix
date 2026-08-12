@@ -40,6 +40,10 @@
           if [ ! -d /var/lib/lunatix-deploy/lunatix/.git ]; then
             ${pkgs.git}/bin/git clone --no-checkout ${repo} /var/lib/lunatix-deploy/lunatix
           fi
+          # Force the remote URL every run: an older deploy script cloned from
+          # forgejo, and the checkout's `origin` would otherwise keep pointing
+          # there (a stale mirror), silently ignoring the github chain.
+          ${pkgs.git}/bin/git -C /var/lib/lunatix-deploy/lunatix remote set-url origin ${repo}
           ${pkgs.git}/bin/git -C /var/lib/lunatix-deploy/lunatix fetch origin main || true
 
           new_rev=$(${pkgs.git}/bin/git -C /var/lib/lunatix-deploy/lunatix rev-parse origin/main)
