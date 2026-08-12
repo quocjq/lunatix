@@ -1,0 +1,55 @@
+# -*- mode: snippet -*-
+# Castel lecture-notes snippets (castel.dev/post/lecture-notes-1), yasnippet port.
+# Regex snippets (a1 -> a_1, 3/ -> frac, visual /) have no yasnippet equivalent;
+# cdlatex (latex +cdlatex) covers smart frac/sub/sup in math mode instead.
+# Keys overlapping the doom math.yasnippet port (mk dm sr cb // sq sum lim hat
+# bar vec ovl) are intentionally not redefined here.
+
+# name: environment
+# key: beg
+# --
+\begin{$1}
+$0
+\end{$1}
+
+# name: complement
+# key: compl
+# condition: (texmathp)
+# --
+^{c}$0
+
+# name: superscript
+# key: td
+# condition: (texmathp)
+# --
+^{$1}$0
+
+# name: function
+# key: fun
+# condition: (texmathp)
+# --
+f: \R \to \R : $0
+
+# name: infinity
+# key: ooo
+# condition: (texmathp)
+# --
+\infty $0
+
+# name: to
+# key: ->
+# condition: (texmathp)
+# --
+\to $0
+
+# name: maps-to
+# key: !>
+# condition: (texmathp)
+# --
+\mapsto $0
+
+# name: subset
+# key: cc
+# condition: (texmathp)
+# --
+\subset $0
