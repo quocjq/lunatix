@@ -15,7 +15,7 @@
       <server/homepage>
       <server/duckdns>
       <server/syncthing-server>
-      <server/jenkins>
+      <server/forgejo-runner>
       <server/lunatix-deploy>
     ];
 
