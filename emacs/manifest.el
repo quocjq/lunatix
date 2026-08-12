@@ -19,9 +19,12 @@
  (popup +defaults)
  smooth-scroll
  unicode
- (vc-gutter +pretty)
+  (vc-gutter +pretty)
  window-select
  workspaces
+
+ :checkers
+ checkers
 
  :editor
  (evil +everywhere)
