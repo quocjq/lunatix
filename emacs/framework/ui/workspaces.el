@@ -207,7 +207,13 @@ throws an error."
     (equal (+workspace-current-name) name)))
 
 ;;; Commands
-(defalias '+workspace/restore-last-session #'persp-load-state-from-file)
+(defun +workspace/restore-last-session ()
+  "Restore the last autosaved session, if one exists."
+  (interactive)
+  (let ((fname (expand-file-name persp-auto-save-fname persp-save-dir)))
+    (if (file-exists-p fname)
+        (persp-load-state-from-file fname)
+      (+workspace-error "No autosaved session found"))))
 
 (defun +workspace/load (name)
   "Load a workspace and switch to it. If called with C-u, try to reload the
@@ -786,7 +792,7 @@ the user to open a file in the new project."
 
 (leaf persp-mode
   :ensure t
-  :defer t
+  :demand t
   :commands persp-switch-to-buffer
   :config
   (setq persp-autokill-buffer-on-remove 'kill-weak
@@ -870,12 +876,5 @@ the user to open a file in the new project."
     (persp-mode +1)))
 
 ;;; ui-config.el ends here
-;; run the dashboard init now that +dashboard-reload is defined; retry render
-;; shortly after so daemon/emacsclient frames (no window at load time) get it.
-(+dashboard-init-h)
-(run-with-idle-timer 1 nil
-  (lambda ()
-    (unless noninteractive
-      (+dashboard-reload t))))
 
 ;;; ui/workspaces.el ends here

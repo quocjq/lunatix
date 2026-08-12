@@ -186,12 +186,14 @@ dashboard reloading is inhibited.")
     (add-hook 'window-buffer-change-functions #'+dashboard-reload-maybe-h)
     (add-hook 'delete-frame-functions #'+dashboard-reload-frame-h)
     ;; `persp-mode' integration: update `default-directory' when switching
-    ;; perspectives.
-    (add-hook 'persp-created-functions #'+dashboard--persp-record-project-h)
-    (add-hook 'persp-activated-functions #'+dashboard--persp-detect-project-h)
-    (when (daemonp)
-      (add-hook 'persp-activated-functions #'+dashboard-reload-maybe-h))
-    (add-hook 'persp-before-switch-functions #'+dashboard--persp-record-project-h)))
+    ;; perspectives. Dashboard loads before workspaces, so persp-mode may not
+    ;; be loaded yet; require it (a no-op once workspaces' :demand loads it).
+    (when (require 'persp-mode nil t)
+      (add-hook 'persp-created-functions #'+dashboard--persp-record-project-h)
+      (add-hook 'persp-activated-functions #'+dashboard--persp-detect-project-h)
+      (when (daemonp)
+        (add-hook 'persp-activated-functions #'+dashboard-reload-maybe-h))
+      (add-hook 'persp-before-switch-functions #'+dashboard--persp-record-project-h))))
 
 ;; doom ran this on `luna-init-ui-hook' (a no-op hook in the compat layer);
 ;; ui-config loads in stage 2 (after startup), so run the dashboard init

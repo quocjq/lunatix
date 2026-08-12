@@ -5,7 +5,6 @@
 ;;; MUST be declared here, grouped by package under `(after! <pkg> ...)'.
 ;;; Source files never bind keys; they may only define the commands they bind.
 ;;; Defer every mode-map bind with `after!' so the keymap exists when it runs.
-;;;
 
 ;; Buffer/path/file helpers live in lunaris.el (luna/* prefix).
 
@@ -182,6 +181,7 @@
   "pc"  '(projectile-compile-project :wk "compile project")
   "pf"  '(projectile-find-file :wk "find file in project")
   "pF"  '(projectile-find-dir :wk "find dir in project")
+  "pi"  '(projectile-invalidate-cache :wk "invalidate cache")
   "pp"  '(projectile-switch-project :wk "switch project")
   "pd"  '(projectile-dired :wk "browse project")
   "pr"  '(projectile-recentf :wk "recent project files")
