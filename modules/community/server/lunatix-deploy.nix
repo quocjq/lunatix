@@ -13,8 +13,25 @@
         # branch advances. The runner never runs the switch (it can't kill
         # itself); this timer owns deployment. Local-path flake + explicit rev
         # = no github flake-cache stale-rev problem.
+        #
+        # flock serializes against a manual `nixos-rebuild switch` (an admin
+        # deploy and this timer otherwise collide on systemd's fixed transient
+        # unit name nixos-rebuild-switch-to-configuration).
         deployScript = pkgs.writeShellScript "lunatix-deploy" ''
           set -euo pipefail
+
+          exec 9>/var/lib/lunatix-deploy/.switch.lock
+          if ! flock -n 9; then
+            echo "lunatix: another switch is running (admin deploy?), skipping"
+            exit 0
+          fi
+
+          # If a manual `nixos-rebuild switch` (admin via ssh) is mid-flight it
+          # occupies the fixed transient unit; wait for it rather than collide.
+          while systemctl is-active --quiet nixos-rebuild-switch-to-configuration; do
+            echo "lunatix: waiting for in-flight admin switch..."
+            sleep 10
+          done
 
           export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i ${githubKey} -o StrictHostKeyChecking=accept-new"
 
