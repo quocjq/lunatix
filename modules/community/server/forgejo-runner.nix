@@ -26,10 +26,25 @@
         # The runner's jobs call `nix build` — allow it through the daemon.
         nix.settings.allowed-users = [ "gitea-runner" ];
 
-        # gitea-runner is a DynamicUser (not in users.users), so grant the keys
-        # group (which owns the shared github ssh key) via SupplementaryGroups.
-        systemd.services.gitea-runner-default.serviceConfig.SupplementaryGroups =
-          lib.mkForce [ "keys" ];
+        # gitea-runner must be a REAL user (not DynamicUser): DynamicUser's
+        # ephemeral UID changes every service restart, so the StateDirectory
+        # (npm cache, act workspaces) gets chowned to a stale UID -> EACCES on
+        # npm/esbuild in later runs. Fixed UID keeps file ownership stable.
+        users.users.gitea-runner = {
+          isSystemUser = true;
+          group = "gitea-runner";
+          uid = 63182;
+        };
+        users.groups.gitea-runner = {
+          gid = 63182;
+        };
+
+        # With DynamicUser disabled, grant the keys group (which owns the
+        # shared github ssh key) via SupplementaryGroups.
+        systemd.services.gitea-runner-default.serviceConfig = {
+          DynamicUser = lib.mkForce false;
+          SupplementaryGroups = lib.mkForce [ "keys" ];
+        };
 
         # Pre-create the runner StateDirectory layout so the agenix secrets
         # (mounted at activation, before the service starts) land in a dir
@@ -42,13 +57,11 @@
 
         # The runner uses a DynamicUser with an ephemeral $HOME; git+ssh would
         # stall on the github host-key prompt. Point ssh at the agenix-mounted
-        # key and auto-accept the host key for all runner subprocesses.
+        # Pre-create the runner StateDirectory so files survive with stable
+        # gitea-runner ownership (the workflows set GIT_SSH_COMMAND directly).
         system.activationScripts.runner-ssh-env = ''
-          cat > /var/lib/gitea-runner/default/.ssh-env <<EOF
-          GIT_SSH_COMMAND=ssh -i /var/lib/gitea-runner/default/.ssh/github -o StrictHostKeyChecking=accept-new
-          EOF
-          chown gitea-runner:gitea-runner /var/lib/gitea-runner/default/.ssh-env
-          chmod 600 /var/lib/gitea-runner/default/.ssh-env
+          mkdir -p /var/lib/gitea-runner/default
+          chown gitea-runner:gitea-runner /var/lib/gitea-runner /var/lib/gitea-runner/default
         '';
 
         services.gitea-actions-runner = {
