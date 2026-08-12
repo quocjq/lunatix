@@ -1,0 +1,351 @@
+#+TITLE: Lunaris — development rules & how the framework works
+#+AUTHOR: lunixose
+#+STARTUP: showall
+
+This file is the developer's guide for the Lunaris Emacs framework: how it
+actually works, what the layout means, and the rules you must follow when you
+add or change anything. It complements (does not replace):
+- [[./README.org][README.org]] — overview, boot, nix integration, build/test.
+- [[./lunaris.org][lunaris.org]] — the backend API (leaf, lbind, manifest, loader) in depth.
+- [[./DOCS.org][DOCS.org]] — a file-by-file dump of what each module file contains.
+
+* How it actually works
+
+** Two layers: config vs backend
+
+The whole tree is split on purpose. The config layer (what you write) is kept
+dumb; the backend (what runs it) is centralized.
+
+- =manifest.el= — the single source of truth. A =lunaris!...= form declaring
+  every enabled module group and submodule.
+- =config/*.el= — stage-1 user configuration, loaded synchronously at startup.
+- =lunaris.el= — the backend: the =leaf= DSL, doom-compat macros (=after!=,
+  =map!=, =defadvice!=, =modulep!=...), the manifest parser, and the tree
+  loader with its byte-compile cache.
+- =framework/<group>/<module>.el= — stage-2 module ports (doom module ports),
+  loaded in the background after startup.
+
+Rule of thumb: =lunaris.el= + =manifest.el= + =framework/= = backend.
+=config/= = user config. The config side only uses the clean API in
+=lunaris.el=; backend details never leak into module files.
+
+** Boot flow (init.el)
+
+Order matters. Reading =init.el= top to bottom:
+
+1. =lunatix-emacs-dir= is set from the init file's own path.
+2. nix profile =bin= dirs are prepended to =exec-path= (daemon/frame PATH is
+   stale after =just switch=; this keeps =projectile=, LSP servers, etc.
+   findable).
+3. High =gc-cons-threshold= during init; reset to sane values by an idle timer.
+4. Evil vars are set before evil can load (any =:after evil= forces it early).
+5. =load-path= gains =config/=. =lunaris.el= is loaded.
+6. =use-package= required; =use-package-always-defer t=; the =:ensure=
+   function is stubbed out — nix builds every package, so use-package must
+   never touch =package.el=. A missing package fails loudly at =require=,
+   not via a silent archive lookup.
+7. All autoload files on =load-path= are loaded (=registering autoloads;=
+   cheap). =treesit= is required first: ts-mode packages call
+   =treesit-ready-p= at load time.
+8. =manifest.el= is loaded — this populates =lunaris--manifest=, which drives
+   every =modulep!=.
+9. Frame chrome is disabled; the dashboard is autoloaded; the initial buffer
+   is a =*doom*= placeholder.
+10. =lunaris-load-core config/= — stage 1: every =config/*.el= loads
+    synchronously, byte-compiled into the cache.
+11. The compiled cache dir is appended to =load-path= (=append= so cache
+    copies can't shadow same-named package files, e.g. =php.el=).
+12. An idle timer fires =lunaris-stage-2= — stage 2, the module tree.
+
+** Stage 1 vs Stage 2
+
+- Stage 1 (startup, synchronous): =config/*.el=. Defines the keybinding
+  layer, leader, theme, evil, which-key. This is what must be ready before
+  the first frame is useful.
+- Stage 2 (idle, background): =framework/<group>/<module>.el=. The tree
+  loader pushes files into a queue and loads at most 4 per idle tick so
+  typing is never blocked. When the queue empties, =evil-collection-init=
+  runs.
+
+Consequence: stage-2 code must never be assumed loaded at startup. If
+startup code needs a stage-2 command, autoload it (see the dashboard
+autoload in =init.el=) or force the module in =manifest.el= and reference it
+late.
+
+** Module resolution
+
+=manifest.el= is parsed by the =lunaris!= macro into =lunaris--manifest=, an
+alist: group keyword → list of =(submodule . flags)=.
+
+The stage-2 loader (lunaris.el =lunaris-stage-2=) walks
+=framework/<group>/*.el= and decides each file:
+
+- group = the directory name, interned as a keyword (:ui, :lang, ...).
+- sub = the file base name.
+- A file loads if its group is enabled AND either:
+  - the file is the group-level file (=<group>.el=, e.g. =framework/ui/ui.el=),
+    or
+  - the manifest enables that exact submodule
+    (=assq sub (cdr (assq group lunaris--manifest))=).
+
+So enabling a module is *only* a manifest change: drop a file in
+=framework/<group>/<sub>.el= and list =sub= in the =:group= section of
+=manifest.el=. Nothing else. If it's not in the manifest, it never loads.
+
+** Flags and =modulep!=
+
+Manifest entries carry flags: =(web +lsp +tree-sitter)=. Inside a module
+file, =modulep! +lsp= is t if the *current* module is enabled with that
+flag (gated by the loader's context). The bare-flag form
+=(modulep! +lsp)= without a module argument is t if any enabled submodule
+carries the flag — used by group-level files.
+
+Flag semantics (lunaris.el =modulep!=):
+- =+foo= — "enabled with foo" (the flag is in the entry).
+- =-foo= — "enabled unless foo" (the flag is absent).
+
+Standard pattern in module files:
+#+begin_src emacs-lisp
+  (when (modulep! +lsp)
+    (add-hook 'web-mode-hook #'lsp-deferred))
+#+end_src
+
+** The byte-compile cache
+
+=lunaris--load-cached= compiles each module file into the cache
+(=~/.cache/lunatix-emacs/lisp=) and loads the =.elc=. Key properties:
+
+- =BUILD-ID= stamp: =lunaris--cache-build-id= hashes the
+  =emacsWithPackages_siteLisp= env var (a per-build store hash). When
+  =just switch= changes the package store, the stamp mismatches and all
+  =.elc= files are wiped. This is why source edits don't require a manual
+  cache flush but a nix rebuild does.
+- =NOT-COMPILED= blacklist: when a compile fails (e.g. eager
+  macro-expansion cycle), the file is recorded and loaded from source on
+  future runs.
+- =no-byte-compile= header: files carrying it (e.g. =ui/workspaces.el=) are
+  always loaded from source.
+- Atomic compile: each file is copied to a temp, compiled, and atomically
+  renamed into the cache so a concurrent daemon/client reader never sees a
+  half-written =.elc= ("End of file during parsing").
+- Dedup: module files are tracked by absolute path (=lunaris--loaded-files=).
+  Framework files intentionally do *not* =provide= a feature — doom-style,
+  so =featurep= can't be used and must not be pre-claimed.
+
+* Structure reference
+
+** File tree
+
+#+begin_example
+emacs/
+  init.el            boot: env, backend load, manifest, stage 1+2
+  lunaris.el         backend: leaf, doom-compat, manifest, loader, doctor
+  manifest.el        the single source of truth (lunaris! ...)
+  early-init.el      frame/GC pre-boot
+  lunaris.org        API docs
+  rules.org          this file
+  DOCS.org           file-by-file dump
+  README.org         overview + build/test
+  config/            stage-1 user config (evil, theme, keybind, projectile...)
+  framework/
+    <group>/         one dir per manifest group
+      <group>.el     group-level file, loads whenever the group is enabled
+      <sub>.el       per-module ports, gated by manifest
+      doctor.el      optional health checks for the group
+  snippets/          yasnippet dirs: snippets/<mode>/*.yasnippet
+  elpa/              local archive cache (nix builds, not package.el)
+  project/           per-user projects
+  test.sh            batch smoke test
+#+end_example
+
+** Groups
+
+- =:completion= — corfu, vertico (minibuffer + completion).
+- =:ui= — dashboard, modeline, workspaces, popup, vc-gutter, ...
+- =:editor= — evil, file-templates, format, snippets, fold, ...
+- =:emacs= — dired, ibuffer, tramp, undo, vc, ...
+- =:term= — eshell, vterm, mistty.
+- =:checkers= — flycheck (syntax checking).
+- =:tools= — biblio, docker, eval, lookup, lsp, magit, tree-sitter, ...
+- =:lang= — one file per language (or family).
+- =:email=, =:app=, =:config= — as in doom.
+
+** Module file layout convention
+
+Every ported module file follows the same skeleton:
+
+#+begin_example
+;;; lang/javascript.el --- doom lang/javascript port  -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Ported from doom-modules/modules/lang/javascript.
+;;; Code:
+... body ...
+;;; lang/javascript.el ends here
+#+end_example
+
+Ports document what was dropped (packages with no nixpkgs/elpa equivalent,
+dead flags) in a comment block so the drift from doom is visible and
+intentional.
+
+* Development rules
+
+These are hard rules. Follow them for every change.
+
+** RULE — manifest gating
+
+A new module is exactly two changes: a file in
+=framework/<group>/<sub>.el= and an entry in =manifest.el=. Do not hack
+around the manifest (e.g. =require=-ing module files directly) to "test
+fast" — the gate exists to keep the manifest the source of truth.
+
+** RULE — keybind.el is the only place that binds keys
+
+Every keybinding — =define-key=, =map!=, =lbind=, =general-define-key=,
+=evil-define-key=, =[remap ...]=, =global-set-key=, localleader/mode maps —
+must be declared in =config/keybind.el=, grouped by package under
+=(after! <pkg> ...)=. See the RULE header at the top of that file.
+
+Module source files never bind keys; they only define the commands that get
+bound. Defer mode-map binds with =after!= so the keymap exists when the
+binding runs.
+
+** RULE — leaf semantics
+
+=leaf= is the package-declaration DSL (a thin =use-package= shim in
+lunaris.el). Defaults: =:ensure t= unless given; auto-=:defer t= whenever
+=:hook=, =:bind=, or =:commands= is present and no =:defer= / =:demand= is
+given.
+
+- Want a package loaded now? Pass =:demand t=.
+- Want it lazy? Let the auto-defer apply, or say =:defer t=.
+- Ordering between packages? Use =:after pkg= inside =leaf=, or
+  =(after! pkg ...)= for a standalone block.
+
+Watch out: auto-defer on =:commands= means the =:config= body only runs when
+the command is first invoked. If the module's own top-level code needs
+package vars bound (persp-mode case: =persp-* = vars void until loaded), use
+=:demand t= or =require= explicitly. A "void-function / void-variable"
+pointing at a package symbol is the classic symptom of a lazy-loaded
+dependency being used before it loaded.
+
+** RULE — no package.el
+
+=use-package-ensure-function= is stubbed; nix builds every =:ensure= package
+and puts the store on =load-path=. Never enable package.el archives or add
+a package by hand. Missing packages fail loudly at =require=, which is the
+feature, not the bug.
+
+** RULE — cache / compile hygiene
+
+- Don't add =no-byte-compile= to new files casually; it's a last resort for
+  files that hang native-comp on this hardware (see =ui/workspaces.el=).
+- Prefer clean source that byte-compiles. Compile-check new files with the
+  lunaris+leaf context loaded (see workflow) before committing.
+- Never reference cache internals from config code.
+
+** RULE — naming
+
+- =luna-*= — core helpers living in =lunaris.el= (=luna-project-root=,
+  =luna/log-...=).
+- =+group/...= — interactive commands, =+group--...= — internal helpers
+  (doom convention). The "group" is the module's submodule name
+  (=+workspace/display=, =+web/...=, =+org-...=).
+- Legacy =doom-*= aliases exist in =lunaris.el= for ported code; new code
+  uses =luna-*=.
+- Framework files never =provide= a feature (dedup is by path).
+- File headers: "Ported from doom-modules/modules/<path>" + an
+  "ends here" footer.
+
+** RULE — doctor
+
+Each group may ship =framework/<group>/doctor.el= whose top-level forms gate
+on =modulep!= and report via =ok!=-/=warn!=-/=error!=. Doctor files load
+standalone (never in stage-2) and are exercised by =lunaris-doctor= and the
+test script. If your module has an external dependency or environment
+requirement, add a doctor check for it.
+
+** RULE — snippets
+
+All yasnippet definitions live in =emacs/snippets/<mode>/<name>.yasnippet=
+(mode = the lowercase major-mode name, e.g. =latex-mode=). The snippets dir
+is registered in =config/editor-extra.el= and reloaded by =(yas-reload-all)=
+in =framework/editor/snippets.el=. Math-gated snippets use the AUCTeX
+=condition: (texmathp)=. Regex-trigger snippets are impossible in yasnippet;
+use cdlatex for those (latex module already enables =+cdlatex=).
+
+** RULE — nix scanner
+
+The nix package set is derived by parsing =leaf= / =use-package= =:ensure=
+forms with emacs-overlay's pure-Nix scanner. Keep declarations machine
+parseable: don't hide =leaf= forms in comments, strings, or convoluted
+conditional forms. Adding a new =leaf= package that isn't scanned means a
+"cannot load X" failure at startup. After package changes: =nix build
+.#emacs=.
+
+* Development workflow
+
+** Edit → verify
+
+1. Make the change.
+2. Byte-compile check the touched files with the backend context:
+#+begin_src sh
+  emacs --batch \
+    --eval "(load (expand-file-name \"lunaris.el\" default-directory))" \
+    --eval "(byte-compile-file \"framework/lang/web.el\")"
+#+end_src
+   A clean compile with only "not known to be defined" warnings is fine;
+   real errors (void vars at top level, parse errors, unbalanced parens) are
+   not.
+3. If the file changed module resolution, load =lunaris.el= + =manifest.el=
+   in batch and assert =modulep!= for the touched modules.
+
+** Smoke test
+
+=emacs/test.sh= runs =init.el= in batch with =debug-on-error=t, forces
+stage-2, and asserts the look/feel invariants (leader bound, evil active,
+theme, modeline, key packages present). Run it after anything structural:
+
+#+begin_src sh
+  EMACS="$(nix build .#emacs --print-out-paths)/bin/emacs" \
+    timeout 200 bash emacs/test.sh
+#+end_src
+
+GUI probes hang this laptop — batch only. test.sh deletes the lunatix-emacs
+cache first, so it also exercises the compile path from cold.
+
+** Nix build
+
+Only needed when the package set changes (new leaf, new package version).
+=just build= / =just switch= from the repo root. After a rebuild the
+BUILD-ID cache stamp changes and the =.elc= cache recompiles on next start.
+
+** Commit conventions
+
+Conventional Commits, scoped to the module group. Examples already in
+history: =fix(workspaces)=, =feat(checkers)=, =feat(snippets)=,
+=fix(org)=. One logical change per commit; config + framework changes that
+are one fix go together.
+
+* Troubleshooting
+
+| Symptom | Cause | Fix |
+|---------+-------+-----|
+| "Failed loading <file>: ..." in messages | stage-2 load aborted mid-file | find the erroring top-level form; definitions before it persist, so symptoms can point elsewhere |
+| void-function/void-variable on a package symbol | lazy =:defer= package used before load | add =:demand t= or =require= before use (persp-mode case) |
+| void-function on a =+module/...= command | module not loaded | check =manifest.el= entry + module file exists + no load abort |
+| stale behavior after =just switch= | BUILD-ID mismatch | automatic — cache wipes on next start; if not, =rm -rf ~/.cache/lunatix-emacs= |
+| "Cannot load X" at startup | package missing from nix set | check the leaf form is machine-parseable; =nix build .#emacs= |
+| which-key timer errors | a bound command resolved before its module loaded | load the module eagerly or defer the binding until =after!= |
+| texmathp void in batch tests | AUCTeX not loaded in =--batch= | expected; conditional snippets are excluded, not broken |
+| =End of file during parsing= | concurrent cache compile | atomic-rename path should prevent it; wipe cache if hit |
+
+* Known drift / stale references
+
+Documented leftover names that still point at old file names:
+
+- =lunaris-core-files= in =lunaris.el= still lists =keybindings-config.el=;
+  the canonical keybinding file is now =config/keybind.el=.
+- =README.org= and =lunaris.org= reference =keybindings-config.el= in a few
+  places.
+
+These are documentation drift, not functional; update them opportunistically.
