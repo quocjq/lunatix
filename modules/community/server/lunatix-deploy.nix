@@ -1,22 +1,13 @@
 {
   server.lunatix-deploy = {
-    secrets = [
-      {
-        # github SSH deploy key (same secret as igloo's ~/.ssh/github) so the
-        # root timer can fetch lunatix from github (the real origin; forgejo is
-        # a mirror). The runner pushes to github; this timer watches github.
-        name = "github";
-        path = "/root/.ssh/github";
-        owner = "root";
-        group = "root";
-        mode = "0600";
-      }
-    ];
-
     nixos =
       { pkgs, ... }:
       let
         repo = "git@github.com:quocjq/lunatix.git";
+        # github SSH key: declared once by server/forgejo-runner.nix (owner
+        # gitea-runner); this timer runs as root and reads it directly (root
+        # bypasses permission checks).
+        githubKey = "/var/lib/gitea-runner/default/.ssh/github";
         revFile = "/var/lib/lunatix-deploy/last-switched-rev";
         # Root-only: watches lunatix main, runs `nixos-rebuild switch` when the
         # branch advances. The runner never runs the switch (it can't kill
@@ -25,7 +16,7 @@
         deployScript = pkgs.writeShellScript "lunatix-deploy" ''
           set -euo pipefail
 
-          export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /root/.ssh/github -o StrictHostKeyChecking=accept-new"
+          export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i ${githubKey} -o StrictHostKeyChecking=accept-new"
 
           mkdir -p /var/lib/lunatix-deploy
 
