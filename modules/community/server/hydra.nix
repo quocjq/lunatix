@@ -8,7 +8,8 @@
         # listens on loopback, exposed to the tailnet via tailscale serve.
         services.hydra = {
           enable = true;
-          hydraURL = "http://oracle:3001";
+          # tailnet URL (tailscale serve): https://oracle.taila425e1.ts.net
+          hydraURL = "https://oracle.taila425e1.ts.net";
           port = 3001; # 3000 = forgejo, 3100 = blog, 3200 = homepage
           listenHost = "127.0.0.1"; # private; tailscale serve exposes it
           notificationSender = "hydra@lunixose.duckdns.org";
@@ -17,21 +18,14 @@
           minimumDiskFree = 20;
         };
 
-        # Tailscale: oracle joins the tailnet; serve forwards hydra to loopback.
-        # MagicDNS name = "oracle" (from networking.hostName).
+        # Tailscale: oracle joins the tailnet; serve exposes hydra at
+        # https://oracle.taila425e1.ts.net. The serve config is applied once at
+        # runtime (tailnet-level "Enable Serve" toggle required):
+        #   ssh oraclevps 'tailscale serve --bg 3001'
+        # It persists in tailscaled state across reboots.
         services.tailscale = {
           enable = true;
           useRoutingFeatures = "client";
-          serve = {
-            enable = true;
-            services = {
-              hydra = {
-                endpoints = {
-                  "tcp:3001" = "http://127.0.0.1:3001";
-                };
-              };
-            };
-          };
         };
       };
   };
