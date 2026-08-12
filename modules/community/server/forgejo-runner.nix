@@ -52,6 +52,7 @@
         systemd.tmpfiles.rules = [
           "d /var/lib/gitea-runner 0750 gitea-runner gitea-runner -"
           "d /var/lib/gitea-runner/default 0750 gitea-runner gitea-runner -"
+          "d /var/lib/gitea-runner/default/.cache 0750 gitea-runner gitea-runner -"
           "d /var/lib/gitea-runner/default/.ssh 0700 gitea-runner gitea-runner -"
         ];
 
