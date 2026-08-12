@@ -1,5 +1,18 @@
 {
   server.lunatix-deploy = {
+    secrets = [
+      {
+        # github SSH deploy key for the ROOT deploy timer (owner root, mode 600
+        # — ssh rejects group-readable keys, so this is a separate copy from
+        # the runner's github-runner secret).
+        name = "github-root";
+        path = "/root/.ssh/github";
+        owner = "root";
+        group = "root";
+        mode = "0600";
+      }
+    ];
+
     nixos =
       { pkgs, ... }:
       let
@@ -7,7 +20,7 @@
         # github SSH key: declared once by server/forgejo-runner.nix (owner
         # gitea-runner); this timer runs as root and reads it directly (root
         # bypasses permission checks).
-        githubKey = "/var/lib/gitea-runner/default/.ssh/github";
+        githubKey = "/root/.ssh/github";
         revFile = "/var/lib/lunatix-deploy/last-switched-rev";
         # Root-only: watches lunatix main, runs `nixos-rebuild switch` when the
         # branch advances. The runner never runs the switch (it can't kill

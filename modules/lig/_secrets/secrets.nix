@@ -12,6 +12,8 @@ let
 in
 {
   "github.age".publicKeys = all;
+  "github-root.age".publicKeys = all;
+  "github-runner.age".publicKeys = all;
   "oraclevps.age".publicKeys = all;
   "env.age".publicKeys = all;
   "github-token.age".publicKeys = all;

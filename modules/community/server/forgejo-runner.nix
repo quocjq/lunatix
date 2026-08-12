@@ -9,14 +9,14 @@
         mode = "0400";
       }
       {
-        # github SSH deploy key (same secret as igloo's ~/.ssh/github) — gives
-        # the runner push access to github.com/quocjq/lunatix. The runner runs
-        # as a DynamicUser, so the key lives at a stable path under StateDirectory.
-        name = "github";
+        # github SSH deploy key for the RUNNER (owner gitea-runner, mode 600 —
+        # ssh rejects group-readable keys). The deploy timer gets its own copy
+        # (server/lunatix-deploy.nix) because ssh also rejects 0640.
+        name = "github-runner";
         path = "/var/lib/gitea-runner/default/.ssh/github";
-        owner = "root";
-        group = "keys";
-        mode = "0640";
+        owner = "gitea-runner";
+        group = "gitea-runner";
+        mode = "0600";
       }
     ];
 
@@ -43,7 +43,6 @@
         # shared github ssh key) via SupplementaryGroups.
         systemd.services.gitea-runner-default.serviceConfig = {
           DynamicUser = lib.mkForce false;
-          SupplementaryGroups = lib.mkForce [ "keys" ];
         };
 
         # Pre-create the runner StateDirectory layout so the agenix secrets
