@@ -38,8 +38,10 @@
             ExecStartPre = [
               # `+` runs these as root (ExecStartPre defaults to the service user)
               "+${pkgs.coreutils}/bin/mkdir -p /root/Notes"
-              # self-healing ACLs: www-data needs traverse on /root and rw on Notes
-              "+${pkgs.acl}/bin/setfacl -m u:www-data:--x /root"
+              # self-healing ACLs: www-data needs traverse on /root and rw on Notes.
+              # The mask must include x, else the named user's --x is stripped
+              # (effective ---) and www-data can't reach /root/Notes.
+              "+${pkgs.acl}/bin/setfacl -m u:www-data:--x,m::--x /root"
               "+${pkgs.acl}/bin/setfacl -Rm u:www-data:rx,d:u:www-data:rx /root/Notes"
               "+${pkgs.coreutils}/bin/chmod -R 2775 /root/Notes"
               "+${pkgs.coreutils}/bin/chown -R root:www-data /root/Notes"
