@@ -11,6 +11,7 @@
       printing
       ssh
       syncthing
+      tailscale
       x11
     ];
   };

@@ -17,6 +17,7 @@
       <server/syncthing-server>
       <server/forgejo-runner>
       <server/lunatix-deploy>
+      <server/hydra>
     ];
 
     disk = {
