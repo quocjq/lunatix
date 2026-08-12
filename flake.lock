@@ -859,11 +859,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1786505263,
-        "narHash": "sha256-enm6a/2iatarc650c65peSg7LFg5uQvRt1J0D1RvKhs=",
+        "lastModified": 1786505656,
+        "narHash": "sha256-pW4GTaqGLDQQ+8PrEf1PSEmSnVoxMN0Q81XUvXnXUVA=",
         "ref": "refs/heads/main",
-        "rev": "8e2f1db6ce084413d1ac19b3ad35a4963c255a09",
-        "revCount": 16,
+        "rev": "bbab35918f7b18e8892c0cca90857b6209f8f777",
+        "revCount": 17,
         "type": "git",
         "url": "https://git.lunixose.duckdns.org/lunixose/homepage"
       },
