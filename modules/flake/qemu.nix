@@ -45,6 +45,17 @@
               qemu-img create -f qcow2 "$DISK" 64G
             fi
 
+            # OVMF_VARS.fd in the nix store is read-only, but QEMU opens the
+            # writable pflash drive for write. Copy it next to the disk so the
+            # VM's boot-variable store is actually writable.
+            VARS_DIR="$(dirname "$DISK")"
+            VARS_FILE="$VARS_DIR/OVMF_VARS.fd"
+            if [[ ! -f "$VARS_FILE" ]]; then
+              echo "==> Copying writable OVMF_VARS.fd -> $VARS_FILE"
+              cp ${ovmfVars} "$VARS_FILE"
+              chmod u+w "$VARS_FILE"
+            fi
+
             # Snapshot mode keeps the disk pristine across runs (writes go to
             # a temporary overlay). Set SNAPSHOT=0 to commit changes to $DISK.
             SNAPSHOT_ARG=()
@@ -60,7 +71,7 @@
               -m "$MEMORY" \
               -enable-kvm \
               -drive "if=pflash,format=raw,readonly=on,file=${ovmfCode}" \
-              -drive "if=pflash,format=raw,file=${ovmfVars}" \
+              -drive "if=pflash,format=raw,file=$VARS_FILE" \
               -drive "file=$DISK,if=virtio,format=qcow2" \
               -device virtio-vga \
               -netdev user,id=net0 \
