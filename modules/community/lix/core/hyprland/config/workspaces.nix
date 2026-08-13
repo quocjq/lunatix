@@ -15,18 +15,19 @@
 
         # Semantic workspaces (Prime-style): Mod+1/2/3 are fixed categories,
         # the rest stay numbered. Apps are auto-routed by window rules so each
-        # Mod+N is deterministic.
+        # Mod+N is deterministic. Hyprland named-workspace selectors need the
+        # `name:` prefix (bare "editors" is an invalid selector -> focus no-op).
         named = {
-          "1" = "editors";
-          "2" = "media";
-          "3" = "terminal";
+          "1" = "name:editors";
+          "2" = "name:media";
+          "3" = "name:terminal";
         };
-        namedBinds = lib.mapAttrsToList (key: name:
-          (bind "${mainMod} + ${key}" (lua "hl.dsp.focus({ workspace = '${name}' })")
-            "Focus workspace ${name}")) named;
-        namedMoveBinds = lib.mapAttrsToList (key: name:
-          (bind "${mainMod} + SHIFT + ${key}" (lua "hl.dsp.window.move({ workspace = '${name}' })")
-            "Move window to workspace ${name}")) named;
+        namedBinds = lib.mapAttrsToList (key: sel:
+          (bind "${mainMod} + ${key}" (lua "hl.dsp.focus({ workspace = '${sel}' })")
+            "Focus workspace ${sel}")) named;
+        namedMoveBinds = lib.mapAttrsToList (key: sel:
+          (bind "${mainMod} + SHIFT + ${key}" (lua "hl.dsp.window.move({ workspace = '${sel}' })")
+            "Move window to workspace ${sel}")) named;
 
         # Numbered workspaces 4..10 (0 = 10)
         numbered = builtins.genList (i: i + 4) 7;
@@ -54,18 +55,19 @@
         # Hyprland 0.55+ Lua config: window rules are `hl.window_rule({...})`
         # calls. The home-manager `settings.window_rule` key does NOT render
         # (attrsOf drops it), so emit them via extraConfig (raw Lua, verbatim).
+        # Named workspaces require the `name:` prefix in the rule value too.
         windowRuleLua = lib.concatStringsSep "\n" (
           map (rule: "hl.window_rule(${rule})") [
             # editors: emacs, neovim, thunar (files), obsidian (notes)
-            "{ match = { class = '(^emacs)' }, workspace = 'editors' }"
-            "{ match = { class = '(^nvim)' }, workspace = 'editors' }"
-            "{ match = { class = '(^thunar)' }, workspace = 'editors' }"
-            "{ match = { class = '(^obsidian)' }, workspace = 'editors' }"
+            "{ match = { class = '(^emacs)' }, workspace = 'name:editors' }"
+            "{ match = { class = '(^nvim)' }, workspace = 'name:editors' }"
+            "{ match = { class = '(^thunar)' }, workspace = 'name:editors' }"
+            "{ match = { class = '(^obsidian)' }, workspace = 'name:editors' }"
             # media/browser
-            "{ match = { class = '(^zen)' }, workspace = 'media' }"
-            "{ match = { class = '(^mpv)' }, workspace = 'media' }"
+            "{ match = { class = '(^zen)' }, workspace = 'name:media' }"
+            "{ match = { class = '(^mpv)' }, workspace = 'name:media' }"
             # terminal/ai/research
-            "{ match = { class = '(^ghostty)' }, workspace = 'terminal' }"
+            "{ match = { class = '(^ghostty)' }, workspace = 'name:terminal' }"
           ]
         );
       in
