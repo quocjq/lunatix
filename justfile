@@ -79,6 +79,12 @@ qemu:
 iso:
     bash scripts/qemu-iso.sh fetch
 
+# Interactive (re)install from the minimal ISO: asks hostname/user/arch,
+# runs facter, picks disk + disko layout + aspects, generates the host file,
+# then disko-format + nixos-install. Run in the bootstrap dev shell.
+reinstall:
+    bash scripts/reinstall.sh
+
 # One-shot: fetch ISO, build the runner, boot the installer into a fresh
 # qcow2. SNAPSHOT is forced to 0 so the install persists (SNAPSHOT=1 would
 # discard it and qemu-boot would hit emergency mode).

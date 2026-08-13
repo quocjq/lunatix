@@ -53,6 +53,11 @@
           age
           openssh # ssh-keygen for a fresh host key / recipient pubkey
           inputs.agenix.packages.${system}.default
+
+          # Reinstall script TUI (scripts/reinstall.sh): colorful prompts,
+          # spinner, multi-select for aspects.
+          gum
+          nixos-facter # hardware report -> facter.json -> hardware.facter.reportPath
         ];
 
         shellHook = ''
@@ -82,12 +87,12 @@
                  just switch
 
           Notes:
-            * Disk layout lives in modules/disko/latitude3250.nix with
-              `disko.enableConfig = true`; that aspect owns mounts, LUKS, and
-              swap for any host including
-              <disko-latitude3250>. On an existing disk whose swap partition lacks
-              a partlabel, run `sudo sgdisk -c 3:swap /dev/nvme0n1` once before
-              the first rebuild.
+            * Disk layouts live in modules/community/lix/diskos/<name>.nix
+              (den.aspects."disko-<name>"). Hosts include the layout they want:
+              <disko-desktop> (LUKS+btrfs+swap) or <disko-server> (plain), etc.
+              The layout aspect owns mounts, LUKS, and swap for that host.
+            * On an existing disk whose swap partition lacks a partlabel, run
+              `sudo sgdisk -c 3:swap /dev/nvme0n1` once before the first rebuild.
             * Run `just` to list every recipe.
           EOF
         '';
