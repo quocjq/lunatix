@@ -94,9 +94,10 @@ DISK_NAME="main"
 # Core aspects are locked on (can't skip disko-layout -> that bricks boot).
 CORE_ASPECTS="settings disko-$LAYOUT lig/agenix"
 OPTIONAL_ASPECTS="$(gum choose --no-limit \
-  "obs" "hyprland" "communication" "development" "gaming" \
-  "tools" "emacs" "sioyek" "flameshot" "mpv" "nixcord" "kanata" \
-  --header "optional aspects (space to toggle, enter to continue)" \
+  "minimal" "tools" "development" "communication" "gaming" \
+  "system" "hyprland" "greetd" "zenwser" "doomacs" "obs" \
+  "sioyek" "flameshot" "mpv" "nixcord" "kanata" \
+  --header "optional aspects (space to toggle, enter to continue; 'minimal' = core desktop)" \
   --cursor "> ")"
 
 # ---------- 5. user aspect ----------
