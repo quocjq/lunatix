@@ -27,8 +27,9 @@
         ];
         text =
           let
-            ovmfCode = "${pkgs.OVMFFull}/FV/OVMF_CODE.fd";
-            ovmfVars = "${pkgs.OVMFVarsFull}/FV/OVMF_VARS.fd";
+            ovmfFd = pkgs.OVMFFull.fd;
+            ovmfCode = "${ovmfFd}/FV/OVMF_CODE.fd";
+            ovmfVars = "${ovmfFd}/FV/OVMF_VARS.fd";
           in
           ''
             set -euo pipefail
@@ -68,6 +69,9 @@
               -vga none \
               "''${SNAPSHOT_ARG[@]}" \
               ''${ISO:+-drive "file=$ISO,media=cdrom"} \
+              # EXTRA_QEMU_ARGS is intentionally unquoted: it passes multiple
+              # qemu flags as separate argv entries (word splitting is the point).
+              # shellcheck disable=SC2086
               $EXTRA_QEMU_ARGS \
               "$@"
           '';

@@ -7,12 +7,7 @@ identity := "~/.ssh/ssh_user_lunixose_ed25519"
 default:
     @just --list
 
-# --- Bootstrap: reinstall on a fresh NixOS installer ----------------------
-# A fresh installer doesn't have flakes enabled, so these recipes turn the
-# experimental features on from the command line. The only tool you need to
-# reach them is `just` itself:  nix-shell -p just git
-
-nix := "nix --extra-experimental-features 'nix-command flakes' --max-jobs 2"
+nix := "nix --extra-experimental-features 'nix-command flakes' "
 agenix_cmd := if `bash -c 'command -v agenix 2>/dev/null || true'` != "" { "agenix" } else { nix + " run github:ryantm/agenix --" }
 devenv_cmd := if `bash -c 'command -v devenv 2>/dev/null || true'` != "" { "devenv" } else { nix + " run github:cachix/devenv --" }
 
@@ -43,11 +38,11 @@ disko-install host disk:
 
 # Build the igloo host configuration (no activation)
 build:
-    {{nix}} run .#igloo
+    {{nix}} run .#igloo -- --max-jobs 2
 
 # Build and activate the igloo host configuration
 switch:
-    {{nix}} run .#igloo -- switch
+    {{nix}} run .#igloo -- switch --max-jobs 1
 
 # Switch the ORACLE host remotely (root@oracle, ed25519 key). Run from igloo.
 switch-oracle:
@@ -75,13 +70,14 @@ deploy target:
 vm:
     {{nix}} run .#vm
 
+# Boot the standalone qemu-kvm runner (UEFI, qcow2). Real-hardware rehearsal:
+# DISK=path ISO=installer.iso MEMORY=4G CPUS=4 SNAPSHOT=1 ./result/bin/qemu
+qemu:
+    {{nix}} build .#qemu
+
 # Regenerate flake.nix after changing inputs declared inside modules
 write-flake:
     {{nix}} run .#write-flake
-
-# Update every flake input and refresh flake.lock
-update:
-    {{nix}} flake update
 
 # Garbage-collect old generations, keeping at least the 5 most recent
 # (and anything newer than 5 days), then hard-link identical store paths.
