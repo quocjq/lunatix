@@ -75,6 +75,19 @@ vm:
 qemu:
     {{nix}} build .#qemu
 
+# Fetch the minimal NixOS installer ISO (cached in ~/Downloads).
+iso:
+    bash scripts/qemu-iso.sh fetch
+
+# One-shot: fetch ISO, build the runner, boot the installer into a fresh
+# throwaway qcow2 (SNAPSHOT=1 keeps the disk pristine; SNAPSHOT=0 to keep it).
+qemu-install:
+    bash scripts/qemu-iso.sh install
+
+# Boot the installed system (after qemu-install) without the ISO.
+qemu-boot:
+    bash scripts/qemu-iso.sh boot
+
 # Regenerate flake.nix after changing inputs declared inside modules
 write-flake:
     {{nix}} run .#write-flake
