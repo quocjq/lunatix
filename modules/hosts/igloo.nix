@@ -4,7 +4,7 @@
   den.aspects.igloo = {
     includes = [
       <settings>
-      <disko-layout>
+      <disko-desktop>
       <lig/agenix>
       <obs>
     ];
@@ -33,7 +33,7 @@
         age.rekey.storageMode = "derivation";
 
         nix.settings = {
-          max-jobs = 2;
+          max-jobs = 1;
           cores = 2;
         };
       };

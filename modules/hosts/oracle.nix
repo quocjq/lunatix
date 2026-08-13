@@ -3,7 +3,7 @@
 
   den.aspects.oracle = {
     includes = [
-      <disko-layout>
+      <disko-server>
       <lig/agenix>
       <locale>
       <nix-settings>
