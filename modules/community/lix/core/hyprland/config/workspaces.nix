@@ -14,7 +14,7 @@
         };
 
         # Semantic workspaces (Prime-style): Mod+1/2/3 are fixed categories,
-        # the rest stay numbered. Apps are auto-routed by windowrule so each
+        # the rest stay numbered. Apps are auto-routed by window rules so each
         # Mod+N is deterministic.
         named = {
           "1" = "editors";
@@ -51,23 +51,30 @@
         ];
 
         # Auto-routing: window class -> semantic workspace (Prime muscle memory).
-        windowRules = [
-          # editors: emacs, neovim, thunar (files), obsidian (notes)
-          { _args = [ "workspace name:editors,class:emacs" ]; }
-          { _args = [ "workspace name:editors,class:(^nvim)" ]; }
-          { _args = [ "workspace name:editors,class:(^thunar)" ]; }
-          { _args = [ "workspace name:editors,class:(^obsidian)" ]; }
-          # media/browser
-          { _args = [ "workspace name:media,class:(^zen)" ]; }
-          { _args = [ "workspace name:media,class:(^mpv)" ]; }
-          # terminal/ai/research
-          { _args = [ "workspace name:terminal,class:(^ghostty)" ]; }
-        ];
+        # Hyprland 0.55+ Lua config: window rules are `hl.window_rule({...})`
+        # calls. The home-manager `settings.window_rule` key does NOT render
+        # (attrsOf drops it), so emit them via extraConfig (raw Lua, verbatim).
+        windowRuleLua = lib.concatStringsSep "\n" (
+          map (rule: "hl.window_rule(${rule})") [
+            # editors: emacs, neovim, thunar (files), obsidian (notes)
+            "{ match = { class = '(^emacs)' }, workspace = 'editors' }"
+            "{ match = { class = '(^nvim)' }, workspace = 'editors' }"
+            "{ match = { class = '(^thunar)' }, workspace = 'editors' }"
+            "{ match = { class = '(^obsidian)' }, workspace = 'editors' }"
+            # media/browser
+            "{ match = { class = '(^zen)' }, workspace = 'media' }"
+            "{ match = { class = '(^mpv)' }, workspace = 'media' }"
+            # terminal/ai/research
+            "{ match = { class = '(^ghostty)' }, workspace = 'terminal' }"
+          ]
+        );
       in
       {
-        wayland.windowManager.hyprland.settings = {
-          bind = namedBinds ++ namedMoveBinds ++ workspaceBinds ++ relativeBinds;
-          windowrule = windowRules;
+        wayland.windowManager.hyprland = {
+          settings = {
+            bind = namedBinds ++ namedMoveBinds ++ workspaceBinds ++ relativeBinds;
+          };
+          extraConfig = windowRuleLua;
         };
       };
   };
