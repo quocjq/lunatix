@@ -79,6 +79,10 @@ qemu:
 iso:
     bash scripts/qemu-iso.sh fetch
 
+# Kill stale tmux sessions (idle > 120 min), skipping the current one.
+tmux-clean:
+    ~/.local/bin/tmux-kill-sessions
+
 # Interactive (re)install from the minimal ISO: asks hostname/user/arch,
 # runs facter, picks disk + disko layout + aspects, generates the host file,
 # then disko-format + nixos-install. Run in the bootstrap dev shell.

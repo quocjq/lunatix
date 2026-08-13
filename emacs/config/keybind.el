@@ -189,6 +189,8 @@
   "pr"  '(projectile-recentf :wk "recent project files")
   "pR"  '(projectile-run-project :wk "run project")
   "pT"  '(projectile-test-project :wk "test project")
+  "pt"  '(luna/tmux-project-session :wk "tmux session (project)")
+  "ps"  '(luna/tmux-sessionizer :wk "tmux sessionizer")
 
   ;; SPC q --- quit
   "q"   '("quit")

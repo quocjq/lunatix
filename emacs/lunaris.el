@@ -737,6 +737,37 @@ already-loaded (stage-1) features. Byte-compiles into the cache on first run."
     "r"   '(python-shell-send-region :wk "send region")
     "f"   '(python-shell-send-defun :wk "send defun")))
 
+;;; Tmux bridge (Prime workflow): open the current projectile's tmux session
+;;; in a vterm, or run the fzf sessionizer. The sessionizer script comes from
+;;; modules/community/lix/core/tmux.nix (~/.local/bin/tmux-sessionizer).
+(defun luna/tmux-project-session ()
+  "Open (or attach to) a vterm running the current project's tmux session.
+Session name = basename of `projectile-project-root' (or default-directory)."
+  (interactive)
+  (let* ((root (or (ignore-errors (projectile-project-root))
+                   default-directory))
+         (name (file-name-nondirectory (directory-file-name root))))
+    (luna/tmux-vterm (format "cd %s && tmux attach -t %s 2>/dev/null || tmux new -s %s"
+                             (shell-quote-argument root)
+                             (shell-quote-argument name)
+                             (shell-quote-argument name))
+                     (format "*vterm %s*" name))))
+
+(defun luna/tmux-sessionizer ()
+  "Run the fzf tmux sessionizer inside a vterm (pick any project)."
+  (interactive)
+  (luna/tmux-vterm "~/.local/bin/tmux-sessionizer" "*vterm sessionizer*"))
+
+(defun luna/tmux-vterm (command buffer-name)
+  "Open a vterm in BUFFER-NAME running COMMAND, reusing an existing buffer."
+  (let ((buf (get-buffer buffer-name)))
+    (if (and buf (buffer-live-p buf))
+        (pop-to-buffer buf)
+      (let ((vterm-buffer (vterm buffer-name)))
+        (with-current-buffer vterm-buffer
+          (vterm-send-string (concat command "\n")))
+        (pop-to-buffer vterm-buffer)))))
+
 (defun luna-disable-line-numbers-h ()
   (display-line-numbers-mode -1))
 
