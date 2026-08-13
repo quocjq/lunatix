@@ -80,7 +80,8 @@ iso:
     bash scripts/qemu-iso.sh fetch
 
 # One-shot: fetch ISO, build the runner, boot the installer into a fresh
-# throwaway qcow2 (SNAPSHOT=1 keeps the disk pristine; SNAPSHOT=0 to keep it).
+# qcow2. SNAPSHOT is forced to 0 so the install persists (SNAPSHOT=1 would
+# discard it and qemu-boot would hit emergency mode).
 qemu-install:
     bash scripts/qemu-iso.sh install
 

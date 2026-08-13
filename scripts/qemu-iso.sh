@@ -53,8 +53,11 @@ case "${1:-fetch}" in
   install)
     fetch_iso
     build_runner
-    echo "==> Booting installer (SNAPSHOT=$SNAPSHOT, disk=$DISK)…"
-    SNAPSHOT="$SNAPSHOT" DISK="$DISK" ISO="$ISO" ./result/bin/qemu
+    # SNAPSHOT=0 is REQUIRED here: SNAPSHOT=1 (default) would write the
+    # installer's disk changes to a throwaway overlay that is discarded on
+    # VM exit — the qcow2 stays blank and qemu-boot lands in emergency mode.
+    echo "==> Booting installer (SNAPSHOT=0 — install persists to $DISK)…"
+    SNAPSHOT="0" DISK="$DISK" ISO="$ISO" ./result/bin/qemu
     echo "==> Done. Reboot into the installed system:"
     echo "    scripts/qemu-iso.sh boot"
     ;;
