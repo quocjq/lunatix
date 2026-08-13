@@ -13,21 +13,22 @@
           ];
         };
 
-        # Semantic workspaces (Prime-style): Mod+1/2/3 are fixed categories,
-        # the rest stay numbered. Apps are auto-routed by window rules so each
-        # Mod+N is deterministic. Hyprland named-workspace selectors need the
-        # `name:` prefix (bare "editors" is an invalid selector -> focus no-op).
-        named = {
-          "1" = "name:editors";
-          "2" = "name:media";
-          "3" = "name:terminal";
+        # Semantic workspaces (Prime-style): Mod+1/2/3 are fixed categories
+        # (editors/media/terminal), the rest stay numbered. Apps are
+        # auto-routed by window rules. Using PLAIN numbered workspaces (not
+        # `name:`-named) so the bar shows 1/2/3 — named workspaces get
+        # auto-allocated ids (e.g. 6) which displayed instead of the name.
+        semantic = {
+          "1" = "editors";
+          "2" = "media";
+          "3" = "terminal";
         };
-        namedBinds = lib.mapAttrsToList (key: sel:
-          (bind "${mainMod} + ${key}" (lua "hl.dsp.focus({ workspace = '${sel}' })")
-            "Focus workspace ${sel}")) named;
-        namedMoveBinds = lib.mapAttrsToList (key: sel:
-          (bind "${mainMod} + SHIFT + ${key}" (lua "hl.dsp.window.move({ workspace = '${sel}' })")
-            "Move window to workspace ${sel}")) named;
+        semanticBinds = lib.mapAttrsToList (key: _:
+          (bind "${mainMod} + ${key}" (lua "hl.dsp.focus({ workspace = ${toString (lib.toInt key)} })")
+            "Focus workspace ${toString (lib.toInt key)}")) semantic;
+        semanticMoveBinds = lib.mapAttrsToList (key: _:
+          (bind "${mainMod} + SHIFT + ${key}" (lua "hl.dsp.window.move({ workspace = ${toString (lib.toInt key)} })")
+            "Move window to workspace ${toString (lib.toInt key)}")) semantic;
 
         # Numbered workspaces 4..10 (0 = 10)
         numbered = builtins.genList (i: i + 4) 7;
@@ -51,30 +52,29 @@
           (bind "${mainMod} + Next" (lua ''hl.dsp.focus({ workspace = "r+1" })'') "Focus next workspace")
         ];
 
-        # Auto-routing: window class -> semantic workspace (Prime muscle memory).
+        # Auto-routing: window class -> workspace id (Prime muscle memory).
         # Hyprland 0.55+ Lua config: window rules are `hl.window_rule({...})`
-        # calls. The home-manager `settings.window_rule` key does NOT render
-        # (attrsOf drops it), so emit them via extraConfig (raw Lua, verbatim).
-        # Named workspaces require the `name:` prefix in the rule value too.
+        # calls; the home-manager `settings.window_rule` key does NOT render
+        # (attrsOf drops it), so emit via extraConfig (raw Lua, verbatim).
         windowRuleLua = lib.concatStringsSep "\n" (
           map (rule: "hl.window_rule(${rule})") [
-            # editors: emacs, neovim, thunar (files), obsidian (notes)
-            "{ match = { class = '(^emacs)' }, workspace = 'name:editors' }"
-            "{ match = { class = '(^nvim)' }, workspace = 'name:editors' }"
-            "{ match = { class = '(^thunar)' }, workspace = 'name:editors' }"
-            "{ match = { class = '(^obsidian)' }, workspace = 'name:editors' }"
-            # media/browser
-            "{ match = { class = '(^zen)' }, workspace = 'name:media' }"
-            "{ match = { class = '(^mpv)' }, workspace = 'name:media' }"
-            # terminal/ai/research
-            "{ match = { class = '(^ghostty)' }, workspace = 'name:terminal' }"
+            # editors: emacs, neovim, thunar (files), obsidian (notes) -> ws 1
+            "{ match = { class = '(^emacs)' }, workspace = 1 }"
+            "{ match = { class = '(^nvim)' }, workspace = 1 }"
+            "{ match = { class = '(^thunar)' }, workspace = 1 }"
+            "{ match = { class = '(^obsidian)' }, workspace = 1 }"
+            # media/browser: zen, mpv -> ws 2
+            "{ match = { class = '(^zen)' }, workspace = 2 }"
+            "{ match = { class = '(^mpv)' }, workspace = 2 }"
+            # terminal/ai/research: ghostty -> ws 3
+            "{ match = { class = '(^ghostty)' }, workspace = 3 }"
           ]
         );
       in
       {
         wayland.windowManager.hyprland = {
           settings = {
-            bind = namedBinds ++ namedMoveBinds ++ workspaceBinds ++ relativeBinds;
+            bind = semanticBinds ++ semanticMoveBinds ++ workspaceBinds ++ relativeBinds;
           };
           extraConfig = windowRuleLua;
         };
