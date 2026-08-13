@@ -63,6 +63,18 @@
               SNAPSHOT_ARG=(-snapshot)
             fi
 
+            # Boot order: when an ISO is attached, boot the CD-ROM first (the
+            # disk is empty on first install — booting it lands in the NixOS
+            # rescue shell: bash 5.3, no sudo). Otherwise boot the disk.
+            if [[ -n "$ISO" ]]; then
+              BOOT_ARG=(-boot "order=d,menu=on")
+            else
+              BOOT_ARG=(-boot "order=c,menu=on")
+            fi
+
+            # EXTRA_QEMU_ARGS / "$@" are intentionally unquoted so extra flags
+            # pass as separate argv entries (word splitting is the point).
+            # shellcheck disable=SC2086
             qemu-system-x86_64 \
               -name lunatix \
               -machine type=q35,accel=kvm \
@@ -76,12 +88,9 @@
               -device virtio-vga \
               -netdev user,id=net0 \
               -device virtio-net,netdev=net0 \
-              -boot menu=on \
+              "''${BOOT_ARG[@]}" \
               "''${SNAPSHOT_ARG[@]}" \
-              ''${ISO:+-drive "file=$ISO,media=cdrom"} \
-              # EXTRA_QEMU_ARGS is intentionally unquoted: it passes multiple
-              # qemu flags as separate argv entries (word splitting is the point).
-              # shellcheck disable=SC2086
+              ''${ISO:+-drive "file=$ISO,media=cdrom,format=raw,readonly=on"} \
               $EXTRA_QEMU_ARGS \
               "$@"
           '';

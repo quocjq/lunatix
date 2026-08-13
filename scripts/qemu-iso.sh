@@ -29,19 +29,27 @@ build_runner() {
 
 fetch_iso() {
   mkdir -p "$ISO_DIR"
-  if [ -f "$ISO" ] && [ "${FORCE:-0}" = "0" ]; then
-    # Already have it — verify it's still an ISO, else redownload.
-    if "$FILE_BIN" -b "$ISO" | grep -qE "ISO 9660|DOS/MBR"; then
-      echo "ISO already present: $ISO (FORCE=1 to redownload)"
-      return 0
-    fi
-    echo "==> Existing file is not an ISO, re-downloading…"
+  # Expected size of the minimal ISO (content-length from the 302 target).
+  # A truncated download (e.g. interrupt) boots to emergency mode with
+  # squashfs I/O errors — fail fast instead.
+  EXPECTED_SIZE="${EXPECTED_SIZE:-1726365696}"
+
+  ok() {
+    [ -f "$ISO" ] \
+      && [ "$(stat -c %s "$ISO")" = "$EXPECTED_SIZE" ] \
+      && "$FILE_BIN" -b "$ISO" | grep -qE "ISO 9660|DOS/MBR"
+  }
+
+  if ok && [ "${FORCE:-0}" = "0" ]; then
+    echo "ISO already present and valid: $ISO (FORCE=1 to redownload)"
+    return 0
   fi
+
   echo "==> Downloading minimal NixOS ISO (1.7G)…"
-  curl -fL -o "$ISO" "$ISO_URL"
-  if ! "$FILE_BIN" -b "$ISO" | grep -qE "ISO 9660|DOS/MBR"; then
-    echo "error: $ISO is not an ISO (channel moved?)" >&2
-    "$FILE_BIN" -b "$ISO"
+  curl -fL --retry 3 -C - -o "$ISO" "$ISO_URL"
+  if ! ok; then
+    echo "error: $ISO failed verification (size=$(stat -c %s "$ISO" 2>/dev/null || echo 0), expected $EXPECTED_SIZE)" >&2
+    "$FILE_BIN" -b "$ISO" 2>/dev/null
     exit 1
   fi
   echo "ISO ready: $ISO"
