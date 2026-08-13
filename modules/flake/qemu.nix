@@ -77,7 +77,6 @@
               -netdev user,id=net0 \
               -device virtio-net,netdev=net0 \
               -boot menu=on \
-              -vga none \
               "''${SNAPSHOT_ARG[@]}" \
               ''${ISO:+-drive "file=$ISO,media=cdrom"} \
               # EXTRA_QEMU_ARGS is intentionally unquoted: it passes multiple

@@ -23,7 +23,8 @@ else
 fi
 
 build_runner() {
-  nix --extra-experimental-features 'nix-command flakes' build .#qemu --no-link >/dev/null 2>&1
+  nix --extra-experimental-features 'nix-command flakes' build .#qemu --no-link \
+    --print-out-paths 2>/dev/null | tail -1
 }
 
 fetch_iso() {
@@ -52,19 +53,19 @@ case "${1:-fetch}" in
     ;;
   install)
     fetch_iso
-    build_runner
+    RUNNER="$(build_runner)"
     # SNAPSHOT=0 is REQUIRED here: SNAPSHOT=1 (default) would write the
     # installer's disk changes to a throwaway overlay that is discarded on
     # VM exit — the qcow2 stays blank and qemu-boot lands in emergency mode.
     echo "==> Booting installer (SNAPSHOT=0 — install persists to $DISK)…"
-    SNAPSHOT="0" DISK="$DISK" ISO="$ISO" ./result/bin/qemu
+    SNAPSHOT="0" DISK="$DISK" ISO="$ISO" "$RUNNER/bin/qemu"
     echo "==> Done. Reboot into the installed system:"
     echo "    scripts/qemu-iso.sh boot"
     ;;
   boot)
-    build_runner
+    RUNNER="$(build_runner)"
     echo "==> Booting installed system (SNAPSHOT=$SNAPSHOT, disk=$DISK)…"
-    SNAPSHOT="$SNAPSHOT" DISK="$DISK" ./result/bin/qemu
+    SNAPSHOT="$SNAPSHOT" DISK="$DISK" "$RUNNER/bin/qemu"
     ;;
   *)
     echo "usage: $0 {fetch|install|boot}" >&2
