@@ -1,0 +1,80 @@
+#+title: Home environment module map
+#+subtitle: hjem (migrated) + home-manager tail; out-of-store symlinks
+#+options: toc:t
+
+Every module in =modules/community/lix/core/= exposes a ~homeManager~ and/or
+~hjem~ attribute. The [[file:../modules/flake/dendritic.nix][dendritic]]
+framework routes them into the user's classes
+(~den.schema.user.classes = ["homeManager" "hjem"]~, see
+[[file:../modules/flake/defaults.nix][defaults.nix]]). Migration from
+home-manager → hjem is in progress: most modules now ship a ~hjem~ block;
+a small "HM tail" still runs on the ~homeManager~ class (deep HM-coupled
+frameworks). The plan is documented in the migration commit; rollback =
+drop the ~hjem~ class.
+
+Hjem wiring lives in [[file:../modules/hosts/igloo.nix][igloo.nix]]
+(~hjem.extraModules = [ inputs.hjem-rum.hjemModules.default ]~,
+~clobberByDefault = true~). hjem-rum options render under
+~hjem.users.<user>.rum.programs.*~.
+
+* Migrated to hjem (hjem-rum modules)
+
+- fzf (package + `FZF_DEFAULT_OPTS` session var)
+- ghostty (via lix.minimal, standalone reinstall aspect)
+- git (~rum.programs.git~: settings/ignore; difftastic + delta merged into gitconfig)
+- mpv
+- nushell (~settings~ pre-dotted keys for the hjem-rum flattener limitation, ~aliases~, ~extraConfig~)
+- starship (+ nushell integration)
+- yazi (theme.toml still owned by stylix HM target)
+- zoxide (+ nushell integration; bash hook in .bashrc)
+- flameshot (scaffold, disabled)
+
+* Migrated to hjem (raw files, ~core/dotfiles~ snapshot)
+
+- bash — ~/.bashrc (login shell; interactive shell is nushell)
+- bat — ~/.config/bat/config
+- btop — ~/.config/btop/ (btop.conf + frozen stylix theme)
+- eza — no config file; flags/aliases in shell configs
+- sioyek — keys_user.config + prefs_user.config (frozen catppuccin)
+- tmux — tmux.conf + ~/.local/bin/tmux-sessionizer / tmux-kill-sessions
+- lotus (fcitx5) — ~/.config/fcitx5 snapshot; engine via NixOS ~i18n.inputMethod~
+
+* Moved to NixOS (host scope)
+
+- lotus — ~i18n.inputMethod~ (waylandFrontend + addons), service stays NixOS
+- nix-settings — ~nixpkgs.config.allowUnfree~ (nixos) + HM-tail copy (HM evaluates
+  its own pkgs; needed until the HM tail is gone)
+- packages — hjem has no package management; every migrated tool's binary moved to
+  ~environment.systemPackages~ (bat+extras, btop, eza, fzf, git, difftastic, ghostty,
+  neovim, mpv, nushell, starship, tmux, yazi, zoxide, sioyek, thunar thumbnails,
+  breeze-icons)
+
+* Home-manager tail (still on ~homeManager~ class)
+
+- easyeffects (~services.easyeffects~ + presets)
+- emacs (~services.emacs~ daemon + ~emacsWithPackagesFromUsePackage~ + overlays)
+- nixcord (~programs.nixcord~ + equicord)
+- stylix (theming spans host+home)
+- plasma (plasma-manager, HM-only module framework)
+- caelestia (HM-only module framework)
+- zenwser (zen-browser HM module, HM-only)
+- hyprland (~.config/hypr~ — out-of-store source; hjem/smfh silently skips
+  non-store sources, so this stays on HM to keep live lua editing)
+
+These have no hjem/hjem-rum port path short of rewriting their service/package
+layers; keep on HM until a path exists. Packages they pull in stay in HM.
+
+* Out-of-store symlinks
+
+Home-manager's ~config.lib.file.mkOutOfStoreSymlink~ stays the mechanism for
+out-of-store links: hjem's smfh refuses non-store sources (verified:
+~hjem internal activate~ emits no actions for them).
+
+- hyprland (~lix.hyprland~, HM tail) — ~.config/hypr→~ repo =config/= dir
+  (live lua edits, ~hyprctl reload~ picks them up).
+- emacs (HM tail) — ~.emacs.d→~ repo =emacs/= via
+  ~config.lib.file.mkOutOfStoreSymlink~.
+
+Note the emacs compiled cache (~lunaris--load-cached~) byte-compiles into
+=lisp/= under the user-emacs-directory; source edits recompile on next start
+via the staleness check (~*.elc~ is gitignored).

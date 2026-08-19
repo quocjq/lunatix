@@ -12,7 +12,7 @@
   };
   lix.doomacs = {
     maid = {
-      file.home.".emacs.d".source = "/home/lunixose/Proj/lunatix/emacs";
+      file.home.".emacs.d".source = "{{home}}/Proj/lunatix/emacs";
     };
     os = { pkgs, ... }: {
       nixpkgs.overlays = [

@@ -59,7 +59,7 @@
       { ... }:
       {
         file.xdg_config."hypr".source =
-          "/home/lunixose/Proj/lunatix/modules/community/lix/core/hyprland/config";
+          "{{home}}/Proj/lunatix/modules/community/lix/core/hyprland/config";
       };
   };
 }

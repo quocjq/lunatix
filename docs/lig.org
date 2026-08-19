@@ -41,13 +41,13 @@ Recipients are pinned in [[file:../modules/lig/_secrets/secrets.nix][secrets.nix
 
 Both recipients are allowed for all five secrets:
 
-| file            | purpose                                        |
-|-----------------+------------------------------------------------|
-| =dns.age=       | DNS credentials → /run/agenix/dns              |
-| =env.age=       | environment secrets → ~/.config/secrets/env    |
-| =github.age=    | GitHub SSH key → ~/.ssh/github                 |
-| =github-token.age= | GitHub token, included into ~nix.extraOptions~ |
-| =oraclevps.age= | Oracle VPS key → ~/.ssh/ssh-key-2026-05-09.key |
+| file             | purpose                                        |
+|------------------+------------------------------------------------|
+| =dns.age=          | DNS credentials → /run/agenix/dns              |
+| =env.age=          | environment secrets → ~/.config/secrets/env    |
+| =github.age=       | GitHub SSH key → ~/.ssh/github                 |
+| =github-token.age= | GitHub token, included into ~nix.extraOptions~   |
+| =oraclevps.age=    | Oracle VPS key → ~/.ssh/ssh-key-2026-05-09.key |
 
 Add a new secret: create the ~.age~ file, add it to secrets.nix recipients,
 then declare a matching ~secrets~ entry.

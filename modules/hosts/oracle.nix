@@ -18,6 +18,7 @@
       <server/forgejo-runner>
       <server/lunatix-deploy>
       <server/hydra>
+      <server/vaultwarden>
     ];
 
     disk = {
@@ -48,7 +49,7 @@
         networking.networkmanager.enable = lib.mkForce false;
         networking.useDHCP = lib.mkForce true;
         networking.firewall.enable = true;
-        networking.firewall.allowedTCPPorts = [ 22 80 443 ];
+        networking.firewall.allowedTCPPorts = [ 22 80 443 8222 ];
 
         users.users.root.openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHkCjExNYxUFFr2joRL8Rq0jE/tEDfNR/hrKReH4FS9l lunixose"
