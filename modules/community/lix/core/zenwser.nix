@@ -6,14 +6,10 @@
   };
 
   lix.zenwser = {
-    homeManager = { user, ... }: {
-      imports = [ inputs.zen-browser.homeModules.twilight ];
-      programs.zen-browser = {
-        enable = true;
-        setAsDefaultBrowser = true;
-        # profileNames = [ "${user.userName}" ];
-      };
+    os = {pkgs, ...}: {
+      environment.systemPackages = [
+        inputs.zen-browser.packages.${pkgs.system}.twilight
+      ];
     };
-
   };
 }

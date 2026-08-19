@@ -1,17 +1,16 @@
 { __findFile, ... }: {
   lix.bat = {
-    homeManager = { pkgs, ... }: {
-      programs.bat = {
-        enable = true;
-        config = {
-          pager = "less -FR";
-        };
-        extraPackages = with pkgs.bat-extras; [
-          batman
-          batpipe
-          batgrep
-        ];
-      };
+    os = { pkgs, ... }: {
+      environment.systemPackages = with pkgs; [
+        bat
+      ] ++ (with pkgs.bat-extras; [
+        batman
+        batpipe
+        batgrep
+      ]);
+    };
+    maid = {
+      file.xdg_config."bat/config".text = "--pager='less -FR'";
     };
   };
 }

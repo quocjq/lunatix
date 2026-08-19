@@ -41,7 +41,7 @@ in
   den.default.includes = [ den.policies.expose-secrets ];
 
   lig.agenix = {
-    nixos =
+    os =
       {
         secrets,
         pkgs,

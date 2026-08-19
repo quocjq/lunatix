@@ -19,7 +19,7 @@
  (popup +defaults)
  smooth-scroll
  unicode
-  (vc-gutter +pretty)
+ (vc-gutter +pretty)
  window-select
  workspaces
 
@@ -94,10 +94,6 @@
  :app
  calendar
  irc
- (rss +org)
-
- :config
- literate
- (default +bindings +smartparens))
+ (rss +org))
 
 ;;; manifest.el ends here

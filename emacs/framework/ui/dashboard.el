@@ -605,9 +605,14 @@ See `+dashboard-menu-sections' to change the contents of the menu."
   (+dashboard--help-echo))
 
 (defun +dashboard/backward-button (n)
-  "Like `backward-button', but don't wrap."
+  "Like `forward-button', but don't wrap."
   (interactive "p")
-  (backward-button n nil)
+  (forward-button n nil)
   (+dashboard--help-echo))
+
+;;; Bootstrap: +dashboard-init-h must run after +dashboard-reload (and the
+;;; other hooks it references) are defined, so the call belongs here at the
+;;; end of the file. ui-config loads in stage 2, after the frame is up.
+(+dashboard-init-h)
 
 ;;; ui/dashboard.el ends here

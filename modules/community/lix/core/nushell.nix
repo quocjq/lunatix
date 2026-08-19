@@ -1,17 +1,60 @@
 {
   lix.nushell = {
-    provides = {
-      zoxide.homeManager.programs.zoxide.enableNushellIntegration = true;
-      eza.homeManager.programs.eza.enableNushellIntegration = true;
-      yazi.homeManager.programs.yazi.enableNushellIntegration = true;
-      starship.homeManager.programs.starship.enableNushellIntegration = true;
+    os = { pkgs, ... }: {
+      environment.systemPackages = [ pkgs.nushell ];
     };
-    homeManager = {
-      programs.nushell = {
-        enable = true;
+    maid =
+      { pkgs, lib, ... }:
+      let
+        inherit (builtins) isNull isBool isAttrs isInt isFloat;
+        inherit (lib.attrsets) mapAttrsToList;
+        inherit (lib.strings) concatStringsSep;
+        inherit (lib.trivial) boolToString;
+        inherit (lib.lists) flatten;
+
+        # Render `settings` as `$env.config.<path> = <value>` lines, one
+        # nesting level deep (deeper keys must be pre-dotted).
+        renderValue = v:
+          if isNull v then
+            "null"
+          else if isBool v then
+            boolToString v
+          else if isInt v || isFloat v then
+            toString v
+          else if builtins.match "^[0-9_]+$" (toString v) != null then
+            toString v
+          else
+            "\"${toString v}\"";
+
+        # Flatten to `path = value` lines (no $env.config. prefix).
+        flattenConfig = settings:
+          flatten (
+            mapAttrsToList (
+              n: v:
+              if isAttrs v then
+                map (sub: "${n}.${sub}") (flattenConfig v)
+              else
+                "${n} = ${renderValue v}"
+            ) settings
+          );
+
+        renderConfig = settings:
+          concatStringsSep "\n" (map (line: "$env.config.${line}") (flattenConfig settings));
+
+        renderAliases = aliases:
+          concatStringsSep "\n" (mapAttrsToList (n: v: "alias ${n} = ${v}") aliases);
+
+        starshipInit = pkgs.runCommand "starship-init-nu" { } ''
+          ${pkgs.starship}/bin/starship init nu >> $out
+        '';
+        zoxideInit = pkgs.runCommand "zoxide-init-nu" { } ''
+          ${pkgs.zoxide}/bin/zoxide init nushell >> $out
+        '';
+
         settings = {
           show_banner = false;
-          completions.external = {
+          # deeper keys pre-dotted (renders $env.config.completions.external.*)
+          "completions.external" = {
             enable = true;
             max_results = 200;
           };
@@ -20,13 +63,10 @@
             sync_on_enter = true;
             isolation = true;
           };
-          buffer_editor = [
-            "emacsclient"
-            "-a"
-            "-t"
-          ];
+          buffer_editor = "emacsclient -a -t";
         };
-        shellAliases = {
+
+        aliases = {
           lt = "eza --tree --level=2";
           ll = "eza  -lh --no-user --long";
           la = "eza -lah ";
@@ -34,6 +74,7 @@
           g = "git";
           e = "nvim";
         };
+
         extraConfig = ''
           load-env (
           open '/home/lunixose/.config/secrets/env'
@@ -115,7 +156,7 @@
                                }
                            }
                        } else {
-                           $env._DEVENV_HOOK_UNTRUSTED = ""
+                           $env._DEVENV_HOOK_UNTRUSTED = $env.PWD
                        }
                    } else {
                        $env._DEVENV_HOOK_UNTRUSTED = $env.PWD
@@ -155,7 +196,15 @@
                }
            ))
         '';
+      in
+      {
+        file.xdg_config."nushell/config.nu".text = concatStringsSep "\n" [
+          (renderConfig settings)
+          (renderAliases aliases)
+          "use ${starshipInit}"
+          "source ${zoxideInit}"
+          extraConfig
+        ];
       };
-    };
   };
 }

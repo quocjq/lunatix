@@ -1,0 +1,15 @@
+#!/nix/store/7ik8057hajl6vq9j40h3jracxjn0bb5x-bash-5.3p15/bin/bash
+set -euo pipefail
+IDLE_MIN="120"
+cur="$(/nix/store/m7gd6hk60nd2hkmpyrfzm2v3q3j8ymrc-tmux-3.7b/bin/tmux display-message -p '#S' 2>/dev/null || true)"
+now="$(date +%s)"
+/nix/store/m7gd6hk60nd2hkmpyrfzm2v3q3j8ymrc-tmux-3.7b/bin/tmux list-sessions -F '#{session_name} #{session_attached} #{session_activity}' 2>/dev/null | while read -r name att last; do
+  [ "$name" = "$cur" ] && continue
+  [ "$att" = "1" ] && continue
+  idle=$(( (now - last) / 60 ))
+  if [ "$idle" -ge "$IDLE_MIN" ]; then
+    echo "killing idle tmux session: $name (idle ${idle}m)"
+    /nix/store/m7gd6hk60nd2hkmpyrfzm2v3q3j8ymrc-tmux-3.7b/bin/tmux kill-session -t "$name"
+  fi
+done
+

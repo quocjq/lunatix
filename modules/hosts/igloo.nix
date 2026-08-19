@@ -1,4 +1,4 @@
-{ __findFile, ... }: {
+{ __findFile, inputs, ... }: {
   den.hosts.x86_64-linux.igloo.users.lunixose = { };
 
   den.aspects.igloo = {
@@ -36,6 +36,10 @@
           max-jobs = 1;
           cores = 2;
         };
+
+        # nix-maid: user dotfiles are routed via the lix.* maid class into
+        # users.users.<user>.maid; the den maid battery auto-imports the
+        # nix-maid NixOS module when a user carries the "maid" class.
       };
   };
 }

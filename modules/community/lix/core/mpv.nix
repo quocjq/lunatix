@@ -1,7 +1,8 @@
 { __findFile, ... }: {
   lix.mpv = {
-    homeManager = {
-      programs.mpv.enable = true;
+    os = { pkgs, ... }: {
+      environment.systemPackages = [ pkgs.mpv ];
     };
+    maid = { };
   };
 }

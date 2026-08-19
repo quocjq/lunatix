@@ -1,26 +1,16 @@
 { __findFile, ... }: {
   lix.btop = {
-    homeManager = { pkgs, ... }: {
-      programs.btop = {
-        enable = true;
-        package = pkgs.btop.override {
+    os = { pkgs, ... }: {
+      environment.systemPackages = [
+        (pkgs.btop.override {
           rocmSupport = true;
           cudaSupport = true;
-        };
-        settings = {
-          vim_keys = true;
-          rounded_corners = true;
-          proc_tree = true;
-          show_gpu_info = "on";
-          show_uptime = true;
-          show_coretemp = true;
-          cpu_sensor = "auto";
-          show_disks = true;
-          only_physical = true;
-          io_mode = true;
-          io_graph_combined = false;
-        };
-      };
+        })
+      ];
+    };
+    maid = {
+      file.xdg_config."btop/btop.conf".source = ./_config/.config/btop/btop.conf;
+      file.xdg_config."btop/themes".source = ./_config/.config/btop/themes;
     };
   };
 }

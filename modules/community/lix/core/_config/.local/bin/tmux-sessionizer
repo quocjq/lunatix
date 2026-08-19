@@ -1,0 +1,28 @@
+#!/nix/store/7ik8057hajl6vq9j40h3jracxjn0bb5x-bash-5.3p15/bin/bash
+set -euo pipefail
+
+PROJ_DIR="${TMUX_PROJ_DIR:-$HOME/Proj}"
+
+# Explicit list ++ one-level scan of ~/Proj, deduped, sorted.
+dirs="$(
+  {
+    /nix/store/fcqbwp5hx5wh3lzf0457wmf0divknz7y-findutils-4.11.0/bin/find "$PROJ_DIR" -mindepth 1 -maxdepth 1 -type d \
+      -not -name '.*' 2>/dev/null
+    for d in ; do
+      echo "$d"
+    done
+  } | sort -u
+)"
+
+selected="$(printf '%s\n' "$dirs" | /nix/store/q9na80xlbr9gh0607h13hmdx9ljzslng-fzf-0.74.2/bin/fzf --height 40% --layout reverse \
+  --prompt 'tmux session > ' --preview 'ls -1 {} 2>/dev/null | head -20')" || exit 0
+[ -n "$selected" ] || exit 0
+
+name="$(basename "$selected")"
+if /nix/store/m7gd6hk60nd2hkmpyrfzm2v3q3j8ymrc-tmux-3.7b/bin/tmux has-session -t "$name" 2>/dev/null; then
+  /nix/store/m7gd6hk60nd2hkmpyrfzm2v3q3j8ymrc-tmux-3.7b/bin/tmux switch-client -t "$name"
+else
+  /nix/store/m7gd6hk60nd2hkmpyrfzm2v3q3j8ymrc-tmux-3.7b/bin/tmux new-session -d -s "$name" -c "$selected"
+  /nix/store/m7gd6hk60nd2hkmpyrfzm2v3q3j8ymrc-tmux-3.7b/bin/tmux switch-client -t "$name"
+fi
+

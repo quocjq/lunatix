@@ -16,18 +16,10 @@
   };
 
   lix.stylix = {
-    os = { pkgs, ... }: {
+    os = { lib, pkgs, config, ... }: {
       imports = [ inputs.stylix.nixosModules.stylix ];
-    };
-
-    provides.to-hosts.homeManager = { lib, pkgs, config, ... }: {
-      imports = [ inputs.stylix.homeModules.stylix ];
-
       stylix = {
         enable = true;
-        # Catppuccin Mocha base16. YAML from tinted-theming/schemes (the upstream
-        # source stylix already consumes internally — pinned via our own input,
-        # forwarded through stylix.inputs.tinted-schemes).
         base16Scheme = "${config.stylix.inputs.tinted-schemes}/base16/catppuccin-mocha.yaml";
         polarity = "dark"; # mocha is dark; kept explicit for clarity
 
@@ -62,27 +54,11 @@
           size = 24;
         };
 
-        icons.dark = "Papirus-Dark";
+        # icons.dark = "Papirus-Dark";
 
         targets = {
-          hyprland.enable = true; # borders, shadows, groupbar, bg
-          # hyprpaper disabled: stylix target writes `path = image`; null when no
-          # image is set. Wallpaper is owned by noctalia runtime pool.
-          # hyprpaper.enable = true;
-          bat.enable = true;
-          btop.enable = true;
-          fzf.enable = true;
-          ghostty.enable = true;
-          kde.enable = true; # Plasma colors / fonts / cursor / wallpaper
-          gtk.enable = true;
+          gtk.enable = true; # GTK theme / css; backups forced above
           qt.enable = true;
-          nushell.enable = true;
-          noctalia.enable = true;
-          yazi.enable = true;
-          starship.enable = true;
-          mpv.enable = true;
-          sioyek.enable = true;
-          zen-browser.profileNames = [ "lunixose" ];
         };
       };
     };

@@ -1,33 +1,10 @@
-# eza — modern `ls` replacement.
+# eza — modern `ls` replacement. Flags/aliases live in the shell configs
+# (bashrc for bash login shell, nushell aliases for the interactive shell);
+# no own config file.
 { __findFile, ... }: {
   lix.eza = {
-    homeManager = { pkgs, ... }: {
-      programs.eza = {
-        enable = true;
-        icons = "auto";
-        enableBashIntegration = true;
-        enableZshIntegration = true;
-        enableFishIntegration = true;
-        git = true;
-
-        extraOptions = [
-          "--group-directories-first"
-          "--no-quotes"
-          "--header" # Show header row
-          "--git-ignore"
-          "--icons=always"
-          # "--time-style=long-iso" # ISO 8601 extended format for time
-          "--classify" # append indicator (/, *, =, @, |)
-          "--hyperlink" # make paths clickable in some terminals
-        ];
-      };
-      # Aliases to make `ls`, `ll`, `la` use eza
-      home.shellAliases = {
-        lt = "eza --tree --level=2";
-        ll = "eza  -lh --no-user --long";
-        la = "eza -lah ";
-        tree = "eza --tree ";
-      };
+    os = { pkgs, ... }: {
+      environment.systemPackages = [ pkgs.eza ];
     };
   };
 }

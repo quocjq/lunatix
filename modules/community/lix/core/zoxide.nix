@@ -1,12 +1,11 @@
 {
   lix.zoxide = {
-    homeManager = {
-      programs.zoxide = {
-        enable = true;
-        enableZshIntegration = true;
-        enableBashIntegration = true;
-        enableFishIntegration = true;
-      };
+    os = { pkgs, ... }: {
+      environment.systemPackages = [ pkgs.zoxide ];
+    };
+    maid = {
+      # nushell integration folded into config.nu by lix.nushell;
+      # the bash login hook is added by lix.bash.
     };
   };
 }

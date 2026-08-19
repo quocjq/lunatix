@@ -19,6 +19,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-maid = {
+      url = "github:viperml/nix-maid";
+    };
     devenv.url = "github:cachix/devenv";
     disko = {
       url = "github:nix-community/disko";

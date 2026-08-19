@@ -17,14 +17,14 @@
       <lix/doomacs>
     ];
 
-    # terminal + neovim: not standalone aspects (ghostty lives in the user
-    # packages, neovim too) — provide them here so minimal is self-contained.
-    homeManager = { pkgs, ... }: {
-      home.packages = with pkgs; [
+    # terminal + neovim: nix-maid has no package management, so these land in
+    # the host environment (mirrors the old home.packages set).
+    os = { pkgs, ... }: {
+      environment.systemPackages = with pkgs; [
         ghostty # terminal
         neovim # editor
       ];
-      programs.ghostty.enable = true;
     };
+    maid = { };
   };
 }

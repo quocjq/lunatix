@@ -12,7 +12,7 @@
 
   lix.hyprland = {
     includes = [
-      <lix/noctalia>
+      <lix/caelestia>
     ];
     provides.to-hosts.nixos = { pkgs, lib, ... }: {
       # The Hyprland Cachix exists to cache the hyprland packages and any dependencies not found in cache.nixos.org.
@@ -48,10 +48,18 @@
       xdg.icons.enable = true;
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+
+      # Breeze dark icon theme (Quickshell/caelestia + Qt/GTK show this).
+      environment.systemPackages = [ pkgs.kdePackages.breeze-icons ];
     };
-    homeManager = {
-      wayland.windowManager.hyprland.enable = true;
-      wayland.windowManager.hyprland.configType = "lua";
-    };
+    # hyprland config is hand-written lua edited live in the repo. nix-maid
+    # keeps change-on-save: a plain-string source is NOT coerced into the
+    # nix-store, so ~/.config/hypr stays an out-of-store symlink into the repo.
+    maid =
+      { ... }:
+      {
+        file.xdg_config."hypr".source =
+          "/home/lunixose/Proj/lunatix/modules/community/lix/core/hyprland/config";
+      };
   };
 }

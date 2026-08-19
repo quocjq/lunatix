@@ -30,9 +30,15 @@ devenv.local.yaml
 # doom modules reference checkout (git clone, not committed)
 emacs/doom-modules/
 
+# caelestia shell reference checkout (git clone, not committed)
+/caelestia/
+
 # Emacs runtime state (never committed)
 emacs/#*#
 emacs/.#*
+
+# Hyprland runtime-generated scheme (entrypoint copies scheme/default.lua here)
+modules/community/lix/core/hyprland/config/scheme/current.lua
 
 # Emacs runtime state (all under emacs/.cache — never committed)
 emacs/.cache/

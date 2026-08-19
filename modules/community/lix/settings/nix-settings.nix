@@ -35,10 +35,13 @@
           };
         };
       };
-    provides.to-users.homeManager =
-      { pkgs, ... }:
-      {
-        nixpkgs.config.allowUnfree = true;
-      };
+    # The HM tail (nixcord, emacs...) still runs on the homeManager class; HM
+    # evaluates packages with its own nixpkgs.config, so allowUnfree must be
+    # set there too until the tail is gone.
+    # provides.to-users.homeManager =
+    #   { pkgs, ... }:
+    #   {
+    #     nixpkgs.config.allowUnfree = true;
+    #   };
   };
 }

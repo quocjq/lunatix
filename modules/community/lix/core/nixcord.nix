@@ -5,25 +5,27 @@
     };
   };
   lix.nixcord = {
-    homeManager = { pkgs, ... }: {
-      imports = [ inputs.nixcord.homeModules.nixcord ];
+    nixos = {
+      imports = [ inputs.nixcord.nixosModules.nixcord ];
+    };
+    darwin = {
+      imports = [ inputs.nixcord.darwinModules.nixcord ];
+    };
+    os = {
       programs.nixcord = {
         enable = true;
+        user = "lunixose";
         discord = {
           equicord.enable = true; # Equicord (has more plugins)
           branch = "stable";
           krisp.enable = true;
           openASAR.enable = true;
         };
-        # Theme: Midnight (refact0r). Picked over stylix's discord target —
-        # change the URL here to swap themes; comment-uncomment to A/B.
         config = {
           enabledThemeLinks = [
-            # "https://raw.githubusercontent.com/refact0r/system24/refs/heads/main/theme/system24.theme.css"
             "https://raw.githubusercontent.com/refact0r/midnight-discord/refs/heads/master/themes/midnight.theme.css"
           ];
           frameless = true;
-          transparent = true;
           plugins = {
             betterActivities.enable = true;
             betterAudioPlayer.enable = true;
@@ -154,12 +156,6 @@
             contextMenu = true;
             isEnabled = true;
             showIcon = false;
-          };
-          translate = {
-            shavian = true;
-            sitelen = true;
-            target = "en";
-            toki = true;
           };
         };
       };

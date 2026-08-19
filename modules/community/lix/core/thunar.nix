@@ -12,11 +12,9 @@
           ];
         };
         services.gvfs.enable = true;
-      };
-    homeManager =
-      { pkgs, ... }:
-      {
-        home.packages = with pkgs; [
+        # nix-maid has no package management; thumbnailers moved from
+        # home-manager's home.packages to the host environment.
+        environment.systemPackages = with pkgs; [
           tumbler
           ffmpegthumbnailer
           poppler-utils

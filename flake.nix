@@ -19,6 +19,7 @@
       type = "git";
       url = "git+https://git.lunixose.duckdns.org/lunixose/blog";
     };
+    caelestia.url = "github:caelestia-dots/shell";
     den.url = "github:denful/den";
     den-diagram = {
       url = "github:denful/den-diagram";
@@ -59,6 +60,9 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     herdr.url = "github:ogulcancelik/herdr";
+    nix-maid = {
+      url = "github:viperml/nix-maid";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -80,10 +84,6 @@
     nixcord.url = "github:4evy/nixcord";
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
-    noctalia = {
-      url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs = {

@@ -7,21 +7,31 @@
         mode = "400";
       }
     ];
-    os = { config, ... }: {
+    os = { pkgs, config, ... }: {
       nix.extraOptions = ''
         !include ${config.age.secrets."github-token".path}
       '';
+      # nix-maid has no package management; git + difftastic land in the
+      # host environment instead.
+      environment.systemPackages = with pkgs; [
+        git
+        difftastic
+      ];
     };
-    homeManager =
+    maid =
       { pkgs, ... }:
+      let
+        gitIni = pkgs.formats.gitIni {
+          listsAsDuplicateKeys = true;
+        };
+      in
       {
-        home.packages = [ pkgs.difftastic ];
-        programs.git = {
-          enable = true;
-          signing.format = "ssh";
-          settings = {
-            user.name = "Lunixose";
-            user.email = "quocjq@gmail.com";
+        file.xdg_config."git/config" = {
+          source = gitIni.generate "git-config" {
+            user = {
+              name = "Lunixose";
+              email = "quocjq@gmail.com";
+            };
             init.defaultBranch = "main";
             pull.rebase = false;
             pager.difftool = true;
@@ -31,6 +41,18 @@
             github.user = "quocjq";
             gitlab.user = "quocjq";
             core.editor = "emacs";
+            # programs.delta (HM) → [delta] section of the same gitconfig.
+            delta = {
+              line-numbers = true;
+              side-by-side = false;
+            };
+            # programs.git.lfs.enable (HM) → git-lfs filters.
+            "filter.lfs" = {
+              clean = "git-lfs clean -- %f";
+              smudge = "git-lfs smudge -- %f";
+              process = "git-lfs filter-process";
+              required = true;
+            };
             alias = {
               "dff" = "difftool";
               "fap" = "fetch --all -p";
@@ -40,45 +62,37 @@
                 "for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'";
             };
           };
-          ignores = [
-            ".DS_Store"
-            "*.swp"
-            ".direnv"
-            ".envrc"
-            ".envrc.local"
-            ".env"
-            ".env.local"
-            ".jj"
-            "devshell.toml"
-            ".tool-versions"
-            "/.github/chatmodes"
-            "/.github/instructions"
-            "*.key"
-            "target"
-            "result"
-            "out"
-            "old"
-            "*~"
-            ".aider*"
-            ".crush*"
-            "CRUSH.md"
-            "GEMINI.md"
-            "CLAUDE.md"
-            ".workspaces"
-            ".agents"
-            ".claude"
-            "AGENT*"
-            "docs/superpowers"
-          ];
-          includes = [ ];
-          lfs.enable = true;
         };
-
-        programs.delta.enable = true;
-        programs.delta.options = {
-          line-numbers = true;
-          side-by-side = false;
-        };
+        file.xdg_config."git/ignore".text = ''
+          .DS_Store
+          *.swp
+          .direnv
+          .envrc
+          .envrc.local
+          .env
+          .env.local
+          .jj
+          devshell.toml
+          .tool-versions
+          /.github/chatmodes
+          /.github/instructions
+          *.key
+          target
+          result
+          out
+          old
+          *~
+          .aider*
+          .crush*
+          CRUSH.md
+          GEMINI.md
+          CLAUDE.md
+          .workspaces
+          .agents
+          .claude
+          AGENT*
+          docs/superpowers
+        '';
       };
   };
 }
