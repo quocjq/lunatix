@@ -29,6 +29,11 @@
                 reverse_proxy 127.0.0.1:3200
               '';
             };
+            "pass.lunixose.duckdns.org" = {
+              extraConfig = ''
+                reserve_proxy 127.0.0.1:8222
+              '';
+            };
           };
         };
       };
