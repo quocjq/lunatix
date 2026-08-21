@@ -19,7 +19,7 @@
         # Deploy/reinstall (--build-on remote) and installs over
         # SSH. nixos-anywhere auto-downloads the aarch64 kexec image.
         #   nix run .#deploy -- root@<ip>
-        deploy = inputs.nixos-anywhere.packages.${pkgs.system}.default;
+        deploy = inputs.nixos-anywhere.packages.${pkgs.stdenv.hostPlatform.system}.default;
       };
   };
 }

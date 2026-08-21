@@ -54,7 +54,7 @@ in
           inputs.agenix-rekey.nixosModules.default
         ];
         environment.systemPackages = [
-          inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
+          inputs.agenix-rekey.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
 
         age.secrets = lib.listToAttrs (

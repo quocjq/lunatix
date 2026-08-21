@@ -14,7 +14,7 @@
     includes = [
       <lix/caelestia>
     ];
-    provides.to-hosts.nixos = { pkgs, lib, ... }: {
+    os = { pkgs, lib, ... }: {
       # The Hyprland Cachix exists to cache the hyprland packages and any dependencies not found in cache.nixos.org.
       nix.settings = {
         substituters = [ "https://hyprland.cachix.org" ];
@@ -49,8 +49,9 @@
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-      # Breeze dark icon theme (Quickshell/caelestia + Qt/GTK show this).
-      environment.systemPackages = [ pkgs.kdePackages.breeze-icons ];
+      environment.systemPackages = [
+        pkgs.kdePackages.breeze-icons
+      ];
     };
     # hyprland config is hand-written lua edited live in the repo. nix-maid
     # keeps change-on-save: a plain-string source is NOT coerced into the

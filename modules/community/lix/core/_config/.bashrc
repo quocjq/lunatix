@@ -19,8 +19,6 @@ alias -- tree='eza --tree '
 # fzf (lix.fzf)
 eval "$(fzf --bash)"
 
-# zoxide (lix.zoxide)
-eval "$(zoxide init bash)"
 
 # starship (lix.starship)
 if [[ $TERM != "dumb" ]]; then
@@ -88,3 +86,6 @@ clauded() {
 
   claude "$@"
 }
+
+# zoxide (lix.zoxide)
+eval "$(zoxide init bash)"

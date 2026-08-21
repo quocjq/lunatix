@@ -53,6 +53,7 @@ return {
     cursorTheme                = "breeze_cursors",
     cursorSize                 = 24,
     sleepGestureCmd            = "systemctl suspend-then-hibernate",
+    iconTheme                  = "breeze-dark",
 
     ------------------
     ---- KEYBINDS ----

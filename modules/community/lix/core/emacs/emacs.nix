@@ -46,7 +46,9 @@
               lnav = (import ./_lnav/scope.nix { inherit inputs pkgs epkgs; }).lnav;
             in
             [
+              epkgs.all-the-icons
               epkgs.nerd-icons
+              epkgs.all-the-icons-nerd-fonts
               epkgs.ripgrep
               epkgs.eglot
               epkgs.astro-ts-mode

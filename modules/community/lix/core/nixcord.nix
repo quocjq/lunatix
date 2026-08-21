@@ -17,7 +17,7 @@
         user = "lunixose";
         discord = {
           equicord.enable = true; # Equicord (has more plugins)
-          branch = "stable";
+          branches = [ "stable" ];
           krisp.enable = true;
           openASAR.enable = true;
         };

@@ -46,7 +46,7 @@
       <lix/communication>
       <lix/system>
       <lix/gaming>
-      <lix/herdr>
+      # <lix/herdr>
       <lix/tmux>
     ];
     user = { pkgs, ... }: {
@@ -66,6 +66,7 @@
         curl
         obsidian
         onlyoffice-desktopeditors
+        osu-lazer-bin
       ];
     };
   };

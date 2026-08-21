@@ -8,7 +8,7 @@
   lix.zenwser = {
     os = {pkgs, ...}: {
       environment.systemPackages = [
-        inputs.zen-browser.packages.${pkgs.system}.twilight
+        inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.twilight
       ];
     };
   };
