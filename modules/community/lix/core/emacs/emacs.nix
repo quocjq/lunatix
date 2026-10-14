@@ -58,8 +58,6 @@
             ];
         })
         languagetool
-        nerd-fonts.symbols-only
-        nerd-fonts.jetbrains-mono
         fd
         ripgrep
         nodejs

@@ -1,7 +1,5 @@
 { inputs, ... }:
 {
-  # `flake-file` reads `flake-file.inputs.X` from across the repo and merges
-  # them into the top-level `inputs` attr of flake.nix on regeneration.
   flake-file.inputs.tinted-schemes = {
     url = "github:tinted-theming/schemes";
     flake = false;
@@ -16,6 +14,41 @@
   };
 
   lix.stylix = {
+    maid =
+      { pkgs, config, ... }:
+      {
+        file.xdg_config."gtk-3.0/settings.ini" = {
+          text = ''
+            [Settings]
+            gtk-application-prefer-dark-theme=1
+            gtk-theme-name=adw-gtk3-dark
+            gtk-icon-theme-name=breeze-dark
+            gtk-cursor-theme-name=breeze_cursors
+            gtk-cursor-theme-size=24
+            gtk-font-name=JetBrainsMono Nerd Font 12
+          '';
+        };
+
+        file.xdg_config."gtk-4.0/settings.ini" = {
+          text = ''
+            [Settings]
+            gtk-application-prefer-dark-theme=1
+            gtk-icon-theme-name=breeze-dark
+            gtk-cursor-theme-name=breeze_cursors
+            gtk-cursor-theme-size=24
+            gtk-font-name=JetBrainsMono Nerd Font 12
+          '';
+        };
+
+        # Fixes Zen Browser and Electron apps that read
+        # color-scheme from the XDG portal instead of GTK
+        file.xdg_config."xdg-desktop-portal/settings.conf" = {
+          text = ''
+            [org.freedesktop.appearance]
+            color-scheme=1
+          '';
+        };
+      };
     os =
       {
         lib,
@@ -25,15 +58,20 @@
       }:
       {
         imports = [ inputs.stylix.nixosModules.stylix ];
+
+        programs.dconf.enable = true;
         environment.systemPackages = with pkgs; [
           kdePackages.breeze
           kdePackages.breeze-gtk
           kdePackages.breeze-icons
+          adw-gtk3
+          adwaita-icon-theme
+          adwaita-fonts
         ];
         stylix = {
           enable = true;
           base16Scheme = "${config.stylix.inputs.tinted-schemes}/base16/catppuccin-mocha.yaml";
-          polarity = "dark"; # mocha is dark; kept explicit for clarity
+          polarity = "dark";
 
           fonts = {
             monospace = {

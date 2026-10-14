@@ -50,11 +50,11 @@ local function extend_keybind(base, suffix)
 end
 
 -- Launcher
-create_bind(
-    "SUPER + SUPER_L",
-    hl.dsp.global("caelestia:launcher"),
-    release
-)
+-- create_bind(
+--     "SUPER + SUPER_L",
+--     hl.dsp.global("caelestia:launcher"),
+--     release
+-- )
 create_bind(vars.kbLauncher, hl.dsp.global("caelestia:launcher"))
 create_bind(vars.kbSession, hl.dsp.global("caelestia:session"))
 create_bind(vars.kbShowSidebar, hl.dsp.global("caelestia:sidebar"))

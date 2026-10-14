@@ -53,6 +53,8 @@
       shell = pkgs.bash; # login shell; interactive shell of record is nushell
       initialHashedPassword = "$6$.u5xmD5jRI69qFuA$L/M.0dWMo4pS5tLIsgZboyEzZeVXI.v17sG0SDv7WekS.VNEwyEbswld8yV3FHXymhUCnc1phCxyHxpi66uLs.";
       packages = with pkgs; [
+        ntfsprogs
+        ntfs3g
         qbittorrent
         gparted-full
         opencode
@@ -63,7 +65,10 @@
         ghostty
         neovim
         wget
+        unzip
+        anki
         curl
+        gh
         obsidian
         onlyoffice-desktopeditors
         osu-lazer-bin

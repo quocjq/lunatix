@@ -49,9 +49,6 @@
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-      environment.systemPackages = [
-        pkgs.kdePackages.breeze-icons
-      ];
     };
     # hyprland config is hand-written lua edited live in the repo. nix-maid
     # keeps change-on-save: a plain-string source is NOT coerced into the

@@ -12,6 +12,7 @@
       {
         environment.systemPackages = [
           inputs.caelestia.packages.${pkgs.stdenv.hostPlatform.system}.with-cli
+          pkgs.quickshell
         ];
 
         services.upower.enable = true;

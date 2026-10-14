@@ -3,7 +3,7 @@
 { __findFile, ... }: {
   lix.gaming = {
     includes = [
-      # <lix/steam>
+      <lix/prismlauncher>
       # <lix/lutris>
     ];
   };

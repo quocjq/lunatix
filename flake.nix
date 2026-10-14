@@ -60,9 +60,6 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     herdr.url = "github:ogulcancelik/herdr";
-    nix-maid = {
-      url = "github:viperml/nix-maid";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -81,16 +78,11 @@
       url = "github:lotusinputmethod/fcitx5-lotus";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-maid.url = "github:viperml/nix-maid";
     nixcord.url = "github:4evy/nixcord";
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs = {
-        home-manager.follows = "home-manager";
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
+    prismlauncher.url = "github:PrismLauncher/PrismLauncher/refs/tags/9.2";
     stylix = {
       url = "github:nix-community/stylix";
       inputs = {

@@ -34,6 +34,11 @@
                 reserve_proxy 127.0.0.1:8222
               '';
             };
+            "mine.lunixose.duckdns.org" = {
+              extraConfig = ''
+                reserve_proxy 127.0.0.1:25565
+              '';
+            };
           };
         };
       };
