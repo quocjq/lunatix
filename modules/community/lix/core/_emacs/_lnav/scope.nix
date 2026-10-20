@@ -3,14 +3,19 @@
 # pattern: built inside the emacs package scope and added via
 # `extraEmacsPackages`, which is emacs-overlay's sanctioned way to add
 # non-melpa packages. Version is read from lnav.el's header.
-{ inputs, pkgs, epkgs }:
+{
+  inputs,
+  pkgs,
+  epkgs,
+}:
 let
   pname = "lnav";
   src = inputs.lnav;
   version = builtins.head (
-    builtins.match ".*Version: ([0-9.]+).*"
-      (builtins.readFile "${src}/lnav.el"));
-in {
+    builtins.match ".*Version: ([0-9.]+).*" (builtins.readFile "${src}/lnav.el")
+  );
+in
+{
   lnav = epkgs.trivialBuild {
     inherit pname src version;
     packageRequires = [ ];

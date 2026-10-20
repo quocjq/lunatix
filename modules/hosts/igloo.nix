@@ -24,6 +24,21 @@
       }:
       {
         hardware.facter.reportPath = ../community/lix/hardware/latitude3250.json;
+	hardware.graphics = {
+	  enable = true;
+	  enable32Bit = true; # Necessary if running 32-bit software/Steam games
+	  extraPackages = with pkgs; [ 
+	    intel-media-driver
+	    intel-ocl 
+	    intel-vaapi-driver    
+	    vaapi-intel-hybrid
+	    vpl-gpu-rt           # Required for QSV video runtime hooks on Tiger Lake+
+	    intel-compute-runtime # OpenCL acceleration fallback
+	 ];
+	};
+	environment.systemPackages = with pkgs; [
+	  libglvnd  # Provides standard vendor-neutral OpenGL/EGL dispatch libraries
+	];
         boot.loader.systemd-boot.enable = true;
         boot.loader.efi.canTouchEfiVariables = true;
         boot.kernelPackages = pkgs.linuxPackages_latest;

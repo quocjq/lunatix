@@ -43,7 +43,10 @@
         # FTL binary directly (`pihole` re-execs via sudo and fails to write).
         systemd.services.pihole-setpassword = {
           description = "Apply Pi-hole web password from agenix secret";
-          after = [ "pihole-ftl.service" "pihole-web.service" ];
+          after = [
+            "pihole-ftl.service"
+            "pihole-web.service"
+          ];
           wants = [ "pihole-ftl.service" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {

@@ -56,8 +56,7 @@
     maid =
       { ... }:
       {
-        file.xdg_config."hypr".source =
-          "{{home}}/Proj/lunatix/modules/community/lix/core/hyprland/config";
+        file.xdg_config."hypr".source = "{{home}}/Proj/lunatix/modules/community/lix/core/hyprland/config";
       };
   };
 }

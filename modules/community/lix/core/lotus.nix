@@ -28,6 +28,7 @@
           waylandFrontend = true;
           addons = [
             inputs.lotus.packages.${pkgs.stdenv.hostPlatform.system}.fcitx5-lotus
+            pkgs.fcitx5-mozc-ut
           ];
         };
       };

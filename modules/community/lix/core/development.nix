@@ -2,7 +2,7 @@
 { __findFile, ... }: {
   lix.development = {
     includes = [
-      <lix/doomacs>
+      # <lix/doomacs>
       <lix/git>
     ];
   };

@@ -6,7 +6,13 @@
     maid =
       { pkgs, lib, ... }:
       let
-        inherit (builtins) isNull isBool isAttrs isInt isFloat;
+        inherit (builtins)
+          isNull
+          isBool
+          isAttrs
+          isInt
+          isFloat
+          ;
         inherit (lib.attrsets) mapAttrsToList;
         inherit (lib.strings) concatStringsSep;
         inherit (lib.trivial) boolToString;
@@ -14,7 +20,8 @@
 
         # Render `settings` as `$env.config.<path> = <value>` lines, one
         # nesting level deep (deeper keys must be pre-dotted).
-        renderValue = v:
+        renderValue =
+          v:
           if isNull v then
             "null"
           else if isBool v then
@@ -27,22 +34,18 @@
             "\"${toString v}\"";
 
         # Flatten to `path = value` lines (no $env.config. prefix).
-        flattenConfig = settings:
+        flattenConfig =
+          settings:
           flatten (
             mapAttrsToList (
-              n: v:
-              if isAttrs v then
-                map (sub: "${n}.${sub}") (flattenConfig v)
-              else
-                "${n} = ${renderValue v}"
+              n: v: if isAttrs v then map (sub: "${n}.${sub}") (flattenConfig v) else "${n} = ${renderValue v}"
             ) settings
           );
 
-        renderConfig = settings:
-          concatStringsSep "\n" (map (line: "$env.config.${line}") (flattenConfig settings));
+        renderConfig =
+          settings: concatStringsSep "\n" (map (line: "$env.config.${line}") (flattenConfig settings));
 
-        renderAliases = aliases:
-          concatStringsSep "\n" (mapAttrsToList (n: v: "alias ${n} = ${v}") aliases);
+        renderAliases = aliases: concatStringsSep "\n" (mapAttrsToList (n: v: "alias ${n} = ${v}") aliases);
 
         starshipInit = pkgs.runCommand "starship-init-nu" { } ''
           ${pkgs.starship}/bin/starship init nu >> $out

@@ -1,16 +1,10 @@
-# DO-NOT-EDIT. This file was auto-generated using github:vic/flake-file.
+# DO-NOT-EDIT. This file was auto-generated using github:denful/flake-file.
 # Use `nix run .#write-flake` to regenerate it.
 {
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   inputs = {
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs = {
-        home-manager.follows = "home-manager";
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
+    agenix.url = "github:ryantm/agenix";
     agenix-rekey = {
       url = "github:oddlama/agenix-rekey";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,30 +24,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    eaf = {
-      url = "github:emacs-eaf/emacs-application-framework";
-      flake = false;
-    };
-    eaf-browser = {
-      url = "github:emacs-eaf/eaf-browser";
-      flake = false;
-    };
-    eaf-file-manager = {
-      url = "github:emacs-eaf/eaf-file-manager";
-      flake = false;
-    };
-    eaf-image-viewer = {
-      url = "github:emacs-eaf/eaf-image-viewer";
-      flake = false;
-    };
-    eaf-pdf-viewer = {
-      url = "github:emacs-eaf/eaf-pdf-viewer";
-      flake = false;
-    };
-    emacs-overlay = {
-      url = "github:nix-community/emacs-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-file.url = "github:denful/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -69,19 +39,19 @@
       url = "git+https://git.lunixose.duckdns.org/lunixose/homepage";
     };
     hyprland.url = "github:hyprwm/Hyprland";
-    import-tree.url = "github:vic/import-tree";
-    lnav = {
-      url = "github:quocjq/lnav";
-      flake = false;
-    };
+    import-tree.url = "github:denful/import-tree";
     lotus = {
       url = "github:lotusinputmethod/fcitx5-lotus";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-maid.url = "github:viperml/nix-maid";
+    nix-maid.url = "git+https://codeberg.org/viperML/nix-maid";
     nixcord.url = "github:4evy/nixcord";
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
-    nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
+    nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.zst";
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     prismlauncher.url = "github:PrismLauncher/PrismLauncher/refs/tags/9.2";
     stylix = {
       url = "github:nix-community/stylix";

@@ -72,6 +72,7 @@
         obsidian
         onlyoffice-desktopeditors
         osu-lazer-bin
+	ja_JP.UTF-8
       ];
     };
   };

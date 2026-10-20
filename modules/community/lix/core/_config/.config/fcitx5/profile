@@ -1,13 +1,29 @@
+[Groups/0]
+# Group Name
+Name=Default
+# Layout
+Default Layout=us
+# Default Input Method
+DefaultIM=mozc
+
+[Groups/0/Items/0]
+# Name
+Name=keyboard-us
+# Layout
+Layout=
+
+[Groups/0/Items/1]
+# Name
+Name=mozc
+# Layout
+Layout=
+
+[Groups/0/Items/2]
+# Name
+Name=lotus
+# Layout
+Layout=
+
 [GroupOrder]
 0=Default
 
-[Groups/0]
-Default Layout=us
-DefaultIM=keyboard-us
-Name=Default
-
-[Groups/0/Items/0]
-Name=keyboard-us
-
-[Groups/0/Items/1]
-Name=lotus

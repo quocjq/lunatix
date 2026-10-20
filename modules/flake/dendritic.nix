@@ -20,7 +20,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-maid = {
-      url = "github:viperml/nix-maid";
+      url = "git+https://codeberg.org/viperML/nix-maid";
     };
     devenv.url = "github:cachix/devenv";
     disko = {

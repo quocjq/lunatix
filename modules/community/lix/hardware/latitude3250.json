@@ -111,7 +111,7 @@
         "module_alias": "usb:v8087p0026d0002dcE0dsc01dp01icE0isc01ip01in00"
       },
       {
-        "index": 46,
+        "index": 49,
         "attached_to": 39,
         "class_list": [
           "usb",
@@ -713,6 +713,7 @@
         "fpu_exception": false,
         "cpuid_level": 27,
         "write_protect": false,
+        "tlb_size": 3128,
         "clflush_size": 64,
         "cache_alignment": 64,
         "address_sizes": {
@@ -1085,7 +1086,7 @@
         },
         "vendor": {
           "hex": "1d6b",
-          "name": "Linux 7.1.4 xhci-hcd",
+          "name": "Linux 7.2.10 xhci-hcd",
           "value": 7531
         },
         "device": {
@@ -1095,11 +1096,11 @@
         },
         "revision": {
           "hex": "0000",
-          "name": "7.01",
+          "name": "7.02",
           "value": 0
         },
         "serial": "0000:00:14.0",
-        "model": "Linux 7.1.4 xhci-hcd xHCI Host Controller",
+        "model": "Linux 7.2.10 xhci-hcd xHCI Host Controller",
         "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-0:1.0",
         "sysfs_bus_id": "3-0:1.0",
         "resources": [
@@ -1147,10 +1148,10 @@
         "driver_modules": [
           "usbcore"
         ],
-        "module_alias": "usb:v1D6Bp0002d0701dc09dsc00dp01ic09isc00ip00in00"
+        "module_alias": "usb:v1D6Bp0002d0702dc09dsc00dp01ic09isc00ip00in00"
       },
       {
-        "index": 43,
+        "index": 46,
         "attached_to": 31,
         "class_list": [
           "usb",
@@ -1172,7 +1173,7 @@
         },
         "vendor": {
           "hex": "1d6b",
-          "name": "Linux 7.1.4 xhci-hcd",
+          "name": "Linux 7.2.10 xhci-hcd",
           "value": 7531
         },
         "device": {
@@ -1182,11 +1183,11 @@
         },
         "revision": {
           "hex": "0000",
-          "name": "7.01",
+          "name": "7.02",
           "value": 0
         },
         "serial": "0000:00:14.0",
-        "model": "Linux 7.1.4 xhci-hcd xHCI Host Controller",
+        "model": "Linux 7.2.10 xhci-hcd xHCI Host Controller",
         "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb4/4-0:1.0",
         "sysfs_bus_id": "4-0:1.0",
         "detail": {
@@ -1224,10 +1225,10 @@
         "driver_modules": [
           "usbcore"
         ],
-        "module_alias": "usb:v1D6Bp0003d0701dc09dsc00dp03ic09isc00ip00in00"
+        "module_alias": "usb:v1D6Bp0003d0702dc09dsc00dp03ic09isc00ip00in00"
       },
       {
-        "index": 44,
+        "index": 47,
         "attached_to": 14,
         "class_list": [
           "usb",
@@ -1249,7 +1250,7 @@
         },
         "vendor": {
           "hex": "1d6b",
-          "name": "Linux 7.1.4 xhci-hcd",
+          "name": "Linux 7.2.10 xhci-hcd",
           "value": 7531
         },
         "device": {
@@ -1259,11 +1260,11 @@
         },
         "revision": {
           "hex": "0000",
-          "name": "7.01",
+          "name": "7.02",
           "value": 0
         },
         "serial": "0000:00:0d.0",
-        "model": "Linux 7.1.4 xhci-hcd xHCI Host Controller",
+        "model": "Linux 7.2.10 xhci-hcd xHCI Host Controller",
         "sysfs_id": "/devices/pci0000:00/0000:00:0d.0/usb1/1-0:1.0",
         "sysfs_bus_id": "1-0:1.0",
         "resources": [
@@ -1311,10 +1312,10 @@
         "driver_modules": [
           "usbcore"
         ],
-        "module_alias": "usb:v1D6Bp0002d0701dc09dsc00dp01ic09isc00ip00in00"
+        "module_alias": "usb:v1D6Bp0002d0702dc09dsc00dp01ic09isc00ip00in00"
       },
       {
-        "index": 48,
+        "index": 54,
         "attached_to": 14,
         "class_list": [
           "usb",
@@ -1336,7 +1337,7 @@
         },
         "vendor": {
           "hex": "1d6b",
-          "name": "Linux 7.1.4 xhci-hcd",
+          "name": "Linux 7.2.10 xhci-hcd",
           "value": 7531
         },
         "device": {
@@ -1346,11 +1347,11 @@
         },
         "revision": {
           "hex": "0000",
-          "name": "7.01",
+          "name": "7.02",
           "value": 0
         },
         "serial": "0000:00:0d.0",
-        "model": "Linux 7.1.4 xhci-hcd xHCI Host Controller",
+        "model": "Linux 7.2.10 xhci-hcd xHCI Host Controller",
         "sysfs_id": "/devices/pci0000:00/0000:00:0d.0/usb2/2-0:1.0",
         "sysfs_bus_id": "2-0:1.0",
         "detail": {
@@ -1388,7 +1389,7 @@
         "driver_modules": [
           "usbcore"
         ],
-        "module_alias": "usb:v1D6Bp0003d0701dc09dsc00dp03ic09isc00ip00in00"
+        "module_alias": "usb:v1D6Bp0003d0702dc09dsc00dp03ic09isc00ip00in00"
       }
     ],
     "keyboard": [
@@ -1440,7 +1441,7 @@
           "/dev/input/by-id/usb-SONIX_M87_keyboard-event-kbd",
           "/dev/input/by-path/pci-0000:00:14.0-usb-0:7:1.0-event-kbd",
           "/dev/input/by-path/pci-0000:00:14.0-usbv2-0:7:1.0-event-kbd",
-          "/dev/input/event2"
+          "/dev/input/event3"
         ],
         "resources": [
           {
@@ -1705,7 +1706,7 @@
         "module_alias": "usb:v046DpC52Fd3000dc00dsc00dp00ic03isc01ip02in00"
       },
       {
-        "index": 42,
+        "index": 45,
         "attached_to": 39,
         "class_list": [
           "mouse",
@@ -1813,7 +1814,7 @@
         "module_alias": "usb:v0C45p8006d0116dc00dsc00dp00ic03isc01ip02in01"
       },
       {
-        "index": 52,
+        "index": 60,
         "attached_to": 0,
         "bus_type": {
           "hex": "0081",
@@ -1838,9 +1839,9 @@
           "hex": "3147",
           "value": 12615
         },
-        "sysfs_id": "/devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-1/i2c-DELL0A7C:00/0018:04F3:3147.0007/input/input27",
+        "sysfs_id": "/devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-14/i2c-DELL0A7C:00/0018:04F3:3147.0007/input/input101",
         "unix_device_names": [
-          "/dev/input/event13",
+          "/dev/input/event15",
           "/dev/input/ + handler"
         ]
       }
@@ -1904,7 +1905,7 @@
         "resources": [
           {
             "type": "hwaddr",
-            "address": 100
+            "address": 51
           },
           {
             "type": "phwaddr",
@@ -2096,11 +2097,129 @@
           "r8169"
         ],
         "module_alias": "pci:v000010ECd00008168sv00001028sd00000A7Cbc02sc00i00"
+      },
+      {
+        "index": 44,
+        "attached_to": 39,
+        "class_list": [
+          "network_controller",
+          "usb"
+        ],
+        "bus_type": {
+          "hex": "0086",
+          "name": "USB",
+          "value": 134
+        },
+        "slot": {
+          "bus": 0,
+          "number": 0
+        },
+        "base_class": {
+          "hex": "0002",
+          "name": "Network controller",
+          "value": 2
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Ethernet controller",
+          "value": 0
+        },
+        "vendor": {
+          "hex": "3625",
+          "name": "Quectel",
+          "value": 13861
+        },
+        "device": {
+          "hex": "0006",
+          "name": "M7000",
+          "value": 6
+        },
+        "revision": {
+          "hex": "0000",
+          "name": "3.18",
+          "value": 0
+        },
+        "serial": "ACA7F1AB8405",
+        "model": "Quectel M7000",
+        "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.0",
+        "sysfs_bus_id": "3-1:1.0",
+        "unix_device_names": [
+          "enp0s20f0u1"
+        ],
+        "resources": [
+          {
+            "type": "baud",
+            "speed": 480000000,
+            "bits": 0,
+            "stop_bits": 0,
+            "parity": 0,
+            "handshake": 0
+          },
+          {
+            "type": "hwaddr",
+            "address": 55
+          },
+          {
+            "type": "phwaddr",
+            "address": 55
+          }
+        ],
+        "detail": {
+          "device_class": {
+            "hex": "00ef",
+            "name": "miscellaneous",
+            "value": 239
+          },
+          "device_subclass": {
+            "hex": "0002",
+            "name": "comm",
+            "value": 2
+          },
+          "device_protocol": 1,
+          "interface_class": {
+            "hex": "00e0",
+            "name": "wireless",
+            "value": 224
+          },
+          "interface_subclass": {
+            "hex": "0001",
+            "name": "audio",
+            "value": 1
+          },
+          "interface_protocol": 3,
+          "interface_number": 0,
+          "interface_alternate_setting": 0,
+          "interface_association": {
+            "function_class": {
+              "hex": "00e0",
+              "name": "wireless",
+              "value": 224
+            },
+            "function_subclass": {
+              "hex": "0001",
+              "name": "audio",
+              "value": 1
+            },
+            "function_protocol": 3,
+            "interface_count": 2,
+            "first_interface": 0
+          }
+        },
+        "hotplug": "usb",
+        "driver": "rndis_host",
+        "driver_module": "rndis_host",
+        "drivers": [
+          "rndis_host"
+        ],
+        "driver_modules": [
+          "rndis_host"
+        ],
+        "module_alias": "usb:v3625p0006d0318dcEFdsc02dp01icE0isc01ip03in00"
       }
     ],
     "network_interface": [
       {
-        "index": 49,
+        "index": 55,
         "attached_to": 25,
         "class_list": [
           "network_interface"
@@ -2141,7 +2260,7 @@
         ]
       },
       {
-        "index": 50,
+        "index": 56,
         "attached_to": 0,
         "class_list": [
           "network_interface"
@@ -2163,7 +2282,48 @@
         ]
       },
       {
-        "index": 51,
+        "index": 57,
+        "attached_to": 44,
+        "class_list": [
+          "network_interface"
+        ],
+        "base_class": {
+          "hex": "0107",
+          "name": "Network Interface",
+          "value": 263
+        },
+        "sub_class": {
+          "hex": "0001",
+          "name": "Ethernet",
+          "value": 1
+        },
+        "model": "Ethernet network interface",
+        "sysfs_id": "/class/net/enp0s20f0u1",
+        "sysfs_device_link": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.0",
+        "unix_device_names": [
+          "enp0s20f0u1"
+        ],
+        "resources": [
+          {
+            "type": "hwaddr",
+            "address": 55
+          },
+          {
+            "type": "phwaddr",
+            "address": 55
+          }
+        ],
+        "driver": "rndis_host",
+        "driver_module": "rndis_host",
+        "drivers": [
+          "rndis_host"
+        ],
+        "driver_modules": [
+          "rndis_host"
+        ]
+      },
+      {
+        "index": 59,
         "attached_to": 18,
         "class_list": [
           "network_interface"
@@ -2187,7 +2347,7 @@
         "resources": [
           {
             "type": "hwaddr",
-            "address": 100
+            "address": 51
           },
           {
             "type": "phwaddr",
@@ -2979,7 +3139,175 @@
     },
     "usb": [
       {
-        "index": 45,
+        "index": 42,
+        "attached_to": 39,
+        "class_list": [
+          "usb",
+          "unknown"
+        ],
+        "bus_type": {
+          "hex": "0086",
+          "name": "USB",
+          "value": 134
+        },
+        "slot": {
+          "bus": 0,
+          "number": 0
+        },
+        "base_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "vendor": {
+          "hex": "3625",
+          "name": "Quectel",
+          "value": 13861
+        },
+        "device": {
+          "hex": "0006",
+          "name": "M7000",
+          "value": 6
+        },
+        "revision": {
+          "hex": "0000",
+          "name": "3.18",
+          "value": 0
+        },
+        "serial": "ACA7F1AB8405",
+        "model": "Quectel M7000",
+        "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.4",
+        "sysfs_bus_id": "3-1:1.4",
+        "resources": [
+          {
+            "type": "baud",
+            "speed": 480000000,
+            "bits": 0,
+            "stop_bits": 0,
+            "parity": 0,
+            "handshake": 0
+          }
+        ],
+        "detail": {
+          "device_class": {
+            "hex": "00ef",
+            "name": "miscellaneous",
+            "value": 239
+          },
+          "device_subclass": {
+            "hex": "0002",
+            "name": "comm",
+            "value": 2
+          },
+          "device_protocol": 1,
+          "interface_class": {
+            "hex": "00ff",
+            "name": "vendor_spec",
+            "value": 255
+          },
+          "interface_subclass": {
+            "hex": "0000",
+            "name": "per_interface",
+            "value": 0
+          },
+          "interface_protocol": 0,
+          "interface_number": 4,
+          "interface_alternate_setting": 0
+        },
+        "hotplug": "usb",
+        "module_alias": "usb:v3625p0006d0318dcEFdsc02dp01icFFisc00ip00in04"
+      },
+      {
+        "index": 43,
+        "attached_to": 39,
+        "class_list": [
+          "usb",
+          "unknown"
+        ],
+        "bus_type": {
+          "hex": "0086",
+          "name": "USB",
+          "value": 134
+        },
+        "slot": {
+          "bus": 0,
+          "number": 0
+        },
+        "base_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "vendor": {
+          "hex": "3625",
+          "name": "Quectel",
+          "value": 13861
+        },
+        "device": {
+          "hex": "0006",
+          "name": "M7000",
+          "value": 6
+        },
+        "revision": {
+          "hex": "0000",
+          "name": "3.18",
+          "value": 0
+        },
+        "serial": "ACA7F1AB8405",
+        "model": "Quectel M7000",
+        "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.2",
+        "sysfs_bus_id": "3-1:1.2",
+        "resources": [
+          {
+            "type": "baud",
+            "speed": 480000000,
+            "bits": 0,
+            "stop_bits": 0,
+            "parity": 0,
+            "handshake": 0
+          }
+        ],
+        "detail": {
+          "device_class": {
+            "hex": "00ef",
+            "name": "miscellaneous",
+            "value": 239
+          },
+          "device_subclass": {
+            "hex": "0002",
+            "name": "comm",
+            "value": 2
+          },
+          "device_protocol": 1,
+          "interface_class": {
+            "hex": "00ff",
+            "name": "vendor_spec",
+            "value": 255
+          },
+          "interface_subclass": {
+            "hex": "0000",
+            "name": "per_interface",
+            "value": 0
+          },
+          "interface_protocol": 0,
+          "interface_number": 2,
+          "interface_alternate_setting": 0
+        },
+        "hotplug": "usb",
+        "module_alias": "usb:v3625p0006d0318dcEFdsc02dp01icFFisc00ip00in02"
+      },
+      {
+        "index": 48,
         "attached_to": 39,
         "class_list": [
           "usb",
@@ -3070,7 +3398,282 @@
         "module_alias": "usb:v046DpC52Fd3000dc00dsc00dp00ic03isc00ip00in01"
       },
       {
-        "index": 47,
+        "index": 50,
+        "attached_to": 39,
+        "class_list": [
+          "usb",
+          "unknown"
+        ],
+        "bus_type": {
+          "hex": "0086",
+          "name": "USB",
+          "value": 134
+        },
+        "slot": {
+          "bus": 0,
+          "number": 0
+        },
+        "base_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "vendor": {
+          "hex": "3625",
+          "name": "Quectel",
+          "value": 13861
+        },
+        "device": {
+          "hex": "0006",
+          "name": "M7000",
+          "value": 6
+        },
+        "revision": {
+          "hex": "0000",
+          "name": "3.18",
+          "value": 0
+        },
+        "serial": "ACA7F1AB8405",
+        "model": "Quectel M7000",
+        "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.5",
+        "sysfs_bus_id": "3-1:1.5",
+        "resources": [
+          {
+            "type": "baud",
+            "speed": 480000000,
+            "bits": 0,
+            "stop_bits": 0,
+            "parity": 0,
+            "handshake": 0
+          }
+        ],
+        "detail": {
+          "device_class": {
+            "hex": "00ef",
+            "name": "miscellaneous",
+            "value": 239
+          },
+          "device_subclass": {
+            "hex": "0002",
+            "name": "comm",
+            "value": 2
+          },
+          "device_protocol": 1,
+          "interface_class": {
+            "hex": "00ff",
+            "name": "vendor_spec",
+            "value": 255
+          },
+          "interface_subclass": {
+            "hex": "0042",
+            "name": "UsbClass(66)",
+            "value": 66
+          },
+          "interface_protocol": 1,
+          "interface_number": 5,
+          "interface_alternate_setting": 0
+        },
+        "hotplug": "usb",
+        "module_alias": "usb:v3625p0006d0318dcEFdsc02dp01icFFisc42ip01in05"
+      },
+      {
+        "index": 51,
+        "attached_to": 39,
+        "class_list": [
+          "usb",
+          "unknown"
+        ],
+        "bus_type": {
+          "hex": "0086",
+          "name": "USB",
+          "value": 134
+        },
+        "slot": {
+          "bus": 0,
+          "number": 0
+        },
+        "base_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "vendor": {
+          "hex": "3625",
+          "name": "Quectel",
+          "value": 13861
+        },
+        "device": {
+          "hex": "0006",
+          "name": "M7000",
+          "value": 6
+        },
+        "revision": {
+          "hex": "0000",
+          "name": "3.18",
+          "value": 0
+        },
+        "serial": "ACA7F1AB8405",
+        "model": "Quectel M7000",
+        "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.3",
+        "sysfs_bus_id": "3-1:1.3",
+        "resources": [
+          {
+            "type": "baud",
+            "speed": 480000000,
+            "bits": 0,
+            "stop_bits": 0,
+            "parity": 0,
+            "handshake": 0
+          }
+        ],
+        "detail": {
+          "device_class": {
+            "hex": "00ef",
+            "name": "miscellaneous",
+            "value": 239
+          },
+          "device_subclass": {
+            "hex": "0002",
+            "name": "comm",
+            "value": 2
+          },
+          "device_protocol": 1,
+          "interface_class": {
+            "hex": "00ff",
+            "name": "vendor_spec",
+            "value": 255
+          },
+          "interface_subclass": {
+            "hex": "0000",
+            "name": "per_interface",
+            "value": 0
+          },
+          "interface_protocol": 0,
+          "interface_number": 3,
+          "interface_alternate_setting": 0
+        },
+        "hotplug": "usb",
+        "module_alias": "usb:v3625p0006d0318dcEFdsc02dp01icFFisc00ip00in03"
+      },
+      {
+        "index": 52,
+        "attached_to": 39,
+        "class_list": [
+          "usb",
+          "unknown"
+        ],
+        "bus_type": {
+          "hex": "0086",
+          "name": "USB",
+          "value": 134
+        },
+        "slot": {
+          "bus": 0,
+          "number": 0
+        },
+        "base_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "sub_class": {
+          "hex": "0000",
+          "name": "Unclassified device",
+          "value": 0
+        },
+        "vendor": {
+          "hex": "3625",
+          "name": "Quectel",
+          "value": 13861
+        },
+        "device": {
+          "hex": "0006",
+          "name": "M7000",
+          "value": 6
+        },
+        "revision": {
+          "hex": "0000",
+          "name": "3.18",
+          "value": 0
+        },
+        "serial": "ACA7F1AB8405",
+        "model": "Quectel M7000",
+        "sysfs_id": "/devices/pci0000:00/0000:00:14.0/usb3/3-1/3-1:1.1",
+        "sysfs_bus_id": "3-1:1.1",
+        "resources": [
+          {
+            "type": "baud",
+            "speed": 480000000,
+            "bits": 0,
+            "stop_bits": 0,
+            "parity": 0,
+            "handshake": 0
+          }
+        ],
+        "detail": {
+          "device_class": {
+            "hex": "00ef",
+            "name": "miscellaneous",
+            "value": 239
+          },
+          "device_subclass": {
+            "hex": "0002",
+            "name": "comm",
+            "value": 2
+          },
+          "device_protocol": 1,
+          "interface_class": {
+            "hex": "000a",
+            "name": "data",
+            "value": 10
+          },
+          "interface_subclass": {
+            "hex": "0000",
+            "name": "per_interface",
+            "value": 0
+          },
+          "interface_protocol": 0,
+          "interface_number": 1,
+          "interface_alternate_setting": 0,
+          "interface_association": {
+            "function_class": {
+              "hex": "00e0",
+              "name": "wireless",
+              "value": 224
+            },
+            "function_subclass": {
+              "hex": "0001",
+              "name": "audio",
+              "value": 1
+            },
+            "function_protocol": 3,
+            "interface_count": 2,
+            "first_interface": 0
+          }
+        },
+        "hotplug": "usb",
+        "driver": "rndis_host",
+        "driver_module": "rndis_host",
+        "drivers": [
+          "rndis_host"
+        ],
+        "driver_modules": [
+          "rndis_host"
+        ],
+        "module_alias": "usb:v3625p0006d0318dcEFdsc02dp01ic0Aisc00ip00in01"
+      },
+      {
+        "index": 53,
         "attached_to": 39,
         "class_list": [
           "usb",
@@ -3639,12 +4242,12 @@
         "handle": 3585,
         "name": "Firmware Version Info",
         "handles": [
-          225404178713856,
-          225408473681153,
-          225412768648450,
-          225417063615747,
-          225421358583044,
-          225425653550341,
+          52480,
+          52481,
+          52482,
+          52483,
+          52484,
+          52485,
           52486
         ]
       }

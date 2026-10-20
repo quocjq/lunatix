@@ -7,7 +7,12 @@
 # https://den.denful.dev/reference/diag. If a future input revision drifts
 # the call shape, inspect with:
 #   nix eval .#inputs.den-diagram.lib --apply 'lib: builtins.attrNames lib'
-{ inputs, den, lib, ... }:
+{
+  inputs,
+  den,
+  lib,
+  ...
+}:
 let
   diagram = inputs.den-diagram.lib;
 

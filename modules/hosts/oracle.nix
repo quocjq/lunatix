@@ -43,13 +43,22 @@
         # Hardware
         hardware.facter.reportPath = ../community/lix/hardware/oracle-facter.json;
 
-        boot.kernelParams = [ "console=tty0" "console=ttyAMA0,115200" "console=ttyS0,115200" ];
+        boot.kernelParams = [
+          "console=tty0"
+          "console=ttyAMA0,115200"
+          "console=ttyS0,115200"
+        ];
 
         # Headless server: networkd + DHCP instead of NetworkManager.
         networking.networkmanager.enable = lib.mkForce false;
         networking.useDHCP = lib.mkForce true;
         networking.firewall.enable = true;
-        networking.firewall.allowedTCPPorts = [ 22 80 443 8222 ];
+        networking.firewall.allowedTCPPorts = [
+          22
+          80
+          443
+          8222
+        ];
 
         users.users.root.openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHkCjExNYxUFFr2joRL8Rq0jE/tEDfNR/hrKReH4FS9l lunixose"
