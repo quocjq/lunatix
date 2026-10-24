@@ -1,9 +1,5 @@
-{
-  __findFile,
-  ...
-}:
-{
-  den.aspects.lunixose = { user, ... }: {
+{__findFile, ...}: {
+  den.aspects.lunixose = {user, ...}: {
     # Per-user agenix secrets. `lig.agenix` collects these via the `secrets`
     # quirk and exposes them up to the host scope so each user gets their own
     # decrypted symlinks under their home directory.
@@ -49,7 +45,7 @@
       # <lix/herdr>
       <lix/tmux>
     ];
-    user = { pkgs, ... }: {
+    user = {pkgs, ...}: {
       shell = pkgs.bash; # login shell; interactive shell of record is nushell
       initialHashedPassword = "$6$.u5xmD5jRI69qFuA$L/M.0dWMo4pS5tLIsgZboyEzZeVXI.v17sG0SDv7WekS.VNEwyEbswld8yV3FHXymhUCnc1phCxyHxpi66uLs.";
       packages = with pkgs; [
@@ -57,22 +53,18 @@
         ntfs3g
         qbittorrent
         gparted-full
-        opencode
-        opencode-desktop
         devenv
         just
         nh
         ghostty
-        neovim
         wget
         unzip
-        anki
+        anki-bin
         curl
         gh
         obsidian
-        onlyoffice-desktopeditors
-        osu-lazer-bin
-	ja_JP.UTF-8
+        # onlyoffice-desktopeditors
+        # osu-lazer-bin
       ];
     };
   };

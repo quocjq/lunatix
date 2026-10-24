@@ -30,10 +30,6 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     herdr.url = "github:ogulcancelik/herdr";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     homepage = {
       type = "git";
       url = "git+https://git.lunixose.duckdns.org/lunixose/homepage";
@@ -48,10 +44,8 @@
     nixcord.url = "github:4evy/nixcord";
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.zst";
-    nvf = {
-      url = "github:NotAShelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nvf.url = "github:NotAShelf/nvf";
     prismlauncher.url = "github:PrismLauncher/PrismLauncher/refs/tags/9.2";
     stylix = {
       url = "github:nix-community/stylix";
@@ -64,9 +58,6 @@
       url = "github:tinted-theming/schemes";
       flake = false;
     };
-    zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 }
