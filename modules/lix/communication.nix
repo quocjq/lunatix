@@ -1,5 +1,4 @@
-# communication — chat/messaging clients.
-{ __findFile, ... }: {
+{__findFile, ...}: {
   lix.communication = {
     includes = [
       <lix/nixcord>

@@ -17,7 +17,7 @@
     (final: _prev: {
       stable = import inputs.nixpkgs-stable {
         inherit (final.stdenv.hostPlatform) system;
-        inherit (final) config;
+        config = final.config // {rewriteURL = url: url;};
       };
     })
   ];
