@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   lix.kanata = {
     provides.to-hosts.nixos.services.kanata = {
       enable = true;
@@ -10,7 +10,7 @@
           '';
           config = ''
             (defsrc
-            caps a s d f j k l ;
+            caps a s d f j k l ; ralt
             )
             (defvar
              tap-time 200
@@ -29,7 +29,7 @@
             )
 
             (deflayer base
-             @caps @a  @s  @d  @f  @j  @k  @l  @;
+             @caps @a  @s  @d  @f  @j  @k  @l  @; f9
             )
           '';
         };

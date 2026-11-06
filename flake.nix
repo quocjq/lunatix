@@ -24,6 +24,7 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    fjordlauncher.url = "github:unmojang/FjordLauncher";
     flake-file.url = "github:denful/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -46,7 +47,6 @@
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.zst";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
     nvf.url = "github:NotAShelf/nvf";
-    prismlauncher.url = "github:PrismLauncher/PrismLauncher/refs/tags/9.2";
     stylix = {
       url = "github:nix-community/stylix";
       inputs = {

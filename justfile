@@ -2,14 +2,13 @@
 
 secrets_dir := "modules/lig/_secrets"
 identity := "~/.ssh/ssh_user_lunixose_ed25519"
+nix := "nix --extra-experimental-features 'nix-command flakes' "
+agenix := if `bash -c 'command -v agenix 2>/dev/null || true'` != "" { "agenix" } else { nix + " nix run github:oddlama/agenix-rekey --" }
+devenv := if `bash -c 'command -v devenv 2>/dev/null || true'` != "" { "devenv" } else { nix + " run github:cachix/devenv --" }
 
 # List available recipes
 default:
     @just --list
-
-nix := "nix --extra-experimental-features 'nix-command flakes' "
-agenix_cmd := if `bash -c 'command -v agenix 2>/dev/null || true'` != "" { "agenix" } else { nix + " run github:ryantm/agenix --" }
-devenv_cmd := if `bash -c 'command -v devenv 2>/dev/null || true'` != "" { "devenv" } else { nix + " run github:cachix/devenv --" }
 
 # Enter the bootstrap toolbox shell (disko, cryptsetup, nixos-install-tools…).
 bootstrap:
@@ -17,11 +16,11 @@ bootstrap:
 
 # Bootstrap via devenv — same toolbox, but powered by cachix/devenv.
 bootstrap-dev:
-    {{devenv_cmd}} shell
+    {{devenv}} shell
 
 # Enter the daily devenv shell (mirrors `.envrc`'s `use flake .#dev`).
 dev:
-    {{devenv_cmd}} shell dev
+    {{devenv}} shell dev
 
 # Partition, format and mount the Latitude 3250 disk at /mnt (DESTRUCTIVE).
 # Stash the LUKS passphrase first:  echo -n 'your-passphrase' > /tmp/secret.key
@@ -42,7 +41,8 @@ build:
 
 # Build and activate the igloo host configuration
 switch:
-    {{nix}} run .#igloo -- switch --max-jobs 1
+    {{agenix}} rekey
+    {{nix}} run .#igloo -- switch --max-jobs 3
 
 # Switch the ORACLE host remotely (root@oracle, ed25519 key). Run from igloo.
 switch-oracle:
@@ -83,22 +83,6 @@ iso:
 tmux-clean:
     ~/.local/bin/tmux-kill-sessions
 
-# Interactive (re)install from the minimal ISO: asks hostname/user/arch,
-# runs facter, picks disk + disko layout + aspects, generates the host file,
-# then disko-format + nixos-install. Run in the bootstrap dev shell.
-reinstall:
-    bash scripts/reinstall.sh
-
-# One-shot: fetch ISO, build the runner, boot the installer into a fresh
-# qcow2. SNAPSHOT is forced to 0 so the install persists (SNAPSHOT=1 would
-# discard it and qemu-boot would hit emergency mode).
-qemu-install:
-    bash scripts/qemu-iso.sh install
-
-# Boot the installed system (after qemu-install) without the ISO.
-qemu-boot:
-    bash scripts/qemu-iso.sh boot
-
 # Regenerate flake.nix after changing inputs declared inside modules
 write-flake:
     {{nix}} run .#write-flake
@@ -107,26 +91,20 @@ write-flake:
 # (and anything newer than 5 days), then hard-link identical store paths.
 # `nh clean all` covers profiles + boot entries; the final optimise dedupes.
 clean:
-    nh clean all --keep 5 --keep-since 0
-    {{nix}} store optimise
-
-# Deduplicate the nix store without removing any generations.
-optimise:
+    nh clean all --keep 3 --keep-since 0
     {{nix}} store optimise
 
 # Create or edit an encrypted secret, e.g. `just secret github`
 secret name:
-    cd {{secrets_dir}} && {{agenix_cmd}} -e {{name}}.age -i {{identity}}
+    cd {{secrets_dir}} && {{agenix}} -e {{name}}.age -i {{identity}}
 
 # Encrypt an existing plaintext file into a secret,
 # e.g. `just secret-import github ~/.ssh/github`
 secret-import name file:
-    cd {{secrets_dir}} && EDITOR="cp {{file}}" {{agenix_cmd}} -e {{name}}.age
+    cd {{secrets_dir}} && EDITOR="cp {{file}}" {{agenix}} -e {{name}}.age
 
 # Re-encrypt every secret for the current recipients in secrets.nix.
 # Run this after adding/removing a key in secrets.nix.
 rekey:
-    cd {{secrets_dir}} && {{agenix_cmd}} --rekey -i {{identity}}
+    cd {{secrets_dir}} && {{agenix}} --rekey -i {{identity}}
 
-# Create new ssh key and add it to age & provide public key
-# Type of key: dsa, ecdsa, ecdsa-sk, ed25519, ed25519-sk, rsa
